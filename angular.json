@@ -5,11 +5,7 @@
   "projects": {
     "ItemiteClient": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -19,7 +15,6 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -27,8 +22,7 @@
               }
             ],
             "styles": [
-              "src/tailwind.css",
-              "src/styles.scss"
+              "src/styles.css"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -79,7 +73,6 @@
           "builder": "@angular/build:karma",
           "options": {
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -87,25 +80,11 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
+              "src/styles.css"
             ]
           }
         }
       }
     }
-  },
-  "cli": {
-    "schematicCollections": [
-      "angular-eslint"
-    ]
   }
 }
