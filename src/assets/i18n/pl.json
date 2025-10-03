@@ -1,0 +1,19 @@
+{
+  "categories": {
+    "header": "Kategorie",
+    "agriculture": "Rolnictwo",
+    "electronics": "Elektronika",
+    "motorization": "Motoryzacja",
+    "fashion": "Moda",
+    "sports_hobbies": "Sport & Hobby",
+    "kids_baby": "Dzieci & Niemowlęta",
+    "real_estate": "Nieruchomości",
+    "home_garden": "Dom & Ogród",
+    "pets": "Zwierzęta",
+    "services_education": "Usługi & Edukacja",
+    "industry": "Przemysł",
+    "health_beauty": "Zdrowie & Uroda",
+    "events": "Wydarzenia",
+    "jobs": "Praca"
+  }
+}

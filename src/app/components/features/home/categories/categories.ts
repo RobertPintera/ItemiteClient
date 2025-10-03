@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import {NgClass, NgOptimizedImage} from '@angular/common';
+import {TranslateDirective, TranslatePipe} from '@ngx-translate/core';
 
 interface Category {
   id: number;
-  name: string;
+  key: string;
   image: string;
   backgroundColor: string;
 }
@@ -12,7 +13,8 @@ interface Category {
   selector: 'app-categories',
   imports: [
     NgOptimizedImage,
-    NgClass
+    NgClass,
+    TranslatePipe,
   ],
   templateUrl: './categories.html',
   styleUrl: './categories.css'
@@ -21,85 +23,85 @@ export class Categories {
   categories: Category[] = [
     {
       id: 1,
-      name: 'Agriculture',
+      key: 'agriculture',
       image: 'assets/categories/agriculture_icon.svg',
       backgroundColor: 'bg-green-200'
     },
     {
       id: 2,
-      name: 'Electronics',
+      key: 'electronics',
       image: '/assets/categories/devices_icon.svg',
       backgroundColor: 'bg-blue-200'
     },
     {
       id: 3,
-      name: 'Motorization',
+      key: 'motorization',
       image: '/assets/categories/commute_icon.svg',
       backgroundColor: 'bg-indigo-200'
     },
     {
       id: 4,
-      name: 'Fashion',
+      key: 'fashion',
       image: '/assets/categories/apparel_icon.svg',
       backgroundColor: 'bg-pink-200'
     },
     {
       id: 5,
-      name: 'Sports & Hobbies',
+      key: 'sports_hobbies',
       image: '/assets/categories/sports_and_outdoors_icon.svg',
       backgroundColor: 'bg-red-200'
     },
     {
       id: 6,
-      name: 'Kids & Baby',
+      key: 'kids_baby',
       image: '/assets/categories/child_icon.svg',
       backgroundColor: 'bg-yellow-200'
     },
     {
       id: 7,
-      name: 'Real Estate',
+      key: 'real_estate',
       image: '/assets/categories/apartment_icon.svg',
       backgroundColor: 'bg-purple-200'
     },
     {
       id: 8,
-      name: 'Home & Garden',
+      key: 'home_garden',
       image: '/assets/categories/home_and_garden_icon.svg',
       backgroundColor: 'bg-teal-200'
     },
     {
       id: 9,
-      name: 'Pets',
+      key: 'pets',
       image: '/assets/categories/pets_icon.svg',
       backgroundColor: 'bg-orange-200'
     },
     {
       id: 10,
-      name: 'Services & Education',
+      key: 'services_education',
       image: '/assets/categories/menu_book_icon.svg',
       backgroundColor: 'bg-cyan-200'
     },
     {
       id: 11,
-      name: 'Industry',
+      key: 'industry',
       image: '/assets/categories/manufacturing_icon.svg',
       backgroundColor: 'bg-gray-200'
     },
     {
       id: 12,
-      name: 'Health & Beauty',
+      key: 'health_beauty',
       image: '/assets/categories/health_and_beauty_icon.svg',
       backgroundColor: 'bg-pink-300'
     },
     {
       id: 13,
-      name: 'Events',
+      key: 'events',
       image: '/assets/categories/newspaper_icon.svg',
       backgroundColor: 'bg-lime-200'
     },
     {
       id: 14,
-      name: 'Jobs',
+      key: 'jobs',
       image: '/assets/categories/work_icon.svg',
       backgroundColor: 'bg-blue-300'
     },

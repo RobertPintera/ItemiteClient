@@ -1,0 +1,19 @@
+{
+  "categories": {
+    "header": "Categories",
+    "agriculture": "Agriculture",
+    "electronics": "Electronics",
+    "motorization": "Motorization",
+    "fashion": "Fashion",
+    "sports_hobbies": "Sports & Hobbies",
+    "kids_baby": "Kids & Baby",
+    "real_estate": "Real Estate",
+    "home_garden": "Home & Garden",
+    "pets": "Pets",
+    "services_education": "Services & Education",
+    "industry": "Industry",
+    "health_beauty": "Health & Beauty",
+    "events": "Events",
+    "jobs": "Jobs"
+  }
+}
