@@ -1,0 +1,8 @@
+<!-- temporary component -->
+<select [value]="selected()" (change)="onChange($event)">
+  @for (option of options(); track option) {
+    <option [value]="option">
+      {{ option }}
+    </option>
+  }
+</select>
