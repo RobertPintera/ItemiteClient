@@ -1,0 +1,13 @@
+<section class="flex flex-col items-center gap-8">
+  <h1>Categories</h1>
+  <div class="flex flex-row flex-wrap justify-center gap-8">
+    @for(category of categories; track category.id) {
+      <div class="flex flex-col items-center gap-2">
+        <div class="flex justify-center items-center size-44 bg-blue-200 rounded-full" [ngClass]="category.backgroundColor">
+          <img [ngSrc]="category.image" [alt]="category.name" class="size-[80%] object-cover" width="1" height="1" />
+        </div>
+        <h4>{{category.name}}</h4>
+      </div>
+    }
+  </div>
+</section>
