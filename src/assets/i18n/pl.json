@@ -15,5 +15,12 @@
     "health_beauty": "Zdrowie & Uroda",
     "events": "Wydarzenia",
     "jobs": "Praca"
+  },
+  "login_screen": {
+    "login_title": "Zaloguj się",
+    "password": "Hasło",
+    "register_title": "Zarejestruj się",
+    "ask_register": "Nie masz konta? Zarejestruj się",
+    "ask_login": "Masz konto? Zaloguj się"
   }
 }

@@ -15,5 +15,12 @@
     "health_beauty": "Health & Beauty",
     "events": "Events",
     "jobs": "Jobs"
+  },
+  "login_screen": {
+    "login_title": "Login",
+    "password": "Password",
+    "register_title": "Register",
+    "ask_register": "Don't have account? Sign up",
+    "ask_login": "Already have account? Sing in"
   }
 }
