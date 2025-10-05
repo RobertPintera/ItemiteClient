@@ -16,7 +16,7 @@
     "events": "Events",
     "jobs": "Jobs"
   },
-  "login_screen": {
+  "login_register": {
     "login_title": "Login",
     "password": "Password",
     "register_title": "Register",
