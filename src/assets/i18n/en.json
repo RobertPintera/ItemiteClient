@@ -15,5 +15,8 @@
     "health_beauty": "Health & Beauty",
     "events": "Events",
     "jobs": "Jobs"
+  },
+  "dedicated_products": {
+    "header": "Dedicated products"
   }
 }

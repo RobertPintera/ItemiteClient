@@ -15,5 +15,8 @@
     "health_beauty": "Zdrowie & Uroda",
     "events": "Wydarzenia",
     "jobs": "Praca"
+  },
+  "dedicated_products": {
+    "header": "Dedykowane produkty"
   }
 }
