@@ -10,6 +10,38 @@ import {
 } from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 
+
+
+/**
+ * Carousel component
+ *
+ * @description
+ * Displays a horizontal carousel of items with configurable visible counts per screen size.
+ * Supports navigation via arrows and automatically hides them if all items fit in the visible area.
+ *
+ * The component accepts a template via `<ng-template>` to render each item.
+ *
+ * @example
+ * <app-carousel
+ *   [items]="products" [hideArrows]="false"
+ *   [visibleSSm]="1" [visibleSm]="2"
+ *   [visibleMd]="3" [visibleLg]="4"
+ *   [visibleXl]="5" [visible2xl]="6">
+ *   <ng-template let-product>
+ *     <div>{{ product.name }}</div>
+ *   </ng-template>
+ * </app-carousel>
+ *
+ * @inputs
+ * - `items: any[]` – Array of items to display in the carousel.
+ * - `hideArrows: boolean` – Whether to hide navigation arrows entirely.
+ * - `visibleSSm: number` – Number of visible items for extra small screens.
+ * - `visibleSm: number` – Number of visible items for small screens (≥ 640px).
+ * - `visibleMd: number` – Number of visible items for medium screens (≥ 768px).
+ * - `visibleLg: number` – Number of visible items for large screens (≥ 1024px).
+ * - `visibleXl: number` – Number of visible items for extra large screens (≥ 1280px).
+ * - `visible2xl: number` – Number of visible items for 2xl screens (≥ 1536px).
+ */
 @Component({
   selector: 'app-carousel',
   imports: [
@@ -102,9 +134,7 @@ export class Carousel {
 
     if (this.hideArrows()) return;
 
-    const containerWidth = this.carouselTrack.nativeElement.parentElement!.offsetWidth;
-    const contentWidth = this.carouselTrack.nativeElement.scrollWidth;
-    this.hideArrowsOnButtons.set(contentWidth > containerWidth);
+    this.hideArrowsOnButtons.set(this.itemsWithId().length <= this.visibleCount);
   }
 
   updateVisibleCount() {
