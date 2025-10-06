@@ -1,29 +1,27 @@
 <section class="flex flex-col items-center gap-8">
   <h1>{{'newest_products.header' | translate}}</h1>
-  <ul class="w-full grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
-    @for (product of products.slice(0, products.length / 2); track product.id){
-      <li class="w-1/1 h-96 px-4 my-4 flex-shrink-0">
-        <div class="border-1 rounded-2xl w-full h-full">
-          <img [ngSrc]="product.image" [alt]="product.name" class="w-full h-[60%]" width="1" height="1">
-          <div class="flex flex-col gap-2 p-2">
-            <p class="text-3xl">{{ product.price }} $</p>
-            <p class="text-lg">{{ product.isNegotiable ? "negotiable" : "" }}</p>
-            <p class="text-lg">{{ product.name }}</p>
-          </div>
+  <app-carousel [items]="products.slice(0, products.length / 2)" [visible2xl]="3">
+    <ng-template let-product>
+      <div class="border-1 rounded-2xl w-full h-full">
+        <img [ngSrc]="product.image" [alt]="product.name" class="w-full h-[60%]" width="1" height="1">
+        <div class="flex flex-col gap-2 p-2">
+          <p class="text-3xl">{{ product.price }} $</p>
+          <p class="text-lg">{{ product.isNegotiable ? "negotiable" : "" }}</p>
+          <p class="text-lg">{{ product.name }}</p>
         </div>
-      </li>
-    }
-    @for (product of products.slice(products.length / 2); track product.id){
-      <li class="w-1/1 h-96 px-4 my-4 flex-shrink-0">
-        <div class="border-1 rounded-2xl w-full h-full">
-          <img [ngSrc]="product.image" [alt]="product.name" class="w-full h-[60%]" width="1" height="1">
-          <div class="flex flex-col gap-2 p-2">
-            <p class="text-3xl">{{ product.price }} $</p>
-            <p class="text-lg">{{ product.isNegotiable ? "negotiable" : "" }}</p>
-            <p class="text-lg">{{ product.name }}</p>
-          </div>
+      </div>
+    </ng-template>
+  </app-carousel>
+  <app-carousel [items]="products.slice(products.length / 2)">
+    <ng-template let-product>
+      <div class="border-1 rounded-2xl w-full h-full">
+        <img [ngSrc]="product.image" [alt]="product.name" class="w-full h-[60%]" width="1" height="1">
+        <div class="flex flex-col gap-2 p-2">
+          <p class="text-3xl">{{ product.price }} $</p>
+          <p class="text-lg">{{ product.isNegotiable ? "negotiable" : "" }}</p>
+          <p class="text-lg">{{ product.name }}</p>
         </div>
-      </li>
-    }
-  </ul>
+      </div>
+    </ng-template>
+  </app-carousel>
 </section>

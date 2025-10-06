@@ -4,7 +4,7 @@ import {
   ContentChild,
   ElementRef, HostBinding,
   HostListener,
-  input,
+  input, signal,
   TemplateRef,
   ViewChild
 } from '@angular/core';
@@ -27,6 +27,14 @@ export class Carousel {
   @ContentChild(TemplateRef) templateRef?: TemplateRef<any>;
 
   readonly items = input<any[]>([]);
+  readonly hideArrows = input<boolean>(false);
+  readonly visibleSSm = input<number>(1);
+  readonly visibleSm = input<number | undefined>();
+  readonly visibleMd = input<number | undefined>();
+  readonly visibleLg = input<number | undefined>();
+  readonly visibleXl = input<number | undefined>();
+  readonly visible2xl = input<number | undefined>();
+
   readonly itemsWithId = computed(() =>
     this.items()?.map((item, index) => ({
       id: item.id ?? index,
@@ -35,9 +43,10 @@ export class Carousel {
   );
 
   translateX: number = 0;
-  itemWidth: number = 0;
-  visibleCount: number = 5;
+  itemWidth = signal<number>(0);
+  visibleCount: number = 3;
   activeIndex: number = 0;
+  hideArrowsOnButtons = signal<boolean>(false);
 
   ngAfterViewInit() {
     if (typeof window !== 'undefined' && this.carouselTrack && this.templateRef) {
@@ -46,7 +55,9 @@ export class Carousel {
       this.mql = window.matchMedia(`(max-width: ${screenWidth}px)`);
       this.mql.addEventListener('change', this.handler);
 
-      setTimeout(() => this.calculateSizes());
+      setTimeout(() => {
+        this.updateDom();
+      },0);
     }
   }
 
@@ -56,38 +67,73 @@ export class Carousel {
 
   @HostListener('window:resize')
   onResize() {
+    this.updateDom();
+  }
+
+  private mql?: MediaQueryList;
+
+  private handler = (e: MediaQueryListEvent) => {
+    this.updateDom();
+  };
+
+  updateDom(){
+    this.updateVisibleCount();
+    this.updateArrowVisibility();
     this.calculateSizes();
   }
 
-  private mql!: MediaQueryList;
-  private handler = (e: MediaQueryListEvent) => {
-    this.calculateSizes();
-  };
-
   calculateSizes() {
     if (!this.carouselTrack) return;
-    const firstItem = this.carouselTrack.nativeElement.querySelector('li');
-
-    if (!firstItem) return;
-    this.itemWidth = firstItem.getBoundingClientRect().width;
 
     const containerWidth = this.carouselTrack.nativeElement.parentElement?.getBoundingClientRect().width || 0;
-    this.visibleCount = Math.round(containerWidth / this.itemWidth) || 1;
+
+    this.itemWidth.set(containerWidth / this.visibleCount);
 
     const maxActiveIndex = this.itemsWithId().length - this.visibleCount;
     if (this.activeIndex > maxActiveIndex) {
       this.activeIndex = maxActiveIndex >= 0 ? maxActiveIndex : 0;
     }
-    this.translateX = this.activeIndex * this.itemWidth;
+
+    this.translateX = this.activeIndex * this.itemWidth();
+  }
+
+  updateArrowVisibility() {
+    if (!this.carouselTrack) return;
+
+    if (this.hideArrows()) return;
+
+    const containerWidth = this.carouselTrack.nativeElement.parentElement!.offsetWidth;
+    const contentWidth = this.carouselTrack.nativeElement.scrollWidth;
+    this.hideArrowsOnButtons.set(contentWidth > containerWidth);
+  }
+
+  updateVisibleCount() {
+    if (!this.carouselTrack) return;
+
+    const width = this.carouselTrack.nativeElement.parentElement?.offsetWidth || 0;
+
+    const sSm = this.visibleSSm() ?? 1;
+    const sm = this.visibleSm() ?? sSm;
+    const md = this.visibleMd() ?? sm;
+    const lg = this.visibleLg() ?? md;
+    const xl = this.visibleXl() ?? lg;
+    const x2l = this.visible2xl() ?? xl;
+
+    if (width < 640) this.visibleCount = sSm;
+    else if (width < 768) this.visibleCount = sm;
+    else if (width < 1024) this.visibleCount = md;
+    else if (width < 1280) this.visibleCount = lg;
+    else if (width < 1536) this.visibleCount = xl;
+    else this.visibleCount = x2l;
   }
 
   prev() {
     this.activeIndex = Math.max(this.activeIndex - 1, 0);
-    this.translateX = Math.max(this.translateX - this.itemWidth, 0);
+    this.translateX = Math.max(this.activeIndex * this.itemWidth(), 0);
   }
 
   next() {
     this.activeIndex = Math.min(this.activeIndex + 1, this.itemsWithId().length - this.visibleCount);
-    this.translateX = this.activeIndex * this.itemWidth;
+    this.translateX = this.activeIndex * this.itemWidth();
   }
 }
