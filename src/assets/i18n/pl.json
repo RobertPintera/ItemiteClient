@@ -18,5 +18,11 @@
   },
   "dedicated_products": {
     "header": "Dedykowane produkty"
+  },
+  "newest_products": {
+    "header": "Najnowsze produkty"
+  },
+  "auctions": {
+    "header": "Licytacje"
   }
 }
