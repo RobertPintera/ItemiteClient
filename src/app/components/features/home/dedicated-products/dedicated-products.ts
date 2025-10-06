@@ -2,19 +2,19 @@ import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {TranslatePipe} from "@ngx-translate/core";
 import {Product} from '../../../../core/models/Product';
 import {NgOptimizedImage} from '@angular/common';
+import {Carousel} from '../../../shared/carousel/carousel';
 
 @Component({
   selector: 'app-dedicated-products',
   imports: [
     NgOptimizedImage,
-    TranslatePipe
+    TranslatePipe,
+    Carousel
   ],
   templateUrl: './dedicated-products.html',
   styleUrl: './dedicated-products.css'
 })
 export class DedicatedProducts {
-  @ViewChild('carouselTrack', { static: true }) carouselTrack?: ElementRef<HTMLUListElement>;
-
   products : Product[] = [
    {
      id: 'p1',
@@ -87,61 +87,4 @@ export class DedicatedProducts {
      price: 999.00
    }
   ];
-
-  translateX: number = 0;
-  itemWidth: number = 0;
-  visibleCount: number = 5;
-  activeIndex: number = 0;
-
-  ngAfterViewInit() {
-    if (typeof window !== 'undefined' && this.carouselTrack) {
-      const screenWidth = window.screen.availWidth - 1;
-
-      this.mql = window.matchMedia(`(max-width: ${screenWidth}px)`);
-      this.mql.addEventListener('change', this.handler);
-
-      setTimeout(() => this.calculateSizes());
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.mql) this.mql.removeEventListener('change', this.handler);
-  }
-
-  @HostListener('window:resize')
-  onResize() {
-    this.calculateSizes();
-  }
-
-  private mql!: MediaQueryList;
-  private handler = (e: MediaQueryListEvent) => {
-    this.calculateSizes();
-  };
-
-  calculateSizes() {
-    if (!this.carouselTrack) return;
-    const firstItem = this.carouselTrack.nativeElement.querySelector('li');
-
-    if (!firstItem) return;
-    this.itemWidth = firstItem.getBoundingClientRect().width;
-
-    const containerWidth = this.carouselTrack.nativeElement.parentElement?.getBoundingClientRect().width || 0;
-    this.visibleCount = Math.floor(containerWidth / this.itemWidth) || 1;
-
-    const maxActiveIndex = this.products.length - this.visibleCount;
-    if (this.activeIndex > maxActiveIndex) {
-      this.activeIndex = maxActiveIndex >= 0 ? maxActiveIndex : 0;
-    }
-    this.translateX = this.activeIndex * this.itemWidth;
-  }
-
-  prev() {
-    this.activeIndex = Math.max(this.activeIndex - 1, 0);
-    this.translateX = Math.max(this.translateX - this.itemWidth, 0);
-  }
-
-  next() {
-    this.activeIndex = Math.min(this.activeIndex + 1, this.products.length - this.visibleCount);
-    this.translateX = this.activeIndex * this.itemWidth;
-  }
 }

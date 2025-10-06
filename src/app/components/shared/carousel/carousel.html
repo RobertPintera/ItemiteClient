@@ -7,10 +7,11 @@
   </button>
 
   <div class="relative w-11/12 overflow-hidden">
-    <ul #carouselTrack class="flex flex-row items-center w-full transition">
-      @for (item of items(); track item.id){
+    <ul #carouselTrack class="flex flex-row items-center w-full transition"
+        [style.transform]="'translateX(-' + translateX + 'px)'">
+      @for (item of itemsWithId(); track item.id){
         <li class="w-1/1 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-[20%] h-96 px-4 flex-shrink-0">
-          <ng-content></ng-content>
+          <ng-container *ngTemplateOutlet="templateRef; context: {$implicit: item}"/>
         </li>
       }
     </ul>
