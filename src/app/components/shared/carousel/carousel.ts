@@ -80,12 +80,24 @@ export class Carousel {
   activeIndex: number = 0;
   hideArrowsOnButtons = signal<boolean>(false);
 
+  private mql?: MediaQueryList;
+  private resizeObserver?: ResizeObserver;
+
   ngAfterViewInit() {
     if (typeof window !== 'undefined' && this.carouselTrack && this.templateRef) {
       const screenWidth = window.screen.availWidth - 1;
 
       this.mql = window.matchMedia(`(max-width: ${screenWidth}px)`);
       this.mql.addEventListener('change', this.handler);
+
+      this.resizeObserver = new ResizeObserver(() => {
+        this.updateDom();
+      });
+
+      const parent = this.carouselTrack.nativeElement.parentElement;
+      if (parent) {
+        this.resizeObserver.observe(parent);
+      }
 
       setTimeout(() => {
         this.updateDom();
@@ -95,14 +107,8 @@ export class Carousel {
 
   ngOnDestroy() {
     if (this.mql) this.mql.removeEventListener('change', this.handler);
+    this.resizeObserver?.disconnect();
   }
-
-  @HostListener('window:resize')
-  onResize() {
-    this.updateDom();
-  }
-
-  private mql?: MediaQueryList;
 
   private handler = (e: MediaQueryListEvent) => {
     this.updateDom();
