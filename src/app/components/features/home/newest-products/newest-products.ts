@@ -3,13 +3,14 @@ import {NgOptimizedImage} from "@angular/common";
 import {Product} from '../../../../core/models/Product';
 import {TranslatePipe} from '@ngx-translate/core';
 import {Carousel} from '../../../shared/carousel/carousel';
+import {ProductCard} from '../cards/product-card/product-card';
 
 @Component({
   selector: 'app-newest-products',
   imports: [
-    NgOptimizedImage,
     TranslatePipe,
-    Carousel
+    Carousel,
+    ProductCard
   ],
   templateUrl: './newest-products.html',
   styleUrl: './newest-products.css'

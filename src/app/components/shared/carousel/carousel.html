@@ -10,11 +10,11 @@
   }
 
 
-  <div class="relative w-11/12 overflow-hidden">
+  <div class="relative w-full overflow-hidden">
     <ul #carouselTrack class="flex flex-row items-center w-full transition"
         [style.transform]="'translateX(-' + translateX + 'px)'">
       @for (item of itemsWithId(); track item.id){
-        <li class="h-96 px-4 flex-shrink-0" [style.width.px]="itemWidth()">
+        <li class="h-auto px-4 flex-shrink-0" [style.width.px]="itemWidth()">
           <ng-container *ngTemplateOutlet="templateRef; context: {$implicit: item}"/>
         </li>
       }

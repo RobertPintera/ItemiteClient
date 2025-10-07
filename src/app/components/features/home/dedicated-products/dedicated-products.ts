@@ -1,15 +1,15 @@
-import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {TranslatePipe} from "@ngx-translate/core";
 import {Product} from '../../../../core/models/Product';
-import {NgOptimizedImage} from '@angular/common';
 import {Carousel} from '../../../shared/carousel/carousel';
+import {ProductCard} from '../cards/product-card/product-card';
 
 @Component({
   selector: 'app-dedicated-products',
   imports: [
-    NgOptimizedImage,
     TranslatePipe,
-    Carousel
+    Carousel,
+    ProductCard
   ],
   templateUrl: './dedicated-products.html',
   styleUrl: './dedicated-products.css'

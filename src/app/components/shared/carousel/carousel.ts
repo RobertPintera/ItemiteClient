@@ -3,7 +3,6 @@ import {
   computed,
   ContentChild,
   ElementRef, HostBinding,
-  HostListener,
   input, signal,
   TemplateRef,
   ViewChild

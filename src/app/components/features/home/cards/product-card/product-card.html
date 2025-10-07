@@ -1,0 +1,8 @@
+<div class="border-1 rounded-2xl w-full h-96">
+  <img [ngSrc]="product()?.image ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name" class="w-full h-[60%]" width="1" height="1">
+  <div class="flex flex-col gap-2 p-2">
+    <p class="text-3xl">{{ product()?.price }} $</p>
+    <p class="text-lg">{{ product()?.isNegotiable ? "negotiable" : "" }}</p>
+    <p class="text-lg">{{ product()?.name }}</p>
+  </div>
+</div>

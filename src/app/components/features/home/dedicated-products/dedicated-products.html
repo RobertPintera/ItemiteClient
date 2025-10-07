@@ -2,14 +2,7 @@
   <h1>{{'dedicated_products.header' | translate}}</h1>
   <app-carousel [items]="products" [visibleSm]="2" [visibleMd]="3" [visibleLg]="4" [visibleXl]="5">
     <ng-template let-product>
-      <div class="border-1 rounded-2xl w-full h-full">
-        <img [ngSrc]="product.image" [alt]="product.name" class="w-full h-[60%]" width="1" height="1">
-        <div class="flex flex-col gap-2 p-2">
-          <p class="text-3xl">{{ product.price }} $</p>
-          <p class="text-lg">{{ product.isNegotiable ? "negotiable" : "" }}</p>
-          <p class="text-lg">{{ product.name }}</p>
-        </div>
-      </div>
+      <app-product-card [product]="product"/>
     </ng-template>
   </app-carousel>
 </section>
