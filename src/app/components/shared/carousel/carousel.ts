@@ -146,7 +146,7 @@ export class Carousel {
   updateVisibleCount() {
     if (!this.carouselTrack) return;
 
-    const width = this.carouselTrack.nativeElement.parentElement?.offsetWidth || 0;
+    const width = window.innerWidth;
 
     const sSm = this.visibleSSm() ?? 1;
     const sm = this.visibleSm() ?? sSm;
