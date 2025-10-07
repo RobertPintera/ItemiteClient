@@ -15,7 +15,7 @@ export class AuctionProductCard {
 
   isXl = signal<boolean>(false);
 
-  private mediaQuery = window.matchMedia('(min-width: 768px)');
+  private mediaQuery = window.matchMedia('(min-width: 640px)');
   private listener = (event: MediaQueryListEvent) => this.isXl.set(event.matches);
 
   constructor() {
