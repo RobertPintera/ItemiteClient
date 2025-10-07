@@ -9,9 +9,8 @@
     </button>
   }
 
-
-  <div class="relative w-full overflow-hidden">
-    <ul #carouselTrack class="flex flex-row items-center w-full transition"
+  <div class="relative w-full mx-8 overflow-hidden">
+    <ul #carouselTrack class="flex flex-row items-center w-full transition py-1"
         [style.transform]="'translateX(-' + translateX + 'px)'">
       @for (item of itemsWithId(); track item.id){
         <li class="h-auto px-4 flex-shrink-0" [style.width.px]="itemWidth()">

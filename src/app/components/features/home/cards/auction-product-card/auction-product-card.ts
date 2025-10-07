@@ -12,18 +12,24 @@ import {AuctionProduct} from '../../../../../core/models/AuctionProduct';
 })
 export class AuctionProductCard {
   readonly product = input<AuctionProduct>();
-
   isXl = signal<boolean>(false);
 
-  private mediaQuery = window.matchMedia('(min-width: 640px)');
-  private listener = (event: MediaQueryListEvent) => this.isXl.set(event.matches);
+  private mediaQuery?: MediaQueryList;
+  private listener?: (event: MediaQueryListEvent) => void;
 
-  constructor() {
-    this.isXl.set(this.mediaQuery.matches);
-    this.mediaQuery.addEventListener('change', this.listener);
+  ngOnInit() {
+    if (typeof window !== 'undefined') {
+      this.mediaQuery = window.matchMedia('(min-width: 640px)');
+      this.listener = (event: MediaQueryListEvent) => this.isXl.set(event.matches);
+
+      this.isXl.set(this.mediaQuery.matches);
+      this.mediaQuery.addEventListener('change', this.listener);
+    }
   }
 
   ngOnDestroy() {
-    this.mediaQuery.removeEventListener('change', this.listener);
+    if (this.mediaQuery && this.listener) {
+      this.mediaQuery.removeEventListener('change', this.listener);
+    }
   }
 }
