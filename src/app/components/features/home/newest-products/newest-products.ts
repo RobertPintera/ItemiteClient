@@ -60,5 +60,6 @@ export class NewestProducts {
       price: 399.00
     }];
 
-
+  readonly firstHalfProducts = this.products.slice(0, this.products.length / 2);
+  readonly secondHalfProducts = this.products.slice(this.products.length / 2);
 }

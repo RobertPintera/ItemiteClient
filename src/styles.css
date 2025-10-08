@@ -5,6 +5,8 @@
   --color-header-color: #222;
   --color-navbar-border: #AEAEAE;
   --color-primary: #EEF3FF;
+  --color-secondary: #D3E0FF;
+  --color-separator: #AEAEAE;
 }
 
 @layer base {

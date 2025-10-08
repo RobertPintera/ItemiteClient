@@ -1,10 +1,10 @@
 <div class="relative flex justify-center w-full">
   @if(!hideArrowsOnButtons())
   {
-    <button class="absolute right-8 top-1/2 bg-[#D3E0FF]/70 hover:bg-[#D3E0FF] active:bg-[#D3E0FF]/70 rounded-full p-4 transition-colors z-20" (click)="next()">
+    <button class="absolute right-8 top-1/2 bg-secondary/70 hover:bg-secondary active:bg-secondary/70 rounded-full p-4 transition-colors z-20" (click)="next()">
       <img ngSrc="assets/arrow_forward_icon.svg" alt="arrow forward" width="24" height="24">
     </button>
-    <button class="absolute left-8 top-1/2 bg-[#D3E0FF]/70 hover:bg-[#D3E0FF] active:bg-[#D3E0FF]/70 rounded-full p-4 transition-colors z-20" (click)="prev()">
+    <button class="absolute left-8 top-1/2 bg-secondary/70 hover:bg-secondary active:bg-secondary/70 rounded-full p-4 transition-colors z-20" (click)="prev()">
       <img ngSrc="assets/arrow_back_icon.svg" alt="arrow back" width="24" height="24">
     </button>
   }

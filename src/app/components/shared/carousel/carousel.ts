@@ -83,25 +83,25 @@ export class Carousel {
   private resizeObserver?: ResizeObserver;
 
   ngAfterViewInit() {
-    if (typeof window !== 'undefined' && this.carouselTrack && this.templateRef) {
-      const screenWidth = window.screen.availWidth - 1;
+    if (typeof window === 'undefined' || !this.carouselTrack || !this.templateRef) return;
 
-      this.mql = window.matchMedia(`(max-width: ${screenWidth}px)`);
-      this.mql.addEventListener('change', this.handler);
+    const screenWidth = window.screen.availWidth - 1;
 
-      this.resizeObserver = new ResizeObserver(() => {
-        this.updateDom();
-      });
+    this.mql = window.matchMedia(`(max-width: ${screenWidth}px)`);
+    this.mql.addEventListener('change', this.handler);
 
-      const parent = this.carouselTrack.nativeElement.parentElement;
-      if (parent) {
-        this.resizeObserver.observe(parent);
-      }
+    this.resizeObserver = new ResizeObserver(() => {
+      this.updateDom();
+    });
 
-      setTimeout(() => {
-        this.updateDom();
-      },0);
+    const parent = this.carouselTrack.nativeElement.parentElement;
+    if (parent) {
+      this.resizeObserver.observe(parent);
     }
+
+    setTimeout(() => {
+      this.updateDom();
+    },0);
   }
 
   ngOnDestroy() {
