@@ -5,15 +5,24 @@
     "electronics": "Elektronika",
     "motorization": "Motoryzacja",
     "fashion": "Moda",
-    "sports_hobbies": "Sport & Hobby",
-    "kids_baby": "Dzieci & Niemowlęta",
+    "sports_hobbies": "Sport i Hobby",
+    "kids_baby": "Dzieci i Niemowlęta",
     "real_estate": "Nieruchomości",
-    "home_garden": "Dom & Ogród",
+    "home_garden": "Dom i Ogród",
     "pets": "Zwierzęta",
-    "services_education": "Usługi & Edukacja",
+    "services_education": "Usługi i Edukacja",
     "industry": "Przemysł",
-    "health_beauty": "Zdrowie & Uroda",
+    "health_beauty": "Zdrowie i Uroda",
     "events": "Wydarzenia",
     "jobs": "Praca"
+  },
+  "dedicated_products": {
+    "header": "Dedykowane produkty"
+  },
+  "newest_products": {
+    "header": "Najnowsze produkty"
+  },
+  "auctions": {
+    "header": "Licytacje"
   }
 }

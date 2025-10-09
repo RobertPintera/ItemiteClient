@@ -15,5 +15,14 @@
     "health_beauty": "Health & Beauty",
     "events": "Events",
     "jobs": "Jobs"
+  },
+  "dedicated_products": {
+    "header": "Dedicated products"
+  },
+  "newest_products": {
+    "header": "Newest products"
+  },
+  "auctions": {
+    "header": "Auctions"
   }
 }

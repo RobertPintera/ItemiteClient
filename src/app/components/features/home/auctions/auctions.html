@@ -1,0 +1,13 @@
+<section class="flex flex-col items-center gap-8 mx-8 py-1">
+  <h1>{{'auctions.header' | translate}}</h1>
+  <div class="h-96 w-full px-4 flex-shrink-0">
+    @if (firstProduct()) {
+      <app-auction-product-card [product]="firstProduct()" />
+    }
+  </div>
+  <div class="h-96 w-full px-4 flex-shrink-0">
+    @if (secondProduct()) {
+      <app-auction-product-card [product]="secondProduct()" />
+    }
+  </div>
+</section>

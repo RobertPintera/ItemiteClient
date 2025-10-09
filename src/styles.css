@@ -3,8 +3,10 @@
 @theme{
   --color-title-color: #51738B;
   --color-header-color: #222;
-  --color-navbar-background: #EEF3FF;
   --color-navbar-border: #AEAEAE;
+  --color-primary: #EEF3FF;
+  --color-secondary: #D3E0FF;
+  --color-separator: #AEAEAE;
 }
 
 :root {
