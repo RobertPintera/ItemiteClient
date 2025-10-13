@@ -5,7 +5,7 @@
       <h1 class="font-semibold italic">Itemite</h1>
     </a>
     <div class="flex">
-      <app-combo-box [options]="languages" [selected]="languages[0]" (selectedChange)="useLanguage($event)"
+      <app-combo-box [items]="languages" [selectedItem]="languages[0]" (selectedChange)="useLanguage($event)"
                      class="text-2xl px-1"/>
       <a routerLink="/login"><img src="/heart_%2351738B_icon.svg" alt="Favourites" class="h-10 w-auto"></a>
       <a routerLink="/login"><img src="/shopping_cat_%2351738B_icon.svg" alt="Checkout" class="h-10 w-auto"></a>

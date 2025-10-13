@@ -1,8 +1,15 @@
-<!-- temporary component -->
-<select [value]="selected()" (change)="onChange($event)">
-  @for (option of options(); track option) {
-    <option [value]="option">
-      {{ option }}
-    </option>
+<div class="combo-container" (click)="toggleDropdown()">
+  <div class="combo-selected">
+    <p>{{ selected()?.value ?? ' ' }}</p>
+    <span class="arrow">▼</span>
+  </div>
+  @if(isOpen()){
+    <ul class="combo-dropdown">
+      @for (item of items(); track item.key){
+        <li (click)="chooseItem(item); $event.stopPropagation()">
+          {{ item.value }}
+        </li>
+      }
+    </ul>
   }
-</select>
+</div>

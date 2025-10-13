@@ -1,4 +1,8 @@
 {
+  "navbar": {
+    "categories": "Kategorie",
+    "auctions": "Licytacje"
+  },
   "categories": {
     "header": "Kategorie",
     "agriculture": "Rolnictwo",

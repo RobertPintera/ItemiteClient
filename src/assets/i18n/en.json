@@ -1,4 +1,8 @@
 {
+  "navbar": {
+    "categories": "Categories",
+    "auctions": "Auctions"
+  },
   "categories": {
     "header": "Categories",
     "agriculture": "Agriculture",

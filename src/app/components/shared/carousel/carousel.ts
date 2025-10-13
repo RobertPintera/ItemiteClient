@@ -9,8 +9,6 @@ import {
 } from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 
-
-
 /**
  * Carousel component
  *
