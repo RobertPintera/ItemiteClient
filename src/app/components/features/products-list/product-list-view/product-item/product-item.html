@@ -1,27 +1,30 @@
-<div class="flex flex-col h-72 w-full border-1 rounded-4xl p-4">
-  <p class="text-4xl">{{ product()?.name }}</p>
-  <div class="flex flex-row h-full w-full">
-    <div class="flex flex-row flex-1 h-full w-full">
-      <div class="aspect-square">
-        <img [ngSrc]="product()?.image ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name" class="size-full object-contain" height="1" width="1">
-      </div>
-      <div class="flex flex-col w-full justify-between p-8 pt-12">
-        <div class="flex flex-row gap-3">
-          @for (category of categoriesWithId(); track category.id){
-            <div class="border-1 px-4 py-2 rounded-2xl">
-              <p class="text-2xl">{{category.name}}</p>
-            </div>
-          }
+<a [routerLink]="['/products', product()?.categories?.[0] ?? 'uncategorized', product()?.name || '']">>
+  <div class="flex flex-col h-72 w-full border-b-1 p-4">
+    <p class="text-4xl">{{ product()?.name }}</p>
+    <div class="flex flex-row h-full w-full">
+      <div class="flex flex-row flex-1 h-full w-full">
+        <div class="aspect-square">
+          <img [ngSrc]="product()?.image ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name" class="size-full object-contain" height="1" width="1">
         </div>
-        <div class="flex flex-col gap-2">
-          <p class="text-xl">Localization: {{ product()?.localization }}</p>
-          <p class="text-xl">Date of issue: {{ product()?.dateOfIssue }}</p>
+        <div class="flex flex-col w-full justify-between p-8 pt-12">
+          <div class="flex flex-row gap-3">
+            @for (category of categoriesWithId(); track category.id){
+              <div class="border-1 px-4 py-2 rounded-2xl">
+                <p class="text-2xl">{{category.name}}</p>
+              </div>
+            }
+          </div>
+          <div class="flex flex-col gap-2">
+            <p class="text-xl">Localization: {{ product()?.localization }}</p>
+            <p class="text-xl">Date of issue: {{ product()?.dateOfIssue }}</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="flex-none flex flex-col px-16 items-end">
+      <div class="flex-none flex flex-col px-16 items-end">
         <p class="text-3xl">{{ product()?.price }}$</p>
         <p class="text-lg">{{ product()?.isNegotiable ? "negotiable" : "" }}</p>
+      </div>
     </div>
   </div>
-</div>
+</a>
+
