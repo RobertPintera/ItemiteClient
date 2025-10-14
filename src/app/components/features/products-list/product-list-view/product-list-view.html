@@ -1,3 +1,7 @@
-<main>
-  dfsfds
+<main class="p-4">
+  <div class="flex flex-col gap-4">
+    @for (product of products; track product.id){
+      <app-product-item [product]="product"/>
+    }
+  </div>
 </main>

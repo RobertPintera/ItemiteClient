@@ -1,0 +1,13 @@
+<ul>
+  @for (category of categories(); track category.id) {
+    <li [style.padding-left.px]="level() * 20">
+      <div class="flex pb-4 gap-3">
+        <input type="checkbox"/>
+        <p>{{ category.name }}</p>
+      </div>
+      @if (category.subcategories?.length) {
+        <app-category-tree [categories]="category.subcategories ?? []" [level]="level() + 1"></app-category-tree>
+      }
+    </li>
+  }
+</ul>
