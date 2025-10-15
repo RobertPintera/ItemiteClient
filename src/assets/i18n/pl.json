@@ -1,4 +1,7 @@
 {
+  "paginator": {
+    "preposition": "z"
+  },
   "navbar": {
     "categories": "Kategorie",
     "auctions": "Licytacje"

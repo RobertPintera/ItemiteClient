@@ -1,4 +1,4 @@
-<a [routerLink]="['/products', product()?.categories?.[0] ?? 'uncategorized', product()?.name || '']">>
+<a [routerLink]="['/products', product()?.categories?.[0] ?? 'uncategorized', product()?.name || '']">
   <div class="flex flex-col h-72 w-full border-b-1 p-4">
     <p class="text-4xl">{{ product()?.name }}</p>
     <div class="flex flex-row h-full w-full">

@@ -1,4 +1,7 @@
 {
+  "paginator": {
+    "preposition": "from"
+  },
   "navbar": {
     "categories": "Categories",
     "auctions": "Auctions"

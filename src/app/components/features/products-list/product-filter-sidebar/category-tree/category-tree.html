@@ -1,7 +1,7 @@
 <ul>
   @for (category of categories(); track category.id) {
     <li [style.padding-left.px]="level() * 20">
-      <div class="flex pb-4 gap-3">
+      <div class="flex pb-2 gap-2">
         <input type="checkbox"/>
         <p>{{ category.name }}</p>
       </div>

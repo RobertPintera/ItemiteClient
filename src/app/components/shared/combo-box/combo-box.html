@@ -1,13 +1,13 @@
-<div class="combo-container" (click)="toggleDropdown()">
-  <div class="combo-selected">
+<div class="combo-container">
+  <button class="combo-selected w-full" (click)="toggleDropdown()">
     <p>{{ selected()?.value ?? ' ' }}</p>
     <span class="arrow">▼</span>
-  </div>
+  </button>
   @if(isOpen()){
-    <ul class="combo-dropdown">
+    <ul class="combo-dropdown w-full">
       @for (item of items(); track item.key){
-        <li (click)="chooseItem(item); $event.stopPropagation()">
-          {{ item.value }}
+        <li class="h-full w-full">
+          <button (click)="chooseItem(item); $event.stopPropagation()" class="w-full h-full text-left p-2">{{ item.value }}</button>
         </li>
       }
     </ul>

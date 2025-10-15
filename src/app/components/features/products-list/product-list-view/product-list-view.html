@@ -1,7 +1,14 @@
-<main class="p-4">
+<main class="flex flex-col p-4">
+  <div class="w-full flex justify-between items-center">
+    <app-combo-box [items]="sortings" [selectedItem]="sortings[0]" (selectedChange)="useSorting($event)"/>
+    <app-paginator/>
+  </div>
   <div class="flex flex-col gap-4">
     @for (product of products; track product.id){
       <app-product-item [product]="product"/>
     }
+  </div>
+  <div class="w-full flex justify-end">
+    <app-paginator/>
   </div>
 </main>
