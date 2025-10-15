@@ -1,12 +1,14 @@
 import {Component, computed, input, output, signal} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-paginator',
   imports: [
     NgOptimizedImage,
-    FormsModule
+    FormsModule,
+    TranslatePipe
   ],
   templateUrl: './paginator.html',
   styleUrl: './paginator.css'

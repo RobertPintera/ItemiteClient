@@ -12,7 +12,7 @@
          (keydown)="allowOnlyNumbers($event)"
          (keyup.enter)="goToPage(currentPageValue)"
          (blur)="goToPage(currentPageValue)">
-  <p>z</p>
+  <p>{{'paginator.preposition' | translate}}</p>
   <p>{{totalPages()}}</p>
   <button type="button" class="bg-background hover:bg-accent active:bg-accent/70 border-2 border-border ring-ring rounded-xl p-2 transition-colors z-20"
   (click)="nextPage()">

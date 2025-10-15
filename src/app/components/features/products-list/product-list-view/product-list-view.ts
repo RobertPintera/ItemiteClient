@@ -3,32 +3,31 @@ import {Product} from '../../../../core/models/Product';
 import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
-import {TranslateService} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-list-view',
   imports: [
     ProductItem,
     Paginator,
-    ComboBox
+    ComboBox,
+    TranslatePipe
   ],
   templateUrl: './product-list-view.html',
   styleUrl: './product-list-view.css'
 })
 export class ProductListView {
-  @HostBinding('class')
-  hostClass = 'w-full';
+  @HostBinding('class') hostClass = 'w-full';
 
   private translate = inject(TranslateService);
 
   sortings = [
-    { key: 'ascending', value: 'ascending' },
-    { key: 'descending', value: 'descending' },
+    { key: 'ascending', value: 'sortings.ascending' },
+    { key: 'descending', value: 'sortings.descending' },
   ];
 
-  useSorting(language: { key: string; value: string }): void {
-    if(!language) return;
-    this.translate.use(language?.value);
+  useSorting(sorting: { key: string; value: string }): void {
+    if(!sorting) return;
   }
 
   products: Product[] = [

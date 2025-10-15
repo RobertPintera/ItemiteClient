@@ -48,8 +48,7 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
   styleUrl: './carousel.css'
 })
 export class Carousel {
-  @HostBinding('class')
-  hostClass = 'w-full';
+  @HostBinding('class') hostClass = 'w-full';
 
   @ViewChild('carouselTrack', { static: true }) carouselTrack?: ElementRef<HTMLUListElement>;
   @ContentChild(TemplateRef) templateRef?: TemplateRef<any>;

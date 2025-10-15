@@ -1,14 +1,18 @@
-import {Component, inject, input, output, signal} from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import {Component, ContentChild, inject, input, output, signal, TemplateRef} from '@angular/core';
+import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-combo-box',
-  imports: [],
+  imports: [
+    NgTemplateOutlet
+  ],
   templateUrl: './combo-box.html',
   styleUrl: './combo-box.css'
 })
 export class ComboBox {
+  @ContentChild(TemplateRef) templateRef?: TemplateRef<any>;
+
   readonly items = input<{ key: string; value: string}[]>([]);
   readonly selectedItem = input<{ key: string; value: string } | null>(null);
 
