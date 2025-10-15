@@ -42,7 +42,6 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
 @Component({
   selector: 'app-carousel',
   imports: [
-    NgOptimizedImage,
     CommonModule
   ],
   templateUrl: './carousel.html',

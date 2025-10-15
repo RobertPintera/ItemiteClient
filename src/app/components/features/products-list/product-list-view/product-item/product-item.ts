@@ -1,4 +1,4 @@
-import {Component, computed, input} from '@angular/core';
+import {Component, computed, HostBinding, input} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 import {Product} from '../../../../../core/models/Product';
 import {RouterLink} from '@angular/router';
@@ -13,6 +13,9 @@ import {RouterLink} from '@angular/router';
   styleUrl: './product-item.css'
 })
 export class ProductItem {
+  @HostBinding('class')
+  hostClass = 'w-full';
+
   readonly product = input<Product>();
 
   readonly categoriesWithId = computed(() =>

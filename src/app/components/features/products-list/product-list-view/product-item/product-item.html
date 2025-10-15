@@ -1,13 +1,13 @@
-<a [routerLink]="['/products', product()?.categories?.[0] ?? 'uncategorized', product()?.name || '']">
-  <div class="flex flex-col h-72 w-full border-b-1 p-4">
+<a [routerLink]="['/products', product()?.categories?.[0] ?? 'uncategorized', product()?.name || '']" class="w-full max-w-full">
+  <div class="flex flex-col w-full border-b-1 p-4">
     <p class="text-4xl">{{ product()?.name }}</p>
     <div class="flex flex-row h-full w-full">
       <div class="flex flex-row flex-1 h-full w-full">
-        <div class="aspect-square">
+        <div class="h-72 aspect-square">
           <img [ngSrc]="product()?.image ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name" class="size-full object-contain" height="1" width="1">
         </div>
         <div class="flex flex-col w-full justify-between p-8 pt-12">
-          <div class="flex flex-row gap-3">
+          <div class="flex flex-row flex-wrap gap-3">
             @for (category of categoriesWithId(); track category.id){
               <div class="border-1 px-4 py-2 rounded-2xl">
                 <p class="text-2xl">{{category.name}}</p>

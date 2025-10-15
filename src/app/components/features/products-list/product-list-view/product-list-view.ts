@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, HostBinding, inject} from '@angular/core';
 import {Product} from '../../../../core/models/Product';
 import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
@@ -16,6 +16,9 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrl: './product-list-view.css'
 })
 export class ProductListView {
+  @HostBinding('class')
+  hostClass = 'w-full';
+
   private translate = inject(TranslateService);
 
   sortings = [
