@@ -1,10 +1,14 @@
 import {Component, input} from '@angular/core';
 import {Category} from '../../../../../core/models/Category';
+import {NgClass, NgTemplateOutlet} from '@angular/common';
 
 @Component({
   selector: 'app-category-tree',
-  imports: [],
   templateUrl: './category-tree.html',
+  imports: [
+    NgClass,
+    NgTemplateOutlet
+  ],
   styleUrl: './category-tree.css'
 })
 export class CategoryTree {
