@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import {Category} from '../../../../core/models/Category';
 import {CategoryTree} from './category-tree/category-tree';
+import {Button} from '../../../shared/button/button';
 
 @Component({
   selector: 'app-product-filter-sidebar',
   imports: [
-    CategoryTree
+    CategoryTree,
+    Button
   ],
   templateUrl: './product-filter-sidebar.html',
   styleUrl: './product-filter-sidebar.css'

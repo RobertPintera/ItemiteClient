@@ -2,14 +2,24 @@
   <div class="flex flex-col gap-2">
     <p class="font-semibold text-lg">{{ mainCategory }}</p>
     <app-category-tree [categories]="categories"/>
-    <p>Prices</p>
-    <div class="flex items-center gap-2 w-full">
-      <input type="text" class="w-32 border rounded p-2" />
-      <p class="shrink-0 text-2xl">-</p>
-      <input type="text" class="w-32 border rounded p-2" />
+    <div class="flex w-full flex-row xl:flex-col gap-2">
+      <div class="flex flex-1 flex-col gap-2">
+        <p>Prices</p>
+        <div class="flex items-center gap-2 w-full">
+          <input type="text" class="border rounded p-2" />
+          <p class="shrink-0 text-2xl">-</p>
+          <input type="text" class="border rounded p-2" />
+        </div>
+      </div>
+      <div class="flex flex-1 flex-col gap-2">
+        <p>Localization</p>
+        <input type="text" class="w-full border rounded p-2" />
+        <input type="text" class="w-full border rounded p-2" />
+      </div>
     </div>
-    <p>Localization</p>
-    <input type="text" class="w-full border rounded p-2" />
-    <input type="text" class="w-full border rounded p-2" />
+
+    <div class="flex justify-end w-full">
+      <app-button label="Filter" />
+    </div>
   </div>
 </aside>
