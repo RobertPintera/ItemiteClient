@@ -1,5 +1,6 @@
 import {Component, input, signal} from '@angular/core';
 import {AuctionProduct} from '../../../../../core/models/AuctionProduct';
+import {NgOptimizedImage} from '@angular/common';
 
 interface ProductInfoItem {
   id: number;
@@ -10,6 +11,9 @@ interface ProductInfoItem {
 @Component({
   selector: 'app-auction-product-card',
   templateUrl: './auction-product-card.html',
+  imports: [
+    NgOptimizedImage
+  ],
   styleUrl: './auction-product-card.css'
 })
 export class AuctionProductCard {
