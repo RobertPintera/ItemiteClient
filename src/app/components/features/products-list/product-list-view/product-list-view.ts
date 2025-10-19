@@ -1,9 +1,10 @@
-import {Component, HostBinding, inject} from '@angular/core';
+import {Component, HostBinding, inject, input, output} from '@angular/core';
 import {Product} from '../../../../core/models/Product';
 import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {Button} from '../../../shared/button/button';
 
 @Component({
   selector: 'app-product-list-view',
@@ -11,7 +12,8 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core';
     ProductItem,
     Paginator,
     ComboBox,
-    TranslatePipe
+    TranslatePipe,
+    Button
   ],
   templateUrl: './product-list-view.html',
   styleUrl: './product-list-view.css'
@@ -21,6 +23,9 @@ export class ProductListView {
 
   private translate = inject(TranslateService);
 
+  readonly isXl = input.required<boolean>();
+  readonly filterOpen = output<void>();
+
   sortings = [
     { key: 'ascending', value: 'sortings.ascending' },
     { key: 'descending', value: 'sortings.descending' },
@@ -28,6 +33,10 @@ export class ProductListView {
 
   useSorting(sorting: { key: string; value: string }): void {
     if(!sorting) return;
+  }
+
+  openFilter(): void {
+    this.filterOpen.emit();
   }
 
   products: Product[] = [
