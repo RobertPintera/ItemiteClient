@@ -23,6 +23,7 @@ export class ProductListView {
 
   private translate = inject(TranslateService);
 
+  readonly isMd = input.required<boolean>();
   readonly isXl = input.required<boolean>();
   readonly filterOpen = output<void>();
 

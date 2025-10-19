@@ -3,8 +3,7 @@
   sm:top-0 sm:p-4
   xl:block xl:sticky xl:top-30 xl:bg-transparent xl:transition-none" [class.hidden]="!isFilterOpen()"
        tabindex="0" (click)="closeFilter()" (keydown.enter)="closeFilter()" (keydown.space)="closeFilter()">
-    <app-product-filter-sidebar class="w-full" [isXl]="isXl()" [isSm]="isSm()"
-                                (click)="$event.stopPropagation()" (filterClose)="closeFilter()"/>
+    <app-product-filter-sidebar class="w-full" [isXl]="isXl()" (click)="$event.stopPropagation()" (filterClose)="closeFilter()"/>
   </div>
-  <app-product-list-view class="flex-1 xl:max-w-[1200px]" [isXl]="isXl()" (filterOpen)="openFilter()"/>
+  <app-product-list-view class="flex-1 xl:max-w-[1200px]" [isXl]="isXl()" [isMd]="isMd()" (filterOpen)="openFilter()"/>
 </div>

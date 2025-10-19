@@ -14,7 +14,6 @@ import {Button} from '../../../shared/button/button';
 })
 export class ProductFilterSidebar {
   readonly isXl = input.required<boolean>();
-  readonly isSm = input.required<boolean>();
   readonly filterClose = output<void>();
 
   readonly mainCategory: string = "Electronics";

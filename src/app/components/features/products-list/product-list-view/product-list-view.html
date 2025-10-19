@@ -14,7 +14,7 @@
   </div>
   <div class="flex flex-col gap-4 w-full">
     @for (product of products; track product.id){
-      <app-product-item [product]="product"/>
+      <app-product-item [product]="product" [isMd]="isMd()"/>
     }
   </div>
   <div class="w-full flex justify-end">

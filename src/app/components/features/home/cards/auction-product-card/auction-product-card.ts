@@ -1,5 +1,4 @@
 import {Component, input, signal} from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
 import {AuctionProduct} from '../../../../../core/models/AuctionProduct';
 
 interface ProductInfoItem {
@@ -10,9 +9,6 @@ interface ProductInfoItem {
 
 @Component({
   selector: 'app-auction-product-card',
-    imports: [
-        NgOptimizedImage
-    ],
   templateUrl: './auction-product-card.html',
   styleUrl: './auction-product-card.css'
 })
@@ -20,7 +16,7 @@ export class AuctionProductCard {
   readonly product = input<AuctionProduct>();
   isRow = signal<boolean>(false);
 
-  info = signal<ProductInfoItem[]>([])
+  info = signal<ProductInfoItem[]>([]);
 
   private breakpoints: { name: 'sm' | 'lg' | 'xl'; query: string; list?: MediaQueryList; listener?: (e: MediaQueryListEvent) => void }[] = [
     { name: 'sm', query: '(min-width: 640px)' },

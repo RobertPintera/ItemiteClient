@@ -16,6 +16,7 @@ export class ProductItem {
   @HostBinding('class')
     hostClass = 'w-full';
 
+  readonly isMd = input.required<boolean>();
   readonly product = input<Product>();
 
   readonly categoriesWithId = computed(() =>
