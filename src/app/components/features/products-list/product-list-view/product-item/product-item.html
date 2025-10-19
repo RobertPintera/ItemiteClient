@@ -1,8 +1,8 @@
 <a [routerLink]="['/products', product()?.categories?.[0] ?? 'uncategorized', product()?.name || '']" class="w-full max-w-full">
   <div class="flex flex-col w-full border-b-1 p-4">
     <p class="text-4xl">{{ product()?.name }}</p>
-    <div class="flex flex-row h-full w-full">
-      <div class="flex flex-row flex-1 h-full w-full">
+    <div class="flex flex-col md:flex-row h-full w-full">
+      <div class="flex flex-col md:flex-row flex-1 h-full w-full">
         <div class="h-64 aspect-square">
           <img [ngSrc]="product()?.image ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name" class="size-full object-contain" height="1" width="1">
         </div>

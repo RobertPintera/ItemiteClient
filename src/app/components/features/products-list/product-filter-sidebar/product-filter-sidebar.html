@@ -1,5 +1,9 @@
-<aside class="w-full p-8 bg-card border-2 border-border rounded-2xl">
-  <div class="flex flex-col gap-2">
+<aside class="w-full p-8 bg-card border-0 border-border rounded-0
+  sm:border-2 sm:rounded-2xl h-full sm:h-auto transition">
+  <div class="relative flex flex-col gap-2">
+    @if (!isXl()){
+      <app-button label="X" (clickButton)="closeFilter()" class="absolute right-[-16px] top-[-16px]"/>
+    }
     <p class="font-semibold text-lg">{{ mainCategory }}</p>
     <app-category-tree [categories]="categories"/>
     <div class="flex w-full flex-row xl:flex-col gap-2">

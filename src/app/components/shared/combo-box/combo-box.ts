@@ -1,4 +1,4 @@
-import {Component, ContentChild, inject, input, output, signal, TemplateRef} from '@angular/core';
+import {Component, ContentChild, HostBinding, inject, input, output, signal, TemplateRef} from '@angular/core';
 import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 
@@ -11,6 +11,8 @@ import { PLATFORM_ID } from '@angular/core';
   styleUrl: './combo-box.css'
 })
 export class ComboBox {
+  @HostBinding('class') hostClass = 'combo-container';
+
   @ContentChild(TemplateRef) templateRef?: TemplateRef<any>;
 
   readonly items = input<{ key: string; value: string}[]>([]);

@@ -14,7 +14,7 @@ import {RouterLink} from '@angular/router';
 })
 export class ProductItem {
   @HostBinding('class')
-  hostClass = 'w-full';
+    hostClass = 'w-full';
 
   readonly product = input<Product>();
 
