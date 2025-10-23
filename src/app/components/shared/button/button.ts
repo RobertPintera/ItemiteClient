@@ -1,10 +1,11 @@
-import {Component, input, output} from '@angular/core';
+import {Component, input, output, ViewEncapsulation} from '@angular/core';
 
 @Component({
   selector: 'app-button',
   imports: [],
   templateUrl: './button.html',
-  styleUrl: './button.css'
+  styleUrl: './button.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class Button {
   readonly label = input<string>('click');

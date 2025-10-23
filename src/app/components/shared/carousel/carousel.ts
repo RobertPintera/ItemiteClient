@@ -1,13 +1,14 @@
 import {
+  AfterViewInit,
   Component,
   computed,
   ContentChild,
   ElementRef, HostBinding,
-  input, signal,
+  input, OnDestroy, signal,
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {CommonModule} from '@angular/common';
 
 /**
  * Carousel component
@@ -47,13 +48,13 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
   templateUrl: './carousel.html',
   styleUrl: './carousel.css'
 })
-export class Carousel {
+export class Carousel implements AfterViewInit, OnDestroy {
   @HostBinding('class') hostClass = 'w-full';
 
   @ViewChild('carouselTrack', { static: true }) carouselTrack?: ElementRef<HTMLUListElement>;
-  @ContentChild(TemplateRef) templateRef?: TemplateRef<any>;
+  @ContentChild(TemplateRef) templateRef?: TemplateRef<unknown>;
 
-  readonly items = input<any[]>([]);
+  readonly items = input.required<Record<string, unknown>[]>();
   readonly hideArrows = input<boolean>(false);
   readonly visibleSSm = input<number>(1);
   readonly visibleSm = input<number | undefined>();
@@ -69,10 +70,10 @@ export class Carousel {
     })) ?? []
   );
 
-  translateX: number = 0;
+  translateX = 0;
   itemWidth = signal<number>(0);
-  visibleCount: number = 3;
-  activeIndex: number = 0;
+  visibleCount = 3;
+  activeIndex = 0;
   hideArrowsOnButtons = signal<boolean>(false);
 
   private mql?: MediaQueryList;
@@ -105,7 +106,7 @@ export class Carousel {
     this.resizeObserver?.disconnect();
   }
 
-  private handler = (e: MediaQueryListEvent) => {
+  private handler = (_e: MediaQueryListEvent) => {
     this.updateDom();
   };
 
