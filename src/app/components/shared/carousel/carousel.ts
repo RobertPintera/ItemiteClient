@@ -65,7 +65,7 @@ export class Carousel implements AfterViewInit, OnDestroy {
 
   readonly itemsWithId = computed(() =>
     this.items()?.map((item, index) => ({
-      id: item.id ?? index,
+      id: (item as { id?: number | string })?.id ?? index,
       ...item
     })) ?? []
   );
