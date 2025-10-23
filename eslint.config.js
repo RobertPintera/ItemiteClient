@@ -15,6 +15,7 @@ module.exports = tseslint.config(
     processor: angular.processInlineTemplates,
     rules: {
       semi: ["warn", "always"],
+      "@typescript-eslint/no-unused-vars": ["warn"],
       indent: ["warn", 2],
       "@angular-eslint/directive-selector": [
         "error",

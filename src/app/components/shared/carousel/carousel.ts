@@ -54,7 +54,7 @@ export class Carousel implements AfterViewInit, OnDestroy {
   @ViewChild('carouselTrack', { static: true }) carouselTrack?: ElementRef<HTMLUListElement>;
   @ContentChild(TemplateRef) templateRef?: TemplateRef<unknown>;
 
-  readonly items = input.required<Record<string, unknown>[]>();
+  readonly items = input.required<unknown[]>();
   readonly hideArrows = input<boolean>(false);
   readonly visibleSSm = input<number>(1);
   readonly visibleSm = input<number | undefined>();
@@ -66,7 +66,7 @@ export class Carousel implements AfterViewInit, OnDestroy {
   readonly itemsWithId = computed(() =>
     this.items()?.map((item, index) => ({
       id: (item as { id?: number | string })?.id ?? index,
-      ...item
+      ...item as object
     })) ?? []
   );
 
@@ -106,7 +106,8 @@ export class Carousel implements AfterViewInit, OnDestroy {
     this.resizeObserver?.disconnect();
   }
 
-  private handler = (_e: MediaQueryListEvent) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private handler = (e: MediaQueryListEvent) => {
     this.updateDom();
   };
 
