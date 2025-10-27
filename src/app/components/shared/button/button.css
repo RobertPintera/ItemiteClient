@@ -4,4 +4,12 @@
   .button-container {
     @apply bg-primary text-primary-foreground hover:bg-primary/70 active:bg-primary transition-colors px-4 py-2 rounded-lg;
   }
+
+  .button-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/70 active:bg-primary;
+  }
+
+  .button-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/70 active:bg-secondary;
+  }
 }
