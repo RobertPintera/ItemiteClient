@@ -7,7 +7,7 @@
       <div class="flex flex-col w-full lg:w-4/6">
         <h1>Lenovo Ideapad 3-17 - Core i5-1235U | 17,3''-FHD | 16GB | 512GB | Win11Home | Szary</h1>
         <img [ngSrc]="'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="size-full max-h-96 object-contain" height="1" width="1">
-        <app-carousel [items]="images" [visibleSm]="5">
+        <app-carousel [items]="images" [visibleSSm]="2" [visibleSm]="3" [visibleMd]="4" [visibleLg]="5" [visibleXl]="6">
           <ng-template let-image>
             <img [ngSrc]="image.src ?? 'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="size-full max-h-96 object-contain" height="1" width="1">
           </ng-template>
