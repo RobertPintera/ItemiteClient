@@ -1,0 +1,22 @@
+<div class="relative flex justify-center w-full">
+  @if(!hideArrowsOnButtons())
+  {
+    <button class="absolute right-8 top-1/2 bg-primary/70 hover:bg-primary active:bg-primary/70 rounded-full p-4 transition-colors z-20" (click)="next()">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" ><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+    </button>
+    <button class="absolute left-8 top-1/2 bg-primary/70 hover:bg-primary active:bg-primary/70 rounded-full p-4 transition-colors z-20" (click)="prev()">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+    </button>
+  }
+
+  <div class="relative w-full mx-8 overflow-hidden">
+    <ul #carouselTrack class="flex flex-row items-center w-full transition py-1"
+        [style.transform]="'translateX(-' + translateX + 'px)'">
+      @for (item of itemsWithId(); track item.id){
+        <li class="h-auto px-4 flex-shrink-0" [style.width.px]="itemWidth()">
+          <ng-container *ngTemplateOutlet="templateRef; context: {$implicit: item}"/>
+        </li>
+      }
+    </ul>
+  </div>
+</div>

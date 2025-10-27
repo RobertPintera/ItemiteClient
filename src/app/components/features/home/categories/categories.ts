@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {NgClass, NgOptimizedImage} from '@angular/common';
 import {TranslateDirective, TranslatePipe} from '@ngx-translate/core';
+import {RouterLink} from '@angular/router';
 
 interface Category {
   id: number;
@@ -15,6 +16,7 @@ interface Category {
     NgOptimizedImage,
     NgClass,
     TranslatePipe,
+    RouterLink,
   ],
   templateUrl: './categories.html',
   styleUrl: './categories.css'

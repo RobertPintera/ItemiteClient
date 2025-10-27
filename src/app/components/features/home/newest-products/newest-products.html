@@ -1,0 +1,13 @@
+<section class="flex flex-col items-center gap-8">
+  <h1>{{'newest_products.header' | translate}}</h1>
+  <app-carousel [items]="firstHalfProducts" [visibleSm]="2" [visibleXl]="3">
+    <ng-template let-product>
+      <app-product-card [product]="product"/>
+    </ng-template>
+  </app-carousel>
+  <app-carousel [items]="secondHalfProducts" [visibleSm]="2" [visibleXl]="3">
+    <ng-template let-product>
+      <app-product-card [product]="product"/>
+    </ng-template>
+  </app-carousel>
+</section>

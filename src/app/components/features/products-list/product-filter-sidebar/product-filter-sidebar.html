@@ -1,0 +1,29 @@
+<aside class="w-full p-8 bg-card border-0 border-border rounded-0
+  sm:border-2 sm:rounded-2xl h-full sm:h-auto transition">
+  <div class="relative flex flex-col gap-2">
+    @if (!isXl()){
+      <app-button label="X" (clickButton)="closeFilter()" class="absolute right-[-16px] top-[-16px]"/>
+    }
+    <p class="font-semibold text-lg">{{ mainCategory }}</p>
+    <app-category-tree [categories]="categories"/>
+    <div class="flex w-full flex-col sm:flex-row xl:flex-col gap-2">
+      <div class="flex flex-1 flex-col gap-2">
+        <p>Prices</p>
+        <div class="flex flex-row items-center gap-2 w-full">
+          <input type="text" class="flex-1 border rounded p-2 w-full" />
+          <p class="shrink-0 text-2xl">-</p>
+          <input type="text" class="flex-1 border rounded p-2 w-full" />
+        </div>
+      </div>
+      <div class="flex flex-1 flex-col gap-2">
+        <p>Localization</p>
+        <input type="text" class="w-full border rounded p-2" />
+        <input type="text" class="w-full border rounded p-2" />
+      </div>
+    </div>
+
+    <div class="flex justify-end w-full">
+      <app-button label="Filter" />
+    </div>
+  </div>
+</aside>

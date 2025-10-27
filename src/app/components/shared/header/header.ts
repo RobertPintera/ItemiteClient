@@ -17,9 +17,13 @@ export class Header {
 
   private translate = inject(TranslateService);
 
-  languages = ['pl','en']
+  languages = [
+    { key: 'en', value: 'en' },
+    { key: 'pl', value: 'pl' },
+  ];
 
-  useLanguage(language: string): void {
-    this.translate.use(language);
+  useLanguage(language: { key: string; value: string }): void {
+    if(!language) return;
+    this.translate.use(language?.value);
   }
 }
