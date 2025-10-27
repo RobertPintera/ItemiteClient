@@ -1,0 +1,10 @@
+.grid-custom {
+  grid-template-columns: max-content 1fr;
+}
+
+@media(width >= 40rem) {
+  .grid-custom {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
