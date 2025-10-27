@@ -1,4 +1,15 @@
 {
+  "paginator": {
+    "preposition": "from"
+  },
+  "sortings": {
+    "ascending": "ascending",
+    "descending": "descending"
+  },
+  "navbar": {
+    "categories": "Categories",
+    "auctions": "Auctions"
+  },
   "categories": {
     "header": "Categories",
     "agriculture": "Agriculture",
@@ -16,11 +27,53 @@
     "events": "Events",
     "jobs": "Jobs"
   },
+  "dedicated_products": {
+    "header": "Dedicated products"
+  },
+  "newest_products": {
+    "header": "Newest products"
+  },
+  "auctions": {
+    "header": "Auctions"
+  },
   "login_register": {
     "login_title": "Login",
     "password": "Password",
     "register_title": "Register",
     "ask_register": "Don't have account? Sign up",
-    "ask_login": "Already have account? Sing in"
+    "ask_login": "Already have account? Sing in",
+    "login": "Login",
+    "register": "Register",
+    "repeat_password": "Repeat password",
+    "login_by_google": "Login using Google",
+    "phone_number": "Phone number",
+    "username": "Username",
+    "forgot_password": "Forgot password",
+    "agree": "I agree to",
+    "terms_of_use": "terms of use"
+  },
+  "controls": {
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "enable": "Enable",
+    "enable_edition": "Enable edition",
+    "unsaved": "Unsaved"
+  },
+  "validator_errors": {
+    "field_empty" : "Field can't be empty",
+    "field_regex" : "Value must follow valid format",
+    "field_min_len" : "Value has too few characters",
+    "field_max_len" : "Value has too many characters",
+    "pass_min_len": "Password must be at least 7 characters long",
+    "pass_max_len": "Password cannot be more than 50 characters",
+    "pass_uppercase": "Password must contain at least one uppercase letter",
+    "pass_lowercase": "Password must contain at least one lowercase letter",
+    "pass_digit": "Password must contain at least one digit",
+    "pass_special": "Password must contain at least one special character",
+    "pass_match": "Passwords must match",
+    "phone_max_len" : "Phone number cannot be more than 20 characters",
+    "name_min_len" : "Username must be at least 3 characters long",
+    "name_max_len" : "Username cannot be more than 20 characters"
   }
 }
