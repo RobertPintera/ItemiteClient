@@ -182,22 +182,22 @@
 
 @layer base {
   h1 {
-    @apply text-4xl font-bold leading-tight;
+    @apply text-3xl sm:text-4xl font-bold leading-tight;
   }
   h2 {
-    @apply text-3xl font-semibold leading-snug;
+    @apply text-2xl sm:text-3xl font-semibold leading-snug;
   }
   h3 {
-    @apply text-2xl font-semibold leading-snug;
+    @apply text-xl sm:text-2xl font-semibold leading-snug;
   }
   h4 {
-    @apply text-xl font-medium leading-snug;
+    @apply text-lg sm:text-xl font-medium leading-snug;
   }
   h5 {
-    @apply text-lg font-medium leading-snug;
+    @apply text-base sm:text-lg font-medium leading-snug;
   }
   h6 {
-    @apply text-base font-medium leading-snug;
+    @apply text-sm sm:text-base font-medium leading-snug;
   }
   input {
     @apply border-2 border-border ring-ring rounded-xl;
