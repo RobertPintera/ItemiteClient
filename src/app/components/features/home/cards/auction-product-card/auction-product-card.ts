@@ -1,4 +1,4 @@
-import {Component, input, signal} from '@angular/core';
+import {Component, input, OnDestroy, OnInit, signal} from '@angular/core';
 import {AuctionProduct} from '../../../../../core/models/AuctionProduct';
 import {NgOptimizedImage} from '@angular/common';
 
@@ -16,7 +16,7 @@ interface ProductInfoItem {
   ],
   styleUrl: './auction-product-card.css'
 })
-export class AuctionProductCard {
+export class AuctionProductCard implements OnInit, OnDestroy {
   readonly product = input<AuctionProduct>();
   isRow = signal<boolean>(false);
 
