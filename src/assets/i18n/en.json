@@ -50,7 +50,8 @@
     "username": "Username",
     "forgot_password": "Forgot password",
     "agree": "I agree to",
-    "terms_of_use": "terms of use"
+    "terms_of_use": "terms of use",
+    "mail_used" : "Email is already used"
   },
   "controls": {
     "edit": "Edit",
@@ -72,8 +73,11 @@
     "pass_digit": "Password must contain at least one digit",
     "pass_special": "Password must contain at least one special character",
     "pass_match": "Passwords must match",
+    "phone_min_len" : "Phone number must be at least 3 characters long",
     "phone_max_len" : "Phone number cannot be more than 20 characters",
     "name_min_len" : "Username must be at least 3 characters long",
-    "name_max_len" : "Username cannot be more than 20 characters"
+    "name_max_len" : "Username cannot be more than 20 characters",
+    "mail_min_len" : "Mail must be at least 3 characters long",
+    "mail_max_len" : "Mail cannot be more than 100 characters"
   }
 }

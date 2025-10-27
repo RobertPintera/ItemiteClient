@@ -1,5 +1,5 @@
 import {Component, Signal, signal, WritableSignal, OnInit, computed} from '@angular/core';
-import { TranslatePipe } from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {
   FormGroup,
   FormControl,
@@ -19,6 +19,12 @@ import {ScaledText} from '../../shared/scaled-text/scaled-text';
   styleUrl: './login-register.css',
 })
 export class LoginRegister implements OnInit {
+
+  // TODO response when email was used
+  //  --> login_register.mail_used
+  // TODO terms of use
+  // TODO API integration & Google login
+
   private _showRegisterForm: WritableSignal<boolean> = signal(false);
   private _repeatPassMatch: WritableSignal<boolean> = signal(false);
 
@@ -73,7 +79,6 @@ export class LoginRegister implements OnInit {
   ngOnInit() {
 
     // Login form
-
     this.loginForm.get('email')?.valueChanges.subscribe(() => {
       this.updateEmailErrors(this.loginForm);
     });
@@ -83,7 +88,6 @@ export class LoginRegister implements OnInit {
     });
 
     // Register form
-
     this.registerForm.get('email')?.valueChanges.subscribe(() => {
       this.updateEmailErrors(this.registerForm);
     });
@@ -116,8 +120,11 @@ export class LoginRegister implements OnInit {
     });
   }
 
-  constructor() {
-    // Initialize form group with email and password fields
+  constructor(private translate: TranslateService) {
+    this.translate.onLangChange.subscribe(() => {
+      this.UpdateErrorTranslations();
+    });
+    this.UpdateErrorTranslations();
 
     this.loginForm = new FormGroup({
       email: new FormControl('', [
@@ -133,6 +140,7 @@ export class LoginRegister implements OnInit {
       email: new FormControl('', [
         Validators.required,
         Validators.email,
+        Validators.minLength(3),
         Validators.maxLength(100)
       ]),
       username: new FormControl('', [
@@ -142,7 +150,8 @@ export class LoginRegister implements OnInit {
       ]),
       phoneNumber: new FormControl('', [
         Validators.pattern(RegExp("\\+(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]|8[6421]6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*(\\d{1,2})$")),
-        Validators.maxLength(20)
+        Validators.maxLength(20),
+        Validators.minLength(7)
       ]),
       password: new FormControl('', [
         Validators.required,
@@ -167,21 +176,60 @@ export class LoginRegister implements OnInit {
     );
   }
 
+  //////////////////
+  // Translations //
+  //////////////////
+
+  private UpdateErrorTranslations() {
+    for(const translationKey of this._errorTranslations.keys()) {
+      this.translate.get(`validator_errors.${translationKey}`).subscribe((translatedText: string) => {
+        this._errorTranslations.set(translationKey, translatedText);
+      });
+    }
+  }
+
+  private _errorTranslations= new Map(
+    [
+      ["field_empty", "Field can't be empty"],
+      ["field_regex","Value must follow valid format"],
+      ["pass_min_len", "Password must be at least 7 characters long"],
+      ["pass_max_len", "Password cannot be more than 50 characters"],
+      ["pass_uppercase", "Password must contain at least one uppercase letter"],
+      ["pass_lowercase", "Password must contain at least one lowercase letter"],
+      ["pass_digit", "Password must contain at least one digit"],
+      ["pass_special", "Password must contain at least one special character"],
+      ["pass_match", "Passwords must match"],
+      ["phone_min_len", "Phone number must be at least 3 characters long"],
+      ["phone_max_len", "Phone number cannot be more than 20 characters"],
+      ["name_min_len", "Username must be at least 3 characters long"],
+      ["name_max_len", "Username cannot be more than 20 characters"],
+      ["mail_min_len", "Mail must be at least 3 characters long"],
+      ["mail_max_len", "Mail cannot be more than 100 characters"]
+    ]
+  );
+
+  //////////////////////
+  // Validator errors //
+  //////////////////////
+
   private updateUsernameErrors() {
     const usernameControl = this.registerForm.get('username');
 
     const errors: string[] = [];
 
     if (usernameControl?.hasError('required')) {
-      errors.push('Username is required');
+      const translation:string = this._errorTranslations.get(`field_empty`)!;
+      errors.push(translation);
     }
 
     if (usernameControl?.hasError('minlength')) {
-      errors.push('Username must be at least 3 characters long');
+      const translation:string = this._errorTranslations.get(`name_min_len`)!;
+      errors.push(translation);
     }
 
     if (usernameControl?.hasError('maxlength')) {
-      errors.push('Username cannot be more than 20 characters');
+      const translation:string = this._errorTranslations.get(`name_max_len`)!;
+      errors.push(translation);
     }
 
     this._usernameErrors.set(errors);
@@ -193,15 +241,23 @@ export class LoginRegister implements OnInit {
     const errors: string[] = [];
 
     if (control?.hasError('required')) {
-      errors.push('Phone number is required');
+      const translation:string = this._errorTranslations.get(`field_empty`)!;
+      errors.push(translation);
     }
 
     if (control?.hasError('pattern')) {
-      errors.push('Phone number must be valid');
+      const translation:string = this._errorTranslations.get(`field_regex`)!;
+      errors.push(translation);
     }
 
     if (control?.hasError('maxlength')) {
-      errors.push('Phone number cannot be more than 20 characters');
+      const translation:string = this._errorTranslations.get(`phone_max_len`)!;
+      errors.push(translation);
+    }
+
+    if (control?.hasError('minLength')) {
+      const translation:string = this._errorTranslations.get(`phone_min_len`)!;
+      errors.push(translation);
     }
 
     this._phoneErrors.set(errors);
@@ -212,12 +268,24 @@ export class LoginRegister implements OnInit {
 
     const errors: string[] = [];
 
+    if (emailControl?.hasError('minlength')) {
+      const translation:string = this._errorTranslations.get(`mail_min_len`)!;
+      errors.push(translation);
+    }
+
+    if (emailControl?.hasError('maxlength')) {
+      const translation:string = this._errorTranslations.get(`mail_max_len`)!;
+      errors.push(translation);
+    }
+
     if (emailControl?.hasError('required')) {
-      errors.push('Email is required');
+      const translation:string = this._errorTranslations.get(`field_empty`)!;
+      errors.push(translation);
     }
 
     if (emailControl?.hasError('email')) {
-      errors.push('Email must be a valid email address');
+      const translation:string = this._errorTranslations.get(`field_regex`)!;
+      errors.push(translation);
     }
 
     this._emailErrors.set(errors); // Update emailErrors signal
@@ -228,35 +296,40 @@ export class LoginRegister implements OnInit {
     const errors: string[] = [];
 
     if (passwordControl?.hasError('required')) {
-      errors.push('Password is required');
+      const translation:string = this._errorTranslations.get(`field_empty`)!;
+      errors.push(translation);
     }
 
     if (passwordControl?.hasError('minlength')) {
-      errors.push('Password must be at least 7 characters long');
+      const translation:string = this._errorTranslations.get(`pass_min_len`)!;
+      errors.push(translation);
     }
 
     if (passwordControl?.hasError('maxlength')) {
-      errors.push('Password cannot be more than 50 characters');
+      const translation:string = this._errorTranslations.get(`pas_max_len`)!;
+      errors.push(translation);
     }
 
     const controlErrors = passwordControl?.errors;
     if (controlErrors) {
       // Handle custom password errors
       if (controlErrors['uppercase']) {
-        errors.push(controlErrors['uppercase']);
+        const translation:string = this._errorTranslations.get(`pass_uppercase`)!;
+        errors.push(translation);
       }
       if (controlErrors['lowercase']) {
-        errors.push(controlErrors['lowercase']);
+        const translation:string = this._errorTranslations.get(`pass_lowercase`)!;
+        errors.push(translation);
       }
       if (controlErrors['digit']) {
-        errors.push(controlErrors['digit']);
+        const translation:string = this._errorTranslations.get(`pass_digit`)!;
+        errors.push(translation);
       }
       if (controlErrors['special']) {
-        errors.push(controlErrors['special']);
+        const translation:string = this._errorTranslations.get(`pass_special`)!;
+        errors.push(translation);
       }
     }
-
-
     this._passwordErrors.set(errors); // Update passwordErrors signal
   }
 
@@ -266,6 +339,7 @@ export class LoginRegister implements OnInit {
       console.log('Form submitted:', this.loginForm.value);
     }
   }
+
 }
 
 export function passwordValidator(): ValidatorFn {
