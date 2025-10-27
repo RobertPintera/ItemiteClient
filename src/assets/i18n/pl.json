@@ -1,4 +1,15 @@
 {
+  "paginator": {
+    "preposition": "z"
+  },
+  "sortings": {
+    "ascending": "rosnąco",
+    "descending": "malejąco"
+  },
+  "navbar": {
+    "categories": "Kategorie",
+    "auctions": "Licytacje"
+  },
   "categories": {
     "header": "Kategorie",
     "agriculture": "Rolnictwo",

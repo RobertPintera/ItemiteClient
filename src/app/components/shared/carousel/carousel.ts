@@ -9,8 +9,6 @@ import {
 } from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 
-
-
 /**
  * Carousel component
  *
@@ -44,15 +42,13 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
 @Component({
   selector: 'app-carousel',
   imports: [
-    NgOptimizedImage,
     CommonModule
   ],
   templateUrl: './carousel.html',
   styleUrl: './carousel.css'
 })
 export class Carousel {
-  @HostBinding('class')
-  hostClass = 'w-full';
+  @HostBinding('class') hostClass = 'w-full';
 
   @ViewChild('carouselTrack', { static: true }) carouselTrack?: ElementRef<HTMLUListElement>;
   @ContentChild(TemplateRef) templateRef?: TemplateRef<any>;

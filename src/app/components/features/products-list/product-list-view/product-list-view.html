@@ -1,0 +1,23 @@
+<main class="flex flex-col w-full max-w-full p-4">
+  <div class="w-full flex justify-center items-center sm:justify-between flex-wrap">
+    <div class="flex flex-row items-center gap-4">
+      @if (!isXl()){
+        <app-button label="filters" (clickButton)="openFilter()"/>
+      }
+      <app-combo-box [items]="sortings" [selectedItem]="sortings[0]" (selectedChange)="useSorting($event)">
+        <ng-template let-item>
+          {{item?.value | translate}}
+        </ng-template>
+      </app-combo-box>
+    </div>
+    <app-paginator/>
+  </div>
+  <div class="flex flex-col gap-4 w-full">
+    @for (product of products; track product.id){
+      <app-product-item [product]="product" [isMd]="isMd()"/>
+    }
+  </div>
+  <div class="w-full flex justify-end">
+    <app-paginator/>
+  </div>
+</main>
