@@ -1,8 +1,9 @@
-import {Component, computed, signal} from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {Carousel} from '../../shared/carousel/carousel';
 import {Product} from '../../../core/models/Product';
 import {Button} from '../../shared/button/button';
+import {BreakpointObserver} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-product-details',
@@ -15,6 +16,9 @@ import {Button} from '../../shared/button/button';
   styleUrl: './product-details.css'
 })
 export class ProductDetails {
+  private breakpointObserver = inject(BreakpointObserver);
+  readonly isLg = signal<boolean>(false);
+
   images= [
     {
       "src": "assets/laptop_chromebook_icon.svg"
@@ -53,4 +57,10 @@ export class ProductDetails {
       name: category,
     })) ?? []
   );
+
+  constructor() {
+    this.breakpointObserver.observe(['(min-width: 1024px)']).subscribe(result => {
+      this.isLg.set(result.breakpoints['(min-width: 1024px)']);
+    });
+  }
 }

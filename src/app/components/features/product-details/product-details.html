@@ -12,25 +12,42 @@
             <img [ngSrc]="image.src ?? 'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="size-full max-h-96 object-contain" height="1" width="1">
           </ng-template>
         </app-carousel>
-        <div class="flex flex-row flex-wrap gap-3">
+        <div class="flex flex-row flex-wrap gap-3 mb-4">
           @for (category of categoriesWithId(); track category.id){
             <div class="border-1 px-4 py-2 rounded-2xl">
               <p class="text-base md:text-xl">{{category.name}}</p>
             </div>
           }
         </div>
-        <h3>Description</h3>
-        <p>Laptop Lenovo Ideapad 3-17 to wszechstronne urządzenie, które łączy dużą przestrzeń roboczą z płynnością działania, stając się niezawodnym partnerem w codziennych zadaniach. Ten model, dostępny w uniwersalnej, szarej obudowie, został stworzony z myślą o użytkownikach ceniących komfort i wydajność, zarówno podczas pracy, jak i w chwilach relaksu. Dzięki przemyślanej konfiguracji, obejmującej wydajny procesor i dużą ilość pamięci RAM, możesz swobodnie realizować swoje projekty i cieszyć się multimediami bez żadnych kompromisów. Zainstalowany system Windows 11 Home sprawia, że jest on gotowy do działania od razu po wyjęciu z opakowania.</p>
+        @if (!isLg()) {
+          <div class="flex flex-col gap-2 text-xl">
+            <p>Price: 167.58$ - negotiable</p>
+            <app-button label="Send Message"/>
+            <app-button label="Call"/>
+            <p>Vendor: Jan Kowalski</p>
+            <p>Date of issue: 20.07.2025</p>
+          </div>
+        }
+        <div class="flex flex-col gap-2">
+          <h3>Description</h3>
+          <p>Laptop Lenovo Ideapad 3-17 to wszechstronne urządzenie, które łączy dużą przestrzeń roboczą z płynnością działania, stając się niezawodnym partnerem w codziennych zadaniach. Ten model, dostępny w uniwersalnej, szarej obudowie, został stworzony z myślą o użytkownikach ceniących komfort i wydajność, zarówno podczas pracy, jak i w chwilach relaksu. Dzięki przemyślanej konfiguracji, obejmującej wydajny procesor i dużą ilość pamięci RAM, możesz swobodnie realizować swoje projekty i cieszyć się multimediami bez żadnych kompromisów. Zainstalowany system Windows 11 Home sprawia, że jest on gotowy do działania od razu po wyjęciu z opakowania.</p>
+        </div>
       </div>
       <div class="hidden lg:block self-stretch min-w-0.5 bg-muted-foreground z-10"></div>
-      <div class="flex flex-col w-full lg:w-2/6 lg:p-4 gap-2 text-xl">
-        <p>Date of issue: 20.07.2025</p>
-        <p>Price: 167.58$ - negotiable</p>
-        <p>Vendor: Jan Kowalski</p>
-        <app-button label="Send Message"/>
-        <app-button label="Call"/>
-        <p>Localization: Gliwice</p>
-      </div>
+      @if (isLg()) {
+        <div class="flex flex-col w-2/6 p-4 gap-2 text-xl">
+          <p>Date of issue: 20.07.2025</p>
+          <p>Price: 167.58$ - negotiable</p>
+          <p>Vendor: Jan Kowalski</p>
+          <app-button label="Send Message"/>
+          <app-button label="Call"/>
+          <p>Localization: Gliwice</p>
+        </div>
+      } @else {
+        <div>
+          <p>Localization: Gliwice</p>
+        </div>
+      }
     </div>
   </div>
 </div>
