@@ -109,7 +109,7 @@
         <label for="repeat_passwordR" class="w-full">
           <app-scaled-text [text]="'login_register.repeat_password' | translate" [step]="-1"
                            base="text-sm" [maxGrowTimes]="2"/>
-          @if(!repeatPassMatch()) {<div class="text-(--destructive)">{{"validator_errors.pass_match"}}</div>}
+          @if(!repeatPassMatch()) {<div class="text-(--destructive)">{{"validator_errors.pass_match" | translate}}</div>}
         </label>
         <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
                name="repeat_passwordR" id=repeat_passwordR type="password" formControlName="repeatPassword"
