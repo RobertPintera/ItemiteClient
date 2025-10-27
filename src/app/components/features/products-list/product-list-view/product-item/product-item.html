@@ -5,8 +5,8 @@
     }
     <div class="flex flex-col md:flex-row h-full w-full">
       <div class="flex flex-col md:flex-row flex-1 h-full w-full">
-        <div class="h-64 aspect-square">
-          <img [ngSrc]="product()?.image ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name" class="size-full object-contain" height="1" width="1">
+        <div class="relative h-64 aspect-square">
+          <img [ngSrc]="product()?.image ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name" class="object-contain" fill>
         </div>
         <div class="flex flex-col md:flex-row w-full gap-4">
           @if(!isMd()){
