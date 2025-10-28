@@ -4,6 +4,7 @@ import {Carousel} from '../../shared/carousel/carousel';
 import {Product} from '../../../core/models/Product';
 import {Button} from '../../shared/button/button';
 import {BreakpointObserver} from '@angular/cdk/layout';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-details',
@@ -11,6 +12,7 @@ import {BreakpointObserver} from '@angular/cdk/layout';
     NgOptimizedImage,
     Carousel,
     Button,
+    TranslatePipe,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'

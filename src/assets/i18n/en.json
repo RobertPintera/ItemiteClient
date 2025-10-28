@@ -1,4 +1,13 @@
 {
+  "product_details": {
+    "send_message": "Send Message",
+    "call": "Call",
+    "price": "Price",
+    "vendor": "Vendor",
+    "date_of_issue": "Date of issue",
+    "description": "Description",
+    "localization": "Localization"
+  },
   "paginator": {
     "preposition": "from"
   },

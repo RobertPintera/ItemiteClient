@@ -6,7 +6,9 @@
     <div class="flex flex-col lg:flex-row w-full">
       <div class="flex flex-col w-full lg:w-4/6">
         <h1>Lenovo Ideapad 3-17 - Core i5-1235U | 17,3''-FHD | 16GB | 512GB | Win11Home | Szary</h1>
-        <img [ngSrc]="'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="size-full max-h-96 object-contain" height="1" width="1">
+        <div class="relative w-full h-72 sm:h-96">
+          <img [ngSrc]="'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="object-contain" fill>
+        </div>
         <app-carousel [items]="images" [visibleSSm]="2" [visibleSm]="3" [visibleMd]="4" [visibleLg]="5" [visibleXl]="6">
           <ng-template let-image>
             <img [ngSrc]="image.src ?? 'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="size-full max-h-96 object-contain" height="1" width="1">
@@ -20,32 +22,32 @@
           }
         </div>
         @if (!isLg()) {
-          <div class="flex flex-col gap-2 text-xl">
-            <p>Price: 167.58$ - negotiable</p>
+          <div class="flex flex-col gap-2 text-xl mb-2">
+            <p>{{'product_details.price' | translate}}: 167.58$ - negotiable</p>
             <app-button label="Send Message"/>
             <app-button label="Call" variant="secondary"/>
-            <p>Vendor: Jan Kowalski</p>
-            <p>Date of issue: 20.07.2025</p>
+            <p>{{'product_details.vendor' | translate}}: Jan Kowalski</p>
+            <p>{{'product_details.date_of_issue' | translate}}: 20.07.2025</p>
           </div>
         }
         <div class="flex flex-col gap-2">
-          <h3>Description</h3>
-          <p>Laptop Lenovo Ideapad 3-17 to wszechstronne urządzenie, które łączy dużą przestrzeń roboczą z płynnością działania, stając się niezawodnym partnerem w codziennych zadaniach. Ten model, dostępny w uniwersalnej, szarej obudowie, został stworzony z myślą o użytkownikach ceniących komfort i wydajność, zarówno podczas pracy, jak i w chwilach relaksu. Dzięki przemyślanej konfiguracji, obejmującej wydajny procesor i dużą ilość pamięci RAM, możesz swobodnie realizować swoje projekty i cieszyć się multimediami bez żadnych kompromisów. Zainstalowany system Windows 11 Home sprawia, że jest on gotowy do działania od razu po wyjęciu z opakowania.</p>
+          <h3>{{'product_details.description' | translate}}</h3>
+          <p class="text-sm sm:text-base">Laptop Lenovo Ideapad 3-17 to wszechstronne urządzenie, które łączy dużą przestrzeń roboczą z płynnością działania, stając się niezawodnym partnerem w codziennych zadaniach. Ten model, dostępny w uniwersalnej, szarej obudowie, został stworzony z myślą o użytkownikach ceniących komfort i wydajność, zarówno podczas pracy, jak i w chwilach relaksu. Dzięki przemyślanej konfiguracji, obejmującej wydajny procesor i dużą ilość pamięci RAM, możesz swobodnie realizować swoje projekty i cieszyć się multimediami bez żadnych kompromisów. Zainstalowany system Windows 11 Home sprawia, że jest on gotowy do działania od razu po wyjęciu z opakowania.</p>
         </div>
       </div>
       <div class="hidden lg:block self-stretch min-w-0.5 bg-muted-foreground z-10"></div>
       @if (isLg()) {
         <div class="flex flex-col w-2/6 p-4 gap-2 text-xl">
-          <p>Date of issue: 20.07.2025</p>
-          <p>Price: 167.58$ - negotiable</p>
-          <p>Vendor: Jan Kowalski</p>
-          <app-button label="Send Message"/>
-          <app-button label="Call" variant="secondary"/>
-          <p>Localization: Gliwice</p>
+          <p>{{'product_details.date_of_issue' | translate}}: 20.07.2025</p>
+          <p>{{'product_details.price' | translate}}: 167.58$ - negotiable</p>
+          <p>{{'product_details.vendor' | translate}}: Jan Kowalski</p>
+          <app-button label="{{'product_details.send_message' | translate}}"/>
+          <app-button label="{{'product_details.call' | translate}}" variant="secondary"/>
+          <p>{{'product_details.localization' | translate}}: Gliwice</p>
         </div>
       } @else {
-        <div>
-          <p>Localization: Gliwice</p>
+        <div class="text-xl mt-2">
+          <p>{{'product_details.localization' | translate}}: Gliwice</p>
         </div>
       }
     </div>
