@@ -6,7 +6,7 @@ import {
   ElementRef, HostBinding,
   input, OnDestroy, signal,
   TemplateRef,
-  ViewChild
+  ViewChild, ViewEncapsulation
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 
@@ -46,7 +46,8 @@ import {CommonModule} from '@angular/common';
     CommonModule
   ],
   templateUrl: './carousel.html',
-  styleUrl: './carousel.css'
+  styleUrl: './carousel.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class Carousel implements AfterViewInit, OnDestroy {
   @HostBinding('class') hostClass = 'w-full';
