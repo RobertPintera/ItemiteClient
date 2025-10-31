@@ -50,7 +50,8 @@
     "username": "Nazwa użytkownika",
     "forgot_password": "Zapomniałem hasła",
     "agree": "Zgadzam się na",
-    "terms_of_use": "warunki korzystania"
+    "terms_of_use": "warunki korzystania",
+    "mail_used" : "Podany e-mail został już użyty"
   },
   "controls": {
     "edit": "Edytuj",
@@ -60,7 +61,6 @@
     "enable_edition": "Aktywuj edycję",
     "unsaved": "Niezapisane"
   },
-
   "validator_errors": {
     "field_empty" : "Pole nie może być puste",
     "field_regex" : "Wartość musi być w poprawnym formacie",
@@ -73,8 +73,11 @@
     "pass_digit": "Hasło musi zawierać przynajmniej jedną cyfrę",
     "pass_special": "Hasło musi zawierać przynajmniej jeden znak specjalny",
     "pass_match": "Hasła muszą być jednakowe",
+    "phone_min_len" : "nr telefonu nie może mieć mniej niż 7 znaków",
     "phone_max_len" : "Nr telefonu nie może mieć więcej niż 20 znaków",
     "name_min_len" : "Nazwa użytkownika musi mieć co najmniej 3 znaki",
-    "name_max_len" : "Nazwa użytkownika nie może mieć więcej niż 20 znaków"
+    "name_max_len" : "Nazwa użytkownika nie może mieć więcej niż 20 znaków",
+    "mail_min_len" : "E-mail nie może mieć mniej niż 3 znaki",
+    "mail_max_len" : "E-mail nie może mieć więcej niż 100 znaków"
   }
 }
