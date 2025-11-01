@@ -4,8 +4,8 @@
     @if (!isXl()){
       <app-button label="X" (clickButton)="closeFilter()" class="absolute right-[-16px] top-[-16px]"/>
     }
-    <p class="font-semibold text-lg">{{ mainCategory }}</p>
-    <app-category-tree [categories]="categories"/>
+    <p class="font-semibold text-lg">{{ categoryTree()?.name }}</p>
+    <app-category-tree [categories]="categoryTree()?.subCategories ?? []"/>
     <div class="flex w-full flex-col sm:flex-row xl:flex-col gap-2">
       <div class="flex flex-1 flex-col gap-2">
         <p>Prices</p>

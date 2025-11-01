@@ -15,11 +15,11 @@ export const routes: Routes = [
         component: Home,
       },
       {
-        path: 'products/:category',
+        path: 'products',
         component: ProductsList
       },
       {
-        path: 'products/:category/:slug',
+        path: 'product',
         component: ProductDetails
       },
       {

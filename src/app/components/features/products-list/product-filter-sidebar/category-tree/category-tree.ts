@@ -1,6 +1,6 @@
 import {Component, input} from '@angular/core';
-import {Category} from '../../../../../core/models/Category';
 import {NgClass, NgTemplateOutlet} from '@angular/common';
+import {CategoryTreeDTO} from '../../../../../core/models/CategoryTreeDTO';
 
 @Component({
   selector: 'app-category-tree',
@@ -12,6 +12,6 @@ import {NgClass, NgTemplateOutlet} from '@angular/common';
   styleUrl: './category-tree.css'
 })
 export class CategoryTree {
-  readonly categories = input<Category[]>([]);
+  readonly categories = input<CategoryTreeDTO[]>([]);
   readonly level = input<number>(0);
 }

@@ -8,11 +8,11 @@
         <input type="checkbox"/>
         <p>{{ category.name }}</p>
       </div>
-      @if (category.subcategories?.length) {
+      @if (category.subCategories.length) {
         <ng-container
           *ngTemplateOutlet="
             treeTemplate;
-            context: { $implicit: category.subcategories, level: level() + 1 }
+            context: { $implicit: category.subCategories, level: level() + 1 }
           "
         ></ng-container>
       }

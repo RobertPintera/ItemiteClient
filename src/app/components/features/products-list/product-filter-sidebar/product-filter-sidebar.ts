@@ -1,7 +1,9 @@
-import {Component, input, output} from '@angular/core';
-import {Category} from '../../../../core/models/Category';
+import {Component, inject, input, OnInit, output, signal} from '@angular/core';
 import {CategoryTree} from './category-tree/category-tree';
 import {Button} from '../../../shared/button/button';
+import {ActivatedRoute} from '@angular/router';
+import {CategoryService} from '../../../../core/services/category-service/category.service';
+import {CategoryTreeDTO} from '../../../../core/models/CategoryTreeDTO';
 
 @Component({
   selector: 'app-product-filter-sidebar',
@@ -12,39 +14,34 @@ import {Button} from '../../../shared/button/button';
   templateUrl: './product-filter-sidebar.html',
   styleUrl: './product-filter-sidebar.css'
 })
-export class ProductFilterSidebar {
+export class ProductFilterSidebar implements OnInit {
   readonly isXl = input.required<boolean>();
   readonly filterClose = output<void>();
 
-  readonly mainCategory: string = "Electronics";
+  private route = inject(ActivatedRoute);
+  private categoryService = inject(CategoryService);
+
+  readonly categoryTree = signal<CategoryTreeDTO | null>(null);
+
+  ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      const name = params.get('category');
+      const id = params.get('id');
+
+      const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
+      const validName = typeof name === 'string' && name.trim().length > 0 ? name : null;
+
+      if (validId === null || validName === null) return;
+
+      this.categoryService.getCategoryTree(validId).subscribe({
+        next: (data) => this.categoryTree.set(data),
+        error: (error) => console.error('Error:', error)
+      });
+    });
+  }
+
 
   closeFilter(){
     this.filterClose.emit();
   }
-
-  readonly categories: Category[] = [
-    {
-      id: "1",
-      name: "Computers",
-    },
-    {
-      id: "2",
-      name: "Laptops",
-    },
-    {
-      id: "3",
-      name: "Computer Accessories",
-      subcategories: [
-        {
-          id: "4",
-          name: "Mouses",
-        },
-        {
-          id: "5",
-          name: "Keyboards",
-        }
-      ]
-    },
-  ];
-
 }
