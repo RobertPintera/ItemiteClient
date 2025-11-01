@@ -1,9 +1,8 @@
-import {Component, inject, input, OnInit, output, signal} from '@angular/core';
+import {Component, inject, input, OnInit, output } from '@angular/core';
 import {CategoryTree} from './category-tree/category-tree';
 import {Button} from '../../../shared/button/button';
 import {ActivatedRoute} from '@angular/router';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
-import {CategoryTreeDTO} from '../../../../core/models/CategoryTreeDTO';
 
 @Component({
   selector: 'app-product-filter-sidebar',
@@ -21,7 +20,7 @@ export class ProductFilterSidebar implements OnInit {
   private route = inject(ActivatedRoute);
   private categoryService = inject(CategoryService);
 
-  readonly categoryTree = signal<CategoryTreeDTO | null>(null);
+  readonly categoryTree = this.categoryService.subCategories;
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
@@ -33,9 +32,9 @@ export class ProductFilterSidebar implements OnInit {
 
       if (validId === null || validName === null) return;
 
-      this.categoryService.getCategoryTree(validId).subscribe({
-        next: (data) => this.categoryTree.set(data),
-        error: (error) => console.error('Error:', error)
+      this.categoryService.loadCategoryTree(validId).subscribe({
+        next: tree => console.log('Category tree loaded:', tree),
+        error: err => console.error(err)
       });
     });
   }

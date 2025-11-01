@@ -1,8 +1,7 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {TranslatePipe} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
-import {CategoryDTO} from '../../../../core/models/CategoryDTO';
 
 
 @Component({
@@ -14,15 +13,7 @@ import {CategoryDTO} from '../../../../core/models/CategoryDTO';
   templateUrl: './categories.html',
   styleUrl: './categories.css'
 })
-export class Categories implements OnInit {
+export class Categories {
   private categoryService = inject(CategoryService);
-
-  categories = signal<CategoryDTO[]>([]);
-
-  ngOnInit(): void {
-    this.categoryService.getMainCategories().subscribe({
-      next: (data) => (this.categories.set(data)),
-      error: (error) => console.error('Error:', error)
-    });
-  }
+  categories = this.categoryService.mainCategories;
 }
