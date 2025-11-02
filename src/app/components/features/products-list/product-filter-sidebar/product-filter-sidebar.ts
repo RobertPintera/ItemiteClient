@@ -33,7 +33,7 @@ export class ProductFilterSidebar implements OnInit {
       if (validId === null || validName === null) return;
 
       this.categoryService.loadCategoryTree(validId).subscribe({
-        next: tree => console.log('Category tree loaded:', tree),
+        next: tree => console.log('Category tree loaded'),
         error: err => console.error(err)
       });
     });

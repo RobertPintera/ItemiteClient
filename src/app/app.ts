@@ -16,7 +16,7 @@ export class App implements OnInit {
 
   ngOnInit() {
     this.categoryService.loadMainCategories().subscribe({
-      next: categories => console.log('Main categories loaded:', categories),
+      next: categories => console.log('Main categories loaded'),
       error: err => console.error(err)
     });
   }
