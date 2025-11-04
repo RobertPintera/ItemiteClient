@@ -1,9 +1,10 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
-import {Observable} from 'rxjs';
+import {catchError, map, Observable} from 'rxjs';
 import {ProductListingDTO} from '../../models/ProductListingDTO';
 import {PutProductListingDTO} from '../../models/PutProductListingDTO';
+import {ListingDTO} from '../../models/ListingDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,10 @@ import {PutProductListingDTO} from '../../models/PutProductListingDTO';
 export class ProductListingService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.apiUrl}/api/productlisting`;
+
+  private _productListing = signal<ProductListingDTO | null>(null);
+
+  readonly productListing = this._productListing.asReadonly();
 
   // API
 
@@ -24,6 +29,21 @@ export class ProductListingService {
 
   private putProductListing(id: number,productListing: PutProductListingDTO) {
     return this.http.put(`${this.baseUrl}/${id}`, productListing);
+  }
+
+  // Updating Signals
+
+  loadProductListing(id: number){
+    return this.getProductListing(id).pipe(
+      map(product => {
+        this._productListing.set(product);
+        return this.productListing;
+      }),
+      catchError(err => {
+        console.error('Error loadProductListing:', err);
+        throw err;
+      })
+    );
   }
 
 }
