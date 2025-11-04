@@ -1,6 +1,8 @@
 import {Component, computed, effect, input, OnInit, output, Signal, signal, WritableSignal} from '@angular/core';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {FormControl, FormGroup, ReactiveFormsModule, ValidatorFn} from '@angular/forms';
+import { UpdateErrorTranslations } from '../../../core/Utility/Validation';
+import {errorTranslations} from '../../../core/constants/ErrorTranslations';
 
 @Component({
   selector: 'app-editable-text',
@@ -76,7 +78,7 @@ export class EditableText implements OnInit {
     //    Change will happen when error list is updated
 
     this.translate.onLangChange.subscribe(() => {
-      this.UpdateErrorTranslations();
+      UpdateErrorTranslations(this.translate);
     });
   }
 
@@ -92,14 +94,6 @@ export class EditableText implements OnInit {
   // Form errors //
   /////////////////
 
-  private _errorTranslations= new Map(
-    [
-      ["field_empty", "Field can't be empty"],
-      ["field_regex", "Value must follow valid format"],
-      ["field_min_len", "Value has too few characters"],
-      ["field_max_len", "Value has too many characters"],
-    ]
-  );
 
   ngOnInit() {
     this.editForm.get('textField')?.valueChanges.subscribe((value:string) => {
@@ -113,41 +107,33 @@ export class EditableText implements OnInit {
     const errors: string[] = [];
 
     if (control?.hasError('required')) {
-      const translation:string = this._errorTranslations.get("field_empty") ?? "";
+      const translation:string = errorTranslations.get("field_empty") ?? "";
       if(translation != "") {
         errors.push(translation);
       }
     }
 
     if (control?.hasError('minlength')) {
-      const translation:string = this._errorTranslations.get("field_min_len") ?? "";
+      const translation:string = errorTranslations.get("field_min_len") ?? "";
       if(translation != "") {
         errors.push(translation);
       }
     }
 
     if (control?.hasError('maxlength')) {
-      const translation:string = this._errorTranslations.get("field_max_len") ?? "";
+      const translation:string = errorTranslations.get("field_max_len") ?? "";
       if(translation != "") {
         errors.push(translation);
       }
     }
 
     if (control?.hasError('pattern') || control?.hasError('email')) {
-      const translation:string = this._errorTranslations.get("field_regex") ?? "";
+      const translation:string = errorTranslations.get("field_regex") ?? "";
       if(translation != "") {
         errors.push(translation);
       }
     }
 
     this._formErrors.set(errors);
-  }
-
-  UpdateErrorTranslations() {
-    for(const translationKey of this._errorTranslations.keys()) {
-      this.translate.get(`validator_errors.${translationKey}`).subscribe((translatedText: string) => {
-        this._errorTranslations.set(translationKey, translatedText);
-      });
-    }
   }
 }
