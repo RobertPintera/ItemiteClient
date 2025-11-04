@@ -1,0 +1,23 @@
+<div
+  class="top-30 inset-0 flex flex-col m-auto items-center justify-center z-100
+fixed w-full max-w-[1920px] h-full bg-background/50 backdrop-grayscale-100 backdrop-blur-xs">
+  <div class="flex max-w-[90%] flex-col m-auto bg-card text-card-foreground rounded-sm shadow-xl p-4">
+    <p class="text-3xl text-center sm:text-2xl">{{prompt()}}</p>
+    <div class="flex justify-around gap-10 flex-row mt-10">
+      <button
+        (click)="OnCancelClicked()"
+        class="hover:scale-105 transition-transform ease-in-out cursor-pointer
+        bg-primary text-primary-foreground ring-2 shadow-md rounded-sm flex-1 shadow-input"
+      >
+        {{'controls.cancel' | translate}}
+      </button>
+      <button
+        (click)="OnConfirmClicked()"
+        class="hover:scale-105 transition-transform ease-in-out cursor-pointer
+        bg-secondary text-secondary-foreground ring-2 shadow-md rounded-sm h-20 flex-1 shadow-input"
+      >
+        {{'controls.confirm' | translate}}
+      </button>
+    </div>
+  </div>
+</div>
