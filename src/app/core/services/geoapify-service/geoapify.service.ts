@@ -14,14 +14,14 @@ import {response} from 'express';
   }
 )
 export class GeoapifyService {
-  private geoapifyUrl = environment.geoapifyUrl;
-  private cancelSubject: Subject<void> = new Subject(); // Subject to cancel previous requests
+  private _geoapifyUrl = environment.geoapifyUrl;
+  private _cancelSubject: Subject<void> = new Subject(); // Subject to cancel previous requests
 
   constructor(
     private http: HttpClient
   ) {}
 
-  ReverseCeocode(request: LatLenPayloadDTO): Observable<Localization> {
+  ReverseGeocode(request: LatLenPayloadDTO): Observable<Localization> {
     const params = new HttpParams()
       .set('apiKey', environment.geoapifyApiKey)
       .set('lat', request.lat)
@@ -30,7 +30,7 @@ export class GeoapifyService {
     if(request.filter) {
       params.set('filter', request.filter);
     }
-    return this.http.get(`${this.geoapifyUrl}/reverse`, {params}).pipe(
+    return this.http.get(`${this._geoapifyUrl}/reverse`, {params}).pipe(
       map((response: any) => {
         const suggestion: Localization[] = response.features.map((feature: any) => ({
           country: feature.properties.country,
@@ -58,7 +58,7 @@ export class GeoapifyService {
       params.set('filter', request.filter);
     }
 
-    return this.http.get(`${this.geoapifyUrl}/autocomplete`, {params}).pipe(
+    return this.http.get(`${this._geoapifyUrl}/autocomplete`, {params}).pipe(
       map((response: any) => {
         // Extract and map the relevant fields from the response
         const suggestions: Localization[] = response.features.map((feature: any) => ({
@@ -89,12 +89,12 @@ export class GeoapifyService {
     // Return a debounced observable that cancels previous requests
     return new Observable<GeoapifyResponseDTO>((observer) => {
       // Cancel any previous request
-      this.cancelSubject.next();
+      this._cancelSubject.next();
 
       this.Autocomplete(requestPayload).pipe(
         debounceTime(debounceDelay), // Delay the call
         switchMap(() => this.Autocomplete(requestPayload)), // Switch to the new observable
-        takeUntil(this.cancelSubject) // Cancel the current observable when a new one is fired
+        takeUntil(this._cancelSubject) // Cancel the current observable when a new one is fired
       ).subscribe({
         next: (response) => observer.next(response),
         error: (err) => observer.error(err),

@@ -13,5 +13,4 @@ export function ErrorHandler(error: HttpErrorResponse): string {
     const message:string = error.error.Message;
     return message;
   }
-
 }

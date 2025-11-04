@@ -380,7 +380,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
       lng: lng,
       filter: "city"
     }
-    this.geoapify.ReverseCeocode(request).subscribe({
+    this.geoapify.ReverseGeocode(request).subscribe({
       next: (response) => {
         if(this.ValidateLocalization(response)) {
           this._tempLocalization.set(response);

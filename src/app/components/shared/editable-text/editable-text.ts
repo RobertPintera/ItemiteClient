@@ -15,23 +15,23 @@ import {errorTranslations} from '../../../core/constants/ErrorTranslations';
 })
 export class EditableText implements OnInit {
   // Inputs
-  text = input<string>("");
-  minLength = input(20);
-  validators = input<ValidatorFn | ValidatorFn[] | undefined>([]);
-  verticalLayout = input<boolean>(false);
+  readonly text = input<string>("");
+  readonly minLength = input(20);
+  readonly validators = input<ValidatorFn | ValidatorFn[] | undefined>([]);
+  readonly verticalLayout = input<boolean>(false);
 
   // Outputs
   onEdit = output<string>();
 
-  processedText = computed(() =>
+  readonly processedText = computed(() =>
     this.text().padEnd(this.minLength(), ' ')
   );
 
   private _editing = signal(false);
-  editing:Signal<boolean> = this._editing;
+  readonly editing:Signal<boolean> = this._editing.asReadonly();
 
   private _unsaved = signal("");
-  unsavedEdit = computed(() => this._unsaved().trim());
+  readonly unsavedEdit = computed(() => this._unsaved().trim());
 
   writeUnsaved(text: string): void {
     const textVal = text.trim();
@@ -55,8 +55,8 @@ export class EditableText implements OnInit {
 
   editForm: FormGroup;
   private _formErrors:WritableSignal<string[]> = signal([]);
-  formErrors: Signal<string[]> = this._formErrors;
-  hasErrors = computed(()=> this.formErrors().length != 0);
+  readonly formErrors: Signal<string[]> = this._formErrors.asReadonly();
+  readonly hasErrors = computed(()=> this.formErrors().length != 0);
 
   constructor(private translate: TranslateService) {
     // Form

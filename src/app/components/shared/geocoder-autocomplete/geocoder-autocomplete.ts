@@ -20,14 +20,14 @@ export class GeocoderAutocomplete  {
     });
   }
 
-  placeHolder = input('Enter city');
-  externalSource = input<Localization | undefined>();
+  readonly placeHolder = input('Enter city');
+  readonly externalSource = input<Localization | undefined>();
 
   private _suggestions: WritableSignal<Localization[]> = signal([]);
-  hasSuggestions: Signal<boolean> = computed(() => this._suggestions().length > 0);
+  readonly hasSuggestions: Signal<boolean> = computed(() => this._suggestions().length > 0);
 
   private _inputValue: WritableSignal<string> = signal("");
-  inputValue: Signal<string> = this._inputValue;
+  readonly inputValue: Signal<string> = this._inputValue.asReadonly();
 
   private _isAddressValid: boolean = false;
 

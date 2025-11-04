@@ -16,31 +16,31 @@ export class FileUpload {
   readonly acceptedFormats = input("image/png, image/jpeg")
   readonly supportsPreview = input<boolean>(false);
   readonly maxSizeMB  = input<number>(5);
-  fileSizeExceeded = computed(() => {
+  readonly fileSizeExceeded = computed(() => {
       if(!this.file()) return false;
       return this._file()!.size*0.000001 > this.maxSizeMB();
     }
   );
 
   private _file : WritableSignal<File | undefined> = signal(undefined);
+  readonly file: Signal<File | undefined> = this._file.asReadonly();
 
-  type = computed(() => this._file()?.type);
-  name = computed(() => this._file()?.name);
-  size = computed(() => {
+  readonly type = computed(() => this._file()?.type);
+  readonly name = computed(() => this._file()?.name);
+  readonly size = computed(() => {
     if(this._file()) {
       return `${this._file()!.size * 0.000001} MB`;
     } else {
       return "";
     }
   });
-  file: Signal<File | undefined> = this._file;
-  invalid = computed(() =>
+  readonly invalid = computed(() =>
     this.fileSizeExceeded() ||
     !this.file()
   );
 
   private _preview: WritableSignal<string | undefined> = signal(undefined);
-  preview: Signal<string> = computed(() => this._preview() ?? "");
+  readonly preview: Signal<string> = computed(() => this._preview() ?? "");
 
   constructor(private sanitizer: DomSanitizer) {}
 

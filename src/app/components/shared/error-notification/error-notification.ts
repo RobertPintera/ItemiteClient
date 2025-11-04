@@ -8,9 +8,9 @@ import {ErrorHandlerService} from '../../../core/services/error-handler-service/
   styleUrl: './error-notification.css'
 })
 export class ErrorNotification {
-  _errorMessage = signal("");
-  errorMessage:Signal<string> = this._errorMessage;
-  hasError = computed(() => this.errorMessage() !== "");
+  private _errorMessage = signal("");
+  readonly errorMessage:Signal<string> = this._errorMessage.asReadonly();
+  readonly hasError = computed(() => this.errorMessage() !== "");
 
   constructor(errorHandlerService: ErrorHandlerService) {
     effect(() => {

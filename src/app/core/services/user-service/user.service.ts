@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import {Injectable, Signal, signal} from '@angular/core';
+import {computed, Injectable, Signal, signal} from '@angular/core';
 import {UserBasicInfo} from '../../models/UserBasicInfo';
 import {lastValueFrom, map, Observable} from 'rxjs';
 import {environment} from '../../../../.env';
@@ -17,11 +17,9 @@ export class UserService {
       email: ""
     }
   );
-  userBasicInfo: Signal<UserBasicInfo> = this._userBasicInfo;
+  readonly userBasicInfo: Signal<UserBasicInfo> = this._userBasicInfo.asReadonly();
+  readonly isUserLoggedIn = computed(() => this._userBasicInfo().id !== -1);
 
-  isUserLoggedIn(): boolean {
-    return this._userBasicInfo().id !== -1;
-  }
 
   constructor(private http: HttpClient, private errorHandlerService: ErrorHandlerService) {
   }

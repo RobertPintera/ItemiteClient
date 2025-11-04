@@ -9,7 +9,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 )
 export class ErrorHandlerService {
   private _errorMessage = signal("");
-  errorMessage : Signal<string> = this._errorMessage;
+  readonly errorMessage : Signal<string> = this._errorMessage.asReadonly();
 
   async SendErrorMessage(error: HttpErrorResponse, displayTime: number = 3000) {
     const message = ErrorHandler(error);
