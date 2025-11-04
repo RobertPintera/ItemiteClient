@@ -44,22 +44,62 @@
     "ask_login": "Already have account? Sing in",
     "login": "Login",
     "register": "Register",
-    "repeat_password": "Repeat password",
+    "repeat_password": "Confirm password",
     "login_by_google": "Login using Google",
     "phone_number": "Phone number",
     "username": "Username",
     "forgot_password": "Forgot password",
     "agree": "I agree to",
-    "terms_of_use": "terms of use",
-    "mail_used" : "Email is already used"
+    "terms_of_use": "terms of use"
+  },
+  "user_info": {
+    "details": "Details",
+    "Localization" : "Localization",
+    "security": "Security",
+    "background_image": "Background image",
+    "profile_image": "Profile image"
+  },
+  "user_edition": {
+    "edit_password": "Edit password",
+    "old_password": "Old password",
+    "new_password": "New password",
+    "repeat_new_password": "Confirm new password",
+
+    "delete_background_image": "Delete background image",
+    "delete_profile_image": "Delete profile image",
+    "edit_profile_image": "Edit profile image",
+    "edit_background_image": "Edit background image",
+
+    "edit_email": "Edit email",
+
+    "delete_account": "Delete account",
+    "logout": "Logout",
+
+    "ask_delete_profile_image": "This will permanently delete your profile image, do you want to proceed?",
+    "ask_delete_background_image": "This will permanently delete your background image, do you want to proceed?"
+  },
+  "user_edition_api_errors": {
+    "unknown_error": "Unknown error",
+    "mail_used": "Email is already used",
+    "validation_error": "Sent value is in incorrect format"
   },
   "controls": {
     "edit": "Edit",
     "save": "Save",
+    "delete": "Delete",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "enable": "Enable",
     "enable_edition": "Enable edition",
     "unsaved": "Unsaved"
+  },
+  "file_upload": {
+    "upload_file": "Upload file",
+    "file_size": "File size",
+    "file_name": "File name",
+    "file_type": "File type",
+    "file_size_too_big": "File size is too big",
+    "max_file_size_is": "Max supported file is"
   },
   "validator_errors": {
     "field_empty" : "Field can't be empty",
@@ -77,6 +117,7 @@
     "phone_max_len" : "Phone number cannot be more than 20 characters",
     "name_min_len" : "Username must be at least 3 characters long",
     "name_max_len" : "Username cannot be more than 20 characters",
+    "name_pattern" : "Username can have only letters, digits and characters \"._@+-\"",
     "mail_min_len" : "Mail must be at least 3 characters long",
     "mail_max_len" : "Mail cannot be more than 100 characters"
   }
