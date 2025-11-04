@@ -45,3 +45,4 @@ src/environments/environment.development.ts
 src/app/core/constants/COUNTRY_CODES.ts
 src/app/core/constants/COUNTRY_NAMES.ts
 src/app/core/models/CountryDict.ts
+src/.env.ts
