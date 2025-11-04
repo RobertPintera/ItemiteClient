@@ -15,15 +15,15 @@ export class ProductListingService {
   // API
 
   private getProductListing(id: number): Observable<ProductListingDTO> {
-    return this.http.get<ProductListingDTO>(`${this.baseUrl}/productlisting/${id}`);
+    return this.http.get<ProductListingDTO>(`${this.baseUrl}/${id}`);
   }
 
   private postProductListing(productListing: ProductListingDTO) {
-    return this.http.post(`${this.baseUrl}/productlisting`, productListing);
+    return this.http.post(`${this.baseUrl}`, productListing);
   }
 
   private putProductListing(id: number,productListing: PutProductListingDTO) {
-    return this.http.put(`${this.baseUrl}/productlisting/${id}`, productListing);
+    return this.http.put(`${this.baseUrl}/${id}`, productListing);
   }
 
 }
