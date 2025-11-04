@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {environment} from '../../../../environments/environment.development';
+import {environment} from '../../../../.env';
 import {AutocompletePayloadDTO} from '../../models/AutocompletePayloadDTO';
 import {catchError, debounceTime, map, Observable, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {Localization} from '../../models/Localization';
@@ -102,5 +102,4 @@ export class GeoapifyService {
       });
     });
   }
-
 }
