@@ -18,7 +18,7 @@ export class ListingService {
   // API
 
   private getListing(): Observable<ListingDTO> {
-    return this.http.get<ListingDTO>(`${this.baseUrl}}`);
+    return this.http.get<ListingDTO>(`${this.baseUrl}`);
   }
 
   private deleteListing(id: number) {
@@ -31,7 +31,7 @@ export class ListingService {
     return this.getListing().pipe(
       map(list => {
         this._listing.set(list);
-        return this.listing;
+        return this.listing();
       }),
       catchError(err => {
         console.error('Error loadListing:', err);

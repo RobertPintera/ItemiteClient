@@ -6,7 +6,7 @@
     <div class="flex flex-col md:flex-row h-full w-full">
       <div class="flex flex-col md:flex-row flex-1 h-full w-full">
         <div class="h-64 aspect-square">
-          <img [ngSrc]="product()?.image ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name" class="size-full object-contain" height="1" width="1">
+          <img [src]="product()?.mainImageUrl ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name" class="size-full object-contain" height="1" width="1">
         </div>
         <div class="flex flex-col md:flex-row w-full gap-4">
           @if(!isMd()){
@@ -14,15 +14,15 @@
           }
           <div class="flex flex-col w-full justify-between gap-4 p-0 md:p-8 md:pt-12">
             <div class="flex flex-row flex-wrap gap-3">
-              @for (category of categoriesWithId(); track category.id){
+              @for (category of product()?.categories; track category.id){
                 <div class="border-1 px-4 py-2 rounded-2xl">
                   <p class="text-base md:text-xl">{{category.name}}</p>
                 </div>
               }
             </div>
             <div class="flex flex-col gap-2">
-              <p class="text-base md:text-xl">Localization: {{ product()?.localization }}</p>
-              <p class="text-base md:text-xl">Date of issue: {{ product()?.dateOfIssue }}</p>
+              <p class="text-base md:text-xl">Localization: {{ product()?.location?.city }}</p>
+              <p class="text-base md:text-xl">Date of issue: {{ product()?.dateCreated }}</p>
             </div>
           </div>
           <div class="flex-none flex flex-col items-start md:items-end md:pr-8">

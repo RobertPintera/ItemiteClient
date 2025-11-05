@@ -1,10 +1,12 @@
-import {Component, HostBinding, inject, input, output} from '@angular/core';
+import {Component, HostBinding, inject, input, OnInit, output, signal} from '@angular/core';
 import {Product} from '../../../../core/models/Product';
 import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
+import {ListingService} from '../../../../core/services/listing/listing.service';
+import {ListingDTO} from '../../../../core/models/ListingDTO';
 
 @Component({
   selector: 'app-product-list-view',
@@ -18,10 +20,13 @@ import {Button} from '../../../shared/button/button';
   templateUrl: './product-list-view.html',
   styleUrl: './product-list-view.css'
 })
-export class ProductListView {
+export class ProductListView implements OnInit {
   @HostBinding('class') hostClass = 'w-full';
 
   private translate = inject(TranslateService);
+  private listingService = inject(ListingService);
+
+  listing = signal<ListingDTO | null>(null);
 
   readonly isMd = input.required<boolean>();
   readonly isXl = input.required<boolean>();
@@ -31,6 +36,13 @@ export class ProductListView {
     { key: 'ascending', value: 'sortings.ascending' },
     { key: 'descending', value: 'sortings.descending' },
   ];
+
+  ngOnInit() {
+    this.listingService.loadListing().subscribe({
+      next: listing => this.listing.set(listing),
+      error: err => console.error(err)
+    });
+  }
 
   useSorting(sorting: { key: string; value: string }): void {
     if(!sorting) return;
