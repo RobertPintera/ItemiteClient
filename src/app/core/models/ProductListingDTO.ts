@@ -1,15 +1,27 @@
+import {CategoryDTO} from './CategoryDTO';
+import {Image} from './Image';
+import {LocationDTO} from './LocationDTO';
+
 export interface ProductListingDTO {
   id: string;
   name: string;
   description: string;
-  locationLongitude: number;
-  locationLatitude: number;
-  locationCountry: string;
-  locationCity: string;
-  locationState: string;
   price: number;
-  categoryId: string;
+  views: number;
+  dateCreated: string;
+  isArchived: boolean;
+  isFeatured: boolean;
   isNegotiable: boolean;
-  ImageOrders: number[];
-  images: string[]
+  owner: {
+    id: string;
+    userName: string;
+    email: string;
+    location: LocationDTO;
+    phoneNumber: string;
+    photoUrl: string;
+  };
+  location: LocationDTO;
+  categories: CategoryDTO[];
+  images: Image[];
+  mainImageUrl: string;
 }

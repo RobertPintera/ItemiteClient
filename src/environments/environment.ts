@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5066'
+  apiUrl: 'http://localhost:5066',
+  cloudinaryName: ''
 };

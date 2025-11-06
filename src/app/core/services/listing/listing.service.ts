@@ -31,7 +31,7 @@ export class ListingService {
     return this.getListing().pipe(
       map(list => {
         this._listing.set(list);
-        return this.listing();
+        return list;
       }),
       catchError(err => {
         console.error('Error loadListing:', err);

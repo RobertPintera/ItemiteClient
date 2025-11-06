@@ -24,13 +24,11 @@ export class ProductFilterSidebar implements OnInit {
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
-      const name = params.get('category');
       const id = params.get('id');
 
       const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
-      const validName = typeof name === 'string' && name.trim().length > 0 ? name : null;
 
-      if (validId === null || validName === null) return;
+      if (validId === null) return;
 
       this.categoryService.loadCategoryTree(validId).subscribe({
         next: tree => console.log('Category tree loaded'),

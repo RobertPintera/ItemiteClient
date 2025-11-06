@@ -1,15 +1,16 @@
-import {Component, computed, inject, signal} from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {Carousel} from '../../shared/carousel/carousel';
-import {Product} from '../../../core/models/Product';
 import {Button} from '../../shared/button/button';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {TranslatePipe} from '@ngx-translate/core';
+import {ProductListingService} from '../../../core/services/product-listing-service/product-listing.service';
+import {ProductListingDTO} from '../../../core/models/ProductListingDTO';
+import {ActivatedRoute} from '@angular/router';
+import {Image} from '../../../core/models/Image';
 
 @Component({
   selector: 'app-product-details',
   imports: [
-    NgOptimizedImage,
     Carousel,
     Button,
     TranslatePipe,
@@ -17,48 +18,37 @@ import {TranslatePipe} from '@ngx-translate/core';
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
 })
-export class ProductDetails {
+export class ProductDetails implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
+  private productListingService = inject(ProductListingService);
+  private route = inject(ActivatedRoute);
+
   readonly isLg = signal<boolean>(false);
+  product = signal<ProductListingDTO | null>(null);
+  selectedImage = signal<Image | null>(null);
 
-  images= [
-    {
-      "src": "assets/laptop_chromebook_icon.svg"
-    },
-    {
-      "src": "assets/laptop_chromebook_icon.svg"
-    },
-    {
-      "src": "assets/laptop_chromebook_icon.svg"
-    },
-    {
-      "src": "assets/laptop_chromebook_icon.svg"
-    },
-    {
-      "src": "assets/laptop_chromebook_icon.svg"
-    },
-    {
-      "src": "assets/laptop_chromebook_icon.svg"
-    },
-  ];
+  ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      const id = params.get('id');
 
-  readonly product = signal<Product>({
-    id: 'p1',
-    name: 'Apple iPhone 15 Pro',
-    categories: ['Electronics', 'Smartphones', 'Apple'],
-    image: 'assets/laptop_chromebook_icon.svg',
-    isNegotiable: false,
-    price: 4999,
-    localization: 'Warsaw, Poland',
-    dateOfIssue: '2025-09-20',
-  });
+      const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
 
-  readonly categoriesWithId = computed(() =>
-    this.product()?.categories.map((category, index) => ({
-      id: index + 1,
-      name: category,
-    })) ?? []
-  );
+      if (validId === null) return;
+
+      this.productListingService.loadProductListing(validId).subscribe({
+        next: product => {
+          this.product.set(product);
+          for(const image of product.images){
+            if(image.imageOrder === 1){
+              this.selectedImage.set(image);
+              break;
+            }
+          }
+        },
+        error: err => console.error(err)
+      });
+    });
+  }
 
   constructor() {
     this.breakpointObserver.observe(['(min-width: 1024px)']).subscribe(result => {

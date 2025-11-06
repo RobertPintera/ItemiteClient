@@ -4,7 +4,6 @@ import {environment} from '../../../../environments/environment';
 import {catchError, map, Observable} from 'rxjs';
 import {ProductListingDTO} from '../../models/ProductListingDTO';
 import {PutProductListingDTO} from '../../models/PutProductListingDTO';
-import {ListingDTO} from '../../models/ListingDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +36,7 @@ export class ProductListingService {
     return this.getProductListing(id).pipe(
       map(product => {
         this._productListing.set(product);
-        return this.productListing;
+        return product;
       }),
       catchError(err => {
         console.error('Error loadProductListing:', err);

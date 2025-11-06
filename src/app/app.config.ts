@@ -6,6 +6,8 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import {provideHttpClient} from '@angular/common/http';
 import {provideTranslateService} from '@ngx-translate/core';
 import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
+import {provideCloudinaryLoader} from '@angular/common';
+import {environment} from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,5 +23,6 @@ export const appConfig: ApplicationConfig = {
       lang: 'en',
       fallbackLang: 'en'
     }),
-  ]
+    provideCloudinaryLoader(`https://res.cloudinary.com/${environment.cloudinaryName}/image/upload/`)
+  ],
 };
