@@ -33,6 +33,13 @@ export class ProductListView implements OnInit {
   readonly filterOpen = output<void>();
 
   sortings = [
+    { key: 'none', value: ''},
+    { key: 'ascending', value: 'sortings.ascending' },
+    { key: 'descending', value: 'sortings.descending' },
+  ];
+
+  sortDirect = [
+    { key: 'none', value: ''},
     { key: 'ascending', value: 'sortings.ascending' },
     { key: 'descending', value: 'sortings.descending' },
   ];
@@ -46,6 +53,10 @@ export class ProductListView implements OnInit {
 
   useSorting(sorting: { key: string; value: string }): void {
     if(!sorting) return;
+  }
+
+  useSortDirect(sortDirection: { key: string; value: string }): void {
+    if(!sortDirection) return;
   }
 
   openFilter(): void {

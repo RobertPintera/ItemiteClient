@@ -12,9 +12,11 @@
     "preposition": "z"
   },
   "sortings": {
-    "ascending": "rosnąco",
-    "descending": "malejąco"
+    "name": "sortowanie",
+    "ascending": "Rosnąco",
+    "descending": "Malejąco"
   },
+  "regarding": "Względem",
   "navbar": {
     "categories": "Kategorie",
     "auctions": "Licytacje"

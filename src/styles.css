@@ -200,6 +200,6 @@
     @apply text-sm sm:text-base font-medium leading-snug;
   }
   input {
-    @apply border-2 border-border ring-ring rounded-xl;
+    @apply border-2 border-border ring-ring rounded-xl bg-white;
   }
 }

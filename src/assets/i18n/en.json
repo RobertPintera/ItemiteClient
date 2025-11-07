@@ -12,9 +12,11 @@
     "preposition": "from"
   },
   "sortings": {
-    "ascending": "ascending",
-    "descending": "descending"
+    "name": "Sorting",
+    "ascending": "Ascending",
+    "descending": "Descending"
   },
+  "regarding": "Regarding",
   "navbar": {
     "categories": "Categories",
     "auctions": "Auctions"
