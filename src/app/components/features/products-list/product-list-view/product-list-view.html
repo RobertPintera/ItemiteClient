@@ -4,9 +4,9 @@
       <p>Sorting:</p>
       <app-combo-box [items]="sortDirect" [selectedItem]="sortDirect[0]" (selectedChange)="useSorting($event)">
         <ng-template let-item>
-          <span>
-            {{item?.value | translate}}
-          </span>
+        <span>
+          {{item?.value | translate}}
+        </span>
         </ng-template>
       </app-combo-box>
     </div>
@@ -14,29 +14,36 @@
       <p>Regarding:</p>
       <app-combo-box [items]="sortBy" [selectedItem]="sortBy[0]" (selectedChange)="useSorting($event)">
         <ng-template let-item>
-           <span>
-            {{item?.value | translate}}
-          </span>
+         <span>
+          {{item?.value | translate}}
+        </span>
         </ng-template>
       </app-combo-box>
     </div>
   </div>
-  <div class="w-full flex justify-between items-center xl:justify-end flex-wrap">
-    @if (!isXl()){
-      <app-button label="filters" (clickButton)="openFilter()"/>
-    }
-    <app-paginator/>
-  </div>
-  <div class="flex flex-col gap-4 w-full">
-    @let data = listing();
-
-    @if(data && data.items.length){
-      @for (product of data.items; track product.id){
-        <app-product-item [product]="product" [isMd]="isMd()"/>
+  @if(loading()){
+    <div class="flex justify-center pt-16 w-full">
+      <app-loader/>
+    </div>
+  } @else {
+    <div class="w-full flex justify-between items-center xl:justify-end flex-wrap">
+      @if (!isXl()){
+        <app-button label="filters" (clickButton)="openFilter()"/>
       }
-    }
-  </div>
-  <div class="w-full flex justify-end">
-    <app-paginator/>
-  </div>
+      <app-paginator/>
+    </div>
+    <div class="flex flex-col gap-4 w-full">
+
+      @let data = listing();
+
+      @if(data && data.items.length){
+        @for (product of data.items; track product.id){
+          <app-product-item [product]="product" [isMd]="isMd()"/>
+        }
+      }
+    </div>
+    <div class="w-full flex justify-end">
+      <app-paginator/>
+    </div>
+  }
 </main>
