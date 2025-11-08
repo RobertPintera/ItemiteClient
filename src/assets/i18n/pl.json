@@ -1,4 +1,13 @@
 {
+  "product_details": {
+    "send_message": "Wyślij wiadomość",
+    "call": "Zadzwoń",
+    "price": "Cena",
+    "vendor": "Sprzedawca",
+    "date_of_issue": "Data wystawienia",
+    "description": "Opis",
+    "localization": "Lokalizacja"
+  },
   "paginator": {
     "preposition": "z"
   },

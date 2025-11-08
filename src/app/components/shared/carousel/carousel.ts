@@ -1,13 +1,14 @@
 import {
+  AfterViewInit,
   Component,
   computed,
   ContentChild,
   ElementRef, HostBinding,
-  input, signal,
+  input, OnDestroy, signal,
   TemplateRef,
-  ViewChild
+  ViewChild, ViewEncapsulation
 } from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {CommonModule} from '@angular/common';
 
 /**
  * Carousel component
@@ -45,15 +46,16 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
     CommonModule
   ],
   templateUrl: './carousel.html',
-  styleUrl: './carousel.css'
+  styleUrl: './carousel.css',
+  encapsulation: ViewEncapsulation.None
 })
-export class Carousel {
+export class Carousel implements AfterViewInit, OnDestroy {
   @HostBinding('class') hostClass = 'w-full';
 
   @ViewChild('carouselTrack', { static: true }) carouselTrack?: ElementRef<HTMLUListElement>;
-  @ContentChild(TemplateRef) templateRef?: TemplateRef<any>;
+  @ContentChild(TemplateRef) templateRef?: TemplateRef<unknown>;
 
-  readonly items = input<any[]>([]);
+  readonly items = input.required<unknown[]>();
   readonly hideArrows = input<boolean>(false);
   readonly visibleSSm = input<number>(1);
   readonly visibleSm = input<number | undefined>();
@@ -64,15 +66,15 @@ export class Carousel {
 
   readonly itemsWithId = computed(() =>
     this.items()?.map((item, index) => ({
-      id: item.id ?? index,
-      ...item
+      id: (item as { id?: number | string })?.id ?? index,
+      ...item as object
     })) ?? []
   );
 
-  translateX: number = 0;
+  translateX = 0;
   itemWidth = signal<number>(0);
-  visibleCount: number = 3;
-  activeIndex: number = 0;
+  visibleCount = 3;
+  activeIndex = 0;
   hideArrowsOnButtons = signal<boolean>(false);
 
   private mql?: MediaQueryList;
@@ -105,6 +107,7 @@ export class Carousel {
     this.resizeObserver?.disconnect();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private handler = (e: MediaQueryListEvent) => {
     this.updateDom();
   };

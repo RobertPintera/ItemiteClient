@@ -1,4 +1,13 @@
-import {Component, ContentChild, HostBinding, inject, input, output, signal, TemplateRef} from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  HostBinding,
+  inject,
+  input, OnDestroy, OnInit,
+  output,
+  signal,
+  TemplateRef, ViewEncapsulation
+} from '@angular/core';
 import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 
@@ -8,12 +17,13 @@ import { PLATFORM_ID } from '@angular/core';
     NgTemplateOutlet
   ],
   templateUrl: './combo-box.html',
-  styleUrl: './combo-box.css'
+  styleUrl: './combo-box.css',
+  encapsulation: ViewEncapsulation.None
 })
-export class ComboBox {
+export class ComboBox implements OnInit, OnDestroy {
   @HostBinding('class') hostClass = 'combo-container';
 
-  @ContentChild(TemplateRef) templateRef?: TemplateRef<any>;
+  @ContentChild(TemplateRef) templateRef?: TemplateRef<unknown>;
 
   readonly items = input<{ key: string; value: string}[]>([]);
   readonly selectedItem = input<{ key: string; value: string } | null>(null);

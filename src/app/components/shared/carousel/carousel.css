@@ -1,0 +1,19 @@
+@import "../../../../styles.css";
+
+@layer components {
+  .carousel-button-left, .carousel-button-right{
+    @apply bg-primary/70 hover:bg-primary active:bg-primary/70 rounded-full p-4 transition-colors z-20;
+  }
+
+  .carousel-button-left{
+    @apply absolute left-8 top-1/2 -translate-y-1/2;
+  }
+
+  .carousel-button-right{
+    @apply absolute right-8 top-1/2 -translate-y-1/2;
+  }
+
+  .carousel-button-icon{
+    @apply w-6 h-6;
+  }
+}
