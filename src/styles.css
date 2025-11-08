@@ -209,6 +209,12 @@ body {
   }
 }
 
+@layer utilities {
+  .text-wrap-auto {
+    text-wrap: auto;
+  }
+}
+
 @layer components {
   /* Combobox*/
   .combo-container {
