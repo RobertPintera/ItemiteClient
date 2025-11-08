@@ -1,0 +1,62 @@
+<form [class.flex-row]="!verticalLayout()"
+      [class.flex-col]="verticalLayout()"
+      class="flex relative  max-w-full flex-wrap"
+      [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+  <div class="mr-5 relative whitespace-pre flex flex-row items-center wrap-anywhere text-wrap">
+    @if (editing()) {
+      <input type="text" class="border-2 text-wrap-auto  rounded-sm opacity-100 z-1 absolute flex-1 w-full h-full text-start"
+             value="{{unsavedEdit()}}"
+             formControlName="textField"
+             name="textField"
+      />
+      @if(hasErrors()) {
+        <p class="absolute text-wrap-auto wrap-anywhere p-1 flex flex-col bg-card text-destructive rounded-md text-sm sm:text-base
+            -translate-y-full
+            ">
+          {{formErrors()[0]}}
+        </p>
+      }
+    }
+    <p class="flex-1 flex text-wrap-auto wrap-anywhere"
+      [class.opacity-0]="editing()">
+      {{ processedText() }}
+    </p>
+  </div>
+
+  <div [class.self-start]="verticalLayout()" class="flex flex-row items-center">
+    <button
+      type="button"
+      class="relative rounded-md hover:underline shadow-lg shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit"
+      (click)="handleEditCancelBtn()"
+    >
+      <div class="text-sm sm:text-lg">
+        @if (editing()) {
+          {{"controls.cancel" | translate}}
+        }
+        @else {
+          {{"controls.edit" | translate}}
+        }
+      </div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
+        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+      </svg>
+    </button>
+    @if (editing()) {
+      <button
+        [disabled]="hasErrors()"
+        type="submit"
+        class="disabled:cursor-no-drop disabled:text-primary enabled:text-foreground bg-primary-foreground rounded-md enabled:hover:underline shadow-lg shadow-(color:--secondary) enabled:cursor-pointer p-1 flex text-start flex-row items-center w-fit "
+      >
+        <div class="text-sm sm:text-lg ">
+          {{"controls.save" | translate}}
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-primary size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+      </button>
+    }
+  </div>
+</form>
+
+
