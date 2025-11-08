@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {computed, inject, Injectable, Signal, signal} from '@angular/core';
 import {UserBasicInfo} from '../../models/UserBasicInfo';
 import {lastValueFrom, map, Observable} from 'rxjs';
@@ -18,7 +18,11 @@ export class UserService {
     }
   );
   readonly userBasicInfo: Signal<UserBasicInfo> = this._userBasicInfo.asReadonly();
-  readonly isUserLoggedIn = computed(() => this._userBasicInfo().id !== -1);
+  readonly isUserLoggedIn = computed(() =>
+    this._userBasicInfo().id !== -1.
+    && this._userBasicInfo().username !== ""
+    && this._userBasicInfo().email !== ""
+  );
 
   private http: HttpClient = inject(HttpClient);
   private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
@@ -37,4 +41,37 @@ export class UserService {
       return false;
     }
   }
+
+  async Register(username: string, email: string, password: string, phoneNumber: string | undefined) : Promise<boolean> {
+    const payload = phoneNumber ?
+      {userName: username, email: email, password: password, phoneNumber: phoneNumber} :
+      {userName: username, email: email, password: password};
+    try {
+      const userId = await lastValueFrom(
+        this.http.post<number>(`${environment.itemiteApiUrl}/auth/register`, payload, {timeout: 3000})
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async ConfirmEmail(email:string, token: string) : Promise<boolean> {
+    const params = new HttpParams()
+      .set('email', email)
+      .set('token', token);
+
+    console.log(params);
+    try {
+      await lastValueFrom(
+        this.http.get(`${environment.itemiteApiUrl}/auth/confirm-email`, {params})
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
 }
