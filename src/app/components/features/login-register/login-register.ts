@@ -1,4 +1,4 @@
-import {Component, Signal, signal, WritableSignal, OnInit, computed} from '@angular/core';
+import {Component, Signal, signal, WritableSignal, OnInit, computed, inject} from '@angular/core';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {
   FormGroup,
@@ -15,6 +15,7 @@ import {
   UpdateUsernameErrors,
 } from '../../../core/Utility/Validation';
 import {UserService} from '../../../core/services/user-service/user.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login-register',
@@ -28,7 +29,6 @@ export class LoginRegister implements OnInit {
   // TODO API errors
   //  --> email, username used, awaiting email confirmation etc
   //  --> login_register.mail_used
-  // TODO terms of use
   // TODO API integration & Google login
 
   private _showRegisterForm: WritableSignal<boolean> = signal(false);
@@ -38,7 +38,6 @@ export class LoginRegister implements OnInit {
   private _passwordErrors: WritableSignal<string[]> = signal([]);
   private _usernameErrors: WritableSignal<string[]> = signal([]);
   private _phoneErrors: WritableSignal<string[]> = signal([]);
-  private _termsOfUseError: WritableSignal<boolean> = signal(true);
 
   emailErrors: Signal<string[]> = this._emailErrors;
   hasEmailErrors: Signal<boolean> = computed(() => this.emailErrors().length != 0);
@@ -59,8 +58,7 @@ export class LoginRegister implements OnInit {
       return this.hasEmailErrors() ||
         this.hasPasswordErrors() ||
         this.hasUsernameErrors() ||
-        !this.repeatPassMatch() ||
-        this._termsOfUseError();
+        !this.repeatPassMatch()
     } else {
       return this.hasEmailErrors() ||
         this.hasPasswordErrors();
@@ -104,10 +102,6 @@ export class LoginRegister implements OnInit {
 
     this.registerForm.get('phoneNumber')?.valueChanges.subscribe(() => {
       this._phoneErrors.set(UpdatePhoneErrors(this.registerForm));
-    });
-
-    this.registerForm.get('terms')?.valueChanges.subscribe((value:boolean)=> {
-      this._termsOfUseError.set(!value);
     });
 
     this.registerForm.get('password')?.valueChanges.subscribe(() => {
@@ -165,10 +159,6 @@ export class LoginRegister implements OnInit {
         Validators.minLength(7),
         Validators.maxLength(50),
         PasswordValidator
-      ]),
-      repeatPassword: new FormControl(''),
-      terms: new FormControl(false, [
-        Validators.required
       ])
     });
 
@@ -184,12 +174,41 @@ export class LoginRegister implements OnInit {
     );
   }
 
+  router = inject(Router);
+
   // Handle form submission
   async onSubmit() {
+    let success = false;
+    if (this.showRegisterForm()) {
+      success = await this.userService.Register(
+        this.registerForm.value.username,
+        this.registerForm.value.email,
+        this.registerForm.value.password,
+        this.registerForm.value.phoneNumber === "" || this.registerForm.value.phoneNumber === undefined ?
+          undefined : this.registerForm.value.phoneNumber
+        );
+
+      if(!success) {return;}
+
+      success = await this.userService.Login(this.registerForm.value.email, this.registerForm.value.password);
+
+      if(success) {
+        // route to main
+        this.router.navigate(['']);
+        return;
+      }
+
+      this._showRegisterForm.set(false);
+      return;
+    }
+
     if (this.loginForm.valid) {
-      console.log('Form submitted:', this.loginForm.value);
-      await this.userService.Login(this.loginForm.value.email, this.loginForm.value.password);
+      success = await this.userService.Login(this.loginForm.value.email, this.loginForm.value.password);
+      if(success) {
+        // route to main
+        this.router.navigate(['']);
+        return;
+      }
     }
   }
-
 }

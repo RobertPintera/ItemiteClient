@@ -118,21 +118,6 @@
                name="repeat_passwordR" id=repeat_passwordR type="password" formControlName="repeatPassword"
         />
 
-        <div class="flex flex-row items-center h-12 gap-5 flex-wrap">
-          <p>
-            {{"login_register.agree" | translate}}
-            <a class="hover:underline text-primary hover:cursor-pointer">
-              {{"login_register.terms_of_use" | translate}}
-            </a>
-          </p>
-          <input
-            class="sm:h-6 h-8 aspect-square"
-            formControlName="terms"
-            name="terms_of_use"
-            id="terms_of_use"
-            type="checkbox"/>
-        </div>
-
         <button [disabled]="formHasErrors()"
                 type="submit"
                 class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
