@@ -12,7 +12,7 @@ import {Map, Icon, map, tileLayer, marker, Marker, latLng, LeafletEvent, Leaflet
 import {isPlatformBrowser} from '@angular/common';
 import {Localization} from '../../../core/models/Localization';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
-import {LatLenPayloadDTO} from '../../../core/models/LatLenPayloadDTO';
+import {LatLonPayloadDTO} from '../../../core/models/LatLonPayloadDTO';
 import {EditableText} from '../../shared/editable-text/editable-text';
 import {FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -120,7 +120,10 @@ export class ProfilePage implements AfterViewInit, OnInit {
   private _showImageEditionDialog = signal(false);
   showImageEditionDialog: Signal<boolean> = this._showImageEditionDialog;
 
-  constructor(private geoapify: GeoapifyService, private sanitizer: DomSanitizer) {
+  private _geoapify: GeoapifyService = inject(GeoapifyService);
+  private _sanitizer: DomSanitizer = inject(DomSanitizer);
+
+  constructor() {
     this.changePasswordForm = new FormGroup({
       password: new FormControl('', [
         Validators.required,
@@ -176,7 +179,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
   UpdateTempLocalization(newLoc: Localization | null) {
     if(newLoc == null) return;
     this._tempLocalization.set(newLoc);
-    this.FlyTo(newLoc.lat, newLoc.lon, newLoc.city);
+    this.FlyTo(newLoc.latitude, newLoc.longitude, newLoc.city);
   }
   ShowConfirmationDialog() {
     this._showConfirmationDialog.set(true);
@@ -234,7 +237,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
         URL.revokeObjectURL(this._localProfileImageUrl()!);
       }
       this._localProfileImageUrl.set(URL.createObjectURL(file));
-      this.sanitizer.bypassSecurityTrustUrl(this._localProfileImageUrl()!);
+      this._sanitizer.bypassSecurityTrustUrl(this._localProfileImageUrl()!);
 
       // TODO call API
       return;
@@ -245,7 +248,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
         URL.revokeObjectURL(this._localBackgroundImageUrl()!);
       }
       this._localBackgroundImageUrl.set(URL.createObjectURL(file));
-      this.sanitizer.bypassSecurityTrustUrl(this._localBackgroundImageUrl()!);
+      this._sanitizer.bypassSecurityTrustUrl(this._localBackgroundImageUrl()!);
 
       // TODO call API
       return;
@@ -302,8 +305,8 @@ export class ProfilePage implements AfterViewInit, OnInit {
       // _localization must have valid values as it passed validation
       //    so it is safe to use this._localization()!
       this.FlyTo(
-        this._localization()!.lat,
-        this._localization()!.lon,
+        this._localization()!.latitude,
+        this._localization()!.longitude,
         this._localization()!.city
       )
       return;
@@ -375,16 +378,16 @@ export class ProfilePage implements AfterViewInit, OnInit {
   }
 
   GetPlace(lat :number, lng:number) {
-    const request : LatLenPayloadDTO = {
-      lat: lat,
-      lng: lng,
+    const request : LatLonPayloadDTO = {
+      latitude: lat,
+      longitude: lng,
       filter: "city"
     }
-    this.geoapify.ReverseGeocode(request).subscribe({
+    this._geoapify.ReverseGeocode(request).subscribe({
       next: (response) => {
         if(this.ValidateLocalization(response)) {
           this._tempLocalization.set(response);
-          this.FlyTo(response.lat, response.lon, response.city);
+          this.FlyTo(response.latitude, response.longitude, response.city);
         }
       },
       error: (err) => {

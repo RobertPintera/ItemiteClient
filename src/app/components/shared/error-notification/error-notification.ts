@@ -1,4 +1,4 @@
-import {Component, computed, effect, signal, Signal} from '@angular/core';
+import {Component, computed, effect, inject, Inject, signal, Signal} from '@angular/core';
 import {ErrorHandlerService} from '../../../core/services/error-handler-service/error-handler-service';
 
 @Component({
@@ -12,9 +12,10 @@ export class ErrorNotification {
   readonly errorMessage:Signal<string> = this._errorMessage.asReadonly();
   readonly hasError = computed(() => this.errorMessage() !== "");
 
-  constructor(errorHandlerService: ErrorHandlerService) {
+  private _errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
+  constructor() {
     effect(() => {
-      this._errorMessage.set(errorHandlerService.errorMessage())
+      this._errorMessage.set(this._errorHandlerService.errorMessage())
     });
   }
 }

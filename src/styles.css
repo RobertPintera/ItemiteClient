@@ -9,6 +9,11 @@
 /*  --color-separator: #AEAEAE;*/
 /*}*/
 
+body {
+  width: 100%;
+  margin: 0;
+}
+
 :root {
   --background: oklch(1.0000 0 0);
   --foreground: oklch(0.1450 0 0);
@@ -202,4 +207,42 @@
   input {
     @apply border-2 border-border ring-ring rounded-xl bg-white;
   }
+}
+
+@layer utilities {
+  .text-wrap-auto {
+    text-wrap: auto;
+  }
+}
+
+@layer components {
+  /* Combobox*/
+  .combo-container {
+    @apply relative w-52;
+  }
+
+  .combo-selected {
+    @apply border-2 border-border rounded-md p-2 flex justify-between items-center bg-white;
+  }
+
+  .combo-dropdown {
+    @apply absolute w-full border  border-border border-t-0 bg-white max-h-44 overflow-y-auto shadow-md z-50;
+  }
+
+  .combo-dropdown li {
+    @apply hover:bg-gray-100;
+  }
+
+  .combo-dropdown li.selected {
+    @apply bg-gray-200 font-bold;
+  }
+
+  .arrow {
+    @apply transition-transform;
+  }
+
+  .arrow.open {
+    @apply rotate-180;
+  }
+  /*  --------------- */
 }

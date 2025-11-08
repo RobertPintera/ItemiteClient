@@ -65,7 +65,7 @@
     "login": "Login",
     "register": "Register",
     "repeat_password": "Confirm password",
-    "login_by_google": "Login using Google",
+    "login_by": "Login using",
     "phone_number": "Phone number",
     "username": "Username",
     "forgot_password": "Forgot password",

@@ -1,12 +1,13 @@
 import {Component, computed, inject, input, output, PLATFORM_ID, Signal, signal, WritableSignal} from '@angular/core';
 import {TranslatePipe} from "@ngx-translate/core";
 import {DomSanitizer} from '@angular/platform-browser';
+import {Button} from '../button/button';
 
 @Component({
   selector: 'app-file-upload',
-    imports: [
-        TranslatePipe
-    ],
+  imports: [
+    TranslatePipe,
+  ],
   templateUrl: './file-upload.html',
   styleUrl: './file-upload.css'
 })
