@@ -1,16 +1,22 @@
 import { HttpErrorResponse } from "@angular/common/http";
 
 export function ErrorHandler(error: HttpErrorResponse): string {
-  // todo maybe do something with status code?
-
   if (error.error.message) {
     // Error thrown by client
-    const message = error.error.message;
-    return message;
+    return error.error.message;
   } else {
     // Error thrown by API
-    const statusCode:string = error.error.StatusCode;
-    const message:string = error.error.Message;
+    let message:string = error.error.Message;
+    console.log(error);
+    if(error.error.Errors) {
+      for(let i = 0; i < error.error.Errors.length; i++) {
+        if(i === 0) {
+          message = error.error.Errors[i];
+          continue;
+        }
+        message += `\n\r${error.error.Errors[i]}`;
+      }
+    }
     return message;
   }
 }
