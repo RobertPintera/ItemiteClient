@@ -1,0 +1,154 @@
+
+
+<div class="m-auto relative flex p-5 flex-row items-center justify-around custom max-w-7xl ">
+
+  <div class="flex-1 flex-col w-full h-full ">
+    <input id="request_register" name="request_register" class="peer hidden" type="checkbox" [checked]="showRegisterForm()" />
+
+    <!-- LOGIN PANEL -->
+    <div
+      [class.hidden] = showRegisterForm()
+      class="flex flex-col items-center justify-center transition-all duration-500 ease-in-out w-full h-full min-h-[190px]
+        origin-top
+        peer-not-checked:opacity-100
+        peer-not-checked:scale-y-full
+        scaleIn
+        peer-checked:scale-y-0
+        peer-checked:opacity-0">
+
+      <form class="flex flex-col items-center justify-center sm:w-70 w-full max-w-70" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <app-scaled-text [text]="'login_register.login_title' | translate" [step]="-1" base="text-3xl" [maxGrowTimes]="1"/>
+        <label for="emailL" class="w-full mt-10">
+          <app-scaled-text text='Email' [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
+          @if(hasEmailErrors()) {
+            <div class="text-(--destructive)"> {{emailErrors()[0]}} </div>
+          }
+        </label>
+        <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
+               name="emailL" id="emailL" type="email" formControlName="email"
+        />
+
+        <label for="passwordL" class="w-full">
+          <app-scaled-text [text]="'login_register.password' | translate" [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
+          @if(hasPasswordErrors()) {
+            <div class="text-(--destructive)"> {{passwordErrors()[0]}} </div>
+          }
+        </label>
+        <input class="w-full  h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
+               name="passwordL" id="passwordL" type="password" formControlName="password"
+        />
+
+        <button type="submit"
+                [disabled]="formHasErrors()"
+                class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
+                cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+          {{ 'login_register.login' | translate }}
+        </button>
+      </form>
+      <button class="sm:w-70 w-full max-w-70 cursor-pointer h-15 sm:h-10 mt-3 rounded-md bg-(--primary) hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+        {{ 'login_register.login_by_google' | translate }}
+      </button>
+      <label for="request_register"
+             class="mt-3 text-lg md:text-xl hover:text-primary whitespace-nowrap wrap-normal select-none underline cursor-pointer"
+             (click)="SwitchShowRegister()">
+        <app-scaled-text [text]="'login_register.ask_register' | translate" [step]="-1" base="text-xs" [maxGrowTimes]="1"/>
+      </label>
+      <div class="mt-3 text-md  hover:text-primary whitespace-nowrap wrap-normal select-none underline cursor-pointer">
+        {{'login_register.forgot_password' | translate}}
+      </div>
+    </div>
+
+    <!-- REGISTER PANEL -->
+    <div
+      [class.hidden] = !showRegisterForm()
+      class="flex flex-col items-center justify-center transition-all duration-500 ease-in-out w-full h-full
+      origin-top
+      peer-not-checked:opacity-0
+      peer-not-checked:scale-y-0
+      scaleIn
+      peer-checked:scale-y-full
+      peer-checked:opacity-100"
+    >
+      <form class="flex flex-col items-center justify-center sm:w-80 w-full max-w-80" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <app-scaled-text [text]="'login_register.register_title' | translate" [step]="-1" base="text-2xl" [maxGrowTimes]="1"/>
+
+        <label for="emailR" class="w-full mt-10">
+          <app-scaled-text text='Email' [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
+          @if(hasEmailErrors()) { <div class="text-(--destructive)">{{emailErrors()[0]}}</div> }
+        </label>
+
+        <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
+               name="emailR" id="emailR" type="email" formControlName="email"
+        />
+
+        <label for="username" class="w-full mb-px">
+          <app-scaled-text [text]="'login_register.username' | translate" [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
+          @if(hasUsernameErrors()) { <div class="text-(--destructive)">{{usernameErrors()[0]}}</div> }
+        </label>
+        <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
+               name="username" id="username" type="text" formControlName="username"
+        />
+
+        <label for="phoneNumber" class="w-full mb-px">
+          <app-scaled-text [text]="'login_register.phone_number' | translate" [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
+          @if(hasPhoneErrors()) { <div class="text-(--destructive)">{{phoneErrors()[0]}}</div> }
+        </label>
+        <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
+               name="phoneNumber" id="phoneNumber" type="text" formControlName="phoneNumber"
+        />
+
+        <label for="passwordR" class="w-full">
+          <app-scaled-text [text]="'login_register.password' | translate" [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
+          @if(hasPasswordErrors()) {
+            <div class="text-(--destructive)"> {{passwordErrors()[0]}} </div>
+          }
+        </label>
+        <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
+               name="passwordR" id="passwordR" type="password" formControlName="password"
+        />
+        <label for="repeat_passwordR" class="w-full">
+          <app-scaled-text [text]="'login_register.repeat_password' | translate" [step]="-1"
+                           base="text-sm" [maxGrowTimes]="2"/>
+          @if(!repeatPassMatch()) {<div class="text-(--destructive)">{{"validator_errors.pass_match" | translate}}</div>}
+        </label>
+        <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
+               name="repeat_passwordR" id=repeat_passwordR type="password" formControlName="repeatPassword"
+        />
+
+        <div class="flex flex-row items-center h-12 gap-5 flex-wrap">
+          <p>
+            {{"login_register.agree" | translate}}
+            <a class="hover:underline text-primary hover:cursor-pointer">
+              {{"login_register.terms_of_use" | translate}}
+            </a>
+          </p>
+          <input
+            class="sm:h-6 h-8 aspect-square"
+            formControlName="terms"
+            name="terms_of_use"
+            id="terms_of_use"
+            type="checkbox"/>
+        </div>
+
+        <button [disabled]="formHasErrors()"
+                type="submit"
+                class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
+                enabled:cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) enabled:hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+          {{ 'login_register.register' | translate }}
+        </button>
+      </form>
+      <label class="mt-3 text-lg md:text-xl hover:text-primary whitespace-nowrap wrap-normal select-none underline cursor-pointer"
+             for="request_register" (click)="SwitchShowRegister()">
+        <app-scaled-text [text]="'login_register.ask_login' | translate" [step]="-1" base="text-xs" [maxGrowTimes]="1"/>
+      </label>
+    </div>
+  </div>
+
+  <div class="hidden xl:flex flex-1 flex-col justify-center items-center md:shrink overflow-hidden">
+    <img alt="Person greeting"  class="max-w-full h-auto w-auto object-contain"
+         src="https://www.uczmnie.pl/wp-content/uploads/2025/01/mateusz-chrobok-ekspert-ai-3.png" />
+  </div>
+
+</div>
+
+

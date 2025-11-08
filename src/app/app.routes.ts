@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './components/layouts/main-layout/main-layout';
 import { Home } from './components/features/home/home';
-import { Login } from './components/features/login/login';
+import {LoginRegister} from './components/features/login-register/login-register';
 import {ProductsList} from './components/features/products-list/products-list';
 import {ProductDetails} from './components/features/product-details/product-details';
+import {ProfilePage} from './components/features/profile-page/profile-page';
 
 export const routes: Routes = [
   {
@@ -24,8 +25,13 @@ export const routes: Routes = [
       },
       {
         path: 'login',
-        component: Login,
+        component: LoginRegister
+      },
+      {
+        path: 'dev',
+        component: ProfilePage
       }
+
     ]
   }
 ];

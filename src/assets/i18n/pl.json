@@ -46,5 +46,90 @@
   },
   "auctions": {
     "header": "Licytacje"
+  },
+  "login_register": {
+    "login_title": "Zaloguj się",
+    "password": "Hasło",
+    "register_title": "Zarejestruj się",
+    "ask_register": "Nie masz konta? Zarejestruj się",
+    "ask_login": "Masz konto? Zaloguj się",
+    "login": "Zaloguj",
+    "register": "Zarejestruj",
+    "repeat_password": "Potwierdź hasło",
+    "login_by_google": "Zaloguj przez Google",
+    "phone_number": "Numer telefonu",
+    "username": "Nazwa użytkownika",
+    "forgot_password": "Zapomniałem hasła",
+    "agree": "Zgadzam się na",
+    "terms_of_use": "warunki korzystania"
+  },
+  "user_info": {
+    "details": "Szczegóły",
+    "localization" : "Lokalizacja",
+    "security": "Bezpieczeństwo",
+    "background_image": "Obraz w tle",
+    "profile_image": "Zdjęcie profilowe"
+  },
+  "user_edition": {
+    "edit_password": "Edytuj hasło",
+    "old_password": "Stare hasło",
+    "new_password": "Nowe hasło",
+    "repeat_new_password": "Potwierdź nowe hasło",
+
+    "delete_background_image": "Usuń obraz w tle",
+    "delete_profile_image": "Usuń zdjęcie profilowe",
+    "edit_profile_image": "Edytuj zdjęcie profilowe",
+    "edit_background_image": "Edytuj obraz w tle",
+
+    "edit_email": "Edytuj mail",
+
+    "delete_account": "Usuń konto",
+    "logout": "Wyloguj się",
+
+    "ask_delete_profile_image": "Ta operacja na stałę usunie Twoje zdjęcie profilowe, chcesz kontynuować?",
+    "ask_delete_background_image": "Ta operacja na stałę usunie Twoje zdjęcie w tle, chcesz kontynuować?"
+  },
+  "user_edition_api_errors": {
+    "unknown_error": "Wystąpił nieznany błąd",
+    "mail_used": "Email jest już przypisany do innego konta",
+    "validation_error": "Przesłana wartość jest w złym formacie"
+  },
+  "controls": {
+    "edit": "Edytuj",
+    "save": "Zapisz",
+    "delete": "Usuń",
+    "cancel": "Anuluj",
+    "confirm": "Potwierdź",
+    "enable": "Aktywuj",
+    "enable_edition": "Aktywuj edycję",
+    "unsaved": "Niezapisane"
+  },
+  "file_upload": {
+    "upload_file": "Prześlij plik",
+    "file_size": "Rozmiar pliku",
+    "file_name": "Nazwa pliku",
+    "file_type": "Typ pliku",
+    "file_size_too_big": "Rozmiar pliku jest za duży",
+    "max_file_size_is": "Maksymalny rozmiar pliku to"
+  },
+  "validator_errors": {
+    "field_empty" : "Pole nie może być puste",
+    "field_regex" : "Wartość musi być w poprawnym formacie",
+    "field_min_len" : "Wartość ma za mało znaków",
+    "field_max_len" : "Warotść ma za dużo znaków",
+    "pass_min_len": "Hasło musi mieć co najmniej 7 znaków",
+    "pass_max_len": "Hasło nie może mieć więcej niż 50 znaków",
+    "pass_uppercase": "Hasło musi zawierać przynajmniej jedną wielką literę",
+    "pass_lowercase": "Hasło musi zawierać przynajmniej jedną małą literę",
+    "pass_digit": "Hasło musi zawierać przynajmniej jedną cyfrę",
+    "pass_special": "Hasło musi zawierać przynajmniej jeden znak specjalny",
+    "pass_match": "Hasła muszą być jednakowe",
+    "phone_min_len" : "nr telefonu nie może mieć mniej niż 7 znaków",
+    "phone_max_len" : "Nr telefonu nie może mieć więcej niż 20 znaków",
+    "name_min_len" : "Nazwa użytkownika musi mieć co najmniej 3 znaki",
+    "name_max_len" : "Nazwa użytkownika nie może mieć więcej niż 20 znaków",
+    "name_pattern" : "Nazwa użytkownika może mieć tylko litery, cyfry i znaki \"._@+-\"",
+    "mail_min_len" : "E-mail nie może mieć mniej niż 3 znaki",
+    "mail_max_len" : "E-mail nie może mieć więcej niż 100 znaków"
   }
 }
