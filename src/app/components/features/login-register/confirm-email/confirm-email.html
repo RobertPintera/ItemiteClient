@@ -1,0 +1,29 @@
+<app-external-configs-layout>
+  <div class="flex z-1 justify-center flex-col p-5 items-center shadow-primary shadow-2xl m-auto w-full max-w-7xl h-fit bg-card text-card-foreground rounded-xl">
+    <p class="text-4xl flex-wrap font-bold text-center">
+      {{"login_register.account_activation" | translate}}
+    </p>
+    <div class="flex flex-row items-center h-fit gap-5">
+      <p class="text-lg mt-5 mb-5 max-h-fit h-fit flex-wrap">
+        {{"login_register.agree" | translate}}
+        <a class="hover:underline text-primary hover:cursor-pointer">
+          {{"login_register.terms_of_use" | translate}}
+        </a>
+      </p>
+      <input
+        (change)="SetTermsConfirmed($event)"
+        class="sm:h-6 h-8 aspect-square hover:cursor-pointer"
+        name="terms_of_use"
+        id="terms_of_use"
+        type="checkbox"/>
+    </div>
+    <button [disabled]="errorsPresent()"
+            (click)="OnSubmit()"
+            type="submit"
+            class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
+                enabled:cursor-pointer h-15 sm:h-10 p-1 flex-wrap mt-3 w-fit max-w-full rounded-md bg-(--primary) enabled:hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+      {{ 'login_register.activate_account' | translate }}
+    </button>
+  </div>
+</app-external-configs-layout>
+
