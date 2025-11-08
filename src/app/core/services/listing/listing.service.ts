@@ -1,8 +1,9 @@
-import {inject, Injectable, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {inject, Injectable, } from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
-import {catchError, map, Observable} from 'rxjs';
+import {catchError, Observable} from 'rxjs';
 import {ListingDTO} from '../../models/ListingDTO';
+import {ListingFilter} from '../../models/ListingFilter';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,6 @@ import {ListingDTO} from '../../models/ListingDTO';
 export class ListingService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/api/listing`;
-
-  private _listing = signal<ListingDTO | null>(null);
-
-  readonly listing = this._listing.asReadonly();
 
   // API
 
@@ -27,14 +24,24 @@ export class ListingService {
 
   // Updating signals
 
-  loadListing(){
-    return this.getListing().pipe(
-      map(list => {
-        this._listing.set(list);
-        return list;
-      }),
+  loadListing(filter?: ListingFilter): Observable<ListingDTO> {
+    let params = new HttpParams();
+
+    if (filter?.pageSize != null) params = params.set('pageSize', filter.pageSize);
+    if (filter?.pageNumber != null) params = params.set('pageNumber', filter.pageNumber);
+    if (filter?.listingType) params = params.set('listingType', filter.listingType);
+    if (filter?.sortBy) params = params.set('sortBy', filter.sortBy);
+    if (filter?.sortDirection) params = params.set('sortDirection', filter.sortDirection);
+    if (filter?.priceFrom != null) params = params.set('priceFrom', filter.priceFrom);
+    if (filter?.priceTo != null) params = params.set('priceTo', filter.priceTo);
+    if (filter?.longitude != null) params = params.set('longitude', filter.longitude);
+    if (filter?.latitude != null) params = params.set('latitude', filter.latitude);
+    if (filter?.distance != null) params = params.set('distance', filter.distance);
+    if (filter?.categoryIds?.length) params = params.set('categoryIds', filter.categoryIds.join(','));
+
+    return this.http.get<ListingDTO>(`${this.baseUrl}`, { params }).pipe(
       catchError(err => {
-        console.error('Error loadListing:', err);
+        console.error('Error getFilteredListings:', err);
         throw err;
       })
     );

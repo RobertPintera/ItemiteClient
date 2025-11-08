@@ -1,13 +1,12 @@
-import {Component, HostBinding, inject, input, OnInit, output, signal} from '@angular/core';
+import {Component, inject, input, output} from '@angular/core';
 import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
-import {ListingService} from '../../../../core/services/listing/listing.service';
 import {ListingDTO} from '../../../../core/models/ListingDTO';
-import {finalize} from 'rxjs';
 import {Loader} from '../../../shared/loader/loader';
+import {SortBy, SortDirection} from '../../../../core/constants/constants';
 
 @Component({
   selector: 'app-product-list-view',
@@ -22,16 +21,16 @@ import {Loader} from '../../../shared/loader/loader';
   templateUrl: './product-list-view.html',
   styleUrl: './product-list-view.css'
 })
-export class ProductListView implements OnInit {
+export class ProductListView {
   private translate = inject(TranslateService);
-  private listingService = inject(ListingService);
 
-  loading = signal<boolean>(false);
-  listing = signal<ListingDTO | null>(null);
-
+  readonly listing = input.required<ListingDTO | null>();
+  readonly loading = input.required<boolean>();
   readonly isMd = input.required<boolean>();
   readonly isXl = input.required<boolean>();
   readonly filterOpen = output<void>();
+  readonly sortDirectionChange  = output<null | SortDirection>();
+  readonly sortByChange  = output<null | SortBy>();
 
   sortDirect = [
     { key: 'none', value: '-'},
@@ -46,27 +45,11 @@ export class ProductListView implements OnInit {
     { key: 'views', value: 'sort_by.views' },
   ];
 
-  ngOnInit() {
-    this.loading.set(true);
-    this.listingService.loadListing()
-      .pipe(
-        finalize(() => {
-          setTimeout(() => {
-            this.loading.set(false);
-          }, 3000);
-        })
-      )
-      .subscribe({
-        next: listing => this.listing.set(listing),
-        error: err => console.error(err)
-      });
-  }
-
   useSorting(sorting: { key: string; value: string }): void {
     if(!sorting) return;
   }
 
-  useSortDirect(sortDirection: { key: string; value: string }): void {
+  useSortDirection(sortDirection: { key: string; value: string }): void {
     if(!sortDirection) return;
   }
 
