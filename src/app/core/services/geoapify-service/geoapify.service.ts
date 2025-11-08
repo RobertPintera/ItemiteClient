@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {environment} from '../../../../.env';
+import {environment} from '../../../../environments/environment.development';
 import {AutocompletePayloadDTO} from '../../models/AutocompletePayloadDTO';
 import {catchError, debounceTime, map, Observable, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {Localization} from '../../models/Localization';
 import {GeoapifyResponseDTO} from '../../models/GeoapifyResponseDTO';
-import {LatLenPayloadDTO} from '../../models/LatLenPayloadDTO';
-import {response} from 'express';
+import {LatLonPayloadDTO} from '../../models/LatLonPayloadDTO';
 
 @Injectable(
   {
@@ -17,15 +16,13 @@ export class GeoapifyService {
   private _geoapifyUrl = environment.geoapifyUrl;
   private _cancelSubject: Subject<void> = new Subject(); // Subject to cancel previous requests
 
-  constructor(
-    private http: HttpClient
-  ) {}
+  private http: HttpClient = inject(HttpClient);
 
-  ReverseGeocode(request: LatLenPayloadDTO): Observable<Localization> {
+  ReverseGeocode(request: LatLonPayloadDTO): Observable<Localization> {
     const params = new HttpParams()
       .set('apiKey', environment.geoapifyApiKey)
-      .set('lat', request.lat)
-      .set('lon', request.lng)
+      .set('lat', request.latitude)
+      .set('lon', request.longitude)
       .set('limit', 1);
     if(request.filter) {
       params.set('filter', request.filter);
@@ -37,8 +34,8 @@ export class GeoapifyService {
           city: feature.properties.city,
           state: feature.properties.state,
           formatted: `${feature.properties.city}, ${feature.properties.state}, ${feature.properties.country}`,
-          lat: feature.properties.lat,
-          lon: feature.properties.lon,
+          latitude: feature.properties.lat,
+          longitude: feature.properties.lon,
         }));
 
         return suggestion[0];
@@ -66,8 +63,8 @@ export class GeoapifyService {
           city: feature.properties.city,
           state: feature.properties.state,
           formatted: `${feature.properties.city}, ${feature.properties.state}, ${feature.properties.country}`,
-          lat: feature.properties.lat,
-          lon: feature.properties.lon,
+          latitude: feature.properties.lat,
+          longitude: feature.properties.lon,
         }));
 
         return { suggestions }; // Returning the mapped data as GeoapifyResponseDTO
