@@ -59,7 +59,12 @@
     "username": "Username",
     "forgot_password": "Forgot password",
     "agree": "I agree to",
-    "terms_of_use": "terms of use"
+    "terms_of_use": "terms of use",
+    "register_success": "Registered successfully",
+    "confirm_mail": "Enter the link we sent on your e-mail address",
+    "complete_registration": "and complete the registration",
+    "activate_account": "Activate my account",
+    "account_activation": "Account activation"
   },
   "user_info": {
     "details": "Details",

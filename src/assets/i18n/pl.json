@@ -59,7 +59,12 @@
     "username": "Nazwa użytkownika",
     "forgot_password": "Zapomniałem hasła",
     "agree": "Zgadzam się na",
-    "terms_of_use": "warunki korzystania"
+    "terms_of_use": "warunki korzystania",
+    "register_success": "Zarejestrowano pomyślnie",
+    "confirm_mail": "Wejdź w link, który wysłaliśmy na Twój adres e-mail",
+    "complete_registration": "i ukończ rejestrację",
+    "activate_account": "Aktywuj moje konto",
+    "account_activation": "Aktywacja konta"
   },
   "user_info": {
     "details": "Szczegóły",
