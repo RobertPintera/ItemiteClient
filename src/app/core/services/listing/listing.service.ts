@@ -9,7 +9,7 @@ import {ListingDTO} from '../../models/ListingDTO';
 })
 export class ListingService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.apiUrl}/api/listing`;
+  private baseUrl = `${environment.itemiteApiUrl}/api/listing`;
 
   private _listing = signal<ListingDTO | null>(null);
 

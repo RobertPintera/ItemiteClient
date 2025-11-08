@@ -15,10 +15,13 @@
           <input type="text" class="flex-1 border rounded p-2 w-full" />
         </div>
       </div>
-      <div>
-        <app-combo-box [items]="listingTypes" [selectedItem]="listingTypes[0]" (selectedChange)="useListingType($event)">
+      <div class="flex flex-1 flex-col gap-2 w-full">
+        <p>Listing Type</p>
+        <app-combo-box [items]="listingTypes" [selectedItem]="listingTypes[0]" (selectedChange)="useListingType($event)" class="w-full">
           <ng-template let-item>
-            {{item?.value | translate}}
+            <span>
+              {{item?.value | translate}}
+            </span>
           </ng-template>
         </app-combo-box>
       </div>

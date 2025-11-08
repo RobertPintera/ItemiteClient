@@ -11,12 +11,21 @@
   "paginator": {
     "preposition": "z"
   },
-  "sortings": {
-    "name": "sortowanie",
+  "sorting": "Sortowanie",
+  "regarding": "Względem",
+  "sorting_directions": {
     "ascending": "Rosnąco",
     "descending": "Malejąco"
   },
-  "regarding": "Względem",
+  "sort_by": {
+    "price": "Ceny",
+    "creation_date": "Daty wystawienia",
+    "views": "Wyświetleń"
+  },
+  "listing_types": {
+    "auction": "Licytacja",
+    "product": "Produkt"
+  },
   "navbar": {
     "categories": "Kategorie",
     "auctions": "Licytacje"

@@ -10,7 +10,7 @@ import {CategoryTreeDTO} from '../../models/CategoryTreeDTO';
 })
 export class CategoryService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.apiUrl}/api/categories`;
+  private baseUrl = `${environment.itemiteApiUrl}/api/categories`;
   private _mainCategories = signal<CategoryDTO[]>([]);
   private _subCategories = signal<CategoryTreeDTO | null>(null);
 
@@ -20,7 +20,7 @@ export class CategoryService {
   // API
 
   private getAllCategories(): Observable<CategoryDTO[]> {
-    return this.http.get<CategoryDTO[]>(`${environment.apiUrl}/all`);
+    return this.http.get<CategoryDTO[]>(`${environment.itemiteApiUrl}/all`);
   }
 
   private getMainCategories(): Observable<CategoryDTO[]> {

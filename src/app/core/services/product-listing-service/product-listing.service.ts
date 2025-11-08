@@ -10,7 +10,7 @@ import {PutProductListingDTO} from '../../models/PutProductListingDTO';
 })
 export class ProductListingService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.apiUrl}/api/productlisting`;
+  private baseUrl = `${environment.itemiteApiUrl}/api/productlisting`;
 
   private _productListing = signal<ProductListingDTO | null>(null);
 

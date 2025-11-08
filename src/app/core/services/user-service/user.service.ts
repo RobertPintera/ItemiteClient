@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import {computed, Injectable, Signal, signal} from '@angular/core';
 import {UserBasicInfo} from '../../models/UserBasicInfo';
 import {lastValueFrom, map, Observable} from 'rxjs';
-import {environment} from '../../../../.env';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
+import {environment} from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +29,7 @@ export class UserService {
     const payload = {email: email, password: password};
     try {
       const userInfo = await lastValueFrom(
-        this.http.post<UserBasicInfo>(`${environment.itemiteApiUrl}/auth/login`, payload, {timeout: 3000})
+        this.http.post<UserBasicInfo>(`${environment.itemiteApiUrl}/api/auth/login`, payload, {timeout: 3000})
       );
       this._userBasicInfo.set(userInfo);
       return true;

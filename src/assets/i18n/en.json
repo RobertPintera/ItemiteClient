@@ -11,12 +11,21 @@
   "paginator": {
     "preposition": "from"
   },
-  "sortings": {
-    "name": "Sorting",
+  "sorting": "Sorting",
+  "regarding": "Regarding",
+  "sorting_directions": {
     "ascending": "Ascending",
     "descending": "Descending"
   },
-  "regarding": "Regarding",
+  "sort_by": {
+    "price": "Price",
+    "creation_date": "Date of issue",
+    "views": "Views"
+  },
+  "listing_types": {
+    "auction": "Auction",
+    "product": "Product"
+  },
   "navbar": {
     "categories": "Categories",
     "auctions": "Auctions"

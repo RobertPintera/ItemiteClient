@@ -21,8 +21,6 @@ import {ListingDTO} from '../../../../core/models/ListingDTO';
   styleUrl: './product-list-view.css'
 })
 export class ProductListView implements OnInit {
-  @HostBinding('class') hostClass = 'w-full';
-
   private translate = inject(TranslateService);
   private listingService = inject(ListingService);
 
@@ -32,16 +30,17 @@ export class ProductListView implements OnInit {
   readonly isXl = input.required<boolean>();
   readonly filterOpen = output<void>();
 
-  sortings = [
-    { key: 'none', value: ''},
-    { key: 'ascending', value: 'sortings.ascending' },
-    { key: 'descending', value: 'sortings.descending' },
+  sortDirect = [
+    { key: 'none', value: '-'},
+    { key: 'ascending', value: 'sorting_directions.ascending' },
+    { key: 'descending', value: 'sorting_directions.descending' },
   ];
 
-  sortDirect = [
-    { key: 'none', value: ''},
-    { key: 'ascending', value: 'sortings.ascending' },
-    { key: 'descending', value: 'sortings.descending' },
+  sortBy = [
+    { key: 'none', value: '-'},
+    { key: 'price', value: 'sort_by.price' },
+    { key: 'creation_date', value: 'sort_by.creation_date' },
+    { key: 'views', value: 'sort_by.views' },
   ];
 
   ngOnInit() {

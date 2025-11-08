@@ -27,7 +27,7 @@ export class ProductFilterSidebar implements OnInit {
   readonly categoryTree = this.categoryService.subCategories;
 
   listingTypes = [
-    { key: 'none', value: ''},
+    { key: 'none', value: '-'},
     { key: 'auction', value: 'listing_types.auction' },
     { key: 'product', value: 'listing_types.product' },
   ];
