@@ -1,9 +1,11 @@
 import { HttpErrorResponse } from "@angular/common/http";
 
-export function ErrorHandler(error: HttpErrorResponse): string {
+// Returns array of [error description, error]
+export function ErrorHandler(error: HttpErrorResponse): Array<string> {
   if (error.error.message) {
     // Error thrown by client
-    return error.error.message;
+    console.log(error);
+    return [error.error.message];
   } else {
     // Error thrown by API
     let message:string = error.error.Message;
@@ -17,6 +19,7 @@ export function ErrorHandler(error: HttpErrorResponse): string {
         message += `\n\r${error.error.Errors[i]}`;
       }
     }
-    return message;
+    console.log(error);
+    return [message];
   }
 }
