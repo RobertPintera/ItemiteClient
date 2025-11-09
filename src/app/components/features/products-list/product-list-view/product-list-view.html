@@ -1,7 +1,7 @@
 <main class="flex flex-col w-full max-w-full p-4">
-  <div class="w-full flex flex-row items-center gap-4 border-b-1 py-4">
-    <div class="flex flex-row items-center gap-4">
-      <p>Sorting:</p>
+  <div class="w-full flex flex-row flex-wrap  items-center gap-4 border-b-1 py-4">
+    <div class="flex flex-row flex-wrap items-center gap-4">
+      <p>{{"sort_directions.header" | translate}}:</p>
       <app-combo-box [items]="sortDirect" [selectedItem]="sortDirect[0]" (selectedChange)="useSortDirection($event)">
         <ng-template let-item>
         <span>
@@ -10,8 +10,8 @@
         </ng-template>
       </app-combo-box>
     </div>
-    <div class="flex flex-row items-center gap-4">
-      <p>Regarding:</p>
+    <div class="flex flex-row flex-wrap items-center gap-4">
+      <p>{{"sort_by.header" | translate}}:</p>
       <app-combo-box [items]="sortBy" [selectedItem]="sortBy[0]" (selectedChange)="useSortBy($event)">
         <ng-template let-item>
          <span>
@@ -26,7 +26,7 @@
       <app-loader/>
     </div>
   } @else {
-    <div class="w-full flex justify-between items-center xl:justify-end flex-wrap">
+    <div class="w-full flex justify-between items-center pt-4 xl:justify-end flex-wrap">
       @if (!isXl()){
         <app-button label="filters" (clickButton)="openFilter()"/>
       }

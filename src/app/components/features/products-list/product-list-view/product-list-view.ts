@@ -6,7 +6,7 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
 import {ListingDTO} from '../../../../core/models/ListingDTO';
 import {Loader} from '../../../shared/loader/loader';
-import {SORT_DIRECTION, SortBy, SortDirection} from '../../../../core/constants/constants';
+import {SORT_DIRECTION, SortBy, SortDirection, SORTS_BY} from '../../../../core/constants/constants';
 
 @Component({
   selector: 'app-product-list-view',
@@ -34,35 +34,37 @@ export class ProductListView {
 
   sortDirect = [
     { key: 'none', value: '-'},
-    { key: 'ascending', value: 'sorting_directions.ascending' },
-    { key: 'descending', value: 'sorting_directions.descending' },
+    { key: 'ascending', value: 'sort_directions.ascending' },
+    { key: 'descending', value: 'sort_directions.descending' },
   ];
 
   sortBy = [
     { key: 'none', value: '-'},
     { key: 'price', value: 'sort_by.price' },
-    { key: 'creation_date', value: 'sort_by.creation_date' },
+    { key: 'creationDate', value: 'sort_by.creation_date' },
     { key: 'views', value: 'sort_by.views' },
   ];
 
-  useSortDirection(sortDirection: { key: string; value: string }): void {
-    if(!sortDirection) return;
+  useSortDirection(option: { key: string; value: string }): void {
+    if (!option) return;
 
-    const allowedKeys = Object.values(SORT_DIRECTION);
-
-    function isSortDirection(key: string): key is SortDirection {
-      return allowedKeys.includes(key as SortDirection);
+    const allowed = Object.values(SORT_DIRECTION);
+    if (allowed.includes(option.key as SortDirection)) {
+      this.sortDirectionChange.emit(option.key as SortDirection);
+      return;
     }
-
-    if (isSortDirection(sortDirection.key)) {
-      this.sortDirectionChange.emit(sortDirection.key);
-    } else if (sortDirection.key.includes('none')) {
-      this.sortDirectionChange.emit(null);
-    }
+    this.sortByChange.emit(null);
   }
 
-  useSortBy(sorting: { key: string; value: string }): void {
-    if(!sorting) return;
+  useSortBy(option: { key: string; value: string }): void {
+    if (!option) return;
+
+    const allowed = Object.values(SORTS_BY);
+    if (allowed.includes(option.key as SortBy)) {
+      this.sortByChange.emit(option.key as SortBy);
+      return;
+    }
+    this.sortByChange.emit(null);
   }
 
   openFilter(): void {

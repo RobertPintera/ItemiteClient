@@ -14,7 +14,7 @@ export type ListingType = (typeof LISTING_TYPES)[keyof typeof LISTING_TYPES];
 
 export const SORTS_BY = {
   PRICE: "price",
-  CREATIONDATE: "creation_date",
+  CREATION_DATE: "creationDate",
   VIEWS: "views"
 };
 

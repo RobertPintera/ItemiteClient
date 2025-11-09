@@ -11,13 +11,13 @@
   "paginator": {
     "preposition": "z"
   },
-  "sorting": "Sortowanie",
-  "regarding": "Względem",
-  "sorting_directions": {
+  "sort_directions": {
+    "header": "Sortowanie",
     "ascending": "Rosnąco",
     "descending": "Malejąco"
   },
   "sort_by": {
+    "header": "Według",
     "price": "Ceny",
     "creation_date": "Daty wystawienia",
     "views": "Wyświetleń"

@@ -11,13 +11,13 @@
   "paginator": {
     "preposition": "from"
   },
-  "sorting": "Sorting",
-  "regarding": "Regarding",
-  "sorting_directions": {
+  "sort_directions": {
+    "header": "Sorting",
     "ascending": "Ascending",
     "descending": "Descending"
   },
   "sort_by": {
+    "header": "By",
     "price": "Price",
     "creation_date": "Date of issue",
     "views": "Views"
