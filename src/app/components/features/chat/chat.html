@@ -1,7 +1,20 @@
-<div>
+<div class="custom h-full w-full max-w-7xl m-auto flex">
   <!-- Message window -->
-  <div>
-
+  <div class="flex flex-col overflow-auto items-center w-full">
+    <div class="flex-1 w-full grow"></div>
+    <!-- Messages -->
+    <div class="flex flex-col max-h-100% overflow-auto h-fit">
+      @for (message of messages(); track message.messageId) {
+        <app-message
+          [content]="message.content"
+          [dateModified]="message.dateModified"
+          [dateSent]="message.dateSent"
+          [dateRead]="message.dateRead"
+          [photos]="message.photos"
+          [isOwnMessage]="IsOwnMessage(message.senderId)"
+        />
+      }
+    </div>
   </div>
   <!-- Message input -->
   <div>
