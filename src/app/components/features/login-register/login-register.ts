@@ -198,7 +198,7 @@ export class LoginRegister implements OnInit {
         return;
       }
 
-      this._showRegisterForm.set(false);
+      this.SwitchShowRegister();
       return;
     }
 
