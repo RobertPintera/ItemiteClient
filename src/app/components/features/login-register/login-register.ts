@@ -16,10 +16,11 @@ import {
 } from '../../../core/Utility/Validation';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {Router} from '@angular/router';
+import {ForgotPassword} from './reset-password/forgot-password/forgot-password';
 
 @Component({
   selector: 'app-login-register',
-  imports: [TranslatePipe, ReactiveFormsModule, ScaledText
+  imports: [TranslatePipe, ReactiveFormsModule, ScaledText, ForgotPassword
   ],
   templateUrl: './login-register.html',
   styleUrl: './login-register.css',
@@ -32,27 +33,30 @@ export class LoginRegister implements OnInit {
   // TODO API integration & Google login
 
   private _showRegisterForm: WritableSignal<boolean> = signal(false);
-  private _repeatPassMatch: WritableSignal<boolean> = signal(false);
+  private _showForgotPasswordForm: WritableSignal<boolean> = signal(false);
 
+  private _repeatPassMatch: WritableSignal<boolean> = signal(false);
   private _emailErrors: WritableSignal<string[]> = signal([]);
   private _passwordErrors: WritableSignal<string[]> = signal([]);
   private _usernameErrors: WritableSignal<string[]> = signal([]);
   private _phoneErrors: WritableSignal<string[]> = signal([]);
 
-  emailErrors: Signal<string[]> = this._emailErrors;
+  readonly showForgotPasswordForm: Signal<boolean> = this._showRegisterForm.asReadonly();
+
+  readonly emailErrors: Signal<string[]> = this._emailErrors.asReadonly();
   hasEmailErrors: Signal<boolean> = computed(() => this.emailErrors().length != 0);
 
-  passwordErrors: Signal<string[]> = this._passwordErrors;
+  readonly passwordErrors: Signal<string[]> = this._passwordErrors.asReadonly();
   hasPasswordErrors: Signal<boolean> = computed(() => this.passwordErrors().length != 0);
-  repeatPassMatch: Signal<boolean> = this._repeatPassMatch;
+  readonly repeatPassMatch: Signal<boolean> = this._repeatPassMatch.asReadonly();
 
-  usernameErrors: WritableSignal<string[]> = this._usernameErrors;
+  readonly usernameErrors: Signal<string[]> = this._usernameErrors.asReadonly();
   hasUsernameErrors: Signal<boolean> = computed(() => this.usernameErrors().length != 0);
 
-  phoneErrors: WritableSignal<string[]> = this._phoneErrors;
+  readonly phoneErrors: Signal<string[]> = this._phoneErrors.asReadonly();
   hasPhoneErrors: Signal<boolean> = computed(() => this._phoneErrors().length != 0);
 
-  showRegisterForm: Signal<boolean> = this._showRegisterForm;
+  readonly showRegisterForm: Signal<boolean> = this._showRegisterForm.asReadonly();
   formHasErrors: Signal<boolean> = computed(() => {
     if(this._showRegisterForm()) {
       return this.hasEmailErrors() ||
@@ -75,6 +79,10 @@ export class LoginRegister implements OnInit {
 
     this._emailErrors.set(UpdateEmailErrors(this.showRegisterForm() ? this.registerForm : this.loginForm));
     this._passwordErrors.set(UpdatePasswordErrors(this.showRegisterForm() ? this.registerForm : this.loginForm));
+  }
+
+  SwitchShowForgotPassword() {
+    this._showForgotPasswordForm.set(!this._showForgotPasswordForm());
   }
 
   loginForm: FormGroup;
@@ -107,9 +115,7 @@ export class LoginRegister implements OnInit {
     this.registerForm.get('password')?.valueChanges.subscribe(() => {
       this._passwordErrors.set(UpdatePasswordErrors(this.registerForm));
       this._repeatPassMatch.set(
-        this.registerForm.get(
-          'repeatPassword'
-        )?.value === this.registerForm.get('password')?.value
+        this.registerForm.get('repeatPassword')?.value === this.registerForm.get('password')?.value
       );
     });
 
