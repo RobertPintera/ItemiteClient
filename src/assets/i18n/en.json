@@ -64,7 +64,10 @@
     "confirm_mail": "Enter the link we sent on your e-mail address",
     "complete_registration": "and complete the registration",
     "activate_account": "Activate my account",
-    "account_activation": "Account activation"
+    "account_activation": "Account activation",
+    "forgot_password_enter_email": "Enter the e-mail you used to register",
+    "password_reset_link": "Send password reset link",
+    "reset_password": "Change password"
   },
   "user_info": {
     "details": "Details",

@@ -64,7 +64,10 @@
     "confirm_mail": "Wejdź w link, który wysłaliśmy na Twój adres e-mail",
     "complete_registration": "i ukończ rejestrację",
     "activate_account": "Aktywuj moje konto",
-    "account_activation": "Aktywacja konta"
+    "account_activation": "Aktywacja konta",
+    "forgot_password_enter_email": "Wpisz e-mail użyty przy rejestracji",
+    "password_reset_link": "Wyślij link do zmiany hasła",
+    "reset_password": "Zmień hasło"
   },
   "user_info": {
     "details": "Szczegóły",
