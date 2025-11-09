@@ -168,7 +168,8 @@ export class LoginRegister implements OnInit {
         Validators.minLength(7),
         Validators.maxLength(50),
         PasswordValidator
-      ])
+      ]),
+      repeatPassword: new FormControl('', [])
     });
 
     this._usernameErrors.set(UpdateUsernameErrors(this.registerForm));
