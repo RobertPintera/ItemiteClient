@@ -6,7 +6,7 @@ import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
 import {ListingDTO} from '../../../../core/models/ListingDTO';
 import {Loader} from '../../../shared/loader/loader';
-import {SortBy, SortDirection} from '../../../../core/constants/constants';
+import {SORT_DIRECTION, SortBy, SortDirection} from '../../../../core/constants/constants';
 
 @Component({
   selector: 'app-product-list-view',
@@ -45,12 +45,24 @@ export class ProductListView {
     { key: 'views', value: 'sort_by.views' },
   ];
 
-  useSorting(sorting: { key: string; value: string }): void {
-    if(!sorting) return;
-  }
-
   useSortDirection(sortDirection: { key: string; value: string }): void {
     if(!sortDirection) return;
+
+    const allowedKeys = Object.values(SORT_DIRECTION);
+
+    function isSortDirection(key: string): key is SortDirection {
+      return allowedKeys.includes(key as SortDirection);
+    }
+
+    if (isSortDirection(sortDirection.key)) {
+      this.sortDirectionChange.emit(sortDirection.key);
+    } else if (sortDirection.key.includes('none')) {
+      this.sortDirectionChange.emit(null);
+    }
+  }
+
+  useSortBy(sorting: { key: string; value: string }): void {
+    if(!sorting) return;
   }
 
   openFilter(): void {

@@ -2,7 +2,7 @@
   <div class="w-full flex flex-row items-center gap-4 border-b-1 py-4">
     <div class="flex flex-row items-center gap-4">
       <p>Sorting:</p>
-      <app-combo-box [items]="sortDirect" [selectedItem]="sortDirect[0]" (selectedChange)="useSorting($event)">
+      <app-combo-box [items]="sortDirect" [selectedItem]="sortDirect[0]" (selectedChange)="useSortDirection($event)">
         <ng-template let-item>
         <span>
           {{item?.value | translate}}
@@ -12,7 +12,7 @@
     </div>
     <div class="flex flex-row items-center gap-4">
       <p>Regarding:</p>
-      <app-combo-box [items]="sortBy" [selectedItem]="sortBy[0]" (selectedChange)="useSorting($event)">
+      <app-combo-box [items]="sortBy" [selectedItem]="sortBy[0]" (selectedChange)="useSortBy($event)">
         <ng-template let-item>
          <span>
           {{item?.value | translate}}

@@ -6,5 +6,6 @@
     <app-product-filter-sidebar class="w-full" [isXl]="isXl()" (click)="$event.stopPropagation()" (filterClose)="closeFilter()"/>
   </div>
   <app-product-list-view class="flex-1 xl:max-w-[1200px]" [listing]="listing()" [loading]="loading()"
-                         [isXl]="isXl()" [isMd]="isMd()" (filterOpen)="openFilter()"/>
+                         [isXl]="isXl()" [isMd]="isMd()" (filterOpen)="openFilter()"
+                         (sortByChange)="onSortByChange($event)" (sortDirectionChange)="onSortDirectionChange($event)"/>
 </div>

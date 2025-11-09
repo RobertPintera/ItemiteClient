@@ -6,23 +6,23 @@ export const BUTTON_VARIANTS = {
 export type ButtonVariant = typeof BUTTON_VARIANTS[keyof typeof BUTTON_VARIANTS];
 
 export const LISTING_TYPES = {
-  AUCTION: 'Auction',
-  PRODUCT: 'Product',
+  AUCTION: 'auction',
+  PRODUCT: 'product',
 } as const;
 
 export type ListingType = (typeof LISTING_TYPES)[keyof typeof LISTING_TYPES];
 
 export const SORTS_BY = {
-  PRICE: "Price",
-  CREATIONDATE: "Date of issue",
-  VIEWS: "Views"
+  PRICE: "price",
+  CREATIONDATE: "creation_date",
+  VIEWS: "views"
 };
 
 export type SortBy = (typeof SORTS_BY)[keyof typeof SORTS_BY];
 
 export const SORT_DIRECTION = {
-  ASCENDING: 'ASCENDING',
-  DESCENDING: 'DESCENDING',
+  ASCENDING: 'ascending',
+  DESCENDING: 'descending',
 } as const;
 
 export type SortDirection = (typeof SORT_DIRECTION)[keyof typeof SORT_DIRECTION];
