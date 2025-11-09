@@ -13,7 +13,7 @@ export class ErrorHandlerService {
 
   async SendErrorMessage(error: HttpErrorResponse, displayTime: number = 3000) {
     const message = ErrorHandler(error);
-    this._errorMessage.set(message);
+    this._errorMessage.set(message[0]);
     await new Promise(resolve => setTimeout(resolve, displayTime));
     this._errorMessage.set("");
   }
