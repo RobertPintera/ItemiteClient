@@ -126,11 +126,14 @@ export class LoginRegister implements OnInit {
     });
   }
 
-  constructor(private translate: TranslateService, private userService: UserService) {
-    this.translate.onLangChange.subscribe(() => {
-      UpdateErrorTranslations(this.translate);
+  private _translate = inject(TranslateService);
+  private _userService = inject(UserService);
+
+  constructor() {
+    this._translate.onLangChange.subscribe(() => {
+      UpdateErrorTranslations(this._translate);
     });
-    UpdateErrorTranslations(this.translate);
+    UpdateErrorTranslations(this._translate);
 
     this.loginForm = new FormGroup({
       email: new FormControl('', [
@@ -186,7 +189,7 @@ export class LoginRegister implements OnInit {
   async onSubmit() {
     let success = false;
     if (this.showRegisterForm()) {
-      success = await this.userService.Register(
+      success = await this._userService.Register(
         this.registerForm.value.username,
         this.registerForm.value.email,
         this.registerForm.value.password,
@@ -196,7 +199,7 @@ export class LoginRegister implements OnInit {
 
       if(!success) {return;}
 
-      success = await this.userService.Login(this.registerForm.value.email, this.registerForm.value.password);
+      success = await this._userService.Login(this.registerForm.value.email, this.registerForm.value.password);
 
       if(success) {
         // route to main
@@ -209,7 +212,7 @@ export class LoginRegister implements OnInit {
     }
 
     if (this.loginForm.valid) {
-      success = await this.userService.Login(this.loginForm.value.email, this.loginForm.value.password);
+      success = await this._userService.Login(this.loginForm.value.email, this.loginForm.value.password);
       if(success) {
         // route to main
         this.router.navigate(['']);
