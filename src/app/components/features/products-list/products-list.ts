@@ -6,7 +6,6 @@ import { ListingFilter } from '../../../core/models/ListingFilter';
 import { ListingDTO } from '../../../core/models/ListingDTO';
 import { Subject, debounceTime, switchMap, takeUntil, finalize } from 'rxjs';
 import { ListingService } from '../../../core/services/listing/listing.service';
-import { SortBy, SortDirection } from '../../../core/constants/constants';
 
 @Component({
   selector: 'app-products-list',
@@ -95,13 +94,5 @@ export class ProductsList implements OnInit, OnDestroy {
 
   private applyFilter(filter: ListingFilter) {
     this.filterSubject.next(filter);
-  }
-
-  onSortByChange(sortBy: SortBy | null) {
-    this.updateFilter({ sortBy });
-  }
-
-  onSortDirectionChange(sortDirection: SortDirection | null) {
-    this.updateFilter({ sortDirection });
   }
 }

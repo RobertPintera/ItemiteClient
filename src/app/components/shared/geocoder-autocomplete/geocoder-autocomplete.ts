@@ -1,4 +1,4 @@
-import {Component, computed, effect, Input, input, output, Signal, signal, WritableSignal} from '@angular/core';
+import {Component, computed, effect, inject, Input, input, output, Signal, signal, WritableSignal} from '@angular/core';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {Localization} from '../../../core/models/Localization';
 import {debug} from 'node:util';
@@ -10,8 +10,9 @@ import {debug} from 'node:util';
   styleUrl: './geocoder-autocomplete.css'
 })
 export class GeocoderAutocomplete  {
-  constructor(private geoapify: GeoapifyService) {
+  private geoapifyService = inject(GeoapifyService);
 
+  constructor() {
     effect(() => {
       // Don't emit new event when value is passed into the component (set address valid to false)
       // It only should update text field.
@@ -29,8 +30,9 @@ export class GeocoderAutocomplete  {
   private _inputValue: WritableSignal<string> = signal("");
   readonly inputValue: Signal<string> = this._inputValue.asReadonly();
 
-  private _isAddressValid: boolean = false;
+  private _isAddressValid = false;
 
+  readonly selectedLocalization: WritableSignal<Localization | null> = signal(null);
   suggestions: Signal<Localization[]> = this._suggestions;
 
   // Listen to this signal to detect if address is valid
@@ -52,15 +54,27 @@ export class GeocoderAutocomplete  {
     this.DebounceAutocomplete(textVal);
   }
 
+  updateEnterInputValue(){
+    if(!this.selectedLocalization() || this._inputValue() === this.selectedLocalization()?.formatted || !this._inputValue())
+      return;
+
+    if(this._inputValue() !== this.selectedLocalization()?.formatted)
+      this.selectedLocalization.set(null);
+
+    this.onCityPicked.emit(this.selectedLocalization());
+  }
+
+
   updateInputValue(value:string, index:number ) {
     this._inputValue.set(value);
+    this.selectedLocalization.set(this._suggestions()[index]);
     this.onCityPicked.emit(this._suggestions()[index]);
     this._isAddressValid = true;
   }
 
   // Debounced autocomplete method
   DebounceAutocomplete(query: string) {
-    this.geoapify.DebounceAutocomplete(query, 'city').subscribe({
+    this.geoapifyService.DebounceAutocomplete(query, 'city').subscribe({
       next: (response) => {
         this._suggestions.set(response.suggestions);
       },

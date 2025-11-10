@@ -7,6 +7,7 @@ import {Button} from '../../../shared/button/button';
 import {ListingDTO} from '../../../../core/models/ListingDTO';
 import {Loader} from '../../../shared/loader/loader';
 import {SORT_DIRECTION, SortBy, SortDirection, SORTS_BY} from '../../../../core/constants/constants';
+import {ListingFilter} from '../../../../core/models/ListingFilter';
 
 @Component({
   selector: 'app-product-list-view',
@@ -22,15 +23,12 @@ import {SORT_DIRECTION, SortBy, SortDirection, SORTS_BY} from '../../../../core/
   styleUrl: './product-list-view.css'
 })
 export class ProductListView {
-  private translate = inject(TranslateService);
-
   readonly listing = input.required<ListingDTO | null>();
   readonly loading = input.required<boolean>();
   readonly isMd = input.required<boolean>();
   readonly isXl = input.required<boolean>();
   readonly filterOpen = output<void>();
-  readonly sortDirectionChange  = output<null | SortDirection>();
-  readonly sortByChange  = output<null | SortBy>();
+  readonly filterChange  = output<Partial<ListingFilter>>();
 
   sortDirect = [
     { key: 'none', value: '-'},
@@ -50,10 +48,10 @@ export class ProductListView {
 
     const allowed = Object.values(SORT_DIRECTION);
     if (allowed.includes(option.key as SortDirection)) {
-      this.sortDirectionChange.emit(option.key as SortDirection);
+      this.filterChange.emit({sortDirection: option.key as SortDirection});
       return;
     }
-    this.sortByChange.emit(null);
+    this.filterChange.emit({sortDirection: null});
   }
 
   useSortBy(option: { key: string; value: string }): void {
@@ -61,10 +59,10 @@ export class ProductListView {
 
     const allowed = Object.values(SORTS_BY);
     if (allowed.includes(option.key as SortBy)) {
-      this.sortByChange.emit(option.key as SortBy);
+      this.filterChange.emit({sortBy: option.key as SortBy});
       return;
     }
-    this.sortByChange.emit(null);
+    this.filterChange.emit({sortBy: null});
   }
 
   openFilter(): void {

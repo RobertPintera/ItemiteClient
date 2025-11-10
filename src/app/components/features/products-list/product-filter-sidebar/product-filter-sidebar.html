@@ -27,13 +27,21 @@
       </div>
       <div class="flex flex-1 flex-col gap-2">
         <p>Localization</p>
-        <input type="text" class="w-full border rounded p-2" />
-        <input type="text" class="w-full border rounded p-2" />
+        <app-geocoder-autocomplete placeHolder="Find city" (onCityPicked)="updateLocalization($event)"/>
+        <app-combo-box [items]="distances" [selectedItem]="distances[0]" (selectedChange)="useDistance($event)" class="w-full">
+          <ng-template let-item>
+            <span>
+              {{item?.value | translate}}
+            </span>
+          </ng-template>
+        </app-combo-box>
       </div>
     </div>
 
-    <div class="flex justify-end w-full">
-      <app-button label="Filter" />
-    </div>
+    @if (!isXl()){
+      <div class="flex justify-end w-full">
+        <app-button label="Filter" />
+      </div>
+    }
   </div>
 </aside>
