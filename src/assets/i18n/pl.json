@@ -61,13 +61,14 @@
     "agree": "Zgadzam się na",
     "terms_of_use": "warunki korzystania",
     "register_success": "Zarejestrowano pomyślnie",
-    "confirm_mail": "Wejdź w link, który wysłaliśmy na Twój adres e-mail",
+    "confirm_link": "Wejdź w link, który wysłaliśmy na Twój adres e-mail",
     "complete_registration": "i ukończ rejestrację",
     "activate_account": "Aktywuj moje konto",
     "account_activation": "Aktywacja konta",
     "forgot_password_enter_email": "Wpisz e-mail użyty przy rejestracji",
     "password_reset_link": "Wyślij link do zmiany hasła",
-    "reset_password": "Zmień hasło"
+    "reset_password": "Zmień hasło",
+    "can_close_window": "Możesz zamknąć to okno"
   },
   "user_info": {
     "details": "Szczegóły",
@@ -81,6 +82,7 @@
     "old_password": "Stare hasło",
     "new_password": "Nowe hasło",
     "repeat_new_password": "Potwierdź nowe hasło",
+    "password_changed": "Hasło zostało zmienione, możesz się teraz zalogować nowym hasłem",
 
     "delete_background_image": "Usuń obraz w tle",
     "delete_profile_image": "Usuń zdjęcie profilowe",

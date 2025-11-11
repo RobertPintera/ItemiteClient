@@ -6,6 +6,7 @@ import {ProductsList} from './components/features/products-list/products-list';
 import {ProductDetails} from './components/features/product-details/product-details';
 import {ProfilePage} from './components/features/profile-page/profile-page';
 import {ConfirmEmail} from './components/features/login-register/confirm-email/confirm-email';
+import {ResetPassword} from './components/features/login-register/reset-password/reset-password';
 
 export const routes: Routes = [
   {
@@ -37,5 +38,9 @@ export const routes: Routes = [
     {
       path: 'confirm-email',
       component: ConfirmEmail
+    },
+    {
+      path: 'reset-password',
+      component: ResetPassword
     }
 ];

@@ -17,23 +17,32 @@ import {
 import {UserService} from '../../../core/services/user-service/user.service';
 import {Router} from '@angular/router';
 import {ForgotPassword} from './reset-password/forgot-password/forgot-password';
+import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
 
 @Component({
   selector: 'app-login-register',
-  imports: [TranslatePipe, ReactiveFormsModule, ScaledText, ForgotPassword
+  imports: [TranslatePipe, ReactiveFormsModule, ScaledText, ForgotPassword, LoadingCircle
   ],
   templateUrl: './login-register.html',
   styleUrl: './login-register.css',
 })
 export class LoginRegister implements OnInit {
 
+  // TODO Block submit when API bad request until value change
+
   // TODO API errors
   //  --> email, username used, awaiting email confirmation etc
   //  --> login_register.mail_used
   // TODO API integration & Google login
 
+  router = inject(Router);
+  private _translate = inject(TranslateService);
+  private _userService = inject(UserService);
+
   private _showRegisterForm: WritableSignal<boolean> = signal(false);
   private _showForgotPasswordForm: WritableSignal<boolean> = signal(false);
+  private _processing: WritableSignal<boolean> = signal(false);
+  readonly processing: Signal<boolean> = this._processing.asReadonly();
 
   private _repeatPassMatch: WritableSignal<boolean> = signal(false);
   private _emailErrors: WritableSignal<string[]> = signal([]);
@@ -41,7 +50,7 @@ export class LoginRegister implements OnInit {
   private _usernameErrors: WritableSignal<string[]> = signal([]);
   private _phoneErrors: WritableSignal<string[]> = signal([]);
 
-  readonly showForgotPasswordForm: Signal<boolean> = this._showRegisterForm.asReadonly();
+  readonly showForgotPasswordForm: Signal<boolean> = this._showForgotPasswordForm.asReadonly();
 
   readonly emailErrors: Signal<string[]> = this._emailErrors.asReadonly();
   hasEmailErrors: Signal<boolean> = computed(() => this.emailErrors().length != 0);
@@ -62,10 +71,12 @@ export class LoginRegister implements OnInit {
       return this.hasEmailErrors() ||
         this.hasPasswordErrors() ||
         this.hasUsernameErrors() ||
-        !this.repeatPassMatch()
+        !this.repeatPassMatch() ||
+        this.processing() // Block when already processing
     } else {
       return this.hasEmailErrors() ||
-        this.hasPasswordErrors();
+        this.hasPasswordErrors() ||
+        this.processing() // Block when already processing
     }
   });
 
@@ -126,9 +137,6 @@ export class LoginRegister implements OnInit {
     });
   }
 
-  private _translate = inject(TranslateService);
-  private _userService = inject(UserService);
-
   constructor() {
     this._translate.onLangChange.subscribe(() => {
       UpdateErrorTranslations(this._translate);
@@ -175,8 +183,6 @@ export class LoginRegister implements OnInit {
     this._usernameErrors.set(UpdateUsernameErrors(this.registerForm));
     this._phoneErrors.set(UpdatePhoneErrors(this.registerForm));
     this._emailErrors.set(UpdateEmailErrors(this.loginForm));
-    this._emailErrors.set(UpdateEmailErrors(this.registerForm));
-    this._passwordErrors.set(UpdatePasswordErrors(this.registerForm));
     this._passwordErrors.set(UpdatePasswordErrors(this.loginForm));
 
     this._repeatPassMatch.set(
@@ -184,11 +190,10 @@ export class LoginRegister implements OnInit {
     );
   }
 
-  router = inject(Router);
-
   // Handle form submission
   async onSubmit() {
     let success = false;
+    this._processing.set(true);
     if (this.showRegisterForm()) {
       success = await this._userService.Register(
         this.registerForm.value.username,
@@ -198,7 +203,7 @@ export class LoginRegister implements OnInit {
           undefined : this.registerForm.value.phoneNumber
         );
 
-      if(!success) {return;}
+      if(!success) {this._processing.set(false); return;}
 
       success = await this._userService.Login(this.registerForm.value.email, this.registerForm.value.password);
 
@@ -209,16 +214,20 @@ export class LoginRegister implements OnInit {
       }
 
       this.SwitchShowRegister();
+      this._processing.set(false);
       return;
     }
 
     if (this.loginForm.valid) {
+      this._processing.set(true);
       success = await this._userService.Login(this.loginForm.value.email, this.loginForm.value.password);
       if(success) {
         // route to main
         this.router.navigate(['']);
+        this._processing.set(false);
         return;
       }
+      this._processing.set(false);
     }
   }
 }

@@ -74,4 +74,30 @@ export class UserService {
     }
   }
 
+  async RequestPasswordReset(email:string) : Promise<boolean> {
+    const payload = {email:email};
+    try {
+      await lastValueFrom(
+        this.http.post(`${environment.itemiteApiUrl}/auth/forgot-password`, payload, {timeout: 3000})
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async ChangePassword(email: string, password: string, token: string) : Promise<boolean> {
+    const payload = {email: email, password: password, token: token};
+    try {
+      await lastValueFrom(
+        this.http.post(`${environment.itemiteApiUrl}/auth/reset-password  `, payload, {timeout: 3000})
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
 }

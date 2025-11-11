@@ -61,13 +61,14 @@
     "agree": "I agree to",
     "terms_of_use": "terms of use",
     "register_success": "Registered successfully",
-    "confirm_mail": "Enter the link we sent on your e-mail address",
+    "confirm_link": "Enter the link we sent on your e-mail address",
     "complete_registration": "and complete the registration",
     "activate_account": "Activate my account",
     "account_activation": "Account activation",
     "forgot_password_enter_email": "Enter the e-mail you used to register",
     "password_reset_link": "Send password reset link",
-    "reset_password": "Change password"
+    "reset_password": "Change password",
+    "can_close_window": "You can close this window"
   },
   "user_info": {
     "details": "Details",
@@ -81,6 +82,7 @@
     "old_password": "Old password",
     "new_password": "New password",
     "repeat_new_password": "Confirm new password",
+    "password_changed": "Password changed, you can now log-in with new credentials",
 
     "delete_background_image": "Delete background image",
     "delete_profile_image": "Delete profile image",

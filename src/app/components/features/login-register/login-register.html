@@ -1,4 +1,7 @@
 
+@if (showForgotPasswordForm()) {
+  <app-forgot-password (onExit)="SwitchShowForgotPassword()"/>
+}
 
 <div class="m-auto relative flex p-5 flex-row items-center justify-around custom max-w-7xl ">
 
@@ -42,8 +45,13 @@
         <button type="submit"
                 [disabled]="formHasErrors()"
                 class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
-                cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+                relative cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
           {{ 'login_register.login' | translate }}
+          @if(processing()) {
+            <div class="absolute inset-0 flex items-center w-full justify-center">
+              <app-loading-circle />
+            </div>
+          }
         </button>
       </form>
       <button class="sm:w-70 w-full max-w-70 cursor-pointer justify-center gap-2 h-15 sm:h-10 mt-3 rounded-md bg-destructive hover:bg-destructive/90 border-1 text-destructive-foreground border-(--ring) focus:border-(--ring) text-xl md:text-2xl items-center flex p-1" >
@@ -57,12 +65,12 @@
              (click)="SwitchShowRegister()">
         <app-scaled-text [text]="'login_register.ask_register' | translate" [step]="-1" base="text-xs" [maxGrowTimes]="1"/>
       </label>
-      <div
+      <a
         (click)="SwitchShowForgotPassword()"
-        class="mt-3 text-md  hover:text-primary whitespace-nowrap wrap-normal select-none underline cursor-pointer"
+        class="mt-3 text-md hover:text-primary whitespace-nowrap wrap-normal select-none underline cursor-pointer"
       >
         {{'login_register.forgot_password' | translate}}
-      </div>
+      </a>
     </div>
 
     <!-- REGISTER PANEL -->
@@ -125,8 +133,13 @@
         <button [disabled]="formHasErrors()"
                 type="submit"
                 class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
-                enabled:cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) enabled:hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+                enabled:cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md relative bg-(--primary) enabled:hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
           {{ 'login_register.register' | translate }}
+          @if(processing()) {
+            <div class="absolute inset-0 flex items-center w-full justify-center">
+              <app-loading-circle />
+            </div>
+          }
         </button>
       </form>
       <label class="mt-3 text-lg md:text-xl hover:text-primary whitespace-nowrap wrap-normal select-none underline cursor-pointer"
@@ -142,8 +155,6 @@
   </div>
 </div>
 
-@if (showForgotPasswordForm()) {
-  <app-forgot-password />
-}
+
 
 
