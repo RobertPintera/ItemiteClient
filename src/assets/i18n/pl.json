@@ -68,7 +68,8 @@
     "forgot_password_enter_email": "Wpisz e-mail użyty przy rejestracji",
     "password_reset_link": "Wyślij link do zmiany hasła",
     "reset_password": "Zmień hasło",
-    "can_close_window": "Możesz zamknąć to okno"
+    "can_close_window": "Możesz zamknąć to okno",
+    "google_login_error": "Wystąpił błąd przy próbie logowania przez Google"
   },
   "user_info": {
     "details": "Szczegóły",
@@ -110,7 +111,8 @@
     "confirm": "Potwierdź",
     "enable": "Aktywuj",
     "enable_edition": "Aktywuj edycję",
-    "unsaved": "Niezapisane"
+    "unsaved": "Niezapisane",
+    "return": "Powrót"
   },
   "file_upload": {
     "upload_file": "Prześlij plik",
@@ -139,5 +141,14 @@
     "name_pattern" : "Nazwa użytkownika może mieć tylko litery, cyfry i znaki \"._@+-\"",
     "mail_min_len" : "E-mail nie może mieć mniej niż 3 znaki",
     "mail_max_len" : "E-mail nie może mieć więcej niż 100 znaków"
+  },
+  "external_auth_errors": {
+    "no_claims": "Adres strony nie zawiera wymaganych parametrów. Możliwe, że otwarto niepełny link tej strony",
+    "no_email": "Adres strony nie zawiera parametru dla e-mail. Możliwe, że otwarto niepełny link tej strony",
+    "username_not_unique": "Wystąpił błąd w próbie wygenerowania nazwy użytkownika",
+    "email_not_unique": "Adres e-mail został już wykorzystyany do rejestracji przez formularz rejestracyjny Itemite. Spróbuj zalogować się przez formularz logowania Itemite."
+  },
+  "api_errors": {
+    "try_again": "Proszę spróbować ponownie"
   }
 }

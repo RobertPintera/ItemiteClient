@@ -68,7 +68,8 @@
     "forgot_password_enter_email": "Enter the e-mail you used to register",
     "password_reset_link": "Send password reset link",
     "reset_password": "Change password",
-    "can_close_window": "You can close this window"
+    "can_close_window": "You can close this window",
+    "google_login_error": "Error occurred while trying to login with Google"
   },
   "user_info": {
     "details": "Details",
@@ -110,7 +111,8 @@
     "confirm": "Confirm",
     "enable": "Enable",
     "enable_edition": "Enable edition",
-    "unsaved": "Unsaved"
+    "unsaved": "Unsaved",
+    "return": "Return"
   },
   "file_upload": {
     "upload_file": "Upload file",
@@ -139,5 +141,14 @@
     "name_pattern" : "Username can have only letters, digits and characters \"._@+-\"",
     "mail_min_len" : "Mail must be at least 3 characters long",
     "mail_max_len" : "Mail cannot be more than 100 characters"
+  },
+  "external_auth_errors": {
+    "no_claims": "URL doesn't contain needed parameters. Are you sure you entered the full link?",
+    "no_email": "URL doesn't contain email parameter. Are you sure you entered the full link?",
+    "username_not_unique": "Error occurred while trying to generated username for you",
+    "email_not_unique": "Account with this e-mail has been already registered using Itemite registration. Try to login through Itemite login form."
+  },
+  "api_errors": {
+    "try_again": "Please try again"
   }
 }

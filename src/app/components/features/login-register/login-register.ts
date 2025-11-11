@@ -1,4 +1,4 @@
-import {Component, Signal, signal, WritableSignal, OnInit, computed, inject} from '@angular/core';
+import {Component, Signal, signal, WritableSignal, OnInit, computed, inject, DOCUMENT} from '@angular/core';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {
   FormGroup,
@@ -18,6 +18,7 @@ import {UserService} from '../../../core/services/user-service/user.service';
 import {Router} from '@angular/router';
 import {ForgotPassword} from './reset-password/forgot-password/forgot-password';
 import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
+import {Document} from 'postcss';
 
 @Component({
   selector: 'app-login-register',
@@ -229,5 +230,11 @@ export class LoginRegister implements OnInit {
       }
       this._processing.set(false);
     }
+  }
+
+  private _document = inject(DOCUMENT);
+
+  async LoginByGoogle() {
+    this._document.location.href = this._userService.LoginWithGoogle();
   }
 }

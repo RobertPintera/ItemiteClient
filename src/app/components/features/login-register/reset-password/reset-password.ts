@@ -5,12 +5,9 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {ScaledText} from '../../../shared/scaled-text/scaled-text';
 import {
   PasswordValidator,
-  UpdateEmailErrors,
-  UpdateErrorTranslations,
-  UpdatePasswordErrors, UpdatePhoneErrors, UpdateUsernameErrors
+  UpdatePasswordErrors,
 } from '../../../../core/Utility/Validation';
 import {UserService} from '../../../../core/services/user-service/user.service';
-import {async} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoadingCircle} from '../../../shared/loading-circle/loading-circle';
 

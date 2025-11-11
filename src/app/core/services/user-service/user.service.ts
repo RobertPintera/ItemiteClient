@@ -91,13 +91,21 @@ export class UserService {
     const payload = {email: email, password: password, token: token};
     try {
       await lastValueFrom(
-        this.http.post(`${environment.itemiteApiUrl}/auth/reset-password  `, payload, {timeout: 3000})
+        this.http.post(`${environment.itemiteApiUrl}/auth/reset-password`, payload, {timeout: 3000})
       );
       return true;
     } catch (error: any) {
       this.errorHandlerService.SendErrorMessage(error);
       return false;
     }
+  }
+
+  LoginWithGoogle() : string {
+    const params = new URLSearchParams({
+      returnUrl: "http://localhost:4200/dev",
+      failureUrl: "http://localhost:4200/external-login-error"
+    });
+    return `${environment.itemiteApiUrl}/auth/login/google?${params.toString()}`;
   }
 
 }

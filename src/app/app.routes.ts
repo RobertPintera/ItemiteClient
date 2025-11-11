@@ -7,40 +7,45 @@ import {ProductDetails} from './components/features/product-details/product-deta
 import {ProfilePage} from './components/features/profile-page/profile-page';
 import {ConfirmEmail} from './components/features/login-register/confirm-email/confirm-email';
 import {ResetPassword} from './components/features/login-register/reset-password/reset-password';
+import {ExternalLoginError} from './components/features/login-register/external-login-error/external-login-error';
 
 export const routes: Routes = [
   {
     path: '',
     component: MainLayout,
     children: [
-        {
-          path: '',
-          component: Home,
-        },
-        {
-          path: 'products/:category',
-          component: ProductsList
-        },
-        {
-          path: 'products/:category/:slug',
-          component: ProductDetails
-        },
-        {
-          path: 'login',
-          component: LoginRegister
-        },
-        {
-          path: 'dev',
-          component: ProfilePage
-        }
-      ]
-    },
-    {
-      path: 'confirm-email',
-      component: ConfirmEmail
-    },
-    {
-      path: 'reset-password',
-      component: ResetPassword
-    }
+      {
+        path: '',
+        component: Home,
+      },
+      {
+        path: 'products/:category',
+        component: ProductsList
+      },
+      {
+        path: 'products/:category/:slug',
+        component: ProductDetails
+      },
+      {
+        path: 'login',
+        component: LoginRegister
+      },
+      {
+        path: 'dev',
+        component: ProfilePage
+      }
+    ]
+  },
+  {
+    path: 'confirm-email',
+    component: ConfirmEmail
+  },
+  {
+    path: 'reset-password',
+    component: ResetPassword
+  },
+  {
+    path: 'external-login-error',
+    component: ExternalLoginError
+  }
 ];
