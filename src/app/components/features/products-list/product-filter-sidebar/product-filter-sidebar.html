@@ -5,7 +5,7 @@
       <app-button label="X" (clickButton)="closeFilter()" class="absolute right-[-16px] top-[-16px]"/>
     }
     <p class="font-semibold text-lg">{{ categoryTree()?.name }}</p>
-    <app-category-tree [categories]="categoryTree()?.subCategories ?? []"/>
+    <app-category-tree [categories]="categoryTree()?.subCategories ?? []" (categorySelected)="useCategoriesIds($event)"/>
     <div class="flex w-full flex-col sm:flex-row xl:flex-col gap-2">
       <div class="flex flex-1 flex-col gap-2">
         <p>Prices</p>
@@ -17,7 +17,7 @@
         </div>
         @if (priceError()){
           <div class="flex flex-row w-full">
-            <p class="text-red-500 text-sm text-center">{{ priceError() }}</p>
+            <p class="text-destructive text-sm text-center">{{ priceError() }}</p>
           </div>
         }
       </div>

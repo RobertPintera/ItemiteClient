@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, output, signal} from '@angular/core';
 import {NgClass, NgTemplateOutlet} from '@angular/common';
 import {CategoryTreeDTO} from '../../../../../core/models/CategoryTreeDTO';
 
@@ -14,4 +14,21 @@ import {CategoryTreeDTO} from '../../../../../core/models/CategoryTreeDTO';
 export class CategoryTree {
   readonly categories = input<CategoryTreeDTO[]>([]);
   readonly level = input<number>(0);
+  readonly categorySelected = output<number[]>();
+
+  readonly selectedIds = signal<number[]>([]);
+
+  toggleCategory(categoryId: number) {
+    const current = this.selectedIds();
+    if (current.includes(categoryId)) {
+      this.selectedIds.set(current.filter(id => id !== categoryId));
+    } else {
+      this.selectedIds.set([...current, categoryId]);
+    }
+    this.categorySelected.emit(this.selectedIds());
+  }
+
+  isChecked(categoryId: number) {
+    return this.selectedIds().includes(categoryId);
+  }
 }
