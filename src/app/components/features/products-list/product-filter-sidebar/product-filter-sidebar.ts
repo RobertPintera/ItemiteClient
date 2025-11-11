@@ -36,6 +36,7 @@ export class ProductFilterSidebar implements OnInit {
   categoryTree = signal<CategoryTreeDTO | null>(null);
   priceFrom = signal<number | null>(null);
   priceTo = signal<number | null>(null);
+  priceError = signal<string | null>(null);
 
   listingTypes = [
     { key: 'none', value: '-'},
@@ -95,31 +96,27 @@ export class ProductFilterSidebar implements OnInit {
     this.filterChange.emit({latitude: latitude, longitude: longitude});
   }
 
-  onPriceFromInput(event: KeyboardEvent) {
-    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'ArrowUp', 'ArrowDown'];
-    if (allowedKeys.includes(event.key)) return;
-
-    const input = event.target as HTMLInputElement;
-
-    const regex = /^\d*\.?\d{0,2}$/;
-
-    if (!regex.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  onPriceToInput(event: KeyboardEvent) {
-    const allowedKeys = [
-      'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab',
-      'Home', 'End', 'Enter', '.', ',', // dopuszczamy . i , (zamienimy na .)
-    ];
-  }
-
   usePriceFrom(priceFrom: number | null) {
+    const priceTo = this.priceTo();
+
+    if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
+      this.priceError.set('Minimal price cannot be greater than maximal price.');
+      return;
+    }
+    this.priceError.set(null);
+
     this.filterChange.emit({priceFrom: priceFrom});
   }
 
   usePriceTo(priceTo: number | null) {
+    const priceFrom = this.priceFrom();
+
+    if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
+      this.priceError.set('Minimal price cannot be greater than maximal price.');
+      return;
+    }
+    this.priceError.set(null);
+
     this.filterChange.emit({priceTo: priceTo});
   }
 
