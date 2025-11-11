@@ -25,7 +25,7 @@ export class ProductsList implements OnInit, OnDestroy {
   readonly isFilterOpen = signal<boolean>(false);
 
   listing = signal<ListingDTO | null>(null);
-  loading = signal<boolean>(false);
+  loading = signal<boolean>(true);
 
   filter = signal<ListingFilter>({
     pageSize: 10, pageNumber: 1,

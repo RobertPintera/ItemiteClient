@@ -30,7 +30,6 @@ export class Paginator {
 
     if (page === this.currentPage()){
       this.pageChange.emit(page);
-
     }
 
     this.currentPage.set(page);

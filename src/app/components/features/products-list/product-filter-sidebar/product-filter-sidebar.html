@@ -10,9 +10,9 @@
       <div class="flex flex-1 flex-col gap-2">
         <p>Prices</p>
         <div class="flex flex-row items-center gap-2 w-full">
-          <input type="text" class="flex-1 border rounded p-2 w-full" />
+          <app-input-number [(value)]="priceFrom" [min]="0" [max]="10000000" (enterPressed)="usePriceFrom($event)" (blurInput)="usePriceFrom($event)" class="flex-1 w-full"/>
           <p class="shrink-0 text-2xl">-</p>
-          <input type="text" class="flex-1 border rounded p-2 w-full" />
+          <app-input-number [(value)]="priceTo" [min]="0" [max]="10000000" (enterPressed)="usePriceTo($event)" (blurInput)="usePriceTo($event)" class="flex-1 w-full"/>
         </div>
       </div>
       <div class="flex flex-1 flex-col gap-2 w-full">
@@ -27,7 +27,7 @@
       </div>
       <div class="flex flex-1 flex-col gap-2">
         <p>Localization</p>
-        <app-geocoder-autocomplete placeHolder="Find city" (onCityPicked)="updateLocalization($event)"/>
+        <app-geocoder-autocomplete placeHolder="Find city" (onCityPicked)="useLocalization($event)"/>
         <app-combo-box [items]="distances" [selectedItem]="distances[0]" (selectedChange)="useDistance($event)" class="w-full">
           <ng-template let-item>
             <span>

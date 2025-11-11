@@ -12,10 +12,7 @@ export class CategoryService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/api/categories`;
   private _mainCategories = signal<CategoryDTO[]>([]);
-  private _subCategories = signal<CategoryTreeDTO | null>(null);
-
   readonly mainCategories = this._mainCategories.asReadonly();
-  readonly subCategories = this._subCategories.asReadonly();
 
   // API
 
@@ -53,7 +50,6 @@ export class CategoryService {
   loadCategoryTree(rootCategoryId: number): Observable<CategoryTreeDTO> {
     return this.getCategoryTree(rootCategoryId).pipe(
       map(tree => {
-        this._subCategories.set(tree);
         return tree;
       }),
       catchError(err => {

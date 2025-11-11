@@ -207,6 +207,18 @@ body {
   input {
     @apply border-2 border-border ring-ring rounded-xl bg-white;
   }
+
+  /* Chrome */
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 }
 
 @layer utilities {
