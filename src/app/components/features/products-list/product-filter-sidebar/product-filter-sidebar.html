@@ -46,7 +46,7 @@
 
     @if (!isXl()){
       <div class="flex justify-end w-full">
-        <app-button label="Filter" />
+        <app-button label="Filter" (clickButton)="applyMobileFilter()" />
       </div>
     }
   </div>

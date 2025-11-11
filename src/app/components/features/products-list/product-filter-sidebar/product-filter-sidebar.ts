@@ -34,9 +34,15 @@ export class ProductFilterSidebar implements OnInit {
   readonly filterChange  = output<Partial<ListingFilter>>();
 
   categoryTree = signal<CategoryTreeDTO | null>(null);
+  draftFilter = signal<Partial<ListingFilter>>({});
+  priceError = signal<string | null>(null);
+
+  categoryIds = signal<number[]>([]);
   priceFrom = signal<number | null>(null);
   priceTo = signal<number | null>(null);
-  priceError = signal<string | null>(null);
+  listingType = signal<ListingType | null>(null);
+  localization = signal<Localization | null>(null);
+  distance = signal<number | null>(null);
 
   listingTypes = [
     { key: 'none', value: '-'},
@@ -52,12 +58,11 @@ export class ProductFilterSidebar implements OnInit {
     { key: '100', value: '100' },
   ];
 
+
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
       const id = params.get('id');
-
       const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
-
       if (validId === null) return;
 
       this.categoryService.loadCategoryTree(validId).subscribe({
@@ -71,56 +76,67 @@ export class ProductFilterSidebar implements OnInit {
     this.filterClose.emit();
   }
 
-  useListingType(option: { key: string; value: string }): void {
-    if(!option) return;
-
-    const allowed = Object.values(LISTING_TYPES);
-    if (allowed.includes(option.key as ListingType)) {
-      this.filterChange.emit({listingType: option.key as ListingType});
-      return;
+  private updateFilter(partial: Partial<ListingFilter>) {
+    if (this.isXl()) {
+      this.filterChange.emit(partial);
+    } else {
+      this.draftFilter.set({...this.draftFilter(), ...partial});
     }
-    this.filterChange.emit({listingType: null});
+  }
+
+  useListingType(option: { key: string; value: string }): void {
+    const allowed = Object.values(LISTING_TYPES);
+    const value = allowed.includes(option.key as ListingType) ? option.key as ListingType : null;
+    this.listingType.set(value);
+    this.updateFilter({ listingType: value });
   }
 
   useDistance(option: { key: string; value: string }): void {
-    if(!option) return;
-
     const numericValue = Number(option.key);
-    this.filterChange.emit({distance: !isNaN(numericValue) ? numericValue : null});
+    const value = !isNaN(numericValue) ? numericValue : null;
+    this.distance.set(value);
+    this.updateFilter({ distance: value });
   }
 
   useLocalization(newLocalization: Localization | null) {
-    const latitude = newLocalization?.latitude ?? null;
-    const longitude = newLocalization?.longitude ?? null;
-
-    this.filterChange.emit({latitude: latitude, longitude: longitude});
+    this.localization.set(newLocalization);
+    this.updateFilter({
+      latitude: newLocalization?.latitude ?? null,
+      longitude: newLocalization?.longitude ?? null,
+    });
   }
 
   usePriceFrom(priceFrom: number | null) {
     const priceTo = this.priceTo();
-
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
       this.priceError.set('Minimal price cannot be greater than maximal price.');
       return;
     }
     this.priceError.set(null);
 
-    this.filterChange.emit({priceFrom: priceFrom});
+    this.priceFrom.set(priceFrom);
+    this.updateFilter({ priceFrom });
   }
 
   usePriceTo(priceTo: number | null) {
     const priceFrom = this.priceFrom();
-
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
       this.priceError.set('Minimal price cannot be greater than maximal price.');
       return;
     }
     this.priceError.set(null);
 
-    this.filterChange.emit({priceTo: priceTo});
+    this.priceTo.set(priceTo);
+    this.updateFilter({ priceTo });
   }
 
-  useCategoriesIds(categoriesIds: number[]) {
-    this.filterChange.emit(({categoryIds: categoriesIds}));
+  useCategoriesIds(categoryIds: number[]) {
+    this.categoryIds.set(categoryIds);
+    this.updateFilter({ categoryIds });
+  }
+
+  applyMobileFilter() {
+    this.filterChange.emit(this.draftFilter());
+    this.closeFilter();
   }
 }

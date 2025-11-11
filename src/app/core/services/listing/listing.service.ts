@@ -37,7 +37,11 @@ export class ListingService {
     if (filter?.longitude != null) params = params.set('longitude', filter.longitude);
     if (filter?.latitude != null) params = params.set('latitude', filter.latitude);
     if (filter?.distance != null) params = params.set('distance', filter.distance);
-    if (filter?.categoryIds?.length) params = params.set('categoryIds', filter.categoryIds.join(','));
+    if (filter?.categoryIds?.length) {
+      filter.categoryIds.forEach(id => {
+        params = params.append('categoryIds', id.toString());
+      });
+    }
 
     return this.http.get<ListingDTO>(`${this.baseUrl}`, { params }).pipe(
       catchError(err => {

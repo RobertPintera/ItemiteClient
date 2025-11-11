@@ -4,7 +4,7 @@ import { ProductFilterSidebar } from './product-filter-sidebar/product-filter-si
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ListingFilter } from '../../../core/models/ListingFilter';
 import { ListingDTO } from '../../../core/models/ListingDTO';
-import { Subject, debounceTime, switchMap, takeUntil, finalize } from 'rxjs';
+import {Subject, debounceTime, switchMap, takeUntil, finalize, catchError, of} from 'rxjs';
 import { ListingService } from '../../../core/services/listing/listing.service';
 
 @Component({
@@ -57,6 +57,10 @@ export class ProductsList implements OnInit, OnDestroy {
       switchMap(filter => {
         this.loading.set(true);
         return this.listingService.loadListing(filter).pipe(
+          catchError(err => {
+            console.error('Error loading listings:', err);
+            return of(null);
+          }),
           finalize(() => {
             setTimeout(() => this.loading.set(false), 500);
           })
@@ -65,7 +69,6 @@ export class ProductsList implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => this.listing.set(data),
-      error: (err) => console.error(err)
     });
 
     this.applyFilter(this.filter());
