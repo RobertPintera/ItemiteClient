@@ -8,6 +8,7 @@ import {Component, input, model, output } from '@angular/core';
 })
 export class InputNumber {
   value = model<number | null>(null);
+
   readonly min = input<number>(0);
   readonly max = input<number>(100);
   readonly step = input<number>(1);

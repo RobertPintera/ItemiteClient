@@ -1,4 +1,16 @@
-import {Component, computed, effect, inject, Input, input, output, Signal, signal, WritableSignal} from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  Input,
+  input,
+  model,
+  output,
+  Signal,
+  signal,
+  WritableSignal
+} from '@angular/core';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {Localization} from '../../../core/models/Localization';
 import {debug} from 'node:util';
@@ -17,7 +29,7 @@ export class GeocoderAutocomplete  {
       // Don't emit new event when value is passed into the component (set address valid to false)
       // It only should update text field.
       this._isAddressValid = false;
-      this._inputValue.set(this.externalSource()?.formatted ?? "");
+      this.inputValue.set(this.externalSource()?.formatted ?? "");
     });
   }
 
@@ -27,8 +39,7 @@ export class GeocoderAutocomplete  {
   private _suggestions: WritableSignal<Localization[]> = signal([]);
   readonly hasSuggestions: Signal<boolean> = computed(() => this._suggestions().length > 0);
 
-  private _inputValue: WritableSignal<string> = signal("");
-  readonly inputValue: Signal<string> = this._inputValue.asReadonly();
+  readonly inputValue: WritableSignal<string> = model<string>("");
 
   private _isAddressValid = false;
 
@@ -36,7 +47,7 @@ export class GeocoderAutocomplete  {
   suggestions: Signal<Localization[]> = this._suggestions;
 
   // Listen to this signal to detect if address is valid
-  onCityPicked = output<Localization|null>();
+  readonly onCityPicked = output<Localization|null>();
 
   InputValueChanged(inputEvent:Event) {
     // If user changed the text by hand, the adress is invalid.
@@ -46,7 +57,7 @@ export class GeocoderAutocomplete  {
       this._isAddressValid = false;
     }
     const textVal = (inputEvent.target as HTMLInputElement).value.trim();
-    this._inputValue.set(textVal);
+    this.inputValue.set(textVal);
     if(textVal === '') {
       this._suggestions.set([]); // Clear suggestions if the input is empty
       return;
@@ -55,18 +66,17 @@ export class GeocoderAutocomplete  {
   }
 
   updateEnterInputValue(){
-    if(!this.selectedLocalization() || this._inputValue() === this.selectedLocalization()?.formatted || !this._inputValue())
+    if(!this.selectedLocalization() || this.inputValue() === this.selectedLocalization()?.formatted || !this.inputValue())
       return;
 
-    if(this._inputValue() !== this.selectedLocalization()?.formatted)
+    if(this.inputValue() !== this.selectedLocalization()?.formatted)
       this.selectedLocalization.set(null);
 
     this.onCityPicked.emit(this.selectedLocalization());
   }
 
-
   updateInputValue(value:string, index:number ) {
-    this._inputValue.set(value);
+    this.inputValue.set(value);
     this.selectedLocalization.set(this._suggestions()[index]);
     this.onCityPicked.emit(this._suggestions()[index]);
     this._isAddressValid = true;

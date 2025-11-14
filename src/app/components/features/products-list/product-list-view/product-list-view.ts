@@ -8,6 +8,7 @@ import {ListingDTO} from '../../../../core/models/ListingDTO';
 import {Loader} from '../../../shared/loader/loader';
 import {SORT_DIRECTION, SortBy, SortDirection, SORTS_BY} from '../../../../core/constants/constants';
 import {ListingFilter} from '../../../../core/models/ListingFilter';
+import {OptionItem} from '../../../../core/models/OptionItem';
 
 @Component({
   selector: 'app-product-list-view',
@@ -43,7 +44,7 @@ export class ProductListView {
     { key: 'views', value: 'sort_by.views' },
   ];
 
-  useSortDirection(option: { key: string; value: string }): void {
+  useSortDirection(option?: OptionItem): void {
     if (!option) return;
 
     const allowed = Object.values(SORT_DIRECTION);
@@ -54,7 +55,7 @@ export class ProductListView {
     this.filterChange.emit({sortDirection: null});
   }
 
-  useSortBy(option: { key: string; value: string }): void {
+  useSortBy(option?: OptionItem): void {
     if (!option) return;
 
     const allowed = Object.values(SORTS_BY);

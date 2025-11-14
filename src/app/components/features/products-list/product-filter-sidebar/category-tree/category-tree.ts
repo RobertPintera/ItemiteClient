@@ -1,4 +1,4 @@
-import {Component, input, output, signal} from '@angular/core';
+import {Component, input, model, output, signal} from '@angular/core';
 import {NgClass, NgTemplateOutlet} from '@angular/common';
 import {CategoryTreeDTO} from '../../../../../core/models/CategoryTreeDTO';
 
@@ -12,11 +12,12 @@ import {CategoryTreeDTO} from '../../../../../core/models/CategoryTreeDTO';
   styleUrl: './category-tree.css'
 })
 export class CategoryTree {
+  readonly selectedIds = model<number[]>([]);
+
   readonly categories = input<CategoryTreeDTO[]>([]);
   readonly level = input<number>(0);
-  readonly categorySelected = output<number[]>();
 
-  readonly selectedIds = signal<number[]>([]);
+  readonly categorySelected = output<number[]>();
 
   toggleCategory(categoryId: number) {
     const current = this.selectedIds();

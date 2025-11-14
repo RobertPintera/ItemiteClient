@@ -1,16 +1,18 @@
-import {Component, inject, input, OnInit, output, signal} from '@angular/core';
+import {Component, effect, HostListener, inject, input, model, OnInit, output, signal, untracked} from '@angular/core';
 import {CategoryTree} from './category-tree/category-tree';
 import {Button} from '../../../shared/button/button';
 import {ActivatedRoute} from '@angular/router';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe} from '@ngx-translate/core';
-import {LISTING_TYPES, ListingType } from '../../../../core/constants/constants';
+import {LISTING_TYPES, ListingType, SORT_DIRECTION, SortBy, SortDirection} from '../../../../core/constants/constants';
 import {ListingFilter} from '../../../../core/models/ListingFilter';
 import {GeocoderAutocomplete} from '../../../shared/geocoder-autocomplete/geocoder-autocomplete';
 import {Localization} from '../../../../core/models/Localization';
 import {CategoryTreeDTO} from '../../../../core/models/CategoryTreeDTO';
 import {InputNumber} from '../../../shared/input-number/input-number';
+import {OptionItem} from '../../../../core/models/OptionItem';
+import {FilterSidebar} from '../../../../core/models/FilterSidebar';
 
 @Component({
   selector: 'app-product-filter-sidebar',
@@ -30,27 +32,41 @@ export class ProductFilterSidebar implements OnInit {
   private categoryService = inject(CategoryService);
 
   readonly isXl = input.required<boolean>();
+  readonly isFilterOpen = input.required<boolean>();
   readonly filterClose = output<void>();
   readonly filterChange  = output<Partial<ListingFilter>>();
 
-  categoryTree = signal<CategoryTreeDTO | null>(null);
-  draftFilter = signal<Partial<ListingFilter>>({});
-  priceError = signal<string | null>(null);
+  readonly categoryTree = signal<CategoryTreeDTO | null>(null);
 
-  categoryIds = signal<number[]>([]);
-  priceFrom = signal<number | null>(null);
-  priceTo = signal<number | null>(null);
-  listingType = signal<ListingType | null>(null);
-  localization = signal<Localization | null>(null);
-  distance = signal<number | null>(null);
+  readonly lastFilterSidebar = signal<FilterSidebar>({
+    categoryIds: [],
+    priceFrom: null,
+    priceTo: null,
+    priceError: null,
+    listingType: { key: 'none', value: '-'},
+    localizationText: '',
+    localization: null,
+    distance: { key: 'none', value: '-'}
+  });
 
-  listingTypes = [
+  readonly filterSidebar = signal<FilterSidebar>({
+    categoryIds: [],
+    priceFrom: null,
+    priceTo: null,
+    priceError: null,
+    listingType: { key: 'none', value: '-'},
+    localizationText: '',
+    localization: null,
+    distance: { key: 'none', value: '-'}
+  });
+
+  listingTypesOptions: OptionItem[]  = [
     { key: 'none', value: '-'},
     { key: 'auction', value: 'listing_types.auction' },
     { key: 'product', value: 'listing_types.product' },
   ];
 
-  distances = [
+  distancesOptions: OptionItem[]  = [
     { key: 'none', value: '-'},
     { key: '20', value: '20' },
     { key: '50', value: '50' },
@@ -58,6 +74,25 @@ export class ProductFilterSidebar implements OnInit {
     { key: '100', value: '100' },
   ];
 
+  constructor() {
+    effect(() => {
+      const isXl = this.isXl();
+      const isFilterOpen = untracked(() => this.isFilterOpen());
+      const lastFilter = untracked(() => this.lastFilterSidebar());
+      if(isXl && isFilterOpen) {
+        this.filterSidebar.set(structuredClone(lastFilter));
+        this.filterClose.emit();
+      }
+    });
+
+    effect(() => {
+      const filterSidebar = this.filterSidebar();
+      const isXl = untracked(() => this.isXl());
+      if(isXl) {
+        this.lastFilterSidebar.set(structuredClone(filterSidebar));
+      }
+    });
+  }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
@@ -72,34 +107,34 @@ export class ProductFilterSidebar implements OnInit {
     });
   }
 
-  closeFilter(){
+  closeFilterX(){
+    console.log(this.filterSidebar().categoryIds);
+    console.log(this.lastFilterSidebar().categoryIds);
+    this.filterSidebar.set(structuredClone(this.lastFilterSidebar()));
     this.filterClose.emit();
   }
 
-  private updateFilter(partial: Partial<ListingFilter>) {
-    if (this.isXl()) {
-      this.filterChange.emit(partial);
-    } else {
-      this.draftFilter.set({...this.draftFilter(), ...partial});
-    }
-  }
+  useListingType(option?: OptionItem): void {
+    if(!option || !this.isXl()) return;
 
-  useListingType(option: { key: string; value: string }): void {
     const allowed = Object.values(LISTING_TYPES);
     const value = allowed.includes(option.key as ListingType) ? option.key as ListingType : null;
-    this.listingType.set(value);
-    this.updateFilter({ listingType: value });
+
+    this.updateFilter({listingType: value});
   }
 
-  useDistance(option: { key: string; value: string }): void {
+  useDistance(option?: OptionItem): void {
+    if(!option || !this.isXl()) return;
+
     const numericValue = Number(option.key);
     const value = !isNaN(numericValue) ? numericValue : null;
-    this.distance.set(value);
-    this.updateFilter({ distance: value });
+
+    this.updateFilter({distance: value});
   }
 
   useLocalization(newLocalization: Localization | null) {
-    this.localization.set(newLocalization);
+    if(!this.isXl()) return;
+
     this.updateFilter({
       latitude: newLocalization?.latitude ?? null,
       longitude: newLocalization?.longitude ?? null,
@@ -107,36 +142,72 @@ export class ProductFilterSidebar implements OnInit {
   }
 
   usePriceFrom(priceFrom: number | null) {
-    const priceTo = this.priceTo();
+    const priceTo = this.filterSidebar().priceTo;
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
-      this.priceError.set('Minimal price cannot be greater than maximal price.');
+      this.filterSidebar().priceError = 'Minimal price cannot be greater than maximal price.';
       return;
     }
-    this.priceError.set(null);
+    this.filterSidebar().priceError = null;
 
-    this.priceFrom.set(priceFrom);
-    this.updateFilter({ priceFrom });
+    if(!this.isXl()) return;
+    this.updateFilter({priceFrom: priceFrom});
   }
 
   usePriceTo(priceTo: number | null) {
-    const priceFrom = this.priceFrom();
+    const priceFrom = Number(this.filterSidebar().priceFrom);
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
-      this.priceError.set('Minimal price cannot be greater than maximal price.');
+      this.filterSidebar().priceError = 'Minimal price cannot be greater than maximal price.';
       return;
     }
-    this.priceError.set(null);
+    this.filterSidebar().priceError = null;
 
-    this.priceTo.set(priceTo);
-    this.updateFilter({ priceTo });
+    if(!this.isXl()) return;
+    this.updateFilter({priceTo: priceTo});
   }
 
   useCategoriesIds(categoryIds: number[]) {
-    this.categoryIds.set(categoryIds);
+    if(!this.isXl()) return;
     this.updateFilter({ categoryIds });
   }
 
   applyMobileFilter() {
-    this.filterChange.emit(this.draftFilter());
-    this.closeFilter();
+    const sidebar = this.filterSidebar();
+
+    const listingTypeKey = sidebar.listingType.key;
+    const allowed = Object.values(LISTING_TYPES);
+    const listingTypeValue = allowed.includes(listingTypeKey as ListingType) ? listingTypeKey as ListingType : null;
+
+    const distanceKey = Number(sidebar.distance.key);
+    const distanceValue = !isNaN(distanceKey) ? distanceKey : null;
+
+    const priceFrom =  sidebar.priceFrom;
+    const priceTo = sidebar.priceTo;
+
+    if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
+      this.filterSidebar().priceError = 'Minimal price cannot be greater than maximal price.';
+      return;
+    }
+
+    const longitude = sidebar.localization?.longitude ?? null;
+    const latitude = sidebar.localization?.latitude ?? null;
+
+    const categoryIds = sidebar.categoryIds;
+
+    const partial: Partial<ListingFilter> = {
+      listingType: listingTypeValue,
+      priceFrom: priceFrom,
+      priceTo: priceTo,
+      longitude: longitude,
+      latitude: latitude,
+      distance: distanceValue,
+      categoryIds: categoryIds
+    };
+    this.updateFilter(partial);
+    this.filterClose.emit();
+  }
+
+  private updateFilter(partial: Partial<ListingFilter>) {
+    this.lastFilterSidebar.set(structuredClone(this.filterSidebar()));
+    this.filterChange.emit(partial);
   }
 }

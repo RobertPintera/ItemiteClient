@@ -1,5 +1,9 @@
 @import "../../../../styles.css";
 
+:host{
+  width: 100%;
+}
+
 @layer components {
   .carousel-button-left, .carousel-button-right{
     @apply bg-primary/70 hover:bg-primary active:bg-primary/70 rounded-full p-4 transition-colors z-20;

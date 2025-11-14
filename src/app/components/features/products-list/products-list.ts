@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import {Component, inject, signal, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import { ProductListView } from './product-list-view/product-list-view';
 import { ProductFilterSidebar } from './product-filter-sidebar/product-filter-sidebar';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -17,17 +17,18 @@ import { ListingService } from '../../../core/services/listing/listing.service';
   styleUrl: './products-list.css'
 })
 export class ProductsList implements OnInit, OnDestroy {
+  @ViewChild(ProductFilterSidebar) filterSidebarChild!: ProductFilterSidebar;
+
   private breakpointObserver = inject(BreakpointObserver);
   private listingService = inject(ListingService);
 
   readonly isMd = signal<boolean>(false);
   readonly isXl = signal<boolean>(false);
   readonly isFilterOpen = signal<boolean>(false);
+  readonly listing = signal<ListingDTO | null>(null);
+  readonly loading = signal<boolean>(true);
 
-  listing = signal<ListingDTO | null>(null);
-  loading = signal<boolean>(true);
-
-  filter = signal<ListingFilter>({
+  readonly filter = signal<ListingFilter>({
     pageSize: 10, pageNumber: 1,
     listingType: null,
     sortBy: null, sortDirection: null,
@@ -36,6 +37,7 @@ export class ProductsList implements OnInit, OnDestroy {
     categoryIds: [],
   });
 
+  // Debouncing: delays API calls when filters change
   private filterSubject = new Subject<ListingFilter>();
   private destroy$ = new Subject<void>();
 
@@ -46,10 +48,6 @@ export class ProductsList implements OnInit, OnDestroy {
     ]).subscribe(result => {
       this.isMd.set(result.breakpoints['(min-width: 768px)']);
       this.isXl.set(result.breakpoints['(min-width: 1280px)']);
-
-      if (this.isXl() && this.isFilterOpen()) {
-        this.closeFilter();
-      }
     });
 
     this.filterSubject.pipe(
@@ -89,8 +87,16 @@ export class ProductsList implements OnInit, OnDestroy {
     document.body.classList.remove('overflow-hidden');
   }
 
+  closeOverlay() {
+    if (this.filterSidebarChild) {
+      this.filterSidebarChild.closeFilterX(); // resetuje sidebar
+    }
+    this.isFilterOpen.set(false); // zamyka overlay
+    document.body.classList.remove('overflow-hidden');
+  }
+
   updateFilter(partial: Partial<ListingFilter>) {
-    const newFilter = { ...this.filter(), ...partial };
+    const newFilter = {...this.filter(), ...partial};
     this.filter.set(newFilter);
     this.applyFilter(newFilter);
   }
