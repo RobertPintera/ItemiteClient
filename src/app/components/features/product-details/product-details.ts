@@ -30,11 +30,17 @@ export class ProductDetails implements OnInit {
   ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
       const id = params.get('id');
+      const type = params.get('type');
 
       const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
 
       if (validId === null) return;
 
+      if(type === 'Product'){
+
+      }else if (type === 'Auction'){
+
+      }
       this.productListingService.loadProductListing(validId).subscribe({
         next: product => {
           this.product.set(product);

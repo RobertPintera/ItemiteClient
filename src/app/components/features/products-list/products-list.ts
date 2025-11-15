@@ -6,6 +6,8 @@ import { ListingFilter } from '../../../core/models/ListingFilter';
 import { ListingDTO } from '../../../core/models/ListingDTO';
 import {Subject, debounceTime, switchMap, takeUntil, finalize, catchError, of} from 'rxjs';
 import { ListingService } from '../../../core/services/listing/listing.service';
+import {ActivatedRoute} from '@angular/router';
+import {ListingType, SortBy, SortDirection} from '../../../core/constants/constants';
 
 @Component({
   selector: 'app-products-list',
@@ -21,6 +23,7 @@ export class ProductsList implements OnInit, OnDestroy {
 
   private breakpointObserver = inject(BreakpointObserver);
   private listingService = inject(ListingService);
+  private route = inject(ActivatedRoute);
 
   readonly isMd = signal<boolean>(false);
   readonly isXl = signal<boolean>(false);
@@ -69,7 +72,36 @@ export class ProductsList implements OnInit, OnDestroy {
       next: (data) => this.listing.set(data),
     });
 
-    this.applyFilter(this.filter());
+    this.route.queryParamMap.subscribe(params => {
+      const updated: Partial<ListingFilter> = {};
+
+      const num = (name: string) => {
+        const v = params.get(name);
+        return v !== null ? Number(v) : null;
+      };
+
+      const str = (name: string) => params.get(name);
+
+      updated.pageNumber = num('pageNumber') ?? this.filter().pageNumber;
+      updated.pageSize = num('pageSize') ?? this.filter().pageSize;
+      updated.priceFrom = num('priceFrom');
+      updated.priceTo = num('priceTo');
+      updated.longitude = num('longitude');
+      updated.latitude = num('latitude');
+      updated.distance = num('distance');
+
+      updated.listingType = str('listingType') as ListingType;
+      updated.sortBy = str('sortBy') as SortBy;
+      updated.sortDirection = str('sortDirection') as SortDirection;
+
+      const categoryIds = params.getAll('categoryIds');
+      updated.categoryIds = categoryIds.map(Number);
+
+      const newFilter = { ...this.filter(), ...updated };
+      this.filter.set(newFilter);
+
+      this.applyFilter(this.filter());
+    });
   }
 
   ngOnDestroy() {

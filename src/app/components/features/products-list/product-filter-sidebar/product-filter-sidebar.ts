@@ -1,11 +1,11 @@
-import {Component, effect, HostListener, inject, input, model, OnInit, output, signal, untracked} from '@angular/core';
+import {Component, effect, inject, input, OnInit, output, signal, untracked} from '@angular/core';
 import {CategoryTree} from './category-tree/category-tree';
 import {Button} from '../../../shared/button/button';
 import {ActivatedRoute} from '@angular/router';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe} from '@ngx-translate/core';
-import {LISTING_TYPES, ListingType, SORT_DIRECTION, SortBy, SortDirection} from '../../../../core/constants/constants';
+import {LISTING_TYPES, ListingType } from '../../../../core/constants/constants';
 import {ListingFilter} from '../../../../core/models/ListingFilter';
 import {GeocoderAutocomplete} from '../../../shared/geocoder-autocomplete/geocoder-autocomplete';
 import {Localization} from '../../../../core/models/Localization';
@@ -31,6 +31,7 @@ export class ProductFilterSidebar implements OnInit {
   private route = inject(ActivatedRoute);
   private categoryService = inject(CategoryService);
 
+  readonly filter = input.required<ListingFilter>();
   readonly isXl = input.required<boolean>();
   readonly isFilterOpen = input.required<boolean>();
   readonly filterClose = output<void>();

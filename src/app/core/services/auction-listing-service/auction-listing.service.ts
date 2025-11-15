@@ -2,33 +2,33 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, map, Observable} from 'rxjs';
-import {ProductListingDTO} from '../../models/ProductListingDTO';
 import {PutProductListingDTO} from '../../models/PutProductListingDTO';
+import {AuctionListingDTO} from '../../models/AuctionListingDTO';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductListingService {
+export class AuctionListingService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.itemiteApiUrl}/api/productlisting`;
+  private baseUrl = `${environment.itemiteApiUrl}/api/auctionlisting`;
 
   // API
-  private getProductListing(id: number): Observable<ProductListingDTO> {
-    return this.http.get<ProductListingDTO>(`${this.baseUrl}/${id}`);
+  private getAuctionListing(id: number): Observable<AuctionListingDTO> {
+    return this.http.get<AuctionListingDTO>(`${this.baseUrl}/${id}`);
   }
 
-  private postProductListing(productListing: ProductListingDTO) {
+  private postAuctionListingDTO(productListing: AuctionListingDTO) {
     return this.http.post(`${this.baseUrl}`, productListing);
   }
 
-  private putProductListing(id: number,productListing: PutProductListingDTO) {
+  private putAuctionListing(id: number,productListing: PutProductListingDTO) {
     return this.http.put(`${this.baseUrl}/${id}`, productListing);
   }
 
   // Updating Signals
 
-  loadProductListing(id: number){
-    return this.getProductListing(id).pipe(
+  loadAuctionListing(id: number){
+    return this.getAuctionListing(id).pipe(
       map(product => {
         return product;
       }),

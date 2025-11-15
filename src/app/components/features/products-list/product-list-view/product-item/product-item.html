@@ -1,4 +1,4 @@
-<a routerLink="/product" [queryParams]="{ id: product()?.id }" class="w-full max-w-full">
+<a routerLink="/product" [queryParams]="{ id: product()?.id, type: product()?.listingType }" class="w-full max-w-full">
   <div class="flex flex-col w-full border-b-1 p-4">
     @if (isMd()){
       <p class="text-xl md:text-4xl pb-4">{{ product()?.name }}</p>

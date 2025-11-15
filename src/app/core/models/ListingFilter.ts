@@ -1,7 +1,7 @@
 import {ListingType, SortBy, SortDirection} from '../constants/constants';
 
 export interface ListingFilter {
-  pageSize: number;
+  pageSize: null | number;
   pageNumber: number;
   listingType: null | ListingType;
   sortBy: null | SortBy;
@@ -11,5 +11,5 @@ export interface ListingFilter {
   longitude: null |number;
   latitude: null |number;
   distance: null |number;
-  categoryIds: number[];
+  categoryIds?: number[];
 }

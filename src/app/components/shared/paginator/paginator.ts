@@ -1,4 +1,4 @@
-import {Component, computed, effect, input, model, output, signal} from '@angular/core';
+import {Component, effect, input, model, output, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
 
@@ -13,7 +13,6 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class Paginator {
   readonly pageNumber = model<number>(1);
-  readonly pageSize = model<number>(1);
   readonly totalPages = input<number>(1);
 
   readonly pageChange = output<number>();
@@ -31,7 +30,7 @@ export class Paginator {
 
   goToPage(pageNumber: number) {
     console.log(pageNumber);
-    console.log(this.totalPages())
+    console.log(this.totalPages());
     let page = isNaN(pageNumber) ? this.previousPage() : pageNumber;
 
     if (page < 1) page = 1;

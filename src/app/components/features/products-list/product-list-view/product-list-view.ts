@@ -1,8 +1,8 @@
-import {Component, effect, inject, input, model, output, signal} from '@angular/core';
+import {Component, input, model, OnInit, output, signal} from '@angular/core';
 import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {TranslatePipe} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
 import {ListingDTO} from '../../../../core/models/ListingDTO';
 import {Loader} from '../../../shared/loader/loader';
@@ -23,11 +23,12 @@ import {OptionItem} from '../../../../core/models/OptionItem';
   templateUrl: './product-list-view.html',
   styleUrl: './product-list-view.css'
 })
-export class ProductListView {
-  readonly pageNumber = model.required<number>();
-  readonly pageSize = model.required<number>();
-  readonly totalPages = input.required<number>();
+export class ProductListView implements OnInit {
+  readonly pageNumber = model.required<number | null>();
+  readonly pageSize = model.required<number | null>();
 
+  readonly filter = input.required<ListingFilter>();
+  readonly totalPages = input.required<number>();
   readonly listing = input.required<ListingDTO | null>();
   readonly loading = input.required<boolean>();
 
@@ -37,18 +38,41 @@ export class ProductListView {
   readonly filterOpen = output<void>();
   readonly filterChange  = output<Partial<ListingFilter>>();
 
-  sortDirect = [
+  readonly sortDirection = signal<OptionItem>({ key: 'none', value: '-'});
+  readonly sortBy = signal<OptionItem>({ key: 'none', value: '-'});
+
+  sortDirectionOptions = [
     { key: 'none', value: '-'},
     { key: 'ascending', value: 'sort_directions.ascending' },
     { key: 'descending', value: 'sort_directions.descending' },
   ];
 
-  sortBy = [
+  sortByOptions = [
     { key: 'none', value: '-'},
     { key: 'price', value: 'sort_by.price' },
     { key: 'creationDate', value: 'sort_by.creation_date' },
     { key: 'views', value: 'sort_by.views' },
   ];
+
+  ngOnInit() {
+    const sortDirectionKey = this.filter().sortBy;
+    const selectedSortDirectionOption = this.sortDirectionOptions.find(opt => opt.key === sortDirectionKey);
+
+    if (selectedSortDirectionOption) {
+      this.sortDirection.set(selectedSortDirectionOption);
+    } else {
+      this.sortDirection.set(this.sortByOptions[0]);
+    }
+
+    const sortByKey = this.filter().sortBy;
+    const selectedSortByOption = this.sortByOptions.find(opt => opt.key === sortByKey);
+
+    if (selectedSortByOption) {
+      this.sortBy.set(selectedSortByOption);
+    } else {
+      this.sortBy.set(this.sortByOptions[0]);
+    }
+  }
 
   useSortDirection(option?: OptionItem): void {
     if (!option) return;
