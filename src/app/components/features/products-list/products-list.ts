@@ -29,7 +29,7 @@ export class ProductsList implements OnInit, OnDestroy {
   readonly loading = signal<boolean>(true);
 
   readonly filter = signal<ListingFilter>({
-    pageSize: 10, pageNumber: 1,
+    pageSize: 5, pageNumber: 1,
     listingType: null,
     sortBy: null, sortDirection: null,
     priceFrom: null, priceTo: null,

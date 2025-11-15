@@ -4,9 +4,9 @@
       <p>{{"sort_directions.header" | translate}}:</p>
       <app-combo-box [items]="sortDirect" [selectedValue]="sortDirect[0]" (selectedValueChange)="useSortDirection($event)">
         <ng-template let-item>
-        <span>
-          {{item?.value | translate}}
-        </span>
+      <span>
+        {{item?.value | translate}}
+      </span>
         </ng-template>
       </app-combo-box>
     </div>
@@ -14,9 +14,9 @@
       <p>{{"sort_by.header" | translate}}:</p>
       <app-combo-box [items]="sortBy" [selectedValue]="sortBy[0]" (selectedValueChange)="useSortBy($event)">
         <ng-template let-item>
-         <span>
-          {{item?.value | translate}}
-        </span>
+       <span>
+        {{item?.value | translate}}
+      </span>
         </ng-template>
       </app-combo-box>
     </div>
@@ -25,15 +25,18 @@
     <div class="flex justify-center pt-16 w-full">
       <app-loader/>
     </div>
+  } @else if (totalPages() === 0){
+    <div class="flex justify-center pt-16 w-full">
+      <h2>Can't find any article.</h2>
+    </div>
   } @else {
     <div class="w-full flex justify-between items-center pt-4 xl:justify-end flex-wrap">
       @if (!isXl()){
         <app-button label="filters" (clickButton)="openFilter()"/>
       }
-      <app-paginator/>
+      <app-paginator [pageNumber]="pageNumber()" [pageSize]="pageSize()" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
     </div>
     <div class="flex flex-col gap-4 w-full">
-
       @let data = listing();
 
       @if(data && data.items.length){
@@ -43,7 +46,7 @@
       }
     </div>
     <div class="w-full flex justify-end">
-      <app-paginator/>
+      <app-paginator [pageNumber]="pageNumber()" [pageSize]="pageSize()" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
     </div>
   }
 </main>

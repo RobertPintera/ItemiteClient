@@ -1,4 +1,4 @@
-import {Component, computed, input, output, signal} from '@angular/core';
+import {Component, computed, effect, input, model, output, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
 
@@ -12,28 +12,36 @@ import {TranslatePipe} from '@ngx-translate/core';
   styleUrl: './paginator.css'
 })
 export class Paginator {
-  readonly totalItems = input<number>(1);
-  readonly itemsPerPage = 5;
-  readonly currentPage = signal<number>(1);
+  readonly pageNumber = model<number>(1);
+  readonly pageSize = model<number>(1);
+  readonly totalPages = input<number>(1);
 
   readonly pageChange = output<number>();
 
-  totalPages = computed(() => Math.ceil(this.totalItems() / this.itemsPerPage));
+  readonly previousPage = signal<number>(1);
+  readonly currentPage = signal<number>(1);
 
-  currentPageValue = 1;
+  constructor() {
+    effect(() => {
+      const page = this.pageNumber();
+      this.previousPage.set(page);
+      this.currentPage.set(page);
+    });
+  }
 
-  goToPage(value: number) {
-    let page = isNaN(value) ? 1 : value;
+  goToPage(pageNumber: number) {
+    console.log(pageNumber);
+    console.log(this.totalPages())
+    let page = isNaN(pageNumber) ? this.previousPage() : pageNumber;
 
     if (page < 1) page = 1;
     else if (page > this.totalPages()) page = this.totalPages();
 
-    if (page === this.currentPage()){
-      this.pageChange.emit(page);
-    }
-
     this.currentPage.set(page);
-    this.currentPageValue = page;
+    if (page === this.previousPage()) return;
+
+    this.previousPage.set(page);
+    this.pageChange.emit(page);
   }
 
   prevPage(): void {

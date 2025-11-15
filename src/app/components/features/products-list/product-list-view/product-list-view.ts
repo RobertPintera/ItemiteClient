@@ -1,4 +1,4 @@
-import {Component, inject, input, output} from '@angular/core';
+import {Component, effect, inject, input, model, output, signal} from '@angular/core';
 import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
@@ -24,10 +24,16 @@ import {OptionItem} from '../../../../core/models/OptionItem';
   styleUrl: './product-list-view.css'
 })
 export class ProductListView {
+  readonly pageNumber = model.required<number>();
+  readonly pageSize = model.required<number>();
+  readonly totalPages = input.required<number>();
+
   readonly listing = input.required<ListingDTO | null>();
   readonly loading = input.required<boolean>();
+
   readonly isMd = input.required<boolean>();
   readonly isXl = input.required<boolean>();
+
   readonly filterOpen = output<void>();
   readonly filterChange  = output<Partial<ListingFilter>>();
 
@@ -64,6 +70,10 @@ export class ProductListView {
       return;
     }
     this.filterChange.emit({sortBy: null});
+  }
+
+  usePaginator(pageNumber: number): void {
+    this.filterChange.emit({pageNumber: pageNumber});
   }
 
   openFilter(): void {
