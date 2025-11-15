@@ -50,6 +50,8 @@ import {CommonModule} from '@angular/common';
   encapsulation: ViewEncapsulation.None
 })
 export class Carousel implements AfterViewInit, OnDestroy {
+  @HostBinding('class') hostClass = 'w-full';
+
   @ViewChild('carouselTrack', { static: true }) carouselTrack?: ElementRef<HTMLUListElement>;
   @ContentChild(TemplateRef) templateRef?: TemplateRef<unknown>;
 

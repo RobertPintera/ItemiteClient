@@ -1,4 +1,4 @@
-import {Component, inject, signal, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import {Component, inject, signal, OnInit, OnDestroy, ViewChild, HostBinding} from '@angular/core';
 import { ProductListView } from './product-list-view/product-list-view';
 import { ProductFilterSidebar } from './product-filter-sidebar/product-filter-sidebar';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -19,6 +19,7 @@ import {ListingType, SortBy, SortDirection} from '../../../core/constants/consta
   styleUrl: './products-list.css'
 })
 export class ProductsList implements OnInit, OnDestroy {
+  @HostBinding('class') hostClass = 'w-full';
   @ViewChild(ProductFilterSidebar) filterSidebarChild!: ProductFilterSidebar;
 
   private breakpointObserver = inject(BreakpointObserver);
