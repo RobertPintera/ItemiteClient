@@ -51,7 +51,7 @@ export class UserService {
     effect(() => {
       // This effect is called when refresh tokens loop should run
       // tokenRefreshLoopRunning ensures the loop really stopped
-      //    and prevents to run more loops
+      //    and prevents to run multiple loops
       if(this.isUserLoggedIn() && !this._tokenRefreshLoopRunning) {
         this.PerformContinuesTokenRefresh();
       }
@@ -98,7 +98,7 @@ export class UserService {
   }
 
   // This will need to be recalled once this.autoRefreshToken()
-  //  is equal false - perhaps in effect()
+  //  - handled in effect()
   async PerformContinuesTokenRefresh() {
     // Make sure there is only one token refresh loop
     if(this._tokenRefreshLoopRunning) return;
