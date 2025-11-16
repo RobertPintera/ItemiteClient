@@ -3,7 +3,7 @@ import {
   Component,
   computed,
   inject, OnInit,
-  PLATFORM_ID, Signal,
+  PLATFORM_ID, SecurityContext, Signal,
   signal,
   WritableSignal
 } from '@angular/core';
@@ -20,7 +20,7 @@ import {ScaledText} from '../../shared/scaled-text/scaled-text';
 import {PasswordValidator, UpdatePasswordErrors} from '../../../core/Utility/Validation';
 import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 import {FileUpload} from '../../shared/file-upload/file-upload';
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {Router} from '@angular/router';
 
@@ -44,8 +44,8 @@ export class ProfilePage implements AfterViewInit, OnInit {
   private _currentMarker : WritableSignal<Marker | undefined> = signal(undefined);
 
   // Local images are undefined when they haven't been changed with file dialogs
-  private _localBackgroundImageUrl: WritableSignal<string | undefined> = signal(undefined);
-  private _localProfileImageUrl: WritableSignal<string | undefined> = signal(undefined);
+  private _localBackgroundImageUrl: WritableSignal<SafeUrl  | undefined> = signal(undefined);
+  private _localProfileImageUrl: WritableSignal<SafeUrl  | undefined> = signal(undefined);
 
   private _backgroundImageUrl:WritableSignal<string | undefined> = signal(undefined);
   private _profileImageUrl:WritableSignal<string | undefined> = signal(undefined);
@@ -73,7 +73,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
   profileImage:Signal<string> = computed(() => {
     if(this._localProfileImageUrl()) {
-      return this._localProfileImageUrl()!;
+      return this._localProfileImageUrl()! as string;
     }
     if(this._profileImageUrl()) {
       return this._profileImageUrl()!;
@@ -82,7 +82,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
   });
   backgroundImage: Signal<string> = computed(() => {
     if(this._localBackgroundImageUrl()) {
-      return this._localBackgroundImageUrl()!;
+      return this._localBackgroundImageUrl()! as string;
     }
     return this._backgroundImageUrl()!;
   });
@@ -206,7 +206,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
     if(this._currentDialog === "profileImage") {
       if(this._localProfileImageUrl()) {
-        URL.revokeObjectURL(this._localProfileImageUrl()!);
+        URL.revokeObjectURL(this._localProfileImageUrl() as string);
         this._localProfileImageUrl.set(undefined);
       }
       // TODO call API
@@ -215,7 +215,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
     if(this._currentDialog === "backgroundImage") {
       if(this._localBackgroundImageUrl()) {
-        URL.revokeObjectURL(this._localBackgroundImageUrl()!);
+        URL.revokeObjectURL(this._localBackgroundImageUrl() as string);
         this._localBackgroundImageUrl.set(undefined);
       }
       // TODO call API
@@ -238,10 +238,10 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
     if(this._currentImageEdition === "profile") {
       if(this._localProfileImageUrl()) {
-        URL.revokeObjectURL(this._localProfileImageUrl()!);
+        URL.revokeObjectURL(this._localProfileImageUrl()! as string);
       }
-      this._localProfileImageUrl.set(URL.createObjectURL(file));
-      this._sanitizer.bypassSecurityTrustUrl(this._localProfileImageUrl()!);
+      const objectUrl = URL.createObjectURL(file);
+      this._localProfileImageUrl.set(this._sanitizer.sanitize(SecurityContext.URL, objectUrl) as SafeUrl);
 
       // TODO call API
       return;
@@ -249,10 +249,10 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
     if(this._currentImageEdition === "background") {
       if(this._localBackgroundImageUrl()) {
-        URL.revokeObjectURL(this._localBackgroundImageUrl()!);
+        URL.revokeObjectURL(this._localBackgroundImageUrl()! as string);
       }
-      this._localBackgroundImageUrl.set(URL.createObjectURL(file));
-      this._sanitizer.bypassSecurityTrustUrl(this._localBackgroundImageUrl()!);
+      const objectUrl = URL.createObjectURL(file);
+      this._localBackgroundImageUrl.set(this._sanitizer.sanitize(SecurityContext.URL, objectUrl) as SafeUrl);
 
       // TODO call API
       return;

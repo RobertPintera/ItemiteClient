@@ -1,6 +1,17 @@
-import {Component, computed, inject, input, output, PLATFORM_ID, Signal, signal, WritableSignal} from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  output,
+  PLATFORM_ID,
+  SecurityContext,
+  Signal,
+  signal,
+  WritableSignal
+} from '@angular/core';
 import {TranslatePipe} from "@ngx-translate/core";
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Button} from '../button/button';
 
 @Component({
@@ -12,6 +23,8 @@ import {Button} from '../button/button';
   styleUrl: './file-upload.css'
 })
 export class FileUpload {
+  private _sanitizer: DomSanitizer = inject(DomSanitizer);
+
   onConfirmClicked = output<File>();
   onCancelClicked = output<void>();
   readonly acceptedFormats = input("image/png, image/jpeg")
@@ -40,14 +53,16 @@ export class FileUpload {
     !this.file()
   );
 
-  private _preview: WritableSignal<string | undefined> = signal(undefined);
-  readonly preview: Signal<string> = computed(() => this._preview() ?? "");
-
-  constructor(private sanitizer: DomSanitizer) {}
+  private _preview: WritableSignal<SafeUrl | undefined> = signal(undefined);
+  readonly preview: Signal<string> = computed(() =>
+  {
+    if(!this._preview()) return "";
+    return this._preview()! as string;
+  });
 
   OnConfirmClicked() {
     if(this._preview()) {
-      URL.revokeObjectURL(this.preview());
+      URL.revokeObjectURL(this._preview() as string);
     }
 
     if(this.invalid()) return;
@@ -57,7 +72,7 @@ export class FileUpload {
 
   OnCancelClicked() {
     if(this._preview()) {
-      URL.revokeObjectURL(this.preview());
+      URL.revokeObjectURL(this._preview() as string);
     }
     this.onCancelClicked.emit();
   }
@@ -71,9 +86,9 @@ export class FileUpload {
     if(!this.supportsPreview()) return;
 
     if(this._preview()) {
-      URL.revokeObjectURL(this.preview());
+      URL.revokeObjectURL(this._preview() as string);
     }
-    this._preview.set(URL.createObjectURL(file));
-    this.sanitizer.bypassSecurityTrustUrl(this.preview());
+    const objectUrl = URL.createObjectURL(file);
+    this._preview.set(this._sanitizer.sanitize(SecurityContext.URL, objectUrl) as SafeUrl);
   }
 }
