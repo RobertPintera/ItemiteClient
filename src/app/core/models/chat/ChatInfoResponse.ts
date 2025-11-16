@@ -1,6 +1,6 @@
 import { ChatMemberInfo } from './ChatMemberInfo';
 import {LastMessageInfo} from './LastMessageInfo';
-import {ListingBasicInfo} from './ListingBasicInfo';
+import {ListingBasicInfo} from '../ListingBasicInfo';
 
 export interface ChatInfoResponse {
   listing: ListingBasicInfo

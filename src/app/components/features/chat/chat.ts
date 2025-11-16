@@ -1,7 +1,8 @@
-import {Component, signal, Signal} from '@angular/core';
-import {MessageResponse} from '../../../core/models/MessageResponse';
+import {Component, inject, input, signal, Signal} from '@angular/core';
+import {MessageResponse} from '../../../core/models/chat/MessageResponse';
 import {PhotoResponseDTO} from '../../../core/models/PhotoResponseDTO';
 import {Message} from './message/message';
+import {UserService} from '../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-chat',
@@ -15,31 +16,33 @@ export class Chat {
   // todo grab current and other user data from the service (Chat Member Info)
   //  name, profile photo, profile pic
   //  - ?use the | async pipe?
-  readonly userId: number = 2;
+  userService: UserService = inject(UserService);
+  // readonly userId = signal(this.userService.userBasicInfo().id);
+  private readonly currentUser = signal(2);
+  readonly otherUserId = input(1);
+
   private _currentUserName = signal<string>("Filip Wójcisław");
   private _otherUserName = signal<string>("Dawid Pacisław");
   private _currentProfileImg = signal<string | undefined>(undefined);
   private _otherProfileImg = signal<string | undefined>(undefined);
-  private _currentBackgroundImg = signal<string | undefined>(undefined);
-  private _otherBackgroundImg = signal<string | undefined>(undefined);
 
   // todo grab messages from the api
   private _messages = signal<MessageResponse[]>([]);
   readonly messages:Signal<MessageResponse[]> = this._messages.asReadonly();
 
-  constructor() {
 
+
+  constructor() {
     // TESTING
     this._messages.set([this.testM1, this.testM2, this.testM3, this.testM4]);
-
   }
 
   IsOwnMessage(senderId: number) {
-    return this.userId === senderId;
+    return this._userId() === senderId;
   }
 
-  async GetName() {
-
+  GetUsername(isOwnMessage: boolean) {
+    return isOwnMessage ? this.
   }
 
   /////////////
@@ -82,7 +85,7 @@ export class Chat {
   };
   testM3: MessageResponse = {
     content: undefined,
-    dateModified: "now",
+    dateModified: "23:30 21.02.2025",
     dateRead: "12.31 21.02.2024",
     dateSent: '12:30 21.02.2024',
     listingId: 0,

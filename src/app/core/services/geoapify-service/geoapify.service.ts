@@ -1,11 +1,11 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment.development';
-import {AutocompletePayloadDTO} from '../../models/AutocompletePayloadDTO';
+import {AutocompletePayloadDTO} from '../../models/geoapify/AutocompletePayloadDTO';
 import {catchError, debounceTime, map, Observable, Subject, switchMap, takeUntil, throwError} from 'rxjs';
 import {Localization} from '../../models/Localization';
-import {GeoapifyResponseDTO} from '../../models/GeoapifyResponseDTO';
-import {LatLonPayloadDTO} from '../../models/LatLonPayloadDTO';
+import {GeoapifyResponseDTO} from '../../models/geoapify/GeoapifyResponseDTO';
+import {LatLonPayloadDTO} from '../../models/geoapify/LatLonPayloadDTO';
 
 @Injectable(
   {

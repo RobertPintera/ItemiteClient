@@ -12,7 +12,7 @@ import {Map, Icon, map, tileLayer, marker, Marker, latLng, LeafletEvent, Leaflet
 import {isPlatformBrowser} from '@angular/common';
 import {Localization} from '../../../core/models/Localization';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
-import {LatLonPayloadDTO} from '../../../core/models/LatLonPayloadDTO';
+import {LatLonPayloadDTO} from '../../../core/models/geoapify/LatLonPayloadDTO';
 import {EditableText} from '../../shared/editable-text/editable-text';
 import {FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
