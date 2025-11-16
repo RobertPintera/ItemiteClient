@@ -1,4 +1,7 @@
 
+@if (showForgotPasswordForm()) {
+  <app-forgot-password (onExit)="SwitchShowForgotPassword()"/>
+}
 
 <div class="m-auto relative flex p-5 flex-row items-center justify-around custom max-w-7xl ">
 
@@ -14,7 +17,8 @@
         peer-not-checked:scale-y-full
         scaleIn
         peer-checked:scale-y-0
-        peer-checked:opacity-0">
+        peer-checked:opacity-0"
+    >
 
       <form class="flex flex-col items-center justify-center sm:w-70 w-full max-w-70" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <app-scaled-text [text]="'login_register.login_title' | translate" [step]="-1" base="text-3xl" [maxGrowTimes]="1"/>
@@ -41,11 +45,18 @@
         <button type="submit"
                 [disabled]="formHasErrors()"
                 class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
-                cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+                relative cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
           {{ 'login_register.login' | translate }}
+          @if(processing()) {
+            <div class="absolute inset-0 flex items-center w-full justify-center">
+              <app-loading-circle />
+            </div>
+          }
         </button>
       </form>
-      <button class="sm:w-70 w-full max-w-70 cursor-pointer justify-center gap-2 h-15 sm:h-10 mt-3 rounded-md bg-destructive hover:bg-destructive/90 border-1 text-destructive-foreground border-(--ring) focus:border-(--ring) text-xl md:text-2xl items-center flex p-1" >
+      <button [disabled]="processing()"
+        (click)="LoginByGoogle()"
+        class="sm:w-70 w-full max-w-70 cursor-pointer justify-center gap-2 h-15 sm:h-10 mt-3 rounded-md bg-destructive hover:bg-destructive/90 border-1 text-destructive-foreground border-(--ring) focus:border-(--ring) text-xl md:text-2xl items-center flex p-1" >
         {{ 'login_register.login_by' | translate }}
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 0 262 262" class="h-fit max-h-full max-w-fit bg-white rounded-full p-1" preserveAspectRatio="xMidYMid">
           <path d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027" fill="#4285F4"/><path d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1" fill="#34A853"/><path d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782" fill="#FBBC05"/><path d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251" fill="#EB4335"/>
@@ -56,9 +67,12 @@
              (click)="SwitchShowRegister()">
         <app-scaled-text [text]="'login_register.ask_register' | translate" [step]="-1" base="text-xs" [maxGrowTimes]="1"/>
       </label>
-      <div class="mt-3 text-md  hover:text-primary whitespace-nowrap wrap-normal select-none underline cursor-pointer">
+      <a
+        (click)="SwitchShowForgotPassword()"
+        class="mt-3 text-md hover:text-primary whitespace-nowrap wrap-normal select-none underline cursor-pointer"
+      >
         {{'login_register.forgot_password' | translate}}
-      </div>
+      </a>
     </div>
 
     <!-- REGISTER PANEL -->
@@ -109,35 +123,25 @@
         <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
                name="passwordR" id="passwordR" type="password" formControlName="password"
         />
-        <label for="repeat_passwordR" class="w-full">
+        <label for="repeatPassword" class="w-full">
           <app-scaled-text [text]="'login_register.repeat_password' | translate" [step]="-1"
                            base="text-sm" [maxGrowTimes]="2"/>
           @if(!repeatPassMatch()) {<div class="text-(--destructive)">{{"validator_errors.pass_match" | translate}}</div>}
         </label>
         <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
-               name="repeat_passwordR" id=repeat_passwordR type="password" formControlName="repeatPassword"
+               name="repeatPassword" id="repeatPassword" type="password" formControlName="repeatPassword"
         />
-
-        <div class="flex flex-row items-center h-12 gap-5 flex-wrap">
-          <p>
-            {{"login_register.agree" | translate}}
-            <a class="hover:underline text-primary hover:cursor-pointer">
-              {{"login_register.terms_of_use" | translate}}
-            </a>
-          </p>
-          <input
-            class="sm:h-6 h-8 aspect-square"
-            formControlName="terms"
-            name="terms_of_use"
-            id="terms_of_use"
-            type="checkbox"/>
-        </div>
 
         <button [disabled]="formHasErrors()"
                 type="submit"
                 class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
-                enabled:cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) enabled:hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+                enabled:cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md relative bg-(--primary) enabled:hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
           {{ 'login_register.register' | translate }}
+          @if(processing()) {
+            <div class="absolute inset-0 flex items-center w-full justify-center">
+              <app-loading-circle />
+            </div>
+          }
         </button>
       </form>
       <label class="mt-3 text-lg md:text-xl hover:text-primary whitespace-nowrap wrap-normal select-none underline cursor-pointer"
@@ -151,7 +155,8 @@
     <img alt="Person greeting"  class="max-w-full h-auto w-auto object-contain"
          src="https://www.uczmnie.pl/wp-content/uploads/2025/01/mateusz-chrobok-ekspert-ai-3.png" />
   </div>
-
 </div>
+
+
 
 
