@@ -1,12 +1,18 @@
 {
+  "authors": "authors",
   "product_details": {
     "send_message": "Send Message",
     "call": "Call",
     "price": "Price",
+    "starting_bid": "Starting bid",
+    "current_bid": "Current bid",
     "vendor": "Vendor",
     "date_of_issue": "Date of issue",
+    "date_ends": "Date ends",
     "description": "Description",
-    "localization": "Localization"
+    "localization": "Localization",
+    "bid": "Bid",
+    "negotiable": "Negotiable"
   },
   "paginator": {
     "preposition": "from"

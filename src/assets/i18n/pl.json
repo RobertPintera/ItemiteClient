@@ -1,12 +1,18 @@
 {
+  "authors": "autorzy",
   "product_details": {
     "send_message": "Wyślij wiadomość",
     "call": "Zadzwoń",
     "price": "Cena",
+    "starting_bid": "Cena wywoławcza",
+    "current_bid": "Aktualna cena",
     "vendor": "Sprzedawca",
     "date_of_issue": "Data wystawienia",
+    "date_ends": "Data zakończenia",
     "description": "Opis",
-    "localization": "Lokalizacja"
+    "localization": "Lokalizacja",
+    "bid": "Licytuj",
+    "negotiable": "Do negocjacji"
   },
   "paginator": {
     "preposition": "z"

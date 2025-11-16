@@ -8,7 +8,7 @@ import {
   WritableSignal
 } from '@angular/core';
 import {GeocoderAutocomplete} from '../../shared/geocoder-autocomplete/geocoder-autocomplete';
-import {Map, Icon, map, tileLayer, marker, Marker, latLng, LeafletEvent, LeafletMouseEvent} from 'leaflet';
+import {Map, Marker} from 'leaflet';
 import {isPlatformBrowser} from '@angular/common';
 import {Localization} from '../../../core/models/Localization';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
@@ -367,7 +367,6 @@ export class ProfilePage implements AfterViewInit, OnInit {
       }));
       this.AllowMapControl(false);
     }
-
   }
 
   private ValidateLocalization(loc : Localization | null) : boolean {
@@ -397,7 +396,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
   }
 
   async ngAfterViewInit() {
-   await this.InitMap(50.2970546, 18.6926949, "Gliwice");
+    await this.InitMap(50.2970546, 18.6926949, "Gliwice");
   }
 
   onPassChangeSubmit() {

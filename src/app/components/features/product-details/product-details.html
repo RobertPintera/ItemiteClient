@@ -21,11 +21,20 @@
           </div>
           @if (!isLg()) {
             <div class="flex flex-col gap-2 text-xl mb-2">
-              <p>{{'product_details.price' | translate}}: 167.58$ - negotiable</p>
-              <app-button label="Send Message"/>
-              <app-button label="Call" variant="secondary"/>
-              <p>{{'product_details.vendor' | translate}}: Jan Kowalski</p>
-              <p>{{'product_details.date_of_issue' | translate}}: 20.07.2025</p>
+              @if(product){
+                <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
+                <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
+                <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
+                <app-button label="{{'product_details.send_message' | translate}}"/>
+                <app-button label="{{'product_details.call' | translate}}" variant="secondary"/>
+              } @else if(auction) {
+                <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
+                <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
+                <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
+                <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
+                <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
+                <app-button label="{{'product_details.bid' | translate}}"/>
+              }
             </div>
           }
           <div class="flex flex-col gap-2">
@@ -34,22 +43,26 @@
           </div>
         </div>
         <div class="hidden lg:block self-stretch min-w-0.5 bg-muted-foreground z-10"></div>
-        @if(product){
-          @if (isLg()) {
-            <div class="flex flex-col w-2/6 p-4 gap-2 text-xl">
-              <p>{{'product_details.date_of_issue' | translate}}: 20.07.2025</p>
-              <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? " - negotiable" : "" }}</p>
+        <div class="text-xl mt-2 flex flex-col gap-2 lg:w-2/6 lg:p-4  lg:mt-0">
+          @if (isLg()){
+            @if(product){
+              <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
+              <p>{{'product_details.price' | translate}}: {{ product.price }}$ {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
               <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
               <app-button label="{{'product_details.send_message' | translate}}"/>
               <app-button label="{{'product_details.call' | translate}}" variant="secondary"/>
-              <p>{{'product_details.localization' | translate}}: {{ product.location.country }}, {{product.location.city}}, {{product.location.state}}</p>
-            </div>
-          } @else {
-            <div class="text-xl mt-2">
-              <p>{{'product_details.localization' | translate}}: {{ product.location.country }}, {{product.location.city}}, {{product.location.state}}</p>
-            </div>
+            } @else if(auction) {
+              <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
+              <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
+              <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
+              <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
+              <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
+              <app-button label="{{'product_details.bid' | translate}}"/>
+            }
           }
-        }
+          <p>{{'product_details.localization' | translate}}: {{ article()?.location?.country }}, {{article()?.location?.city}}, {{article()?.location?.state}}</p>
+          <div id="map" class="h-64 rounded-md max-w-full"></div>
+        </div>
       </div>
     }
   </div>
