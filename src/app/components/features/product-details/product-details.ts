@@ -37,6 +37,7 @@ export class ProductDetails implements OnInit {
 
   readonly isLg = signal<boolean>(false);
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
+  readonly isClickPhoneNumber = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -109,5 +110,9 @@ export class ProductDetails implements OnInit {
       this.map.boxZoom.disable();
       this.map?.setZoomAround(this.currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949], 10);
     }
+  }
+
+  ClickNumber() {
+    this.isClickPhoneNumber.set(true);
   }
 }
