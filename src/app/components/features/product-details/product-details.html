@@ -27,7 +27,7 @@
                 <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
                 <app-button label="{{'product_details.send_message' | translate}}"/>
                 <app-button (clickButton)="ClickNumber()"
-                            [label]="isClickPhoneNumber() ? (product?.owner?.phoneNumber || ( 'product_details.call' | translate ))
+                            [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
                           : ( 'product_details.call' | translate )" variant="secondary">
                 </app-button>
               } @else if(auction) {
@@ -54,7 +54,7 @@
               <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
               <app-button label="{{'product_details.send_message' | translate}}"/>
               <app-button (clickButton)="ClickNumber()"
-                          [label]="isClickPhoneNumber() ? (product?.owner?.phoneNumber || ( 'product_details.call' | translate ))
+                          [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
                           : ( 'product_details.call' | translate )" variant="secondary">
               </app-button>
             } @else if(auction) {

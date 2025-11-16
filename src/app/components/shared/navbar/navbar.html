@@ -1,11 +1,11 @@
 <nav>
   <div class="flex overflow-x-auto whitespace-nowrap items-center p-2 h-16 bg-sidebar">
     @for(category of categories(); track category.id) {
-      <a [routerLink]="['/products']" [queryParams]="{ id: category.id }">
+      <button (click)="goToCategory(category.id)" class="cursor-pointer focus:outline-none" >
         <h4 class="inline-block px-4 border-r border-sidebar-border text-muted-foreground">
           {{ 'categories.' + category.name | translate }}
         </h4>
-      </a>
+      </button>
     }
   </div>
 </nav>

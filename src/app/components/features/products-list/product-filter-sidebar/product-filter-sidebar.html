@@ -1,6 +1,6 @@
 <aside class="w-full p-8 bg-card border-0 border-border rounded-0
   sm:border-2 sm:rounded-2xl h-full sm:h-auto transition">
-  <div class="relative flex flex-col gap-2">
+  <form class="relative flex flex-col gap-2">
     @if (!isXl()){
       <app-button label="X" (clickButton)="closeFilterX()" class="absolute right-[-16px] top-[-16px]"/>
     }
@@ -49,5 +49,5 @@
         <app-button label="Filter" (clickButton)="applyMobileFilter()" />
       </div>
     }
-  </div>
+  </form>
 </aside>

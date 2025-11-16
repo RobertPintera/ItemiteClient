@@ -80,7 +80,6 @@ export class ProductsList implements OnInit, OnDestroy {
         const v = params.get(name);
         return v !== null ? Number(v) : null;
       };
-
       const str = (name: string) => params.get(name);
 
       updated.pageNumber = num('pageNumber') ?? this.filter().pageNumber;
@@ -95,8 +94,12 @@ export class ProductsList implements OnInit, OnDestroy {
       updated.sortBy = str('sortBy') as SortBy;
       updated.sortDirection = str('sortDirection') as SortDirection;
 
-      const categoryIds = params.getAll('categoryIds');
-      updated.categoryIds = categoryIds.map(Number);
+      const mainCategoryId = num('id');
+      const categoryIds = params.getAll('categoryIds').map(Number);
+      updated.categoryIds = [
+        ...(mainCategoryId ? [mainCategoryId] : []),
+        ...categoryIds
+      ];
 
       const newFilter = { ...this.filter(), ...updated };
       this.filter.set(newFilter);
