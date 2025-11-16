@@ -11,16 +11,7 @@
       <div class="flex flex-col lg:flex-row w-full">
         <div class="flex flex-col w-full lg:w-4/6">
           <h1>{{ article()?.name }}</h1>
-          <div class="relative flex justify-center w-full h-76 sm:h-96 p-4">
-            <img [src]="selectedImage()?.imageUrl ?? 'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="object-contain h-full">
-          </div>
-          <app-carousel [items]="article()?.images ?? []" [visibleSSm]="2" [visibleSm]="3" [visibleMd]="4" [visibleLg]="5" [visibleXl]="6">
-            <ng-template let-image>
-              <div class="w-full h-32 p-2">
-                <img [src]="image.imageUrl ?? 'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="size-full max-h-96 object-contain" >
-              </div>
-            </ng-template>
-          </app-carousel>
+          <app-gallery [images]="article()?.images ?? []" [visibleSSm]="2" [visibleSm]="3" [visibleMd]="4" [visibleLg]="5" [visibleXl]="6"/>
           <div class="flex flex-row flex-wrap gap-3 mb-4">
             @for (category of article()?.categories; track category.id){
               <div class="border-1 px-4 py-2 rounded-2xl">
@@ -48,7 +39,7 @@
             <div class="flex flex-col w-2/6 p-4 gap-2 text-xl">
               <p>{{'product_details.date_of_issue' | translate}}: 20.07.2025</p>
               <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? " - negotiable" : "" }}</p>
-              <p>{{'product_details.vendor' | translate}}: {{ product.owner?.userName }}</p>
+              <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
               <app-button label="{{'product_details.send_message' | translate}}"/>
               <app-button label="{{'product_details.call' | translate}}" variant="secondary"/>
               <p>{{'product_details.localization' | translate}}: {{ product.location.country }}, {{product.location.city}}, {{product.location.state}}</p>
@@ -59,7 +50,6 @@
             </div>
           }
         }
-
       </div>
     }
   </div>

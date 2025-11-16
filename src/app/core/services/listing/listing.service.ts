@@ -10,7 +10,7 @@ import {ListingFilter} from '../../models/ListingFilter';
 })
 export class ListingService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.itemiteApiUrl}/api/listing`;
+  private baseUrl = `${environment.itemiteApiUrl}/listing`;
 
   // API
 

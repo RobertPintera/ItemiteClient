@@ -1,0 +1,19 @@
+@import "../../../../styles.css";
+
+@layer components {
+  .gallery-button-left, .gallery-button-right{
+    @apply bg-primary/70 hover:bg-primary active:bg-primary/70 rounded-full p-4 transition-colors z-20;
+  }
+
+  .gallery-button-left{
+    @apply absolute left-8 top-1/2 -translate-y-1/2;
+  }
+
+  .gallery-button-right{
+    @apply absolute right-8 top-1/2 -translate-y-1/2;
+  }
+
+  .gallery-button-icon{
+    @apply w-6 h-6;
+  }
+}

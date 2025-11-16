@@ -10,7 +10,7 @@ import {PutProductListingDTO} from '../../models/PutProductListingDTO';
 })
 export class ProductListingService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.itemiteApiUrl}/api/productlisting`;
+  private baseUrl = `${environment.itemiteApiUrl}/productlisting`;
 
   // API
   private getProductListing(id: number): Observable<ProductListingDTO> {

@@ -10,7 +10,7 @@ import {CategoryTreeDTO} from '../../models/CategoryTreeDTO';
 })
 export class CategoryService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.itemiteApiUrl}/api/categories`;
+  private baseUrl = `${environment.itemiteApiUrl}/categories`;
   private _mainCategories = signal<CategoryDTO[]>([]);
   readonly mainCategories = this._mainCategories.asReadonly();
 

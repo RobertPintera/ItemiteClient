@@ -10,7 +10,7 @@ import {AuctionListingDTO} from '../../models/AuctionListingDTO';
 })
 export class AuctionListingService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.itemiteApiUrl}/api/auctionlisting`;
+  private baseUrl = `${environment.itemiteApiUrl}/auctionlisting`;
 
   // API
   private getAuctionListing(id: number): Observable<AuctionListingDTO> {
