@@ -8,6 +8,7 @@ import {ProfilePage} from './components/features/profile-page/profile-page';
 import {ConfirmEmail} from './components/features/login-register/confirm-email/confirm-email';
 import {ResetPassword} from './components/features/login-register/reset-password/reset-password';
 import {ExternalLoginError} from './components/features/login-register/external-login-error/external-login-error';
+import {Me} from './components/features/login-register/me/me';
 
 export const routes: Routes = [
   {
@@ -31,7 +32,7 @@ export const routes: Routes = [
         component: LoginRegister
       },
       {
-        path: 'dev',
+        path: 'profile',
         component: ProfilePage
       }
     ]
@@ -47,5 +48,9 @@ export const routes: Routes = [
   {
     path: 'external-login-error',
     component: ExternalLoginError
+  },
+  {
+    path: 'me',
+    component: Me
   }
 ];
