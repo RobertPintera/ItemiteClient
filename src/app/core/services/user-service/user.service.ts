@@ -69,7 +69,7 @@ export class UserService {
       this._userBasicInfo.set(userInfo);
       return true;
     } catch (error: any) {
-      this.ClearUserBasicInfo();
+      this.ClearUserInfo();
       this.errorHandlerService.SendErrorMessage(error);
       return false;
     }
@@ -211,20 +211,29 @@ export class UserService {
       const message = await lastValueFrom(
         this.http.get<string>(`${environment.itemiteApiUrl}/auth/logout`, {timeout: 10000, withCredentials: true})
       );
-      this.ClearUserBasicInfo();
+      this.ClearUserInfo();
       return true;
     } catch (error: any) {
-      this.ClearUserBasicInfo();
+      this.ClearUserInfo();
       return false;
     }
   }
 
-  private ClearUserBasicInfo(): void {
+  private ClearUserInfo(): void {
     this._userBasicInfo.set({
       id: -1,
       username: "",
       email: ""
     });
+    this._userInfo.set({
+      id: -1,
+      userName: '',
+      email: '',
+      location: undefined,
+      phoneNumber: undefined,
+      photoUrl: undefined,
+      backgroundUrl: undefined
+    })
   }
 
 }
