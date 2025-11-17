@@ -6,7 +6,7 @@ import { ListingFilter } from '../../../core/models/ListingFilter';
 import { ListingDTO } from '../../../core/models/ListingDTO';
 import {Subject, debounceTime, switchMap, takeUntil, finalize, catchError, of} from 'rxjs';
 import { ListingService } from '../../../core/services/listing/listing.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ListingType, SortBy, SortDirection} from '../../../core/constants/constants';
 
 @Component({
@@ -25,6 +25,7 @@ export class ProductsList implements OnInit, OnDestroy {
   private breakpointObserver = inject(BreakpointObserver);
   private listingService = inject(ListingService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   readonly isMd = signal<boolean>(false);
   readonly isXl = signal<boolean>(false);
@@ -40,10 +41,13 @@ export class ProductsList implements OnInit, OnDestroy {
     longitude: null, latitude: null, distance: null,
     categoryIds: [],
   });
+  readonly localizationText = signal<string | null>(null);
 
   // Debouncing: delays API calls when filters change
   private filterSubject = new Subject<ListingFilter>();
   private destroy$ = new Subject<void>();
+
+  mainCategoryId : number | null = null;
 
   ngOnInit() {
     this.breakpointObserver.observe([
@@ -96,6 +100,7 @@ export class ProductsList implements OnInit, OnDestroy {
 
       const mainCategoryId = num('id');
       const categoryIds = params.getAll('categoryIds').map(Number);
+      this.mainCategoryId = mainCategoryId;
       updated.categoryIds = [
         ...(mainCategoryId ? [mainCategoryId] : []),
         ...categoryIds
@@ -103,6 +108,7 @@ export class ProductsList implements OnInit, OnDestroy {
 
       const newFilter = { ...this.filter(), ...updated };
       this.filter.set(newFilter);
+      this.localizationText.set(str("localizationText"));
 
       this.applyFilter(this.filter());
     });
@@ -125,19 +131,77 @@ export class ProductsList implements OnInit, OnDestroy {
 
   closeOverlay() {
     if (this.filterSidebarChild) {
-      this.filterSidebarChild.closeFilterX(); // resetuje sidebar
+      this.filterSidebarChild.closeFilterX();
     }
-    this.isFilterOpen.set(false); // zamyka overlay
+    this.isFilterOpen.set(false);
     document.body.classList.remove('overflow-hidden');
   }
 
   updateFilter(partial: Partial<ListingFilter>) {
-    const newFilter = {...this.filter(), ...partial};
+    const newFilter = { ...this.filter(), ...partial };
     this.filter.set(newFilter);
+
+    const uniqueCategoryIds = [...new Set(newFilter.categoryIds || [])];
+
+    const query = this.serializeFilterToQuery({
+      ...newFilter,
+      categoryIds: uniqueCategoryIds
+    });
+
+    if (this.mainCategoryId != null) {
+      query['id'] = this.mainCategoryId;
+    }
+
+    const formatted = this.localizationText();
+    if (formatted?.trim()) {
+      query['localizationText'] = formatted;
+    }
+
+    this.router.navigate([], {
+      queryParams: query
+    });
+
     this.applyFilter(newFilter);
+  }
+
+  updateLocalizationText(localizationText: string){
+    this.localizationText.set(localizationText);
+
+    const query = this.serializeFilterToQuery(this.filter());
+
+    if (this.mainCategoryId != null) {
+      query['id'] = this.mainCategoryId;
+    }
+
+    const formatted = this.localizationText();
+    if (formatted && formatted.trim() !== '') {
+      query['localizationText'] = formatted;
+    }
+
+    this.router.navigate([], {
+      queryParams: query
+    });
   }
 
   private applyFilter(filter: ListingFilter) {
     this.filterSubject.next(filter);
+  }
+
+  private serializeFilterToQuery(filter: ListingFilter): Record<string, string | number | (string | number)[]> {
+    const params: Record<string, string | number | (string | number)[]> = {};
+
+    if (filter.categoryIds?.length) params['categoryIds'] = [...new Set(filter.categoryIds)];
+    if (filter.priceFrom != null) params['priceFrom'] = filter.priceFrom;
+    if (filter.priceTo != null) params['priceTo'] = filter.priceTo;
+    if (filter.listingType) params['listingType'] = filter.listingType;
+    if (filter.distance != null) params['distance'] = filter.distance;
+    if (filter.latitude != null) params['latitude'] = filter.latitude;
+    if (filter.longitude != null) params['longitude'] = filter.longitude;
+    if (filter.sortBy) params['sortBy'] = filter.sortBy;
+    if (filter.sortDirection) params['sortDirection'] = filter.sortDirection;
+    if (filter.pageNumber != null) params['pageNumber'] = filter.pageNumber;
+    if (filter.pageSize != null) params['pageSize'] = filter.pageSize;
+
+    return params;
   }
 }

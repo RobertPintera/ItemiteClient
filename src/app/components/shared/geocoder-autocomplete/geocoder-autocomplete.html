@@ -1,7 +1,7 @@
 <div class="flex flex-col p-0 m-0">
   <input (input)="InputValueChanged($event)" (keyup.enter)="updateEnterInputValue()" (blur)="updateEnterInputValue()"
          class="peer h-12 sm:h-10 border-solid p-2 rounded-lg m-0 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
-         type="text" value="{{inputValue()}}" placeholder="{{placeHolder()}}" />
+         type="text" [value]="inputValue()" placeholder="{{placeHolder()}}" />
   @if (hasSuggestions()) {
     <div class="peer-focus:flex hover:flex hidden relative flex-row ml-1 mr-1 p-0 z-30">
       <div class="absolute bg-(--background) overflow-y-auto w-full flex flex-col rounded-md shadow-md z-30">

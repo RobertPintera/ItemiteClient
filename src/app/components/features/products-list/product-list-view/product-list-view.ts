@@ -55,7 +55,7 @@ export class ProductListView implements OnInit {
   ];
 
   ngOnInit() {
-    const sortDirectionKey = this.filter().sortBy;
+    const sortDirectionKey = this.filter().sortDirection;
     const selectedSortDirectionOption = this.sortDirectionOptions.find(opt => opt.key === sortDirectionKey);
 
     if (selectedSortDirectionOption) {

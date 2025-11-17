@@ -1,6 +1,6 @@
 <aside class="w-full p-8 bg-card border-0 border-border rounded-0
   sm:border-2 sm:rounded-2xl h-full sm:h-auto transition">
-  <form class="relative flex flex-col gap-2">
+  <div class="relative flex flex-col gap-2">
     @if (!isXl()){
       <app-button label="X" (clickButton)="closeFilterX()" class="absolute right-[-16px] top-[-16px]"/>
     }
@@ -33,7 +33,7 @@
       </div>
       <div class="flex flex-1 flex-col gap-2">
         <p>Localization</p>
-        <app-geocoder-autocomplete placeHolder="Find city" (onCityPicked)="useLocalization($event)"/>
+        <app-geocoder-autocomplete placeHolder="Find city" [(inputValue)]="filterSidebar().localizationText" (onCityPicked)="useLocalization($event)" (onInputEnter)="useLocalizationText($event)" />
         <app-combo-box [items]="distancesOptions" [selectedValue]="filterSidebar().distance" (selectedValueChange)="useDistance($event)" class="w-full">
           <ng-template let-item>
             <span>
@@ -49,5 +49,5 @@
         <app-button label="Filter" (clickButton)="applyMobileFilter()" />
       </div>
     }
-  </form>
+  </div>
 </aside>

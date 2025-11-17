@@ -33,13 +33,13 @@ export class GeocoderAutocomplete  {
     });
   }
 
+  inputValue = model<string>("");
+
   readonly placeHolder = input('Enter city');
   readonly externalSource = input<Localization | undefined>();
 
   private _suggestions: WritableSignal<Localization[]> = signal([]);
   readonly hasSuggestions: Signal<boolean> = computed(() => this._suggestions().length > 0);
-
-  readonly inputValue: WritableSignal<string> = model<string>("");
 
   private _isAddressValid = false;
 
@@ -48,6 +48,7 @@ export class GeocoderAutocomplete  {
 
   // Listen to this signal to detect if address is valid
   readonly onCityPicked = output<Localization|null>();
+  readonly onInputEnter = output<string>();
 
   InputValueChanged(inputEvent:Event) {
     // If user changed the text by hand, the adress is invalid.
@@ -66,8 +67,7 @@ export class GeocoderAutocomplete  {
   }
 
   updateEnterInputValue(){
-    if(!this.selectedLocalization() || this.inputValue() === this.selectedLocalization()?.formatted || !this.inputValue())
-      return;
+    this.onInputEnter.emit(this.inputValue());
 
     if(this.inputValue() !== this.selectedLocalization()?.formatted)
       this.selectedLocalization.set(null);
@@ -79,6 +79,7 @@ export class GeocoderAutocomplete  {
     this.inputValue.set(value);
     this.selectedLocalization.set(this._suggestions()[index]);
     this.onCityPicked.emit(this._suggestions()[index]);
+    this.onInputEnter.emit(this.inputValue());
     this._isAddressValid = true;
   }
 

@@ -5,7 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe} from '@ngx-translate/core';
-import {LISTING_TYPES, ListingType } from '../../../../core/constants/constants';
+import {LISTING_TYPES, ListingType} from '../../../../core/constants/constants';
 import {ListingFilter} from '../../../../core/models/ListingFilter';
 import {GeocoderAutocomplete} from '../../../shared/geocoder-autocomplete/geocoder-autocomplete';
 import {Localization} from '../../../../core/models/Localization';
@@ -36,6 +36,7 @@ export class ProductFilterSidebar implements OnInit {
   readonly isFilterOpen = input.required<boolean>();
   readonly filterClose = output<void>();
   readonly filterChange  = output<Partial<ListingFilter>>();
+  readonly localizationTextChange = output<string>();
 
   readonly categoryTree = signal<CategoryTreeDTO | null>(null);
 
@@ -106,11 +107,35 @@ export class ProductFilterSidebar implements OnInit {
         error: err => console.error(err)
       });
     });
+
+    this.filterSidebar().priceFrom = this.filter().priceFrom;
+    this.filterSidebar().priceTo = this.filter().priceTo;
+
+    const listingTypeKey = this.filter().listingType;
+    const selectedListingType = this.listingTypesOptions.find(opt => opt.key === listingTypeKey);
+
+    if (selectedListingType) {
+      this.filterSidebar().listingType = selectedListingType;
+    } else {
+      this.filterSidebar().listingType = this.listingTypesOptions[0];
+    }
+
+    const distanceKey = this.filter().distance?.toString();
+    const selectedDistance = this.distancesOptions.find(opt => opt.key === distanceKey);
+
+    if (selectedDistance) {
+      this.filterSidebar().distance = selectedDistance;
+    } else {
+      this.filterSidebar().distance = this.distancesOptions[0];
+    }
+
+    const categoryIds = this.filter().categoryIds;
+    if(categoryIds){
+      this.filterSidebar().categoryIds = categoryIds;
+    }
   }
 
   closeFilterX(){
-    console.log(this.filterSidebar().categoryIds);
-    console.log(this.lastFilterSidebar().categoryIds);
     this.filterSidebar.set(structuredClone(this.lastFilterSidebar()));
     this.filterClose.emit();
   }
@@ -140,6 +165,12 @@ export class ProductFilterSidebar implements OnInit {
       latitude: newLocalization?.latitude ?? null,
       longitude: newLocalization?.longitude ?? null,
     });
+  }
+
+  useLocalizationText(formatted: string) {
+    if(!this.isXl()) return;
+
+    this.localizationTextChange.emit(formatted);
   }
 
   usePriceFrom(priceFrom: number | null) {
@@ -209,6 +240,7 @@ export class ProductFilterSidebar implements OnInit {
 
   private updateFilter(partial: Partial<ListingFilter>) {
     this.lastFilterSidebar.set(structuredClone(this.filterSidebar()));
+    this.localizationTextChange.emit(this.filterSidebar().localizationText);
     this.filterChange.emit(partial);
   }
 }

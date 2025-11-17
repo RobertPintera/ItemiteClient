@@ -29,8 +29,6 @@ export class Paginator {
   }
 
   goToPage(pageNumber: number) {
-    console.log(pageNumber);
-    console.log(this.totalPages());
     let page = isNaN(pageNumber) ? this.previousPage() : pageNumber;
 
     if (page < 1) page = 1;
