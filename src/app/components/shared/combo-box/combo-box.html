@@ -1,8 +1,8 @@
 <button class="combo-selected w-full" (click)="toggleDropdown()">
   @if (templateRef){
-    <ng-container [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="{ $implicit: selectedValue() }"></ng-container>
+    <ng-container [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="{ $implicit: selectedItem() }"></ng-container>
   } @else {
-    <span>{{ selectedValue()?.value ?? ' ' }}</span>
+    <span>{{ selectedItem()?.value ?? ' ' }}</span>
   }
   <span class="arrow">▼</span>
 </button>

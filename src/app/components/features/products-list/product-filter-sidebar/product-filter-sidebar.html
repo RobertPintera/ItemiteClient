@@ -23,7 +23,7 @@
       </div>
       <div class="flex flex-1 flex-col gap-2 w-full">
         <p>Listing Type</p>
-        <app-combo-box [items]="listingTypesOptions" [selectedValue]="filterSidebar().listingType" (selectedValueChange)="useListingType($event)" class="w-full">
+        <app-combo-box [items]="listingTypesOptions" [selectedItem]="filterSidebar().listingType" (selectedItemChange)="useListingType($event)" class="w-full">
           <ng-template let-item>
             <span>
               {{item?.value | translate}}
@@ -34,7 +34,7 @@
       <div class="flex flex-1 flex-col gap-2">
         <p>Localization</p>
         <app-geocoder-autocomplete placeHolder="Find city" [(inputValue)]="filterSidebar().localizationText" (onCityPicked)="useLocalization($event)" (onInputEnter)="useLocalizationText($event)" />
-        <app-combo-box [items]="distancesOptions" [selectedValue]="filterSidebar().distance" (selectedValueChange)="useDistance($event)" class="w-full">
+        <app-combo-box [items]="distancesOptions" [selectedItem]="filterSidebar().distance" (selectedItemChange)="useDistance($event)" class="w-full">
           <ng-template let-item>
             <span>
               {{item?.value | translate}}

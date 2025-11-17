@@ -29,8 +29,8 @@ export class ComboBox implements OnInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
 
   readonly items = input<OptionItem[]>([]);
-  readonly selectedValue = model<OptionItem>();
-  readonly selectedValueChange = output<OptionItem>();
+  readonly selectedItem = model<OptionItem>();
+  readonly selectedItemChange = output<OptionItem>();
   readonly isOpen = signal(false);
 
   ngOnInit() {
@@ -55,9 +55,9 @@ export class ComboBox implements OnInit, OnDestroy {
   }
 
   chooseItem(item: OptionItem) {
-    this.selectedValue.set(item);
+    this.selectedItem.set(item);
     this.isOpen.set(false);
-    this.selectedValueChange.emit(item);
+    this.selectedItemChange.emit(item);
   }
 
   private closeDropdownHandler = (event: Event) => {
