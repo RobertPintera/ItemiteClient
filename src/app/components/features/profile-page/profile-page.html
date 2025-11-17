@@ -7,7 +7,8 @@
       />
     }
     <div class="absolute z-2 self-start justify-self-end flex items-end justify-end m-1 inset-0 place-self-end">
-      <button class="rounded-md hover:underline shadow-md shadow-(color:--secondary) bg-card/90 text-card-foreground
+      <button (click)="OnLogoutClicked()"
+        class="rounded-md hover:underline shadow-md shadow-(color:--secondary) bg-card/90 text-card-foreground
       cursor-pointer p-1 flex text-start flex-row items-center w-fit">
         <div class="text-sm sm:text-lg">{{'user_edition.logout' | translate}}</div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"

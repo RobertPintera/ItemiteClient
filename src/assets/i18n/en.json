@@ -76,7 +76,17 @@
     "username": "Username",
     "forgot_password": "Forgot password",
     "agree": "I agree to",
-    "terms_of_use": "terms of use"
+    "terms_of_use": "terms of use",
+    "register_success": "Registered successfully",
+    "confirm_link": "Enter the link we sent on your e-mail address",
+    "complete_registration": "and complete the registration",
+    "activate_account": "Activate my account",
+    "account_activation": "Account activation",
+    "forgot_password_enter_email": "Enter the e-mail you used to register",
+    "password_reset_link": "Send password reset link",
+    "reset_password": "Change password",
+    "can_close_window": "You can close this window",
+    "google_login_error": "Error occurred while trying to login with Google"
   },
   "user_info": {
     "details": "Details",
@@ -90,6 +100,7 @@
     "old_password": "Old password",
     "new_password": "New password",
     "repeat_new_password": "Confirm new password",
+    "password_changed": "Password changed, you can now log-in with new credentials",
 
     "delete_background_image": "Delete background image",
     "delete_profile_image": "Delete profile image",
@@ -117,7 +128,8 @@
     "confirm": "Confirm",
     "enable": "Enable",
     "enable_edition": "Enable edition",
-    "unsaved": "Unsaved"
+    "unsaved": "Unsaved",
+    "return": "Return"
   },
   "file_upload": {
     "upload_file": "Upload file",
@@ -146,5 +158,14 @@
     "name_pattern" : "Username can have only letters, digits and characters \"._@+-\"",
     "mail_min_len" : "Mail must be at least 3 characters long",
     "mail_max_len" : "Mail cannot be more than 100 characters"
+  },
+  "external_auth_errors": {
+    "no_claims": "URL doesn't contain needed parameters. Are you sure you entered the full link?",
+    "no_email": "URL doesn't contain email parameter. Are you sure you entered the full link?",
+    "username_not_unique": "Error occurred while trying to generated username for you",
+    "email_not_unique": "Account with this e-mail has been already registered using Itemite registration. Try to login through Itemite login form."
+  },
+  "api_errors": {
+    "try_again": "Please try again"
   }
 }

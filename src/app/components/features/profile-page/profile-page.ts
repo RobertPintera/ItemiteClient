@@ -21,6 +21,8 @@ import {PasswordValidator, UpdatePasswordErrors} from '../../../core/Utility/Val
 import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 import {FileUpload} from '../../shared/file-upload/file-upload';
 import {DomSanitizer} from '@angular/platform-browser';
+import {UserService} from '../../../core/services/user-service/user.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-profile-page',
@@ -122,6 +124,8 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
   private _geoapify: GeoapifyService = inject(GeoapifyService);
   private _sanitizer: DomSanitizer = inject(DomSanitizer);
+  private _userService: UserService = inject(UserService);
+  private _router: Router = inject(Router);
 
   constructor() {
     this.changePasswordForm = new FormGroup({
@@ -401,5 +405,12 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
   onPassChangeSubmit() {
 
+  }
+
+  async OnLogoutClicked() {
+    const success = await this._userService.Logout();
+    if(success) {
+      await this._router.navigateByUrl('');
+    }
   }
 }

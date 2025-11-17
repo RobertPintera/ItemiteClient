@@ -1,0 +1,39 @@
+<app-external-configs-layout>
+  <div class="flex relative flex-col max-w-2xl h-fit rounded-xl p-5 m-auto w-full bg-destructive text-destructive-foreground">
+    <div class="flex flex-row w-full h-fit items-center">
+      <div class="flex-1 grow h-1 bg-destructive-foreground"></div>
+      <a routerLink="/login"
+         class="hover:cursor-pointer hover:destructive-foreground/80
+            border-2 border-primary-foreground shadow-xl
+         ml-2 mt-2 w-fit h-fit text-destructive-foreground rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-10">
+          <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+
+
+    <p class="text-2xl mt-5 text-center">
+      {{ "login_register.google_login_error" | translate}}
+    </p>
+    @if (hasErrorCode()) {
+      <p class="text-lg mt-5">
+        @if(errorCode() == 1) {
+          {{"external_auth_errors.no_claims" | translate}}
+        } @else if (errorCode() == 2) {
+          {{"external_auth_errors.no_email" | translate}}
+        } @else if (errorCode() == 3) {
+          {{"external_auth_errors.username_not_unique" | translate}}
+        } @else if (errorCode() == 4) {
+          {{"external_auth_errors.email_not_unique" | translate}}
+        }
+      </p>
+      @if(errorCode() == 3) {
+        <p class="text-lg mt-1">
+          {{"api_errors.try_again" | translate}}
+        </p>
+      }
+    }
+    <div class="w-full mt-5 h-1 bg-destructive-foreground"></div>
+  </div>
+</app-external-configs-layout>
