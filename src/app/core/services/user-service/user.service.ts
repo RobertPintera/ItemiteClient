@@ -201,6 +201,10 @@ export class UserService {
       );
       return true;
     } catch (error: any) {
+      // User is no longer logged-in
+      if(error.status === 401) {
+        this.ClearUserInfo();
+      }
       return false;
     }
   }
