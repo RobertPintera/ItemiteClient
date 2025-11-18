@@ -1,5 +1,5 @@
-import {Component, computed, input, InputSignal} from '@angular/core';
-import {MessageResponse} from '../../../../core/models/MessageResponse';
+import {AfterViewInit, Component, computed, input, InputSignal} from '@angular/core';
+import {MessageResponse} from '../../../../core/models/chat/MessageResponse';
 import {PhotoResponseDTO} from '../../../../core/models/PhotoResponseDTO';
 
 @Component({
@@ -8,7 +8,7 @@ import {PhotoResponseDTO} from '../../../../core/models/PhotoResponseDTO';
   templateUrl: './message.html',
   styleUrl: './message.css'
 })
-export class Message {
+export class Message implements AfterViewInit {
   readonly username = input.required<string>();
   readonly content = input<string>();
   readonly dateModified = input<string>();
@@ -19,4 +19,9 @@ export class Message {
   readonly profileImage = input<string>("");
   readonly backgroundImage = input<string>();
 
+  readonly hasPhotos = computed(() => this.photos().length !== 0);
+
+  ngAfterViewInit(): void {
+    console.log(this.username());
+  }
 }

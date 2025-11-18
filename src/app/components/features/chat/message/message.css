@@ -1,0 +1,7 @@
+#edit {
+  display: none;
+}
+
+#parent:hover #edit {
+  display: flex;
+}

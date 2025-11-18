@@ -1,9 +1,13 @@
-<div class="custom h-full w-full max-w-7xl m-auto flex">
+@if(showFileInputDialog()) {
+    <app-file-upload (onCancelClicked)="SwitchShowFileInputDialog()" [supportsPreview]="true"/>
+}
+
+<div class="rounded-sm h-full w-full max-w-7xl m-auto flex ">
   <!-- Message window -->
-  <div class="flex flex-col overflow-auto items-center w-full">
+  <div class="flex flex-col overflow-auto items-center w-full bg-card">
     <div class="flex-1 w-full grow"></div>
-    <!-- Messages -->
-    <div class="flex flex-col max-h-100% overflow-auto h-fit">
+      <!-- Messages -->
+    <div class="flex flex-col max-h-100% overflow-y-auto h-fit w-full">
       @for (message of messages(); track message.messageId) {
         <app-message
           [content]="message.content"
@@ -12,12 +16,49 @@
           [dateRead]="message.dateRead"
           [photos]="message.photos"
           [isOwnMessage]="IsOwnMessage(message.senderId)"
+          [username]="IsOwnMessage(message.senderId) ? currentUsername() : otherUsername()"
+          [profileImage]= "IsOwnMessage(message.senderId) ? currentProfileImg() : otherProfileImg()"
         />
       }
     </div>
-  </div>
-  <!-- Message input -->
-  <div>
 
+     <!-- Message input -->
+    <div id="message_input" class="flex flex-row w-full h-fit min-h-fit max-h-1/2 p-5 overflow-y-auto">
+
+        <!-- Message editing info + cancel -->
+        @if (editingMessage()) {
+            <div class="flex flex-row items-center absolute -translate-y-full text-accent-foreground p-1">
+                <p class="text-shadow-sm text-shadow-secondary">Editing </p>
+                <p class="text-shadow-sm text-shadow-destructive text-destructive ml-2 hover:underline cursor-pointer">Cancel</p>
+            </div>
+        }
+
+        <textarea
+          autoResize
+          class="w-full p-2 rounded border resize-none text-card-foreground bg-card"
+          placeholder="Type here..."
+        >
+        </textarea>
+
+        <div class="flex flex-row self-end gap-1 ml-5 h-full text-card-foreground">
+            <button class="h-full hover:text-primary hover:cursor-pointer"
+                (click)="SwitchShowFileInputDialog()"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                   class="size-6 h-full"
+              >
+                  <path fill-rule="evenodd" d="M18.97 3.659a2.25 2.25 0 0 0-3.182 0l-10.94 10.94a3.75 3.75 0 1 0 5.304 5.303l7.693-7.693a.75.75 0 0 1 1.06 1.06l-7.693 7.693a5.25 5.25 0 1 1-7.424-7.424l10.939-10.94a3.75 3.75 0 1 1 5.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 0 1 5.91 15.66l7.81-7.81a.75.75 0 0 1 1.061 1.06l-7.81 7.81a.75.75 0 0 0 1.054 1.068L18.97 6.84a2.25 2.25 0 0 0 0-3.182Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            <button class="h-full hover:text-primary hover:cursor-pointer"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    class="size-6 h-full"
+                >
+                    <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                </svg>
+            </button>
+      </div>
+    </div>
   </div>
 </div>
