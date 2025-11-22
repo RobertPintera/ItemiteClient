@@ -207,6 +207,9 @@ body {
   input {
     @apply border-2 border-border ring-ring rounded-xl bg-white;
   }
+  input:disabled{
+    @apply border-2 border-ring ring-ring rounded-xl bg-white;
+  }
 
   /* Chrome */
   input[type=number]::-webkit-outer-spin-button,

@@ -28,6 +28,7 @@ export class ProductListView implements OnInit {
   readonly pageSize = model.required<number | null>();
 
   readonly filter = input.required<ListingFilter>();
+  readonly isBlocked = input.required<boolean>();
   readonly totalPages = input.required<number>();
   readonly listing = input.required<ListingDTO | null>();
   readonly loading = input.required<boolean>();

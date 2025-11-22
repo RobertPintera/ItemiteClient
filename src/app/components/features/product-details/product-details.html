@@ -28,7 +28,7 @@
                 <app-button label="{{'product_details.send_message' | translate}}"/>
                 <app-button (clickButton)="ClickNumber()"
                             [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" variant="secondary">
+                          : ( 'product_details.call' | translate )" severity="secondary">
                 </app-button>
               } @else if(auction) {
                 <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
@@ -55,7 +55,7 @@
               <app-button label="{{'product_details.send_message' | translate}}"/>
               <app-button (clickButton)="ClickNumber()"
                           [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" variant="secondary">
+                          : ( 'product_details.call' | translate )" severity="secondary">
               </app-button>
             } @else if(auction) {
               <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>

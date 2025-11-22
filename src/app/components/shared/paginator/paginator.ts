@@ -1,17 +1,21 @@
 import {Component, effect, input, model, output, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
+import {Button} from '../button/button';
+import {BUTTON_SEVERITY, BUTTON_VARIANTS} from '../../../core/constants/constants';
 
 @Component({
   selector: 'app-paginator',
   imports: [
     FormsModule,
-    TranslatePipe
+    TranslatePipe,
+    Button
   ],
   templateUrl: './paginator.html',
   styleUrl: './paginator.css'
 })
 export class Paginator {
+  readonly isBlocked = input<boolean>(false);
   readonly pageNumber = model<number>(1);
   readonly totalPages = input<number>(1);
 
@@ -56,4 +60,7 @@ export class Paginator {
       event.preventDefault();
     }
   }
+
+  protected readonly BUTTON_SEVERITY = BUTTON_SEVERITY;
+  protected readonly BUTTON_VARIANTS = BUTTON_VARIANTS;
 }

@@ -1,1 +1,6 @@
-<button class="button-container {{ classesOfVariants }}" (click)="onClick()">{{label()}}</button>
+<button [type]="type()" class="button-container {{ getClasses }}" (click)="onClick()" [disabled]="isDisabled() || this.severity() === BUTTON_SEVERITY.DISABLED">
+  <ng-content #content></ng-content>
+  @if(hasContent){
+    {{label()}}
+  }
+</button>

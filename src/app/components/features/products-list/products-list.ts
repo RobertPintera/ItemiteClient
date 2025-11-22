@@ -32,6 +32,7 @@ export class ProductsList implements OnInit, OnDestroy {
   readonly isFilterOpen = signal<boolean>(false);
   readonly listing = signal<ListingDTO | null>(null);
   readonly loading = signal<boolean>(true);
+  readonly isBlocked = signal<boolean>(false);
 
   readonly filter = signal<ListingFilter>({
     pageSize: 5, pageNumber: 1,
@@ -68,7 +69,10 @@ export class ProductsList implements OnInit, OnDestroy {
             return of(null);
           }),
           finalize(() => {
-            setTimeout(() => this.loading.set(false), 500);
+            setTimeout(() => {
+              this.isBlocked.set(false);
+              this.loading.set(false);
+            }, 500);
           })
         );
       }),
@@ -184,6 +188,7 @@ export class ProductsList implements OnInit, OnDestroy {
   }
 
   private applyFilter(filter: ListingFilter) {
+    this.isBlocked.set(true);
     this.filterSubject.next(filter);
   }
 

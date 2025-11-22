@@ -9,7 +9,7 @@
                                 (filterChange)="updateFilter($event)" (localizationTextChange)="updateLocalizationText($event)"/>
   </div>
   <app-product-list-view class="flex-1 xl:max-w-[1200px]" [listing]="listing()" [loading]="loading()"
-                         [filter]="filter()"
+                         [filter]="filter()" [isBlocked]="isBlocked()"
                          [isXl]="isXl()" [isMd]="isMd()" (filterOpen)="openFilter()"
                          [(pageSize)]="filter().pageSize" [(pageNumber)]="filter().pageNumber" [totalPages]="listing()?.totalPages ?? 0"
                          (filterChange)="updateFilter($event)"/>

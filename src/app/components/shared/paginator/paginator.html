@@ -1,21 +1,20 @@
 <div class="flex flex-row items-center w-auto p-4 gap-2">
-  <button type="button" class="bg-background hover:bg-accent active:bg-accent/70 border-2 border-border ring-ring rounded-xl p-2 transition-colors"
-  (click)="prevPage()">
+  <app-button type="button" [severity]="BUTTON_SEVERITY.ACCENT" [variant]="BUTTON_VARIANTS.OUTLINED" [isDisabled]="isBlocked()" (clickButton)="prevPage()">
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="h-full w-full"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
-  </button>
+  </app-button>
   <input type="number" id="page" name="page"
          class="no-spinner w-16 h-11 text-center"
          min="1"
          [max]="totalPages()"
          [value]="currentPage()"
+         [disabled]="isBlocked()"
          [(ngModel)]="currentPage"
          (keydown)="allowOnlyNumbers($event)"
          (keyup.enter)="goToPage(currentPage())"
          (blur)="goToPage(currentPage())">
   <p>{{'paginator.preposition' | translate}}</p>
   <p>{{totalPages()}}</p>
-  <button type="button" class="bg-background hover:bg-accent active:bg-accent/70 border-2 border-border ring-ring rounded-xl p-2 transition-colors"
-  (click)="nextPage()">
+  <app-button type="button" [severity]="BUTTON_SEVERITY.ACCENT" [variant]="BUTTON_VARIANTS.OUTLINED" [isDisabled]="isBlocked()" (clickButton)="nextPage()">
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="h-full w-full"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
-  </button>
+  </app-button>
 </div>

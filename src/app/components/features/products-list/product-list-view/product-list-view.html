@@ -25,7 +25,9 @@
     @if (!isXl()){
       <app-button label="filters" (clickButton)="openFilter()"/>
     }
-    <app-paginator [pageNumber]="pageNumber() ?? 1" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
+    @if(!loading() && totalPages() !== 0){
+      <app-paginator [isBlocked]="isBlocked()" [pageNumber]="pageNumber() ?? 1" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
+    }
   </div>
   @if(loading()){
     <div class="flex justify-center py-16 w-full">
@@ -45,8 +47,8 @@
         }
       }
     </div>
+    <div class="w-full flex justify-end">
+      <app-paginator [isBlocked]="isBlocked()" [pageNumber]="pageNumber()?? 1" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
+    </div>
   }
-  <div class="w-full flex justify-end">
-    <app-paginator [pageNumber]="pageNumber()?? 1" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
-  </div>
 </main>
