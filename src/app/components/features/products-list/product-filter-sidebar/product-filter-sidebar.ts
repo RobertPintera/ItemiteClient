@@ -32,8 +32,10 @@ export class ProductFilterSidebar implements OnInit {
   private categoryService = inject(CategoryService);
 
   readonly filter = input.required<ListingFilter>();
+  readonly localizationText = input.required<string | null>();
   readonly isXl = input.required<boolean>();
   readonly isFilterOpen = input.required<boolean>();
+
   readonly filterClose = output<void>();
   readonly filterChange  = output<Partial<ListingFilter>>();
   readonly localizationTextChange = output<string>();
@@ -133,6 +135,12 @@ export class ProductFilterSidebar implements OnInit {
     if(categoryIds){
       this.filterSidebar().categoryIds = categoryIds;
     }
+
+    const localizationText = this.localizationText();
+    if(localizationText) {
+      this.filterSidebar().localizationText = localizationText;
+      console.log(localizationText);
+    }
   }
 
   closeFilterX(){
@@ -159,7 +167,7 @@ export class ProductFilterSidebar implements OnInit {
   }
 
   useLocalization(newLocalization: Localization | null) {
-    if(!this.isXl()) return;
+    if(!this.isXl() || newLocalization?.formatted === this.lastFilterSidebar().localization?.formatted) return;
 
     this.updateFilter({
       latitude: newLocalization?.latitude ?? null,
@@ -168,7 +176,7 @@ export class ProductFilterSidebar implements OnInit {
   }
 
   useLocalizationText(formatted: string) {
-    if(!this.isXl()) return;
+    if(!this.isXl() || formatted === this.lastFilterSidebar().localizationText) return;
 
     this.localizationTextChange.emit(formatted);
   }
@@ -181,7 +189,8 @@ export class ProductFilterSidebar implements OnInit {
     }
     this.filterSidebar().priceError = null;
 
-    if(!this.isXl()) return;
+    if(!this.isXl() || priceFrom === this.lastFilterSidebar().priceFrom) return;
+
     this.updateFilter({priceFrom: priceFrom});
   }
 
@@ -193,7 +202,8 @@ export class ProductFilterSidebar implements OnInit {
     }
     this.filterSidebar().priceError = null;
 
-    if(!this.isXl()) return;
+    if(!this.isXl() || priceTo === this.lastFilterSidebar().priceTo) return;
+
     this.updateFilter({priceTo: priceTo});
   }
 

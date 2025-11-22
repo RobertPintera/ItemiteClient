@@ -3,7 +3,6 @@ import {
   computed,
   effect,
   inject,
-  Input,
   input,
   model,
   output,
@@ -13,7 +12,6 @@ import {
 } from '@angular/core';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {Localization} from '../../../core/models/Localization';
-import {debug} from 'node:util';
 
 @Component({
   selector: 'app-geocoder-autocomplete',
@@ -29,7 +27,10 @@ export class GeocoderAutocomplete  {
       // Don't emit new event when value is passed into the component (set address valid to false)
       // It only should update text field.
       this._isAddressValid = false;
-      this.inputValue.set(this.externalSource()?.formatted ?? "");
+      const external = this.externalSource()?.formatted;
+      if(external){
+        this.inputValue.set(external);
+      }
     });
   }
 
