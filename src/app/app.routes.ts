@@ -9,6 +9,8 @@ import {ConfirmEmail} from './components/features/login-register/confirm-email/c
 import {ResetPassword} from './components/features/login-register/reset-password/reset-password';
 import {ExternalLoginError} from './components/features/login-register/external-login-error/external-login-error';
 import {Me} from './components/features/login-register/me/me';
+import {ProductForm} from './components/features/product-form/product-form';
+import {NotFound} from './components/features/not-found/not-found';
 
 export const routes: Routes = [
   {
@@ -28,13 +30,21 @@ export const routes: Routes = [
         component: ProductDetails
       },
       {
+        path: 'product-form',
+        component: ProductForm,
+      },
+      {
         path: 'login',
         component: LoginRegister
       },
       {
         path: 'profile',
         component: ProfilePage
-      }
+      },
+      {
+        path: '**',
+        component: NotFound,
+      },
     ]
   },
   {

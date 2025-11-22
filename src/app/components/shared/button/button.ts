@@ -1,16 +1,14 @@
-import {Component, ElementRef, input, output, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component,input, output, ViewEncapsulation} from '@angular/core';
 import {BUTTON_SEVERITY, BUTTON_VARIANTS, ButtonSeverity, ButtonVariants} from '../../../core/constants/constants';
 
-@Component({
-  selector: 'app-button',
-  imports: [],
-  templateUrl: './button.html',
-  styleUrl: './button.css',
-  encapsulation: ViewEncapsulation.None
-})
+  @Component({
+    selector: 'app-button',
+    imports: [],
+    templateUrl: './button.html',
+    styleUrl: './button.css',
+    encapsulation: ViewEncapsulation.None
+  })
 export class Button {
-  @ViewChild('content', { read: ElementRef, static: true }) contentRef!: ElementRef;
-
   readonly label = input<string>('click');
   readonly type = input<"submit" | "reset" | "button">('button');
   readonly severity = input<ButtonSeverity>(BUTTON_SEVERITY.PRIMARY);
@@ -22,9 +20,6 @@ export class Button {
     this.clickButton.emit();
   }
 
-  get hasContent(): boolean {
-    return this.contentRef?.nativeElement?.childNodes.length > 0;
-  }
 
   get getClasses(): string {
     if(this.isDisabled())
