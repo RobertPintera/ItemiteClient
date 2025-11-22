@@ -92,6 +92,7 @@ export class ProductFilterSidebar implements OnInit {
     effect(() => {
       const filterSidebar = this.filterSidebar();
       const isXl = untracked(() => this.isXl());
+      console.log(filterSidebar);
       if(isXl) {
         this.lastFilterSidebar.set(structuredClone(filterSidebar));
       }
@@ -141,6 +142,26 @@ export class ProductFilterSidebar implements OnInit {
       this.filterSidebar().localizationText = localizationText;
       console.log(localizationText);
     }
+
+    const latitude = this.filter().latitude;
+    const longitude = this.filter().longitude;
+
+    if(latitude && longitude && localizationText){
+      const parts = localizationText.split(',').map(p => p.trim());
+
+      const city = parts[0] ?? '';
+      const state = parts[1] ?? '';
+      const country = parts[2] ?? '';
+
+      this.filterSidebar().localization = {
+        latitude: latitude,
+        longitude: longitude,
+        formatted: localizationText,
+        city: city,
+        state: state,
+        country: country,
+      };
+    }
   }
 
   closeFilterX(){
@@ -168,6 +189,8 @@ export class ProductFilterSidebar implements OnInit {
 
   useLocalization(newLocalization: Localization | null) {
     if(!this.isXl() || newLocalization?.formatted === this.lastFilterSidebar().localization?.formatted) return;
+
+    this.filterSidebar().localization = newLocalization;
 
     this.updateFilter({
       latitude: newLocalization?.latitude ?? null,

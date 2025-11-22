@@ -105,10 +105,7 @@ export class ProductsList implements OnInit, OnDestroy {
       const mainCategoryId = num('id');
       const categoryIds = params.getAll('categoryIds').map(Number);
       this.mainCategoryId = mainCategoryId;
-      updated.categoryIds = [
-        ...(mainCategoryId ? [mainCategoryId] : []),
-        ...categoryIds
-      ];
+      updated.categoryIds = categoryIds.length > 0 ? categoryIds : (mainCategoryId ? [mainCategoryId] : []);
 
       const newFilter = { ...this.filter(), ...updated };
       this.filter.set(newFilter);
@@ -143,6 +140,22 @@ export class ProductsList implements OnInit, OnDestroy {
 
   updateFilter(partial: Partial<ListingFilter>) {
     const newFilter = { ...this.filter(), ...partial };
+
+    const hasOtherChanges = Object.keys(partial).some(key => key !== 'pageNumber' && partial[key as keyof ListingFilter] !== this.filter()[key as keyof ListingFilter]);
+
+    if (hasOtherChanges) {
+      newFilter.pageNumber = 1;
+    }
+
+    if (newFilter.categoryIds?.length) {
+      const otherCategories = newFilter.categoryIds.filter(id => id !== this.mainCategoryId);
+      if (otherCategories.length > 0) {
+        newFilter.categoryIds = otherCategories;
+      } else {
+        newFilter.categoryIds = this.mainCategoryId ? [this.mainCategoryId] : [];
+      }
+    }
+
     this.filter.set(newFilter);
 
     const uniqueCategoryIds = [...new Set(newFilter.categoryIds || [])];
