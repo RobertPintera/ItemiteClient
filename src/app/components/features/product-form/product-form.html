@@ -13,13 +13,15 @@
         <input id="price" name="price" type="number"  min="0" class="border rounded px-3 py-2">
       </div>
       <!-- Categories -->
-      <div class="flex flex-col gap-2 w-full">
-        <label for="categories" class="text-xl font-semibold">Categories</label>
-        <select id="categories" name="categories"  multiple class="border rounded px-3 py-2">
-          <option value="electronics">Electronics</option>
-          <option value="clothing">Clothing</option>
-          <option value="books">Books</option>
-        </select>
+      <div class="flex flex-row gap-8 w-full">
+        <div class="flex flex-col gap-2 w-full">
+          <label for="mainCategory" class="text-xl font-semibold">Main Category</label>
+          <app-combo-box [items]="mainCategoriesOptions" [(selectedItem)]="selectedMainCategory" (selectedItemChange)="selectMainCategory($event)"/>
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <label for="mainCategory" class="text-xl font-semibold">Subcategory</label>
+          <app-cascade-select [items]="subCategoriesOptions()" [(selectedItem)]="selectedSubCategory" (selectedItemChange)="selectSubCategory($event)"/>
+        </div>
       </div>
       <div class="flex flex-row flex-wrap gap-8 w-full">
         <!-- Negotiable -->

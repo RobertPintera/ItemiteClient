@@ -1,0 +1,44 @@
+<button type="button" class="cascade-selected w-full" (click)="toggleDropdown()">
+  @if (templateRef){
+    <ng-container
+      [ngTemplateOutlet]="templateRef"
+      [ngTemplateOutletContext]="{ $implicit: selectedItem() }">
+    </ng-container>
+  } @else {
+    <span>{{ selectedItem()?.value ?? ' ' }}</span>
+  }
+  <span class="arrow">{{isOpen() ? '▼' : '►' }}</span>
+</button>
+
+@if(isOpen()){
+  <ul class="cascade-dropdown">
+    <ng-container
+      *ngTemplateOutlet="treeTemplate; context:{ $implicit: items(), level: 0 }">
+    </ng-container>
+  </ul>
+}
+
+<ng-template #treeTemplate let-nodes let-level="level">
+  @for (node of nodes; track node.option.key) {
+    <li class="w-full">
+      <button
+        type="button"
+        class="w-full text-left p-2 flex justify-between items-center"
+        [style.padding-left.px]="level * 16 + 8"
+        (click)="onNodeClick(node); $event.stopPropagation()"
+      >
+        <span>{{ node.option.value }}</span>
+
+        @if (node.childrenNodes?.length) {
+          <span>{{ node.expanded ? '▼' : '►' }}</span>
+        }
+      </button>
+
+      @if (node.expanded && node.childrenNodes?.length) {
+        <ng-container
+          *ngTemplateOutlet="treeTemplate; context:{ $implicit: node.childrenNodes, level: level + 1 }">
+        </ng-container>
+      }
+    </li>
+  }
+</ng-template>
