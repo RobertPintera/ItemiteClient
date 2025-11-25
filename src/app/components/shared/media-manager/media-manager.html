@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-4 w-full">
+  <div class="flex flex-row">
+    <app-button label="Edit order" (clickButton)="toggleEditOrder()"/>
+  </div>
+  <div class="images-container flex flex-row gap-4 flex-wrap w-full" cdkDropListOrientation="mixed" (cdkDropListDropped)="drop($event)" cdkDropList>
+    @for(image of images(); track image.imageId){
+
+      <div class="image" cdkDragBoundary=".images-container" [cdkDragDisabled]="!isEditOrder()"  cdkDrag>
+        <img [src]="image.imageUrl" alt="test" class="w-full h-full object-cover no-drag">
+      </div>
+    }
+    @if(!isEditOrder()){
+      <label
+        class="flex justify-center items-center border-border border-2 w-32 h-32 rounded-2xl bg-background cursor-pointer">
+        <input type="file" accept="image/*" class="hidden" (change)="addImage($event)" />
+
+        <svg xmlns="http://www.w3.org/2000/svg" height="48px"
+             viewBox="0 -960 960 960" width="48px" fill="#1f1f1f">
+          <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/>
+        </svg>
+      </label>
+    } @else {
+      @if(!images().length){
+        <p>There are no images!</p>
+      }
+    }
+  </div>
+</div>
+

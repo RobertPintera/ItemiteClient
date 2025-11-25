@@ -6,19 +6,23 @@ import {OptionItem} from '../../../core/models/OptionItem';
 import {CategoryTreeDTO} from '../../../core/models/CategoryTreeDTO';
 import {ComboBox} from '../../shared/combo-box/combo-box';
 import {SelectNode} from '../../../core/models/SelectNode';
+import {MediaManager} from '../../shared/media-manager/media-manager';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-product-form',
   imports: [
     Button,
     CascadeSelect,
-    ComboBox
+    ComboBox,
+    MediaManager
   ],
   templateUrl: './product-form.html',
   styleUrl: './product-form.css'
 })
 export class ProductForm{
   private categoryService = inject(CategoryService);
+  private formBuilder = inject(FormBuilder);
 
   readonly categories = signal<CategoryTreeDTO | null>(null);
 
@@ -32,6 +36,8 @@ export class ProductForm{
     value: cat.name
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
+
+
 
   selectMainCategory(option?: OptionItem){
     if (!option) return;

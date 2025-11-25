@@ -1,0 +1,28 @@
+.images-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--border);
+  width: 128px;
+  height: 128px;
+  border-radius: 16px;
+  background-color: var(--background);
+  overflow: hidden;
+  position: relative;
+  cursor: move;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
