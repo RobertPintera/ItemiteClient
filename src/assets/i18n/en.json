@@ -112,7 +112,10 @@
     "enable": "Enable",
     "enable_edition": "Enable edition",
     "unsaved": "Unsaved",
-    "return": "Return"
+    "return": "Return",
+    "add": "Add",
+    "type_here": "Type here...",
+    "editing": "Editing"
   },
   "file_upload": {
     "upload_file": "Upload file",
@@ -150,5 +153,8 @@
   },
   "api_errors": {
     "try_again": "Please try again"
+  },
+  "chat": {
+    "ask_deletion": "Are you sure you want to delete this message?"
   }
 }

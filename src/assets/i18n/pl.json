@@ -112,7 +112,10 @@
     "enable": "Aktywuj",
     "enable_edition": "Aktywuj edycję",
     "unsaved": "Niezapisane",
-    "return": "Powrót"
+    "return": "Powrót",
+    "add": "Dodaj",
+    "type_here": "Pisz tutaj...",
+    "editing": "Edycja"
   },
   "file_upload": {
     "upload_file": "Prześlij plik",
@@ -150,5 +153,8 @@
   },
   "api_errors": {
     "try_again": "Proszę spróbować ponownie"
+  },
+  "chat": {
+    "ask_deletion": "Czy na pewno chcesz usunąć tą wiadomość?"
   }
 }
