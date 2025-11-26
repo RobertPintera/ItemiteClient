@@ -104,11 +104,14 @@ export class UserService {
     if(this._tokenRefreshLoopRunning) return;
 
     this._tokenRefreshLoopRunning = true;
-    const tokenRefreshInterval = interval(this.refreshTokenMinutesSpacing * 60 * 1000);
     while (this.isUserLoggedIn()) {
-      await this.RefreshToken();
+      if(await this.RefreshToken() == 401) {
+        break;
+      }
 
-      const stop = interval(1000).pipe(filter(() => !this.isUserLoggedIn()), take(1));
+      const stop = interval(1000).pipe(
+        filter(() => !this.isUserLoggedIn()), take(1)
+      );
 
       await lastValueFrom(
         race(
@@ -121,16 +124,23 @@ export class UserService {
     this._tokenRefreshLoopRunning = false;
   }
 
-  private async RefreshToken() : Promise<boolean> {
+  private async RefreshToken() : Promise<number> {
     try {
       const userInfo = await lastValueFrom(
         this.http.post<UserBasicInfo>(`${environment.itemiteApiUrl}/auth/refresh`, {}, {timeout: 10000, withCredentials: true})
       );
       this._userBasicInfo.set(userInfo);
-      return true;
+      return 200;
     } catch (error: any) {
+
+      // when token expired or is no longer valid
+      if(error.status === 401) {
+        console.warn("Clearing user info after token refresh returned 401");
+        this.ClearUserInfo();
+      }
+
       this.errorHandlerService.SendErrorMessage(error);
-      return false;
+      return error.status;
     }
   }
 
@@ -202,7 +212,7 @@ export class UserService {
       return true;
     } catch (error: any) {
       // User is no longer logged-in
-      if(error.status === 401) {
+      if(error.status == 401) {
         this.ClearUserInfo();
       }
       return false;
