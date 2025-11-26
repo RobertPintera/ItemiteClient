@@ -4,10 +4,10 @@ import {
   computed, effect,
   ElementRef,
   HostListener,
-  inject,
+  inject, Input,
   input,
   signal,
-  Signal
+  Signal, ViewChild, WritableSignal
 } from '@angular/core';
 import {MessageResponse} from '../../../core/models/chat/MessageResponse';
 import {PhotoResponseDTO} from '../../../core/models/PhotoResponseDTO';
@@ -16,12 +16,22 @@ import {UserService} from '../../../core/services/user-service/user.service';
 import {ChatMemberInfo} from '../../../core/models/chat/ChatMemberInfo';
 import {sign} from "node:crypto";
 import {FileUpload} from "../../shared/file-upload/file-upload";
+import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
+import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
+import {TranslatePipe} from '@ngx-translate/core';
+import {ImagePreview} from '../../shared/image-preview/image-preview';
+import {AttachedFiles} from './attached-files/attached-files';
 
 @Component({
   selector: 'app-chat',
   imports: [
     Message,
-    FileUpload
+    FileUpload,
+    LoadingCircle,
+    ConfirmDialog,
+    TranslatePipe,
+    ImagePreview,
+    AttachedFiles
   ],
   templateUrl: './chat.html',
   styleUrl: './chat.css'
@@ -140,8 +150,10 @@ export class Chat implements AfterViewInit {
 /*  readonly currentUserId = computed(() => this.userService.userBasicInfo().id);
  */
 
-  readonly currentUsername = computed(() => this.userMemberInfo().username);
 
+  readonly currentUsername = computed(() => this.userMemberInfo().username);
+  readonly currentProfileImg = computed(() => this.userMemberInfo().photoUrl ??
+    "../../../../assets/images/default_profile_pic.png");
   readonly userMemberInfo: Signal<ChatMemberInfo> = computed(() =>
     this.chatMembers().find((member) => member.id === this.currentUserId())!
   );
@@ -149,57 +161,223 @@ export class Chat implements AfterViewInit {
   readonly otherMemberInfo: Signal<ChatMemberInfo> = computed(() =>
     this.chatMembers().find((member) => member.id !== this.currentUserId())!
   );
+  readonly otherUsername = computed(() => this.otherMemberInfo().username);
+  readonly otherProfileImg = computed(() => this.otherMemberInfo().photoUrl ??
+    "../../../../assets/images/default_profile_pic.png");
 
   // todo grab messages from the api
   private _messages = signal<MessageResponse[]>([]);
   readonly messages:Signal<MessageResponse[]> = this._messages.asReadonly();
 
-  readonly currentProfileImg = computed(() => this.userMemberInfo().photoUrl ??
-    "../../../../assets/images/default_profile_pic.png");
-
-  readonly otherUsername = computed(() => this.otherMemberInfo().username);
-  readonly otherProfileImg = computed(() => this.otherMemberInfo().photoUrl ??
-    "../../../../assets/images/default_profile_pic.png");
-
   private _showFileInputDialog = signal(false);
   readonly showFileInputDialog = this._showFileInputDialog.asReadonly();
+  private _showDeletionDialog = signal(false);
+  readonly showDeletionDialog = this._showDeletionDialog.asReadonly();
+  private _editingMessage = signal(false);
+  readonly editingMessage = this._editingMessage.asReadonly();
+  private _loading = signal(true);
+  readonly loading = this._loading.asReadonly();
+  private _imagePreview: WritableSignal<undefined | string> =  signal(undefined);
+  readonly imagePreview = this._imagePreview.asReadonly();
+  readonly previewImage = computed(() => !!this._imagePreview());
 
-  SwitchShowFileInputDialog() {
-    this._showFileInputDialog.set(!this._showFileInputDialog());
-  }
+  private _messageInput = signal("");
+  readonly messageInput = this._messageInput.asReadonly();
+
+  private _attachments = signal<File[]>([]);
+  readonly attachments = this._attachments.asReadonly();
+  private _hasAttachments = signal(false);
+  readonly hasAttachments = this._hasAttachments.asReadonly();
+  private _showAttachments = signal(false);
+  readonly showAttachments = this._showAttachments.asReadonly();
+
+  // stores id of currently edited
+  private _selectedEditMessage: number = -1;
+
+  // stores id of message to delete
+  private _selectedDeleteMessage: number = -1;
 
   constructor() {
     // todo remove - TESTING
-    this.CallApiTest();
+    this.CallApiTest().then((value) =>
+      this._loading.set(false)
+    );
+  }
+
+  // Message Input
+
+  OnInputChanged(ev: Event) {
+    const event = ev as InputEvent;
+    if(event.data === null) return;
+    this._messageInput.set(event.data);
+  }
+
+  private LoadTextIntoInput(text: string) {
+    this._messageInput.set(text);
+  }
+
+  OnAttachmentIconClicked() {
+    if(this.hasAttachments()) {
+      this._showAttachments.set(!this._showAttachments());
+      return;
+    }
+    this.SwitchShowFileInputDialog();
+  }
+
+  SwitchShowFileInputDialog() {
+    if(this.showDeletionDialog()) {
+      this._showFileInputDialog.set(false);
+    }
+    this._showFileInputDialog.set(!this._showFileInputDialog());
+  }
+
+  async OnSubmit() {
+    if(this.editingMessage()) {
+      return;
+    }
+  }
+
+  // Message edition
+
+  OnEditionRequested(messageId: number) {
+    if(this._selectedEditMessage === messageId) {
+      this.OnEditionClosed();
+      return;
+    }
+    this._editingMessage.set(true);
+    this._hideInput.set(false);
+    this._selectedEditMessage = messageId;
+
+    const m = this.messages().find(message=> message.messageId === messageId);
+    if(m) {
+      this.LoadTextIntoInput(
+        m.content ?? ""
+      );
+    }
+  }
+
+  async OnEditionConfirmed() {
+  }
+
+  OnEditionClosed() {
+    this.LoadTextIntoInput("");
+    this._editingMessage.set(false);
+    this._selectedEditMessage = -1;
+  }
+
+  private LocalEdit(editedMessage: MessageResponse) {
+    this._messages.update((messages) => {
+      const index =  messages.findIndex(message => message.messageId === this._selectedEditMessage);
+      messages[index] = editedMessage;
+      return messages;
+    });
+  }
+
+  // Message deletion
+
+  OnDeletionRequested(messageId: number) {
+    this._selectedDeleteMessage = messageId;
+    this._showFileInputDialog.set(false);
+    this._showDeletionDialog.set(true);
+  }
+
+  async OnDeletionConfirmed() {
+    this.LocalDelete();
+    this.OnDeletionClosed();
+  }
+
+  OnDeletionClosed() {
+    this._showDeletionDialog.set(false);
+    this._selectedDeleteMessage = -1;
   }
 
   IsOwnMessage(senderId: number) {
     return this.currentUserId() === senderId;
   }
 
-  private _editingMessage = signal(false);
-  readonly editingMessage = this._editingMessage.asReadonly();
+  private LocalDelete() {
+    this._messages.update((messages) => {
+      const index =  messages.findIndex(message => message.messageId === this._selectedDeleteMessage);
+      if(index > -1) {
+        messages.splice(index, 1);
+      }
+      return messages;
+    });
+  }
 
-  // message input formatting
+  // Attachments
+
+  OnAttachmentAdded(file: File) {
+    this._attachments.update((attachments) => {
+      attachments.push(file); return attachments;
+    });
+    this._hasAttachments.set(this.attachments().length !== 0);
+    this._showFileInputDialog.set(false);
+  }
+
+  OnAttachmentDeleted(index: number) {
+    this._attachments.update(attachments => {
+        attachments.splice(index, 1);
+        return attachments;
+      }
+    );
+    this._hasAttachments.set(this.attachments().length !== 0);
+  }
+
+  // Image Preview
+
+  OnPreviewClicked(url: string) {
+    this._imagePreview.set(url);
+  }
+
+  OnPreviewClosed() {
+    this._imagePreview.set(undefined);
+  }
+
+  // Messages scroll
+
+  private _lastScrollPos: number = 0;
+
+  OnMessagesScroll(event:any) {
+    const scrollContainer = event.srcElement as HTMLElement;
+
+
+    this._hideInput.set(
+      scrollContainer.scrollTop < this._lastScrollPos
+      // scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight > 30
+    )
+    this._lastScrollPos = scrollContainer.scrollTop;
+  }
+
+  // region message input formatting
+
+  private _hideInput = signal(false);
+  readonly hideInput = this._hideInput.asReadonly();
+
   private maxHeight = 0;
   private el: ElementRef<HTMLTextAreaElement> = inject(ElementRef<HTMLTextAreaElement>);
+  private _parent : Element | null = null
 
   ngAfterViewInit(): void {
-/*    const parent = this.el.nativeElement.closest('#message_input');
-    if (parent) {
-      this.maxHeight = parent.clientHeight * 0.5; // 50% max height
+    this._parent = this.el.nativeElement.querySelector('#message_window');
+    if (this._parent) {
+      this.maxHeight = this._parent.clientHeight * 0.5; // 50% max height
       this.el.nativeElement.style.maxHeight = `${this.maxHeight}px`;
       this.adjustHeight();
-    }*/
+    }
+    this._loading.set(true);
   }
 
   @HostListener('input')
   onInput() {
-/*    this.adjustHeight();*/
+    this.adjustHeight();
   }
 
   private adjustHeight() {
-    const textarea = this.el.nativeElement;
+    if(!this._parent) return;
+
+    this.maxHeight = this._parent.clientHeight * 0.33; // 50% max height
+    const textarea = this.el.nativeElement.querySelector('textarea')!;
 
     textarea.style.height = 'auto'; // reset height for accurate measurement
     const newHeight = textarea.scrollHeight;
@@ -212,4 +390,5 @@ export class Chat implements AfterViewInit {
       textarea.style.height = `${this.maxHeight}px`;
     }
   }
+  // endregion
 }

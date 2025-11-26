@@ -1,15 +1,43 @@
-@if(showFileInputDialog()) {
-    <app-file-upload (onCancelClicked)="SwitchShowFileInputDialog()" [supportsPreview]="true"/>
+@if(previewImage()) {
+  <app-image-preview
+    [image]="imagePreview()!"
+    (onExitClicked)="OnPreviewClosed()"
+  />
 }
 
-<div class="rounded-sm h-full w-full max-w-7xl m-auto flex ">
+
+@if(showFileInputDialog()) {
+    <app-file-upload
+      [maxSizeMB]="10"
+      (onCancelClicked)="SwitchShowFileInputDialog()"
+      (onConfirmClicked)="OnAttachmentAdded($event)"
+      [supportsPreview]="true"/>
+}
+
+@if(showDeletionDialog()) {
+  <app-confirm-dialog
+    [prompt]='"chat.ask_deletion" | translate'
+    (onCancelClicked)="OnDeletionClosed()"
+    (onConfirmClicked)="OnDeletionConfirmed()"
+  />
+}
+
+<div class="rounded-sm h-full w-full max-w-7xl m-auto flex custom">
   <!-- Message window -->
-  <div class="flex flex-col overflow-auto items-center w-full bg-card">
+  <div
+    id="message_window"
+    class="relative flex flex-col items-center h-full w-full bg-card ">
+    @if (loading()) {
+      <app-loading-circle class="absolute m-auto top-1/2 -translate-y-1/2"/>
+    }
     <div class="flex-1 w-full grow"></div>
       <!-- Messages -->
-    <div class="flex flex-col max-h-100% overflow-y-auto h-fit w-full">
+    <div id="scrollContainer" class="relative flex flex-col max-h-100% overflow-y-auto h-fit w-full"
+         (scroll)="OnMessagesScroll($event)"
+    >
       @for (message of messages(); track message.messageId) {
         <app-message
+          [id]="message.messageId"
           [content]="message.content"
           [dateModified]="message.dateModified"
           [dateSent]="message.dateSent"
@@ -18,46 +46,74 @@
           [isOwnMessage]="IsOwnMessage(message.senderId)"
           [username]="IsOwnMessage(message.senderId) ? currentUsername() : otherUsername()"
           [profileImage]= "IsOwnMessage(message.senderId) ? currentProfileImg() : otherProfileImg()"
+          (onDeleteClicked)="OnDeletionRequested($event)"
+          (onEditClicked)="OnEditionRequested($event)"
+          (onImageClicked)="OnPreviewClicked($event)"
         />
       }
     </div>
 
-     <!-- Message input -->
-    <div id="message_input" class="flex flex-row w-full h-fit min-h-fit max-h-1/2 p-5 overflow-y-auto">
+    @if (hasAttachments() && !hideInput() && showAttachments()) {
+      <app-attached-files
+        [files]="attachments()"
+        (onFileDeleted)="OnAttachmentDeleted($event)"
+        (onRequestAdd)="SwitchShowFileInputDialog()"
+      />
+    }
 
-        <!-- Message editing info + cancel -->
-        @if (editingMessage()) {
-            <div class="flex flex-row items-center absolute -translate-y-full text-accent-foreground p-1">
-                <p class="text-shadow-sm text-shadow-secondary">Editing </p>
-                <p class="text-shadow-sm text-shadow-destructive text-destructive ml-2 hover:underline cursor-pointer">Cancel</p>
-            </div>
-        }
+    <!-- Message input -->
+    <div id="message_input"
+         [class.scaleOut]="hideInput()"
+         [class.scaleIn]="!hideInput()"
+         class="relative flex flex-row w-full h-fit min-h-fit max-h-1/2 p-5 overflow-y-auto
+         transition-all duration-100 ease-in origin-bottom"
+    >
 
-        <textarea
-          autoResize
-          class="w-full p-2 rounded border resize-none text-card-foreground bg-card"
-          placeholder="Type here..."
+
+      <!-- Message editing info + cancel -->
+      @if (editingMessage()) {
+          <div class="flex absolute z-5 flex-row items-center -translate-y-full text-accent-foreground m-1">
+              <p class="text-shadow-sm text-shadow-secondary">{{"controls.editing" | translate}}</p>
+              <p (click)="OnEditionClosed()"
+                class="text-shadow-sm text-shadow-destructive text-destructive ml-2 hover:underline cursor-pointer">
+                {{"controls.cancel" | translate}}
+              </p>
+          </div>
+      }
+
+      <textarea
+        rows="1"
+        (change)="OnInputChanged($event)"
+        [value]="messageInput()"
+        autoResize
+        class="w-full p-2 rounded border resize-none text-card-foreground bg-card"
+        [placeholder]="'controls.type_here' | translate"
+      ></textarea>
+
+      <div class="relative flex flex-row self-end gap-1 ml-5 h-full text-card-foreground justify-end">
+        <button class="relative h-full hover:text-primary hover:cursor-pointer"
+            (click)="OnAttachmentIconClicked()"
         >
-        </textarea>
-
-        <div class="flex flex-row self-end gap-1 ml-5 h-full text-card-foreground">
-            <button class="h-full hover:text-primary hover:cursor-pointer"
-                (click)="SwitchShowFileInputDialog()"
+          <div>
+            @if (hasAttachments()) {
+              <div class="absolute z-2 rounded-full h-2 w-2 bg-primary"></div>
+            }
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                 class="size-6 h-full"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                   class="size-6 h-full"
-              >
-                  <path fill-rule="evenodd" d="M18.97 3.659a2.25 2.25 0 0 0-3.182 0l-10.94 10.94a3.75 3.75 0 1 0 5.304 5.303l7.693-7.693a.75.75 0 0 1 1.06 1.06l-7.693 7.693a5.25 5.25 0 1 1-7.424-7.424l10.939-10.94a3.75 3.75 0 1 1 5.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 0 1 5.91 15.66l7.81-7.81a.75.75 0 0 1 1.061 1.06l-7.81 7.81a.75.75 0 0 0 1.054 1.068L18.97 6.84a2.25 2.25 0 0 0 0-3.182Z" clip-rule="evenodd" />
-              </svg>
-            </button>
-            <button class="h-full hover:text-primary hover:cursor-pointer"
+                <path fill-rule="evenodd" d="M18.97 3.659a2.25 2.25 0 0 0-3.182 0l-10.94 10.94a3.75 3.75 0 1 0 5.304 5.303l7.693-7.693a.75.75 0 0 1 1.06 1.06l-7.693 7.693a5.25 5.25 0 1 1-7.424-7.424l10.939-10.94a3.75 3.75 0 1 1 5.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 0 1 5.91 15.66l7.81-7.81a.75.75 0 0 1 1.061 1.06l-7.81 7.81a.75.75 0 0 0 1.054 1.068L18.97 6.84a2.25 2.25 0 0 0 0-3.182Z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </button>
+        <button type="submit" (click)="OnSubmit()"
+          class="h-full hover:text-primary hover:cursor-pointer"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                class="size-6 h-full"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                    class="size-6 h-full"
-                >
-                    <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
-                </svg>
-            </button>
+                <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+            </svg>
+        </button>
       </div>
     </div>
   </div>
