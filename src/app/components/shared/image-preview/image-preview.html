@@ -1,0 +1,32 @@
+<div
+  class="inset-0 fixed z-1002 flex items-center justify-center top-0 left-0 max-h-full w-full h-full bottom-0 overflow-y-scroll bg-black/80">
+  <div class="absolute z-2 m-auto max-w-[1920px] w-full h-full">
+    <div class="absolute inset-0  justify-self-end m-2">
+      <div class="flex gap-2 flex-row items-center">
+        <a [href]="image()" target="_blank"
+           class="bg-primary text-primary-foreground rounded-full
+        hover:cursor-pointer shadow-2xl border-primary-foreground border-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+               class="size-10 sm:size-8">
+            <path fill-rule="evenodd" d="M15.75 2.25H21a.75.75 0 0 1 .75.75v5.25a.75.75 0 0 1-1.5 0V4.81L8.03 17.03a.75.75 0 0 1-1.06-1.06L19.19 3.75h-3.44a.75.75 0 0 1 0-1.5Zm-10.5 4.5a1.5 1.5 0 0 0-1.5 1.5v10.5a1.5 1.5 0 0 0 1.5 1.5h10.5a1.5 1.5 0 0 0 1.5-1.5V10.5a.75.75 0 0 1 1.5 0v8.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V8.25a3 3 0 0 1 3-3h8.25a.75.75 0 0 1 0 1.5H5.25Z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <button
+          (click)="OnExitClicked()"
+          class="bg-destructive text-destructive-foreground rounded-full
+        hover:cursor-pointer shadow-2xl border-destructive-foreground border-2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+               class="size-10 sm:size-8">
+            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="m-auto overflow-auto z-1 max-h-full">
+    <img [src]="image()" class="overflow-auto object-contain max-h-screen" alt="preview"/>
+  </div>
+</div>
