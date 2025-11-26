@@ -2,28 +2,52 @@
   sm:border-2 sm:rounded-2xl h-full sm:h-auto transition">
   <div class="relative flex flex-col gap-2">
     @if (!isXl()){
-      <app-button label="X" (clickButton)="closeFilter()" class="absolute right-[-16px] top-[-16px]"/>
+      <app-button label="X" (clickButton)="closeFilterX()" class="absolute right-[-16px] top-[-16px]"/>
     }
-    <p class="font-semibold text-lg">{{ mainCategory }}</p>
-    <app-category-tree [categories]="categories"/>
+    <p class="font-semibold text-lg">{{ categoryTree()?.name }}</p>
+    <app-category-tree [categories]="categoryTree()?.subCategories ?? []" [(selectedIds)]="filterSidebar().categoryIds"  (categorySelected)="useCategoriesIds($event)"/>
     <div class="flex w-full flex-col sm:flex-row xl:flex-col gap-2">
       <div class="flex flex-1 flex-col gap-2">
         <p>Prices</p>
         <div class="flex flex-row items-center gap-2 w-full">
-          <input type="text" class="flex-1 border rounded p-2 w-full" />
-          <p class="shrink-0 text-2xl">-</p>
-          <input type="text" class="flex-1 border rounded p-2 w-full" />
+          <app-input-number [(value)]="filterSidebar().priceFrom" [min]="0" [max]="10000000" (enterPressed)="usePriceFrom($event)" (blurInput)="usePriceFrom($event)" class="flex-1 w-full"/>
+          <span class="shrink-0 text-2xl">-</span>
+          <app-input-number [(value)]="filterSidebar().priceTo" [min]="0" [max]="10000000" (enterPressed)="usePriceTo($event)" (blurInput)="usePriceTo($event)" class="flex-1 w-full"/>
+          <span class="shrink-0 text-2xl">$</span>
         </div>
+        @if (filterSidebar().priceError){
+          <div class="flex flex-row w-full">
+            <p class="text-destructive text-sm text-center">{{ filterSidebar().priceError }}</p>
+          </div>
+        }
+      </div>
+      <div class="flex flex-1 flex-col gap-2 w-full">
+        <p>Listing Type</p>
+        <app-combo-box [items]="listingTypesOptions" [selectedItem]="filterSidebar().listingType" (selectedItemChange)="useListingType($event)" class="w-full">
+          <ng-template let-item>
+            <span>
+              {{item?.value | translate}}
+            </span>
+          </ng-template>
+        </app-combo-box>
       </div>
       <div class="flex flex-1 flex-col gap-2">
         <p>Localization</p>
-        <input type="text" class="w-full border rounded p-2" />
-        <input type="text" class="w-full border rounded p-2" />
+        <app-geocoder-autocomplete placeHolder="Find city" [(inputValue)]="filterSidebar().localizationText" (onCityPicked)="useLocalization($event)" (onInputEnter)="useLocalizationText($event)" />
+        <app-combo-box [items]="distancesOptions" [selectedItem]="filterSidebar().distance" (selectedItemChange)="useDistance($event)" class="w-full">
+          <ng-template let-item>
+            <span>
+              {{item?.value | translate}}
+            </span>
+          </ng-template>
+        </app-combo-box>
       </div>
     </div>
 
-    <div class="flex justify-end w-full">
-      <app-button label="Filter" />
-    </div>
+    @if (!isXl()){
+      <div class="flex justify-end w-full">
+        <app-button label="Filter" (clickButton)="applyMobileFilter()" />
+      </div>
+    }
   </div>
 </aside>

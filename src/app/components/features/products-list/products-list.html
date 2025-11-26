@@ -1,9 +1,16 @@
 <div class="flex flex-col xl:flex-row min-h-screen justify-center px-4">
-  <div class="w-full xl:w-94 p-0 z-1000 fixed top-0 left-0 h-full bg-black/50 transition-all duration-150
-  sm:top-0 sm:p-4
-  xl:block xl:sticky xl:top-30 xl:bg-transparent xl:transition-none" [class.hidden]="!isFilterOpen()"
-       tabindex="0" (click)="closeFilter()" (keydown.enter)="closeFilter()" (keydown.space)="closeFilter()">
-    <app-product-filter-sidebar class="w-full" [isXl]="isXl()" (click)="$event.stopPropagation()" (filterClose)="closeFilter()"/>
+  <div class="w-full xl:w-94 p-0 z-110 xl:z-10 fixed top-0 left-0 h-full bg-black/50 transition-all duration-150
+  sm:top-0 sm:p-4 xl:block xl:sticky xl:top-30 xl:bg-transparent xl:transition-none" [class.hidden]="!isFilterOpen()"
+       tabindex="0" (click)="closeOverlay()" (keydown.escape)="closeOverlay()">
+    <app-product-filter-sidebar #filterSidebarChild class="w-full"
+                                [filter]="filter()" [localizationText]="localizationText()"
+                                [isXl]="isXl()" [isFilterOpen]="isFilterOpen()"
+                                (click)="$event.stopPropagation()" (filterClose)="closeFilter()"
+                                (filterChange)="updateFilter($event)" (localizationTextChange)="updateLocalizationText($event)"/>
   </div>
-  <app-product-list-view class="flex-1 xl:max-w-[1200px]" [isXl]="isXl()" [isMd]="isMd()" (filterOpen)="openFilter()"/>
+  <app-product-list-view class="flex-1 xl:max-w-[1200px]" [listing]="listing()" [loading]="loading()"
+                         [filter]="filter()" [isBlocked]="isBlocked()"
+                         [isXl]="isXl()" [isMd]="isMd()" (filterOpen)="openFilter()"
+                         [(pageSize)]="filter().pageSize" [(pageNumber)]="filter().pageNumber" [totalPages]="listing()?.totalPages ?? 0"
+                         (filterChange)="updateFilter($event)"/>
 </div>

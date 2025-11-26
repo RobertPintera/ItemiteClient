@@ -18,6 +18,18 @@ export class GeoapifyService {
 
   private http: HttpClient = inject(HttpClient);
 
+  // API
+  // private getSearchLocation(query: string): Observable<GeoapifyResponseSearchDTO> {
+  //   const params = new HttpParams()
+  //     .set('type','city')
+  //     .set('limit', 1)
+  //     .set('text', query)
+  //     .set('format', 'json')
+  //     .set('apiKey', environment.geoapifyApiKey);
+  //
+  //   return this.http.get<GeoapifyResponseSearchDTO>(`${this._geoapifyUrl}/search`, { params });
+  // }
+
   ReverseGeocode(request: LatLonPayloadDTO): Observable<Localization> {
     const params = new HttpParams()
       .set('apiKey', environment.geoapifyApiKey)
@@ -99,4 +111,22 @@ export class GeoapifyService {
       });
     });
   }
+
+  // searchLocation(query: string): Observable<Localization | null> {
+  //   return this.getSearchLocation(query).pipe(
+  //     map((response) => {
+  //       const result = response.results?.[0];
+  //       if (!result) return null;
+  //
+  //       return {
+  //         city: result.city || '',
+  //         state: result.state || '',
+  //         country: result.country || '',
+  //         latitude: result.lat,
+  //         longitude: result.lon,
+  //         formatted: result.formatted,
+  //       } satisfies Localization;
+  //     })
+  //   );
+  // }
 }

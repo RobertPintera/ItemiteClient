@@ -1,7 +1,7 @@
 <app-error-notification />
 <div class="w-full min-w-[270px] h-full overflow-auto bg-background p-10 flex items-center">
   <div class="absolute max-w-7xl left-1/2 z-0 -translate-x-1/2 w-full h-full p-5">
-    <app-combo-box [items]="languages" [selectedItem]="languages[0]" (selectedChange)="useLanguage($event)"
+    <app-combo-box [items]="languages" [selectedItem]="languages[0]" (selectedItemChange)="useLanguage($event)"
                    class="w-24 text-2xl absolute right-0 z-2 mr-5"/>
   </div>
   <ng-content />

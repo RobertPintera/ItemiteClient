@@ -1,6 +1,6 @@
-import {Component, input} from '@angular/core';
-import {Category} from '../../../../../core/models/Category';
+import {Component, input, model, output, signal} from '@angular/core';
 import {NgClass, NgTemplateOutlet} from '@angular/common';
+import {CategoryTreeDTO} from '../../../../../core/models/CategoryTreeDTO';
 
 @Component({
   selector: 'app-category-tree',
@@ -12,6 +12,24 @@ import {NgClass, NgTemplateOutlet} from '@angular/common';
   styleUrl: './category-tree.css'
 })
 export class CategoryTree {
-  readonly categories = input<Category[]>([]);
+  readonly selectedIds = model<number[]>([]);
+
+  readonly categories = input<CategoryTreeDTO[]>([]);
   readonly level = input<number>(0);
+
+  readonly categorySelected = output<number[]>();
+
+  toggleCategory(categoryId: number) {
+    const current = this.selectedIds();
+    if (current.includes(categoryId)) {
+      this.selectedIds.set(current.filter(id => id !== categoryId));
+    } else {
+      this.selectedIds.set([...current, categoryId]);
+    }
+    this.categorySelected.emit(this.selectedIds());
+  }
+
+  isChecked(categoryId: number) {
+    return this.selectedIds().includes(categoryId);
+  }
 }

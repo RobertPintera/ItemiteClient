@@ -1,7 +1,17 @@
-import {Component, computed, effect, Input, input, output, Signal, signal, WritableSignal} from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  model,
+  output,
+  Signal,
+  signal,
+  WritableSignal
+} from '@angular/core';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {Localization} from '../../../core/models/Localization';
-import {debug} from 'node:util';
 
 @Component({
   selector: 'app-geocoder-autocomplete',
@@ -10,15 +20,21 @@ import {debug} from 'node:util';
   styleUrl: './geocoder-autocomplete.css'
 })
 export class GeocoderAutocomplete  {
-  constructor(private geoapify: GeoapifyService) {
+  private geoapifyService = inject(GeoapifyService);
 
+  constructor() {
     effect(() => {
       // Don't emit new event when value is passed into the component (set address valid to false)
       // It only should update text field.
       this._isAddressValid = false;
-      this._inputValue.set(this.externalSource()?.formatted ?? "");
+      const external = this.externalSource()?.formatted;
+      if(external){
+        this.inputValue.set(external);
+      }
     });
   }
+
+  inputValue = model<string>("");
 
   readonly placeHolder = input('Enter city');
   readonly externalSource = input<Localization | undefined>();
@@ -26,15 +42,14 @@ export class GeocoderAutocomplete  {
   private _suggestions: WritableSignal<Localization[]> = signal([]);
   readonly hasSuggestions: Signal<boolean> = computed(() => this._suggestions().length > 0);
 
-  private _inputValue: WritableSignal<string> = signal("");
-  readonly inputValue: Signal<string> = this._inputValue.asReadonly();
+  private _isAddressValid = false;
 
-  private _isAddressValid: boolean = false;
-
+  readonly selectedLocalization: WritableSignal<Localization | null> = signal(null);
   suggestions: Signal<Localization[]> = this._suggestions;
 
   // Listen to this signal to detect if address is valid
-  onCityPicked = output<Localization|null>();
+  readonly onCityPicked = output<Localization|null>();
+  readonly onInputEnter = output<string>();
 
   InputValueChanged(inputEvent:Event) {
     // If user changed the text by hand, the adress is invalid.
@@ -44,7 +59,7 @@ export class GeocoderAutocomplete  {
       this._isAddressValid = false;
     }
     const textVal = (inputEvent.target as HTMLInputElement).value.trim();
-    this._inputValue.set(textVal);
+    this.inputValue.set(textVal);
     if(textVal === '') {
       this._suggestions.set([]); // Clear suggestions if the input is empty
       return;
@@ -52,15 +67,26 @@ export class GeocoderAutocomplete  {
     this.DebounceAutocomplete(textVal);
   }
 
+  updateEnterInputValue(){
+    this.onInputEnter.emit(this.inputValue());
+
+    if(this.inputValue() !== this.selectedLocalization()?.formatted)
+      this.selectedLocalization.set(null);
+
+    this.onCityPicked.emit(this.selectedLocalization());
+  }
+
   updateInputValue(value:string, index:number ) {
-    this._inputValue.set(value);
+    this.inputValue.set(value);
+    this.selectedLocalization.set(this._suggestions()[index]);
     this.onCityPicked.emit(this._suggestions()[index]);
+    this.onInputEnter.emit(this.inputValue());
     this._isAddressValid = true;
   }
 
   // Debounced autocomplete method
   DebounceAutocomplete(query: string) {
-    this.geoapify.DebounceAutocomplete(query, 'city').subscribe({
+    this.geoapifyService.DebounceAutocomplete(query, 'city').subscribe({
       next: (response) => {
         this._suggestions.set(response.suggestions);
       },

@@ -205,7 +205,22 @@ body {
     @apply text-sm sm:text-base font-medium leading-snug;
   }
   input {
-    @apply border-2 border-border ring-ring rounded-xl;
+    @apply border-2 border-border ring-ring rounded-xl bg-white;
+  }
+  input:disabled{
+    @apply border-2 border-ring ring-ring rounded-xl bg-white;
+  }
+
+  /* Chrome */
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
   }
 }
 
@@ -215,34 +230,3 @@ body {
   }
 }
 
-@layer components {
-  /* Combobox*/
-  .combo-container {
-    @apply relative w-52;
-  }
-
-  .combo-selected {
-    @apply border-2 border-border rounded-md p-2 flex justify-between items-center bg-white;
-  }
-
-  .combo-dropdown {
-    @apply absolute w-full border  border-border border-t-0 bg-white max-h-44 overflow-y-auto shadow-md z-50;
-  }
-
-  .combo-dropdown li {
-    @apply hover:bg-gray-100;
-  }
-
-  .combo-dropdown li.selected {
-    @apply bg-gray-200 font-bold;
-  }
-
-  .arrow {
-    @apply transition-transform;
-  }
-
-  .arrow.open {
-    @apply rotate-180;
-  }
-  /*  --------------- */
-}

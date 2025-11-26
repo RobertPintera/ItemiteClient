@@ -1,12 +1,10 @@
-import {Component, computed, HostBinding, input} from '@angular/core';
-import {NgOptimizedImage} from '@angular/common';
-import {Product} from '../../../../../core/models/Product';
+import {Component, HostBinding, input} from '@angular/core';
 import {RouterLink} from '@angular/router';
+import {ListingItemDTO} from '../../../../../core/models/LitstingItemDTO';
 
 @Component({
   selector: 'app-product-item',
   imports: [
-    NgOptimizedImage,
     RouterLink
   ],
   templateUrl: './product-item.html',
@@ -17,12 +15,5 @@ export class ProductItem {
     hostClass = 'w-full';
 
   readonly isMd = input.required<boolean>();
-  readonly product = input<Product>();
-
-  readonly categoriesWithId = computed(() =>
-    this.product()?.categories.map((category, index) => ({
-      id: index + 1,
-      name: category,
-    })) ?? []
-  );
+  readonly product = input<ListingItemDTO>();
 }

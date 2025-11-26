@@ -1,0 +1,35 @@
+<div class="relative flex justify-center w-full h-76 sm:h-96 p-4">
+  <img [src]="selectedImage()?.imageUrl" [alt]="'Product'" class="object-contain h-full">
+</div>
+<div class="w-full">
+  <div class="relative flex justify-center w-full">
+    @if(!hideArrowsOnButtons())
+    {
+      <button class="gallery-button-left" (click)="prev()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="gallery-button-icon"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>
+      </button>
+      <button class="gallery-button-right" (click)="next()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="gallery-button-icon"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+      </button>
+    }
+
+    <div class="relative w-full mx-8 overflow-hidden">
+      <ul #galleryTrack class="flex flex-row items-center w-full transition py-1"
+          [style.transform]="'translateX(-' + translateX + 'px)'">
+        @for (item of images(); track item.imageOrder){
+          <li class="h-auto px-4 flex-shrink-0" [style.width.px]="itemWidth()">
+            <button (click)="selectImage(item)" class="w-full h-32 transition-opacity hover:opacity-100"
+                    [class.opacity-60]="selectedImage()?.imageId !== item.imageId"
+                    [class.opacity-100]="selectedImage()?.imageId === item.imageId">
+              <ng-container *ngTemplateOutlet="templateRef; context: {$implicit: item}"/>
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>
+
+<ng-template #defaultTemplate let-item>
+  <img [src]="item.imageUrl" [alt]="item.imageId" class="size-full max-h-96 object-contain hover:">
+</ng-template>

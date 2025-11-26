@@ -1,20 +1,20 @@
 <button class="combo-selected w-full" (click)="toggleDropdown()">
   @if (templateRef){
-    <ng-container [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="{ $implicit: selected() }"></ng-container>
+    <ng-container [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="{ $implicit: selectedItem() }"></ng-container>
   } @else {
-    <p>{{ selected()?.value ?? ' ' }}</p>
+    <span>{{ selectedItem()?.value ?? ' ' }}</span>
   }
   <span class="arrow">▼</span>
 </button>
 @if(isOpen()){
   <ul class="combo-dropdown w-full">
     @for (item of items(); track item.key){
-      <li class="h-full w-full">
-        <button (click)="chooseItem(item); $event.stopPropagation()" class="w-full h-full text-left p-2">
+      <li class="flex items-center h-full w-full">
+        <button (click)="chooseItem(item); $event.stopPropagation()" class="w-full h-full text-left p-2 ">
           @if (templateRef){
             <ng-container [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="{ $implicit: item }"> </ng-container>
           } @else {
-            {{ item.value }}
+            <span>{{ item.value }}</span>
           }
         </button>
       </li>

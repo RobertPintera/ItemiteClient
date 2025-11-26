@@ -1,13 +1,11 @@
 <section class="flex flex-col items-center gap-8">
   <h1>{{'categories.header' | translate}}</h1>
   <div class="flex flex-row flex-wrap justify-center gap-8">
-    @for(category of categories; track category.id) {
-      <a [routerLink]="'products/' + category.key">
+    @for(category of categories(); track category.id) {
+      <a [routerLink]="['/products']" [queryParams]="{ id: category.id }">
         <div class="flex flex-col items-center gap-2 hover:scale-110 active:scale-95 transition-transform duration-200">
-          <div class="flex justify-center items-center size-42 bg-blue-200 rounded-full" [ngClass]="category.backgroundColor">
-            <img [ngSrc]="category.image" [alt]="category.key" class="size-[80%] object-cover select-none" width="1" height="1" />
-          </div>
-          <h4>{{'categories.' + category.key | translate}}</h4>
+          <img [src]="category.imageUrl" [alt]="category.name" class="size-42 object-cover select-none" width="1" height="1" />
+          <h4>{{'categories.' + category.name | translate}}</h4>
         </div>
       </a>
     }

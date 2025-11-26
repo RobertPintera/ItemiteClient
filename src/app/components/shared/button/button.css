@@ -2,14 +2,34 @@
 
 @layer components {
   .button-container {
-    @apply bg-primary text-primary-foreground hover:bg-primary/70 active:bg-primary transition-colors px-4 py-2 rounded-lg;
+    @apply transition-colors px-4 py-2 rounded-lg;
   }
 
-  .button-primary {
+  .button-primary-filled {
     @apply bg-primary text-primary-foreground hover:bg-primary/70 active:bg-primary;
   }
 
-  .button-secondary {
+  .button-secondary-filled {
     @apply bg-secondary text-secondary-foreground hover:bg-secondary/70 active:bg-secondary;
+  }
+
+  .button-accent-filled {
+    @apply bg-accent text-accent-foreground hover:bg-accent/70 active:bg-accent;
+  }
+
+  .button-accent-outlined {
+    @apply bg-background hover:bg-accent/50 active:bg-accent/30 border-2 border-border ring-ring;
+  }
+
+  .button-danger-filled {
+    @apply bg-destructive text-destructive-foreground hover:bg-destructive/70 active:bg-destructive;
+  }
+
+  .button-disabled-filled {
+    @apply bg-ring/20 text-accent-foreground;
+  }
+
+  .button-disabled-outlined {
+    @apply bg-ring/20 border-2 border-ring ring-ring;
   }
 }
