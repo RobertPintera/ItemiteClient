@@ -1,6 +1,6 @@
 import {
   Component,
-  ContentChild, ElementRef,
+  ContentChild, ElementRef, forwardRef,
   HostBinding,
   inject,
   input, model, OnDestroy, OnInit,
@@ -11,7 +11,10 @@ import {
 import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import {OptionItem} from '../../../core/models/OptionItem';
+import {NG_VALUE_ACCESSOR} from '@angular/forms';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-empty-function */
 @Component({
   selector: 'app-combo-box',
   imports: [
@@ -19,7 +22,15 @@ import {OptionItem} from '../../../core/models/OptionItem';
   ],
   templateUrl: './combo-box.html',
   styleUrl: './combo-box.css',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ComboBox),
+      multi: true
+    }
+  ]
+
 })
 export class ComboBox implements OnInit, OnDestroy {
   @HostBinding('class') hostClass = 'combo-container';
@@ -27,6 +38,8 @@ export class ComboBox implements OnInit, OnDestroy {
 
   private elementRef = inject(ElementRef);
   private platformId = inject(PLATFORM_ID);
+  private onChange: (value: OptionItem | null) => void = () => {};
+  private onTouched: () => void = () => {};
 
   readonly items = input<OptionItem[]>([]);
   readonly selectedItem = model<OptionItem>();
@@ -51,6 +64,7 @@ export class ComboBox implements OnInit, OnDestroy {
 
   toggleDropdown() {
     window.dispatchEvent(new CustomEvent('close-all-combos'));
+    this.onTouched();
     this.isOpen.set(!this.isOpen());
   }
 
@@ -58,7 +72,29 @@ export class ComboBox implements OnInit, OnDestroy {
     this.selectedItem.set(item);
     this.isOpen.set(false);
     this.selectedItemChange.emit(item);
+    this.onChange(item);
+    this.onTouched();
   }
+
+  // ------ forms -----
+  writeValue(obj: OptionItem | null): void {
+    this.selectedItem.set(obj ?? undefined);
+  }
+
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    // np. dodaj klasę disabled albo zablokuj przyciski
+  }
+  // -------------------
+
 
   private closeDropdownHandler = (event: Event) => {
     const target = event.target as HTMLElement;

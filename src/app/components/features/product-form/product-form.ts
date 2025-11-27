@@ -1,4 +1,4 @@
-import { Component, inject,signal, } from '@angular/core';
+import {Component, inject, signal,} from '@angular/core';
 import {Button} from '../../shared/button/button';
 import {CascadeSelect} from '../../shared/cascade-select/cascade-select';
 import {CategoryService} from '../../../core/services/category-service/category.service';
@@ -7,9 +7,10 @@ import {CategoryTreeDTO} from '../../../core/models/CategoryTreeDTO';
 import {ComboBox} from '../../shared/combo-box/combo-box';
 import {SelectNode} from '../../../core/models/SelectNode';
 import {MediaManager} from '../../shared/media-manager/media-manager';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Localization} from '../../../core/models/Localization';
 import {GeoMapAutocomplete} from '../../shared/geo-map-autocomplete/geo-map-autocomplete';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-form',
@@ -19,7 +20,8 @@ import {GeoMapAutocomplete} from '../../shared/geo-map-autocomplete/geo-map-auto
     ComboBox,
     MediaManager,
     ReactiveFormsModule,
-    GeoMapAutocomplete
+    GeoMapAutocomplete,
+    TranslatePipe
   ],
   templateUrl: './product-form.html',
   styleUrl: './product-form.css'
@@ -41,16 +43,19 @@ export class ProductForm{
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
-  form = this.formBuilder.group({
-    title: new FormControl<string>('', [
+  readonly form = this.formBuilder.group({
+    name: new FormControl<string>('', [
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(200)]
     ),
     price: new FormControl<number>(0,[
+      Validators.required,
       Validators.min(0),
+      Validators.max(1000000),
+      Validators.pattern(/^\d+(\.\d{1,2})?$/)
     ]),
-    mainCategory: new FormControl<number>(0),
+    mainCategory: new FormControl<OptionItem | null>(null, Validators.required),
     subcategory: new FormControl(''),
     isNegotiable: new FormControl(''),
     localization: new FormControl(''),

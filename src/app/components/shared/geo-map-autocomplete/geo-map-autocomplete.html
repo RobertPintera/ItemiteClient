@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-2">
   <div class="flex flex-row justify-between items-center gap-2">
-    <p>Selected city: {{currentLocalization()?.formatted}}</p>
+    <p>Selected city: {{currentLocalization()?.formatted ?? '-----'}}</p>
     <div class="flex flex-row gap-2">
       @if(isEdit()){
         <app-button [label]="('cancel' | translate)" severity="accent" variant="outlined" (clickButton)="cancel()"/>

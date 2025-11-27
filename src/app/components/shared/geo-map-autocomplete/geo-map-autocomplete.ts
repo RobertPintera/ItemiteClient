@@ -26,7 +26,7 @@ export class GeoMapAutocomplete implements AfterViewInit {
   readonly currentLocalization = model<Localization | null>(null);
 
   readonly currentMarker = signal<Marker | undefined>(undefined);
-  readonly lastLocalization = signal<Localization | null>(null);
+  readonly tempLocalization = model<Localization | null>(null);
   readonly isEdit = signal<boolean>(false);
 
   async ngAfterViewInit() {
@@ -35,25 +35,25 @@ export class GeoMapAutocomplete implements AfterViewInit {
 
   updateLocalization(localization: Localization | null): void {
     if(localization == null) return;
-    this.currentLocalization.set(localization);
+    this.tempLocalization.set(localization);
     this.flyTo(localization.latitude, localization.longitude, localization.city);
   }
 
   cancel(){
     this.isEdit.set(false);
-    this.currentLocalization.set(this.lastLocalization());
+    this.tempLocalization.set(this.currentLocalization());
     this.allowMapControl(this.isEdit());
   }
 
   edit(){
     this.isEdit.set(true);
-    this.lastLocalization.set(this.currentLocalization());
+    this.currentLocalization.set(this.tempLocalization());
     this.allowMapControl(this.isEdit());
   }
 
   save() {
     this.isEdit.set(false);
-    this.lastLocalization.set(this.currentLocalization());
+    this.currentLocalization.set(this.tempLocalization());
     this.allowMapControl(this.isEdit());
   }
 
@@ -86,7 +86,6 @@ export class GeoMapAutocomplete implements AfterViewInit {
       const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
       this.map = map('map').setView([latitude, longtitude], 14);
       tileLayer(baseMapURl, {attribution: '&copy; OpenStreetMap contributors'}).addTo(this.map);
-      this.currentMarker.set(marker([latitude, longtitude]).addTo(this.map).bindPopup(city).openPopup());
 
       this.map.on('click', ((e) => {
         if(!this.isEdit()) return;
@@ -106,7 +105,7 @@ export class GeoMapAutocomplete implements AfterViewInit {
     this.geoapifyService.ReverseGeocode(request).subscribe({
       next: (response) => {
         if(this.validateLocalization(response)) {
-          this.currentLocalization.set(response);
+          this.tempLocalization.set(response);
           this.flyTo(response.latitude, response.longitude, response.city);
         }
       },
@@ -143,17 +142,13 @@ export class GeoMapAutocomplete implements AfterViewInit {
   }
 
   private resetMarkerToCurrentLocalization() {
-    if(this.validateLocalization(this.currentLocalization())) {
-      this.flyTo(
-        this.currentLocalization()!.latitude,
-        this.currentLocalization()!.longitude,
-        this.currentLocalization()!.city
-      );
+    if(!this.validateLocalization(this.tempLocalization())) {
+      this.clearMarker();
       return;
     }
 
-    if(this.currentMarker()) {
-      this.map?.flyTo(this.currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949], 10);
-    }
+    const loc = this.tempLocalization()!;
+    if(loc)
+      this.flyTo(loc.latitude, loc.longitude, loc.city);
   }
 }

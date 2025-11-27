@@ -159,6 +159,15 @@
     "mail_min_len" : "E-mail nie może mieć mniej niż 3 znaki",
     "mail_max_len" : "E-mail nie może mieć więcej niż 100 znaków"
   },
+  "validator_errors_product_form": {
+    "field_empty": "Pole nie może być puste",
+    "field_required": "Pole jest wymagane",
+    "name_len": "Nazwa musi mieć od 2 do 30 znaków",
+    "description_len": "Opis musi mieć od 2 do 500 znaków",
+    "price_range": "Cena musi być pomiędzy 0 a 1000000",
+    "images_min": "Musi być co najmniej 1 obraz jako główne zdjęcie",
+    "localization_required": "Lokalizacja jest wymagana"
+  },
   "external_auth_errors": {
     "no_claims": "Adres strony nie zawiera wymaganych parametrów. Możliwe, że otwarto niepełny link tej strony",
     "no_email": "Adres strony nie zawiera parametru dla e-mail. Możliwe, że otwarto niepełny link tej strony",

@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 
 // Returns array of [error description, error]
-export function ErrorHandler(error: HttpErrorResponse): Array<string> {
+export function ErrorHandler(error: HttpErrorResponse): string[] {
   console.log(error);
   if (error.error && error.error.message) {
     // Error thrown by client

@@ -159,6 +159,15 @@
     "mail_min_len" : "Mail must be at least 3 characters long",
     "mail_max_len" : "Mail cannot be more than 100 characters"
   },
+  "validator_errors_product_form": {
+    "field_empty": "Field can't be empty",
+    "field_required": "Field is required",
+    "name_len": "Name must be between 2 and 30 characters",
+    "description_len": "Description must be between 2 and 500 characters",
+    "price_range": "Price must  be between 0 and 1000000",
+    "images_min": "Images must contain 1 for being main image",
+    "localization_required": "Localization is required"
+  },
   "external_auth_errors": {
     "no_claims": "URL doesn't contain needed parameters. Are you sure you entered the full link?",
     "no_email": "URL doesn't contain email parameter. Are you sure you entered the full link?",

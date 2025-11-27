@@ -2,25 +2,39 @@
   <div class="flex flex-col w-full max-w-[1500px] justify-center mb-32 p-8 bg-card text-card-foreground border-border border-2 rounded-2xl shadow-2xl">
     <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="submit()">
       <h1 class="mb-4">Create Product</h1>
-      <!-- Title -->
+      <!-- Name -->
       <div class="flex flex-col gap-2 w-full">
-        <label for="title" class="text-xl font-semibold ">Title</label>
-        <input id="title" name="title" formControlName="title" type="text"  required class="border rounded px-3 py-2">
-        @if (form.controls.title.invalid && (form.controls.title.touched || form.controls.title.dirty)){
-          <ul>
-            @if (form.controls.title.errors?.["required"]){
-              <li>Title is required!</li>
-            }
-            @if (form.controls.title.errors?.["minLength"]){
-              <li>Title is required!</li>
-            }
-          </ul>
+        <label for="name" class="text-xl font-semibold">Name</label>
+        <input id="name" name="name" formControlName="name" type="text" required class="border rounded px-3 py-2">
+        @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)){
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if(form.controls.name.hasError('required')){
+                <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+              }
+              @if(form.controls.name.hasError('minlength') || form.controls.name.hasError('maxlength')){
+                <li>{{ 'validator_errors_product_form.name_len' | translate }}</li>
+              }
+            </ul>
+          </div>
         }
       </div>
       <!-- Price -->
       <div class="flex flex-col gap-2 w-full">
         <label for="price" class="text-xl font-semibold">Price</label>
-        <input id="price" name="price" type="number"  min="0" class="border rounded px-3 py-2">
+        <input id="price" name="price" formControlName="price" type="number" min="0" step="0.01" class="border rounded px-3 py-2">
+        @if (form.controls.price.invalid && (form.controls.price.touched || form.controls.price.dirty)) {
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if (form.controls.price.hasError('required')) {
+                <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+              }
+              @if (form.controls.price.hasError('min') || form.controls.price.hasError('max')) {
+                <li>{{ 'validator_errors_product_form.price_range' | translate }}</li>
+              }
+            </ul>
+          </div>
+        }
       </div>
       <!-- Negotiable -->
       <div class="flex items-center gap-2">
@@ -31,7 +45,16 @@
       <div class="flex flex-row gap-8 w-full">
         <div class="flex flex-col gap-2 w-full">
           <label for="mainCategory" class="text-xl font-semibold">Main Category</label>
-          <app-combo-box [items]="mainCategoriesOptions" [(selectedItem)]="selectedMainCategory" (selectedItemChange)="selectMainCategory($event)"/>
+          <app-combo-box formControlName="mainCategory" [items]="mainCategoriesOptions" (selectedItemChange)="selectMainCategory($event)"/>
+          @if (form.controls.mainCategory.invalid && (form.controls.mainCategory.touched || form.controls.mainCategory.dirty)) {
+            <div>
+              <ul class="text-destructive text-sm list-disc pl-4">
+                @if(form.controls.mainCategory.hasError('required')) {
+                  <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+                }
+              </ul>
+            </div>
+          }
         </div>
         <div class="flex flex-col gap-2 w-full">
           <label for="mainCategory" class="text-xl font-semibold">Subcategory</label>
