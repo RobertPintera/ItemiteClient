@@ -1,0 +1,21 @@
+<div class="flex flex-col rounded-md w-full m-4 p-2 hover:cursor-pointer"
+  [class.bg-secondary]="selected() && !isArchived()"
+  [class.text-secondary-foreground]="selected() && !isArchived()"
+  [class.bg-accent]="!selected() || isArchived()"
+  [class.bg-accent-foreground]="!selected() || isArchived()"
+  (click)="OnClicked()"
+>
+  <div class="flex flex-row items-center">
+    <p class="text-xl font-bold">
+      {{ listingName() }} {{ price() }}
+    </p>
+    -
+    <p class="text-xl">
+      {{ otherMember() }}
+    </p>
+  </div>
+  <img alt="listing image" [src]="mainImageUrl()" class="h-10 w-full object-cover" />
+  <p class="text-sm">
+    {{ lastMessage() }}
+  </p>
+</div>
