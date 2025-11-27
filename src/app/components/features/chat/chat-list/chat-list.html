@@ -1,0 +1,29 @@
+
+<input
+  class="hidden"
+  type="checkbox" [checked]="showMessagesOnly()"
+/>
+
+<div class="w-full h-[calc(100vh-32*var(--spacing))] m-0 bg-card grid
+  sm:grid-cols-[minmax(calc(30*var(--spacing)),1fr)_2fr]
+  sm:grid-rows-[auto_1fr]
+  grid-rows-[1fr_0]
+  grid-cols-[1fr_0]
+"
+>
+  <p class="text-center m-auto"> Chat list </p>
+  <p class="text-center m-auto"> Selected chat name </p>
+  <!--
+  <app-chat-preview-card
+    [index]=""
+    [isArchived]
+    [listingName]=""
+    [mainImageUrl]=""
+    [price]=""
+    [selected]=""
+    [lastMessage]=""
+    [dateSent]=""
+  />
+  <app-chat/>
+  -->
+</div>
