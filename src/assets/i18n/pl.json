@@ -167,5 +167,8 @@
   },
   "api_errors": {
     "try_again": "Proszę spróbować ponownie"
-  }
+  },
+  "edit": "Edytuj",
+  "save": "Zapisz",
+  "cancel": "Anuluj"
 }

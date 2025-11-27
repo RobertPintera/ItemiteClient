@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-2">
+  <div class="flex flex-row justify-between items-center gap-2">
+    <p>Selected city: {{currentLocalization()?.formatted}}</p>
+    <div class="flex flex-row gap-2">
+      @if(isEdit()){
+        <app-button [label]="('cancel' | translate)" severity="accent" variant="outlined" (clickButton)="cancel()"/>
+        <app-button [label]="('save' | translate)" severity="primary" (clickButton)="save()"/>
+      } @else {
+        <app-button [label]="('edit' | translate)" severity="primary" (clickButton)="edit()"/>
+
+      }
+    </div>
+  </div>
+  @if (isEdit()) {
+    <app-geocoder-autocomplete placeHolder="Find city" (onCityPicked)="updateLocalization($event)"/>
+  }
+  <div id="map" class="h-64 rounded-md max-w-full z-0"></div>
+</div>
+

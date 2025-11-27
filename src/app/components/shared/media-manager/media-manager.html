@@ -6,7 +6,7 @@
     @for(image of images(); track image.imageId){
 
       <div class="image" cdkDragBoundary=".images-container" [cdkDragDisabled]="!isEditOrder()"  cdkDrag>
-        <img [src]="image.imageUrl" alt="test" class="w-full h-full object-cover no-drag">
+        <img [src]="image.imageUrl" alt="test" class="w-full h-full object-cover select-none" draggable="false">
       </div>
     }
     @if(!isEditOrder()){

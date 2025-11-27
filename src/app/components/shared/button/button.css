@@ -9,8 +9,16 @@
     @apply bg-primary text-primary-foreground hover:bg-primary/70 active:bg-primary;
   }
 
+  .button-primary-outlined {
+    @apply bg-background hover:bg-primary/50 active:bg-primary/30 border-2 border-border ring-ring;
+  }
+
   .button-secondary-filled {
     @apply bg-secondary text-secondary-foreground hover:bg-secondary/70 active:bg-secondary;
+  }
+
+  .button-secondary-outlined {
+    @apply bg-background hover:bg-secondary/50 active:bg-secondary/30 border-2 border-border ring-ring;
   }
 
   .button-accent-filled {
@@ -24,6 +32,11 @@
   .button-danger-filled {
     @apply bg-destructive text-destructive-foreground hover:bg-destructive/70 active:bg-destructive;
   }
+
+  .button-danger-outlined {
+    @apply bg-background hover:bg-destructive/50 active:bg-destructive/30 border-2 border-destructive ring-ring;
+  }
+
 
   .button-disabled-filled {
     @apply bg-ring/20 text-accent-foreground;
