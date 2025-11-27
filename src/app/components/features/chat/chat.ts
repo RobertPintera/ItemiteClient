@@ -21,6 +21,7 @@ import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ImagePreview} from '../../shared/image-preview/image-preview';
 import {AttachedFiles} from './attached-files/attached-files';
+import {MessageService} from '../../../core/services/message-service/message.service';
 
 @Component({
   selector: 'app-chat',
@@ -41,6 +42,7 @@ export class Chat implements AfterViewInit {
   //  name, profile photo, profile pic
   //  - ?use the | async pipe?
   userService: UserService = inject(UserService);
+  messageService: MessageService = inject(MessageService);
 
   //////////////////////////////////////////
   // TESTING DELETE AFTER API INTEGRATION //
@@ -148,8 +150,10 @@ export class Chat implements AfterViewInit {
 
   // TODO Uncomment when api ready
 /*  readonly currentUserId = computed(() => this.userService.userBasicInfo().id);
- */
 
+ // This needs to be filled in parent component - s
+ readonly chatMembers = input.required<ChatMemberInfo[]>();
+ */
 
   readonly currentUsername = computed(() => this.userMemberInfo().username);
   readonly currentProfileImg = computed(() => this.userMemberInfo().photoUrl ??
@@ -204,8 +208,15 @@ export class Chat implements AfterViewInit {
     );
   }
 
-  // Message Input
+  // region Submit
+  async OnSubmit() {
+    if(this.editingMessage()) {
+      return;
+    }
+  }
+  // endregion
 
+  // region Message Input
   OnInputChanged(ev: Event) {
     const event = ev as InputEvent;
     if(event.data === null) return;
@@ -230,15 +241,9 @@ export class Chat implements AfterViewInit {
     }
     this._showFileInputDialog.set(!this._showFileInputDialog());
   }
+  // endregion
 
-  async OnSubmit() {
-    if(this.editingMessage()) {
-      return;
-    }
-  }
-
-  // Message edition
-
+  // region Message edition
   OnEditionRequested(messageId: number) {
     if(this._selectedEditMessage === messageId) {
       this.OnEditionClosed();
@@ -272,9 +277,9 @@ export class Chat implements AfterViewInit {
       return messages;
     });
   }
+  // endregion
 
-  // Message deletion
-
+  // region Message deletion
   OnDeletionRequested(messageId: number) {
     this._selectedDeleteMessage = messageId;
     this._showFileInputDialog.set(false);
@@ -304,9 +309,9 @@ export class Chat implements AfterViewInit {
       return messages;
     });
   }
+  // endregion
 
-  // Attachments
-
+  // region Attachments
   OnAttachmentAdded(file: File) {
     this._attachments.update((attachments) => {
       attachments.push(file); return attachments;
@@ -323,9 +328,9 @@ export class Chat implements AfterViewInit {
     );
     this._hasAttachments.set(this.attachments().length !== 0);
   }
+  // endregion
 
-  // Image Preview
-
+  // region Image Preview
   OnPreviewClicked(url: string) {
     this._imagePreview.set(url);
   }
@@ -333,8 +338,9 @@ export class Chat implements AfterViewInit {
   OnPreviewClosed() {
     this._imagePreview.set(undefined);
   }
+  // endregion
 
-  // Messages scroll
+  // region Messages scroll
 
   private _lastScrollPos: number = 0;
 
@@ -348,9 +354,9 @@ export class Chat implements AfterViewInit {
     )
     this._lastScrollPos = scrollContainer.scrollTop;
   }
+  // endregion
 
-  // region message input formatting
-
+  // region Message input formatting
   private _hideInput = signal(false);
   readonly hideInput = this._hideInput.asReadonly();
 
