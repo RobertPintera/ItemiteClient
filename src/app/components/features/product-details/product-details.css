@@ -1,9 +1,9 @@
 @import "../../../../styles.css";
 
-::ng-deep .button-container{
+:host ::ng-deep .button-container{
   @apply w-full;
 }
 
-::ng-deep .carousel-button-icon{
+:host ::ng-deep .carousel-button-icon{
   @apply h-4 w-4 sm:h-6 sm:w-6;
 }

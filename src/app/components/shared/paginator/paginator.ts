@@ -1,40 +1,48 @@
-import {Component, computed, input, output, signal} from '@angular/core';
+import {Component, effect, input, model, output, signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
+import {Button} from '../button/button';
+import {BUTTON_SEVERITY, BUTTON_VARIANTS} from '../../../core/constants/constants';
 
 @Component({
   selector: 'app-paginator',
   imports: [
     FormsModule,
-    TranslatePipe
+    TranslatePipe,
+    Button
   ],
   templateUrl: './paginator.html',
   styleUrl: './paginator.css'
 })
 export class Paginator {
-  readonly totalItems = input<number>(1);
-  readonly itemsPerPage = 5;
-  readonly currentPage = signal<number>(1);
+  readonly isBlocked = input<boolean>(false);
+  readonly pageNumber = model<number>(1);
+  readonly totalPages = input<number>(1);
 
   readonly pageChange = output<number>();
 
-  totalPages = computed(() => Math.ceil(this.totalItems() / this.itemsPerPage));
+  readonly previousPage = signal<number>(1);
+  readonly currentPage = signal<number>(1);
 
-  currentPageValue = 1;
+  constructor() {
+    effect(() => {
+      const page = this.pageNumber();
+      this.previousPage.set(page);
+      this.currentPage.set(page);
+    });
+  }
 
-  goToPage(value: number) {
-    let page = isNaN(value) ? 1 : value;
+  goToPage(pageNumber: number) {
+    let page = isNaN(pageNumber) ? this.previousPage() : pageNumber;
 
     if (page < 1) page = 1;
     else if (page > this.totalPages()) page = this.totalPages();
 
-    if (page === this.currentPage()){
-      this.pageChange.emit(page);
-
-    }
-
     this.currentPage.set(page);
-    this.currentPageValue = page;
+    if (page === this.previousPage()) return;
+
+    this.previousPage.set(page);
+    this.pageChange.emit(page);
   }
 
   prevPage(): void {
@@ -52,4 +60,7 @@ export class Paginator {
       event.preventDefault();
     }
   }
+
+  protected readonly BUTTON_SEVERITY = BUTTON_SEVERITY;
+  protected readonly BUTTON_VARIANTS = BUTTON_VARIANTS;
 }

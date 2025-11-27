@@ -5,14 +5,14 @@
   @for (category of categories(); track category.id) {
     <li class="flex-1 w-full" [style.padding-left.px]="level() * 20">
       <div class="flex pb-2 gap-2">
-        <input type="checkbox"/>
+        <input type="checkbox" [checked]="isChecked(category.id)" (change)="toggleCategory(category.id)"/>
         <p>{{ category.name }}</p>
       </div>
-      @if (category.subcategories?.length) {
+      @if (category.subCategories.length) {
         <ng-container
           *ngTemplateOutlet="
             treeTemplate;
-            context: { $implicit: category.subcategories, level: level() + 1 }
+            context: { $implicit: category.subCategories, level: level() + 1 }
           "
         ></ng-container>
       }
@@ -30,7 +30,7 @@
     @for (category of categories; track category.id) {
       <li [style.padding-left.px]="level * 20">
         <div class="flex pb-2 gap-2">
-          <input type="checkbox" />
+          <input type="checkbox" [checked]="isChecked(category.id)" (change)="toggleCategory(category.id)"/>
           <p>{{ category.name }}</p>
         </div>
 

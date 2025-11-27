@@ -1,19 +1,36 @@
 {
+  "authors": "Authors",
   "product_details": {
     "send_message": "Send Message",
     "call": "Call",
     "price": "Price",
+    "starting_bid": "Starting bid",
+    "current_bid": "Current bid",
     "vendor": "Vendor",
     "date_of_issue": "Date of issue",
+    "date_ends": "Date ends",
     "description": "Description",
-    "localization": "Localization"
+    "localization": "Localization",
+    "bid": "Bid",
+    "negotiable": "Negotiable"
   },
   "paginator": {
     "preposition": "from"
   },
-  "sortings": {
-    "ascending": "ascending",
-    "descending": "descending"
+  "sort_directions": {
+    "header": "Sorting",
+    "ascending": "Ascending",
+    "descending": "Descending"
+  },
+  "sort_by": {
+    "header": "By",
+    "price": "Price",
+    "creation_date": "Date of issue",
+    "views": "Views"
+  },
+  "listing_types": {
+    "auction": "Auction",
+    "product": "Product"
   },
   "navbar": {
     "categories": "Categories",

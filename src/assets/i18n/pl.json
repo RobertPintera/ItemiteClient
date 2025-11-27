@@ -1,19 +1,36 @@
 {
+  "authors": "Autorzy",
   "product_details": {
     "send_message": "Wyślij wiadomość",
     "call": "Zadzwoń",
     "price": "Cena",
+    "starting_bid": "Cena wywoławcza",
+    "current_bid": "Aktualna cena",
     "vendor": "Sprzedawca",
     "date_of_issue": "Data wystawienia",
+    "date_ends": "Data zakończenia",
     "description": "Opis",
-    "localization": "Lokalizacja"
+    "localization": "Lokalizacja",
+    "bid": "Licytuj",
+    "negotiable": "Do negocjacji"
   },
   "paginator": {
     "preposition": "z"
   },
-  "sortings": {
-    "ascending": "rosnąco",
-    "descending": "malejąco"
+  "sort_directions": {
+    "header": "Sortowanie",
+    "ascending": "Rosnąco",
+    "descending": "Malejąco"
+  },
+  "sort_by": {
+    "header": "Według",
+    "price": "Ceny",
+    "creation_date": "Daty wystawienia",
+    "views": "Wyświetleń"
+  },
+  "listing_types": {
+    "auction": "Licytacja",
+    "product": "Produkt"
   },
   "navbar": {
     "categories": "Kategorie",

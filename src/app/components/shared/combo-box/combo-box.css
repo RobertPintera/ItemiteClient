@@ -6,11 +6,11 @@
   }
 
   .combo-selected {
-    @apply border-2 border-border rounded-md p-2 flex justify-between items-center bg-white;
+    @apply border-1 border-border rounded-md p-2 flex justify-between items-center bg-white;
   }
 
   .combo-dropdown {
-    @apply absolute w-full border  border-border border-t-0 bg-white max-h-44 overflow-y-auto shadow-md z-50;
+    @apply absolute w-full border border-border border-t-0 bg-white max-h-44 overflow-y-auto shadow-md z-50;
   }
 
   .combo-dropdown li {

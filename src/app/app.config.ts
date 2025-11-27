@@ -21,5 +21,6 @@ export const appConfig: ApplicationConfig = {
       lang: 'en',
       fallbackLang: 'en'
     }),
-  ]
+    // provideCloudinaryLoader(`https://res.cloudinary.com/${environment.cloudinaryName}/image/upload/`)
+  ],
 };

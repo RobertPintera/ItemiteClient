@@ -1,10 +1,14 @@
-import {Component, HostBinding, inject, input, output} from '@angular/core';
-import {Product} from '../../../../core/models/Product';
+import {Component, input, model, OnInit, output, signal} from '@angular/core';
 import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {TranslatePipe} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
+import {ListingDTO} from '../../../../core/models/ListingDTO';
+import {Loader} from '../../../shared/loader/loader';
+import {SORT_DIRECTION, SortBy, SortDirection, SORTS_BY} from '../../../../core/constants/constants';
+import {ListingFilter} from '../../../../core/models/ListingFilter';
+import {OptionItem} from '../../../../core/models/OptionItem';
 
 @Component({
   selector: 'app-product-list-view',
@@ -13,83 +17,91 @@ import {Button} from '../../../shared/button/button';
     Paginator,
     ComboBox,
     TranslatePipe,
-    Button
+    Button,
+    Loader
   ],
   templateUrl: './product-list-view.html',
   styleUrl: './product-list-view.css'
 })
-export class ProductListView {
-  @HostBinding('class') hostClass = 'w-full';
+export class ProductListView implements OnInit {
+  readonly pageNumber = model.required<number | null>();
+  readonly pageSize = model.required<number | null>();
 
-  private translate = inject(TranslateService);
+  readonly filter = input.required<ListingFilter>();
+  readonly isBlocked = input.required<boolean>();
+  readonly totalPages = input.required<number>();
+  readonly listing = input.required<ListingDTO | null>();
+  readonly loading = input.required<boolean>();
 
   readonly isMd = input.required<boolean>();
   readonly isXl = input.required<boolean>();
-  readonly filterOpen = output<void>();
 
-  sortings = [
-    { key: 'ascending', value: 'sortings.ascending' },
-    { key: 'descending', value: 'sortings.descending' },
+  readonly filterOpen = output<void>();
+  readonly filterChange  = output<Partial<ListingFilter>>();
+
+  readonly sortDirection = signal<OptionItem>({ key: 'none', value: '-'});
+  readonly sortBy = signal<OptionItem>({ key: 'none', value: '-'});
+
+  sortDirectionOptions = [
+    { key: 'none', value: '-'},
+    { key: 'ascending', value: 'sort_directions.ascending' },
+    { key: 'descending', value: 'sort_directions.descending' },
   ];
 
-  useSorting(sorting: { key: string; value: string }): void {
-    if(!sorting) return;
+  sortByOptions = [
+    { key: 'none', value: '-'},
+    { key: 'price', value: 'sort_by.price' },
+    { key: 'creationDate', value: 'sort_by.creation_date' },
+    { key: 'views', value: 'sort_by.views' },
+  ];
+
+  ngOnInit() {
+    const sortDirectionKey = this.filter().sortDirection;
+    const selectedSortDirectionOption = this.sortDirectionOptions.find(opt => opt.key === sortDirectionKey);
+
+    if (selectedSortDirectionOption) {
+      this.sortDirection.set(selectedSortDirectionOption);
+    } else {
+      this.sortDirection.set(this.sortByOptions[0]);
+    }
+
+    const sortByKey = this.filter().sortBy;
+    const selectedSortByOption = this.sortByOptions.find(opt => opt.key === sortByKey);
+
+    if (selectedSortByOption) {
+      this.sortBy.set(selectedSortByOption);
+    } else {
+      this.sortBy.set(this.sortByOptions[0]);
+    }
+  }
+
+  useSortDirection(option?: OptionItem): void {
+    if (!option) return;
+
+    const allowed = Object.values(SORT_DIRECTION);
+    if (allowed.includes(option.key as SortDirection)) {
+      this.filterChange.emit({sortDirection: option.key as SortDirection});
+      return;
+    }
+    this.filterChange.emit({sortDirection: null});
+  }
+
+  useSortBy(option?: OptionItem): void {
+    if (!option) return;
+
+    const allowed = Object.values(SORTS_BY);
+    if (allowed.includes(option.key as SortBy)) {
+      this.filterChange.emit({sortBy: option.key as SortBy});
+      return;
+    }
+    this.filterChange.emit({sortBy: null});
+  }
+
+  usePaginator(pageNumber: number): void {
+    this.filterChange.emit({pageNumber: pageNumber});
   }
 
   openFilter(): void {
     this.filterOpen.emit();
   }
-
-  products: Product[] = [
-    {
-      id: 'p1',
-      name: 'Apple iPhone 15 Pro',
-      categories: ['Electronics', 'Smartphones', 'Apple'],
-      image: 'assets/laptop_chromebook_icon.svg',
-      isNegotiable: false,
-      price: 4999,
-      localization: 'Warsaw, Poland',
-      dateOfIssue: '2025-09-20',
-    },
-    {
-      id: 'p2',
-      name: 'Gaming Laptop ASUS ROG Strix',
-      categories: ['Electronics', 'Computers', 'Gaming'],
-      image: 'assets/laptop_chromebook_icon.svg',
-      isNegotiable: true,
-      price: 7299,
-      localization: 'Kraków, Poland',
-      dateOfIssue: '2025-09-28',
-    },
-    {
-      id: 'p3',
-      name: 'Mountain Bike Trek X-Caliber 8',
-      categories: ['Sports', 'Bikes', 'Outdoor'],
-      image: 'assets/laptop_chromebook_icon.svg',
-      isNegotiable: true,
-      price: 3899,
-      localization: 'Gdańsk, Poland',
-      dateOfIssue: '2025-10-05',
-    },
-    {
-      id: 'p4',
-      name: 'Samsung 65" QLED 4K Smart TV',
-      categories: ['Electronics', 'TVs', 'Home Entertainment'],
-      image: 'assets/laptop_chromebook_icon.svg',
-      isNegotiable: false,
-      price: 5499,
-      localization: 'Poznań, Poland',
-      dateOfIssue: '2025-09-30',
-    },
-    {
-      id: 'p5',
-      name: 'Leather Office Chair Ergonomic Comfort',
-      categories: ['Furniture', 'Office', 'Home'],
-      image: 'assets/laptop_chromebook_icon.svg',
-      isNegotiable: true,
-      price: 899,
-      localization: 'Wrocław, Poland',
-      dateOfIssue: '2025-10-10',
-    }
-  ];
 }

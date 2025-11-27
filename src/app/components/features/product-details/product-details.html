@@ -3,53 +3,73 @@
     <div>
       <p class="w-full">Home / Electronics</p>
     </div>
-    <div class="flex flex-col lg:flex-row w-full">
-      <div class="flex flex-col w-full lg:w-4/6">
-        <h1>Lenovo Ideapad 3-17 - Core i5-1235U | 17,3''-FHD | 16GB | 512GB | Win11Home | Szary</h1>
-        <div class="relative w-full h-72 sm:h-96">
-          <img [ngSrc]="'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="object-contain" fill>
-        </div>
-        <app-carousel [items]="images" [visibleSSm]="2" [visibleSm]="3" [visibleMd]="4" [visibleLg]="5" [visibleXl]="6">
-          <ng-template let-image>
-            <img [ngSrc]="image.src ?? 'assets/laptop_chromebook_icon.svg'" [alt]="'Product'" class="size-full max-h-96 object-contain" height="1" width="1">
-          </ng-template>
-        </app-carousel>
-        <div class="flex flex-row flex-wrap gap-3 mb-4">
-          @for (category of categoriesWithId(); track category.id){
-            <div class="border-1 px-4 py-2 rounded-2xl">
-              <p class="text-base md:text-xl">{{category.name}}</p>
+    @if (!article()){
+      <div class="flex w-full justify-center">
+        <h4>Not found article</h4>
+      </div>
+    } @else {
+      <div class="flex flex-col lg:flex-row w-full">
+        <div class="flex flex-col w-full lg:w-4/6">
+          <h1>{{ article()?.name }}</h1>
+          <app-gallery [images]="article()?.images ?? []" [visibleSSm]="2" [visibleSm]="3" [visibleMd]="4" [visibleLg]="5" [visibleXl]="6"/>
+          <div class="flex flex-row flex-wrap gap-3 mb-4">
+            @for (category of article()?.categories; track category.id){
+              <div class="border-1 px-4 py-2 rounded-2xl">
+                <p class="text-base md:text-xl">{{category.name}}</p>
+              </div>
+            }
+          </div>
+          @if (!isLg()) {
+            <div class="flex flex-col gap-2 text-xl mb-2">
+              @if(product){
+                <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
+                <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
+                <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
+                <app-button label="{{'product_details.send_message' | translate}}"/>
+                <app-button (clickButton)="ClickNumber()"
+                            [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
+                          : ( 'product_details.call' | translate )" severity="secondary">
+                </app-button>
+              } @else if(auction) {
+                <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
+                <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
+                <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
+                <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
+                <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
+                <app-button label="{{'product_details.bid' | translate}}"/>
+              }
             </div>
           }
-        </div>
-        @if (!isLg()) {
-          <div class="flex flex-col gap-2 text-xl mb-2">
-            <p>{{'product_details.price' | translate}}: 167.58$ - negotiable</p>
-            <app-button label="Send Message"/>
-            <app-button label="Call" variant="secondary"/>
-            <p>{{'product_details.vendor' | translate}}: Jan Kowalski</p>
-            <p>{{'product_details.date_of_issue' | translate}}: 20.07.2025</p>
+          <div class="flex flex-col gap-2">
+            <h3>{{'product_details.description' | translate}}</h3>
+            <p class="text-sm sm:text-base">{{article()?.description}}</p>
           </div>
-        }
-        <div class="flex flex-col gap-2">
-          <h3>{{'product_details.description' | translate}}</h3>
-          <p class="text-sm sm:text-base">Laptop Lenovo Ideapad 3-17 to wszechstronne urządzenie, które łączy dużą przestrzeń roboczą z płynnością działania, stając się niezawodnym partnerem w codziennych zadaniach. Ten model, dostępny w uniwersalnej, szarej obudowie, został stworzony z myślą o użytkownikach ceniących komfort i wydajność, zarówno podczas pracy, jak i w chwilach relaksu. Dzięki przemyślanej konfiguracji, obejmującej wydajny procesor i dużą ilość pamięci RAM, możesz swobodnie realizować swoje projekty i cieszyć się multimediami bez żadnych kompromisów. Zainstalowany system Windows 11 Home sprawia, że jest on gotowy do działania od razu po wyjęciu z opakowania.</p>
+        </div>
+        <div class="hidden lg:block self-stretch min-w-0.5 bg-muted-foreground z-10"></div>
+        <div class="text-xl mt-2 flex flex-col gap-2 lg:w-2/6 lg:p-4  lg:mt-0">
+          @if (isLg()){
+            @if(product){
+              <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
+              <p>{{'product_details.price' | translate}}: {{ product.price }}$ {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
+              <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
+              <app-button label="{{'product_details.send_message' | translate}}"/>
+              <app-button (clickButton)="ClickNumber()"
+                          [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
+                          : ( 'product_details.call' | translate )" severity="secondary">
+              </app-button>
+            } @else if(auction) {
+              <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
+              <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
+              <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
+              <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
+              <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
+              <app-button label="{{'product_details.bid' | translate}}"/>
+            }
+          }
+          <p>{{'product_details.localization' | translate}}: {{ article()?.location?.country }}, {{article()?.location?.city}}, {{article()?.location?.state}}</p>
+          <div id="map" class="h-64 rounded-md max-w-full"></div>
         </div>
       </div>
-      <div class="hidden lg:block self-stretch min-w-0.5 bg-muted-foreground z-10"></div>
-      @if (isLg()) {
-        <div class="flex flex-col w-2/6 p-4 gap-2 text-xl">
-          <p>{{'product_details.date_of_issue' | translate}}: 20.07.2025</p>
-          <p>{{'product_details.price' | translate}}: 167.58$ - negotiable</p>
-          <p>{{'product_details.vendor' | translate}}: Jan Kowalski</p>
-          <app-button label="{{'product_details.send_message' | translate}}"/>
-          <app-button label="{{'product_details.call' | translate}}" variant="secondary"/>
-          <p>{{'product_details.localization' | translate}}: Gliwice</p>
-        </div>
-      } @else {
-        <div class="text-xl mt-2">
-          <p>{{'product_details.localization' | translate}}: Gliwice</p>
-        </div>
-      }
-    </div>
+    }
   </div>
 </div>
