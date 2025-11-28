@@ -1,4 +1,4 @@
-import {Component, signal,} from '@angular/core';
+import {Component, signal, ViewEncapsulation,} from '@angular/core';
 import {Image} from '../../../core/models/Image';
 import {CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {Button} from '../button/button';
@@ -17,7 +17,8 @@ import {FileUpload} from '../file-upload/file-upload';
     Dialog,
     FileUpload,
   ],
-  styleUrl: './media-manager.css'
+  styleUrl: './media-manager.css',
+  encapsulation: ViewEncapsulation.None,
 })
 export class MediaManager {
   readonly images = signal<Image[]>([]);
@@ -85,6 +86,22 @@ export class MediaManager {
   openDialog(image: Image) {
     this.selectedImage.set(image);
     this.isOpenDialog.set(true);
+  }
+
+  deleteSelectedImage() {
+    const img = this.selectedImage();
+    if (!img) return;
+
+    this.images.update(arr =>
+      arr.filter(i => i.imageId !== img.imageId)
+    );
+
+    this.images.update(arr =>
+      arr.map((img, idx) => ({ ...img, imageOrder: idx }))
+    );
+
+    this.selectedImage.set(null);
+    this.isOpenDialog.set(false);
   }
 
   closeDialog(){

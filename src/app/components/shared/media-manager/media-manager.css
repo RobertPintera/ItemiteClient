@@ -1,38 +1,41 @@
 @import "../../../../styles.css";
 
-.images-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
+@layer components {
+  .images-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
 
-.image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid var(--border);
-  width: 128px;
-  height: 128px;
-  border-radius: 16px;
-  background-color: var(--background);
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
-}
+  .image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--border);
+    width: 128px;
+    height: 128px;
+    border-radius: 16px;
+    background-color: var(--background);
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
 
-.image.editable {
-  cursor: move;
-}
+  .image.editable {
+    cursor: move;
+  }
 
-.cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
 
-.image-placeholder {
-  background: var(--color-accent);
-  border: dotted 3px var(--border);
-  border-radius: 16px;
-  width: 128px;
-  height: 128px;
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  .image-placeholder {
+    background: var(--color-accent);
+    border: dotted 3px var(--border);
+    border-radius: 16px;
+    width: 128px;
+    height: 128px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
 }

@@ -29,13 +29,15 @@
 @if(isOpenDialog()){
   <app-dialog (closed)="closeDialog()">
     <div class="flex flex-col justify-center h-full w-full">
-      <div class="flex flex-1 items-center justify-center w-full h-full overflow-hidden">
+      <div class="flex items-center justify-center w-full h-full overflow-hidden">
         <img [src]="selectedImage()?.imageUrl ?? ''" [alt]="selectedImage()?.imageUrl" class="object-contain max-w-full max-h-full">
       </div>
-      <div class="flex justify-around gap-10 flex-row p-4 h-fit">
+      <div class="flex flex-wrap justify-between gap-2 flex-row p-4 w-full h-fit">
         <app-button (clickButton)="closeDialog()" label="Close" severity="accent" variant="outlined"/>
-        <app-button (clickButton)="closeDialog()" label="Delete" severity="danger"/>
-        <app-button (clickButton)="closeDialog()" label="Close" severity="primary"/>
+        <div class="flex gap-2">
+          <app-button (clickButton)="deleteSelectedImage()" label="Delete" severity="danger"/>
+          <app-button (clickButton)="closeDialog()" label="Edit" severity="primary"/>
+        </div>
       </div>
     </div>
   </app-dialog>
