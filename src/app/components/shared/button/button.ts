@@ -6,14 +6,14 @@ import {BUTTON_SEVERITY, BUTTON_VARIANTS, ButtonSeverity, ButtonVariants} from '
     imports: [],
     templateUrl: './button.html',
     styleUrl: './button.css',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
   })
 export class Button {
   readonly label = input<string>('click');
   readonly type = input<"submit" | "reset" | "button">('button');
   readonly severity = input<ButtonSeverity>(BUTTON_SEVERITY.PRIMARY);
   readonly variant = input<ButtonVariants>(BUTTON_VARIANTS.FILLED);
-  readonly isDisabled = input<boolean>(false);
+  readonly disabled = input<boolean>(false);
   readonly clickButton = output<void>();
 
   onClick() {
@@ -21,7 +21,7 @@ export class Button {
   }
 
   get getClasses(): string {
-    if(this.isDisabled())
+    if(this.disabled())
       return 'button-' + BUTTON_SEVERITY.DISABLED + '-' + this.variant();
 
     return 'button-' + this.severity() + '-' + this.variant();

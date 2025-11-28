@@ -12,15 +12,17 @@ import {Button} from '../button/button';
   styleUrl: './file-upload.css'
 })
 export class FileUpload {
+  private sanitizer = inject(DomSanitizer);
+
   onConfirmClicked = output<File>();
   onCancelClicked = output<void>();
-  readonly acceptedFormats = input("image/png, image/jpeg")
+  readonly acceptedFormats = input("image/png, image/jpeg");
   readonly supportsPreview = input<boolean>(false);
   readonly maxSizeMB  = input<number>(5);
   readonly fileSizeExceeded = computed(() => {
-      if(!this.file()) return false;
-      return this._file()!.size*0.000001 > this.maxSizeMB();
-    }
+    if(!this.file()) return false;
+    return this._file()!.size*0.000001 > this.maxSizeMB();
+  }
   );
 
   private _file : WritableSignal<File | undefined> = signal(undefined);
@@ -42,8 +44,6 @@ export class FileUpload {
 
   private _preview: WritableSignal<string | undefined> = signal(undefined);
   readonly preview: Signal<string> = computed(() => this._preview() ?? "");
-
-  constructor(private sanitizer: DomSanitizer) {}
 
   OnConfirmClicked() {
     if(this._preview()) {

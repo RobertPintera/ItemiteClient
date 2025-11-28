@@ -7,6 +7,12 @@ import {LatLonPayloadDTO} from '../../../core/models/LatLonPayloadDTO';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {Button} from '../button/button';
 import {TranslatePipe} from '@ngx-translate/core';
+import {OptionItem} from '../../../core/models/OptionItem';
+import {NG_VALUE_ACCESSOR} from '@angular/forms';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-empty-function */
+
 @Component({
   selector: 'app-geo-map-autocomplete',
   imports: [
@@ -15,11 +21,20 @@ import {TranslatePipe} from '@ngx-translate/core';
     TranslatePipe
   ],
   templateUrl: './geo-map-autocomplete.html',
-  styleUrl: './geo-map-autocomplete.css'
+  styleUrl: './geo-map-autocomplete.css',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: GeoMapAutocomplete,
+      multi: true
+    }
+  ]
 })
 export class GeoMapAutocomplete implements AfterViewInit {
   private platformId = inject(PLATFORM_ID);
   private geoapifyService = inject(GeoapifyService);
+  private onChange: (value: Localization | null) => void = () => {};
+  private onTouched: () => void = () => {};
 
   private map!: Map;
 
@@ -27,6 +42,8 @@ export class GeoMapAutocomplete implements AfterViewInit {
 
   readonly currentMarker = signal<Marker | undefined>(undefined);
   readonly tempLocalization = model<Localization | null>(null);
+
+  readonly isDisabled = signal<boolean>(false);
   readonly isEdit = signal<boolean>(false);
 
   async ngAfterViewInit() {
@@ -43,19 +60,43 @@ export class GeoMapAutocomplete implements AfterViewInit {
     this.isEdit.set(false);
     this.tempLocalization.set(this.currentLocalization());
     this.allowMapControl(this.isEdit());
+    this.onChange(this.currentLocalization());
+    this.onTouched();
   }
 
   edit(){
     this.isEdit.set(true);
     this.currentLocalization.set(this.tempLocalization());
     this.allowMapControl(this.isEdit());
+    this.onChange(this.currentLocalization());
+    this.onTouched();
   }
 
   save() {
     this.isEdit.set(false);
     this.currentLocalization.set(this.tempLocalization());
     this.allowMapControl(this.isEdit());
+    this.onChange(this.currentLocalization());
+    this.onTouched();
   }
+
+  // ------ forms -----
+  writeValue(obj: Localization | null): void {
+    this.currentLocalization.set(obj);
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled.set(isDisabled);
+  }
+  // -------------------
 
   private clearMarker() {
     if(this.currentMarker() && isPlatformBrowser(this.platformId)) {
@@ -83,7 +124,7 @@ export class GeoMapAutocomplete implements AfterViewInit {
 
     if (!this.map) {
       Icon.Default.prototype.options.iconRetinaUrl = 'marker-icon.png';
-      Icon.Default.prototype.options.shadowUrl = 'marker-shadow.png';
+      Icon.Default.prototype.options.shadowUrl = 'marker-icon.png';
       Icon.Default.prototype.options.shadowSize = [25, 41];
 
       const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';

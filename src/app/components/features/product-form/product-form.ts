@@ -57,10 +57,10 @@ export class ProductForm{
     ]),
     mainCategory: new FormControl<OptionItem | null>(null, Validators.required),
     subcategory:new FormControl<OptionItem | null>({value: null, disabled: true}, Validators.required),
-    isNegotiable: new FormControl(''),
-    localization: new FormControl(''),
+    isNegotiable: new FormControl<boolean>(false),
+    localization: new FormControl<Localization | null>(null, Validators.required),
     images: new FormControl([]),
-    description: new FormControl('')
+    description: new FormControl<string>('')
   });
 
   selectMainCategory(option?: OptionItem){

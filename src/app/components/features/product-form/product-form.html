@@ -73,7 +73,16 @@
       <!-- Localization -->
       <div class="flex flex-col gap-2 w-full">
         <label for="localization" class="text-xl font-semibold">Localization</label>
-        <app-geo-map-autocomplete/>
+        <app-geo-map-autocomplete formControlName="localization"/>
+        @if (form.controls.localization.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if(form.controls.localization.hasError('required')) {
+                <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+              }
+            </ul>
+          </div>
+        }
       </div>
       <!-- Images -->
       <div class="flex flex-col gap-2 w-full">

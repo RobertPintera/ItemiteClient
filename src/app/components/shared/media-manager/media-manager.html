@@ -4,21 +4,21 @@
   </div>
   <div class="images-container flex flex-row gap-4 flex-wrap w-full" cdkDropListOrientation="mixed" (cdkDropListDropped)="drop($event)" cdkDropList>
     @for(image of images(); track image.imageId){
-
-      <div class="image" cdkDragBoundary=".images-container" [cdkDragDisabled]="!isEditOrder()"  cdkDrag>
+      <div class="image" [class.editable]="isEditOrder()"
+           [cdkDragDisabled]="!isEditOrder()" cdkDrag
+           (click)="!isEditOrder() && openDialog(image)"
+           tabindex="0" (keyup.enter)="!isEditOrder() && openDialog(image)">
+        <div class="image-placeholder" *cdkDragPlaceholder></div>
         <img [src]="image.imageUrl" alt="test" class="w-full h-full object-cover select-none" draggable="false">
       </div>
     }
     @if(!isEditOrder()){
-      <label
-        class="flex justify-center items-center border-border border-2 w-32 h-32 rounded-2xl bg-background cursor-pointer">
-        <input type="file" accept="image/*" class="hidden" (change)="addImage($event)" />
-
+      <button class="flex justify-center items-center border-border border-2 w-32 h-32 rounded-2xl bg-background cursor-pointer" (click)="openFileUpload()">
         <svg xmlns="http://www.w3.org/2000/svg" height="48px"
              viewBox="0 -960 960 960" width="48px" fill="#1f1f1f">
           <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/>
         </svg>
-      </label>
+      </button>
     } @else {
       @if(!images().length){
         <p>There are no images!</p>
@@ -26,4 +26,21 @@
     }
   </div>
 </div>
+@if(isOpenDialog()){
+  <app-dialog (closed)="closeDialog()">
+    <div class="flex flex-col justify-center h-full w-full">
+      <div class="flex flex-1 items-center justify-center w-full h-full overflow-hidden">
+        <img [src]="selectedImage()?.imageUrl ?? ''" [alt]="selectedImage()?.imageUrl" class="object-contain max-w-full max-h-full">
+      </div>
+      <div class="flex justify-around gap-10 flex-row p-4 h-fit">
+        <app-button (clickButton)="closeDialog()" label="Close" severity="accent" variant="outlined"/>
+        <app-button (clickButton)="closeDialog()" label="Delete" severity="danger"/>
+        <app-button (clickButton)="closeDialog()" label="Close" severity="primary"/>
+      </div>
+    </div>
+  </app-dialog>
+}
+@if(isOpenFileUpload()){
+  <app-file-upload [supportsPreview]="true" (onCancelClicked)="onFileUploadCancel()" (onConfirmClicked)="onFileUploadConfirm($event)"/>
+}
 

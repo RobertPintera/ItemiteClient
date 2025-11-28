@@ -1,3 +1,5 @@
+@import "../../../../styles.css";
+
 .images-container {
   display: flex;
   flex-wrap: wrap;
@@ -15,14 +17,22 @@
   background-color: var(--background);
   overflow: hidden;
   position: relative;
-  cursor: move;
+  cursor: pointer;
 }
 
-.cdk-drag-placeholder {
-  opacity: 0;
+.image.editable {
+  cursor: move;
 }
 
 .cdk-drag-animating {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
+.image-placeholder {
+  background: var(--color-accent);
+  border: dotted 3px var(--border);
+  border-radius: 16px;
+  width: 128px;
+  height: 128px;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

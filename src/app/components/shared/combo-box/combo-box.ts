@@ -1,6 +1,6 @@
 import {
   Component,
-  ContentChild, ElementRef, forwardRef,
+  ContentChild, ElementRef,
   HostBinding,
   inject,
   input, model, OnDestroy, OnInit,
@@ -26,11 +26,10 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ComboBox),
+      useExisting: ComboBox,
       multi: true
     }
   ]
-
 })
 export class ComboBox implements OnInit, OnDestroy, ControlValueAccessor {
   @HostBinding('class') hostClass = 'combo-container';

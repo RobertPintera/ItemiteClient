@@ -1,7 +1,9 @@
 import {Component, signal,} from '@angular/core';
 import {Image} from '../../../core/models/Image';
-import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
+import {CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {Button} from '../button/button';
+import {Dialog} from '../dialog/dialog';
+import {FileUpload} from '../file-upload/file-upload';
 
 
 @Component({
@@ -11,6 +13,9 @@ import {Button} from '../button/button';
     CdkDropList,
     Button,
     CdkDrag,
+    CdkDragPlaceholder,
+    Dialog,
+    FileUpload,
   ],
   styleUrl: './media-manager.css'
 })
@@ -18,10 +23,13 @@ export class MediaManager {
   readonly images = signal<Image[]>([]);
   readonly isEditOrder = signal<boolean>(false);
 
+  readonly selectedImage = signal<Image | null>(null);
+  readonly isOpenDialog = signal<boolean>(false);
+  readonly isOpenFileUpload = signal<boolean>(false);
+
   private nextId = 1;
 
   toggleEditOrder() {
-    console.log(this.isEditOrder());
     this.isEditOrder.set(!this.isEditOrder());
   }
 
@@ -49,5 +57,37 @@ export class MediaManager {
     arr.forEach((img, index) => img.imageOrder = index);
 
     this.images.set(arr);
+  }
+
+  openFileUpload() {
+    this.isOpenFileUpload.set(true);
+  }
+
+  onFileUploadConfirm(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const newImage: Image = {
+        imageId: this.nextId++,
+        imageUrl: reader.result as string,
+        imageOrder: this.images().length
+      };
+      this.images.update(arr => [...arr, newImage]);
+    };
+    reader.readAsDataURL(file);
+
+    this.isOpenFileUpload.set(false);
+  }
+
+  onFileUploadCancel() {
+    this.isOpenFileUpload.set(false);
+  }
+
+  openDialog(image: Image) {
+    this.selectedImage.set(image);
+    this.isOpenDialog.set(true);
+  }
+
+  closeDialog(){
+    this.isOpenDialog.set(false);
   }
 }

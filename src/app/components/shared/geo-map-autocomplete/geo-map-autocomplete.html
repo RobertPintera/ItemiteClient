@@ -6,8 +6,7 @@
         <app-button [label]="('cancel' | translate)" severity="accent" variant="outlined" (clickButton)="cancel()"/>
         <app-button [label]="('save' | translate)" severity="primary" (clickButton)="save()"/>
       } @else {
-        <app-button [label]="('edit' | translate)" severity="primary" (clickButton)="edit()"/>
-
+        <app-button [label]="('edit' | translate)" severity="primary" (clickButton)="edit()" [disabled]="isDisabled()"/>
       }
     </div>
   </div>
