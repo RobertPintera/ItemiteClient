@@ -37,7 +37,6 @@
     @apply bg-background hover:bg-destructive/50 active:bg-destructive/30 border-2 border-destructive ring-ring;
   }
 
-
   .button-disabled-filled {
     @apply bg-ring/20 text-accent-foreground;
   }

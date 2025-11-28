@@ -1,9 +1,9 @@
 import {
   Component,
   ContentChild,
-  ElementRef,
+  ElementRef, forwardRef,
   HostBinding,
-  inject,
+  inject, Input,
   input, model, OnDestroy, OnInit,
   output, PLATFORM_ID,
   signal,
@@ -12,7 +12,9 @@ import {
 import {SelectNode} from '../../../core/models/SelectNode';
 import {isPlatformBrowser, NgTemplateOutlet} from '@angular/common';
 import {OptionItem} from '../../../core/models/OptionItem';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
+/* eslint-disable @typescript-eslint/no-empty-function */
 @Component({
   selector: 'app-cascade-select',
   imports: [
@@ -20,9 +22,16 @@ import {OptionItem} from '../../../core/models/OptionItem';
   ],
   templateUrl: './cascade-select.html',
   styleUrl: './cascade-select.css',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: CascadeSelect,
+      multi: true
+    }
+  ]
 })
-export class CascadeSelect implements OnInit, OnDestroy {
+export class CascadeSelect implements OnInit, OnDestroy, ControlValueAccessor {
   @HostBinding('class') hostClass = 'cascade-container';
   @ContentChild(TemplateRef) templateRef?: TemplateRef<unknown>;
 
@@ -33,7 +42,11 @@ export class CascadeSelect implements OnInit, OnDestroy {
   readonly selectedItem = model<OptionItem>();
   readonly selectedItemChange = output<OptionItem>();
 
+  readonly isDisabled = signal<boolean>(false);
   readonly isOpen = signal(false);
+
+  private onChange: (value: OptionItem | null) => void = () => {};
+  private onTouched: () => void = () => {};
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
@@ -52,8 +65,11 @@ export class CascadeSelect implements OnInit, OnDestroy {
   }
 
   toggleDropdown() {
+    if(this.isDisabled()) return;
+
     window.dispatchEvent(new CustomEvent('close-all-combos'));
     this.isOpen.set(!this.isOpen());
+    this.onTouched();
 
     if (this.isOpen()) {
       this.collapseAll(this.items());
@@ -69,7 +85,8 @@ export class CascadeSelect implements OnInit, OnDestroy {
     this.selectedItem.set(node.option);
     this.isOpen.set(false);
     this.selectedItemChange.emit(node.option);
-
+    this.onChange(node.option);
+    this.onTouched();
   }
 
   private closeDropdownHandler = (event: Event) => {
@@ -91,4 +108,22 @@ export class CascadeSelect implements OnInit, OnDestroy {
       if (node.childrenNodes?.length) this.collapseAll(node.childrenNodes);
     }
   }
+
+  // ------ forms -----
+  writeValue(value: OptionItem | null): void {
+    this.selectedItem.set(value ?? undefined);
+  }
+
+  registerOnChange(fn: (value: OptionItem | null) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled.set(isDisabled);
+  }
+  // -------------------
 }

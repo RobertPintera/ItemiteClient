@@ -1,4 +1,4 @@
-<button type="button" class="combo-selected w-full" (click)="toggleDropdown()">
+<button type="button" class="combo-selected w-full" (click)="toggleDropdown()" [disabled]="isDisabled()">
   @if (templateRef){
     <ng-container [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="{ $implicit: selectedItem() }"></ng-container>
   } @else {

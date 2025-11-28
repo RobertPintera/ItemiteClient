@@ -20,7 +20,6 @@ export class Button {
     this.clickButton.emit();
   }
 
-
   get getClasses(): string {
     if(this.isDisabled())
       return 'button-' + BUTTON_SEVERITY.DISABLED + '-' + this.variant();

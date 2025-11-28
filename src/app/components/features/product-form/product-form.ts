@@ -56,7 +56,7 @@ export class ProductForm{
       Validators.pattern(/^\d+(\.\d{1,2})?$/)
     ]),
     mainCategory: new FormControl<OptionItem | null>(null, Validators.required),
-    subcategory: new FormControl(''),
+    subcategory:new FormControl<OptionItem | null>({value: null, disabled: true}, Validators.required),
     isNegotiable: new FormControl(''),
     localization: new FormControl(''),
     images: new FormControl([]),
@@ -73,11 +73,19 @@ export class ProductForm{
         this.categories.set(tree);
 
         const subCategoriesNodes: SelectNode[] = tree.subCategories?.map(cat => this.mapCategoryToSelectNode(cat)) || [];
-
         this.subCategoriesOptions.set(subCategoriesNodes);
+
+        if (subCategoriesNodes.length) {
+          this.form.get('subcategory')?.enable();
+        } else {
+          this.form.get('subcategory')?.disable();
+          this.form.get('subcategory')?.reset();
+        }
       },
       error: err => console.error(err)
     });
+
+    this.form.get('mainCategory')?.setValue(option);
   }
 
   selectSubCategory(option?: OptionItem){

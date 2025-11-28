@@ -57,8 +57,17 @@
           }
         </div>
         <div class="flex flex-col gap-2 w-full">
-          <label for="mainCategory" class="text-xl font-semibold">Subcategory</label>
-          <app-cascade-select [items]="subCategoriesOptions()" [(selectedItem)]="selectedSubCategory" (selectedItemChange)="selectSubCategory($event)"/>
+          <label for="subcategory" class="text-xl font-semibold">Subcategory</label>
+          <app-cascade-select formControlName="subcategory" [items]="subCategoriesOptions()" [(selectedItem)]="selectedSubCategory" (selectedItemChange)="selectSubCategory($event)" />
+          @if (form.controls.subcategory.invalid && (form.controls.subcategory.touched || form.controls.subcategory.dirty)) {
+            <div>
+              <ul class="text-destructive text-sm list-disc pl-4">
+                @if(form.controls.subcategory.hasError('required')) {
+                  <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+                }
+              </ul>
+            </div>
+          }
         </div>
       </div>
       <!-- Localization -->

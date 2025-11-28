@@ -68,33 +68,39 @@ export class GeoMapAutocomplete implements AfterViewInit {
   private async flyTo(lat: number, lon: number, city: string) {
     if (isPlatformBrowser(this.platformId)) {
       const { marker } = await import('leaflet');
-      this.map = this.map.flyTo([lat, lon], 13);
+      this.map.flyTo([lat, lon], 13);
       this.clearMarker();
       this.currentMarker.set(marker([lat, lon]).addTo(this.map).bindPopup(city).openPopup());
     }
   }
 
-  private async initMap(latitude: number, longtitude: number, city: string) {
+  private async initMap(latitude: number, longitude: number, city: string) {
     this.clearMarker();
-    if(isPlatformBrowser(this.platformId)) {
-      const { map, tileLayer, marker, Icon } = await import('leaflet');
 
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const { map, tileLayer, marker, Icon } = await import('leaflet');
+
+    if (!this.map) {
       Icon.Default.prototype.options.iconRetinaUrl = 'marker-icon.png';
-      Icon.Default.prototype.options.shadowUrl = 'marker-icon.png';
+      Icon.Default.prototype.options.shadowUrl = 'marker-shadow.png';
       Icon.Default.prototype.options.shadowSize = [25, 41];
 
       const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-      this.map = map('map').setView([latitude, longtitude], 14);
-      tileLayer(baseMapURl, {attribution: '&copy; OpenStreetMap contributors'}).addTo(this.map);
+      this.map = map('map').setView([latitude, longitude], 14);
+      tileLayer(baseMapURl, { attribution: '&copy; OpenStreetMap contributors' }).addTo(this.map);
 
-      this.map.on('click', ((e) => {
-        if(!this.isEdit()) return;
+      this.map.on('click', (e) => {
+        if (!this.isEdit()) return;
         this.getPlace(e.latlng.lat, e.latlng.lng);
-      }));
+      });
 
       this.allowMapControl(false);
+    } else {
+      this.map.setView([latitude, longitude], 14);
     }
   }
+
 
   private getPlace(lat :number, lng:number) {
     const request: LatLonPayloadDTO = {

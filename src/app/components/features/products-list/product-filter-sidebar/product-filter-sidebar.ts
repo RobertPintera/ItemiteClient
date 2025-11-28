@@ -92,7 +92,6 @@ export class ProductFilterSidebar implements OnInit {
     effect(() => {
       const filterSidebar = this.filterSidebar();
       const isXl = untracked(() => this.isXl());
-      console.log(filterSidebar);
       if(isXl) {
         this.lastFilterSidebar.set(structuredClone(filterSidebar));
       }
