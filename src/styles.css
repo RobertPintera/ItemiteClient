@@ -204,10 +204,14 @@ body {
   h6 {
     @apply text-sm sm:text-base font-medium leading-snug;
   }
-  input {
+
+  input,
+  textarea {
     @apply border-2 border-border ring-ring rounded-xl bg-white;
   }
-  input:disabled{
+
+  input:disabled,
+  textarea:disabled {
     @apply border-2 border-ring ring-ring rounded-xl bg-white;
   }
 

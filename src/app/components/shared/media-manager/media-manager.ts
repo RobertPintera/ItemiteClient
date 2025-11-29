@@ -25,6 +25,8 @@ export class MediaManager {
   readonly isEditOrder = signal<boolean>(false);
 
   readonly selectedImage = signal<Image | null>(null);
+
+  readonly isEditItem = signal<boolean>(false);
   readonly isOpenDialog = signal<boolean>(false);
   readonly isOpenFileUpload = signal<boolean>(false);
 
@@ -60,11 +62,12 @@ export class MediaManager {
     this.images.set(arr);
   }
 
+  // ---- FileUpload ----
   openFileUpload() {
     this.isOpenFileUpload.set(true);
   }
 
-  onFileUploadConfirm(file: File) {
+  fileUploadConfirm(file: File) {
     const reader = new FileReader();
     reader.onload = () => {
       const newImage: Image = {
@@ -79,13 +82,19 @@ export class MediaManager {
     this.isOpenFileUpload.set(false);
   }
 
-  onFileUploadCancel() {
+  fileUploadCancel() {
     this.isOpenFileUpload.set(false);
   }
+
+  // ---- Dialog - Edit/Delete ----
 
   openDialog(image: Image) {
     this.selectedImage.set(image);
     this.isOpenDialog.set(true);
+  }
+
+  closeDialog(){
+    this.isOpenDialog.set(false);
   }
 
   deleteSelectedImage() {
@@ -104,7 +113,35 @@ export class MediaManager {
     this.isOpenDialog.set(false);
   }
 
-  closeDialog(){
+  openEditFileUpload() {
     this.isOpenDialog.set(false);
+    this.isEditItem.set(true);
   }
+
+  editFileUploadConfirm(file: File){
+    const img = this.selectedImage();
+    if (!img) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.images.update(arr =>
+        arr.map(i =>
+          i.imageId === img.imageId
+            ? { ...i, imageUrl: reader.result as string }
+            : i
+        )
+      );
+    };
+
+    reader.readAsDataURL(file);
+
+    this.selectedImage.set(null);
+    this.isEditItem.set(false);
+  }
+
+  editFileUploadCancel(){
+    this.selectedImage.set(null);
+    this.isEditItem.set(false);
+  }
+
 }

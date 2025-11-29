@@ -36,13 +36,14 @@
         <app-button (clickButton)="closeDialog()" label="Close" severity="accent" variant="outlined"/>
         <div class="flex gap-2">
           <app-button (clickButton)="deleteSelectedImage()" label="Delete" severity="danger"/>
-          <app-button (clickButton)="closeDialog()" label="Edit" severity="primary"/>
+          <app-button (clickButton)="openEditFileUpload()" label="Edit" severity="primary"/>
         </div>
       </div>
     </div>
   </app-dialog>
-}
-@if(isOpenFileUpload()){
-  <app-file-upload [supportsPreview]="true" (onCancelClicked)="onFileUploadCancel()" (onConfirmClicked)="onFileUploadConfirm($event)"/>
+} @else if (isEditItem()){
+  <app-file-upload [supportsPreview]="true" (onCancelClicked)="editFileUploadCancel()" (onConfirmClicked)="editFileUploadConfirm($event)"/>
+} @else if(isOpenFileUpload()){
+  <app-file-upload [supportsPreview]="true" (onCancelClicked)="fileUploadCancel()" (onConfirmClicked)="fileUploadConfirm($event)"/>
 }
 
