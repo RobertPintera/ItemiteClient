@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-4 w-full">
   <div class="flex flex-row">
-    <app-button label="Edit order" (clickButton)="toggleEditOrder()"/>
+    <app-button label="Edit order" (clickButton)="toggleEditOrder()" [disabled]="isDisabled()"/>
   </div>
   <div class="images-container flex flex-row gap-4 flex-wrap w-full" cdkDropListOrientation="mixed" (cdkDropListDropped)="drop($event)" cdkDropList>
     @for(image of images(); track image.imageId){
@@ -12,7 +12,7 @@
         <img [src]="image.imageUrl" alt="test" class="w-full h-full object-cover select-none" draggable="false">
       </div>
     }
-    @if(!isEditOrder()){
+    @if(!isEditOrder() && !isDisabled()){
       <button class="flex justify-center items-center border-border border-2 w-32 h-32 rounded-2xl bg-background cursor-pointer" (click)="openFileUpload()">
         <svg xmlns="http://www.w3.org/2000/svg" height="48px"
              viewBox="0 -960 960 960" width="48px" fill="#1f1f1f">

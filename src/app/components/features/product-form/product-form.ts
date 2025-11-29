@@ -11,6 +11,10 @@ import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angula
 import {Localization} from '../../../core/models/Localization';
 import {GeoMapAutocomplete} from '../../shared/geo-map-autocomplete/geo-map-autocomplete';
 import {TranslatePipe} from '@ngx-translate/core';
+import {ProductListingService} from '../../../core/services/product-listing-service/product-listing.service';
+import {PostProductListingDTO} from '../../../core/models/PostProductListingDTO';
+import {Router} from '@angular/router';
+import {ImageMedia} from '../../../core/models/ImageMedia';
 
 @Component({
   selector: 'app-product-form',
@@ -27,13 +31,19 @@ import {TranslatePipe} from '@ngx-translate/core';
   styleUrl: './product-form.css'
 })
 export class ProductForm{
+  private productListingService = inject(ProductListingService);
   private categoryService = inject(CategoryService);
   private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
 
   readonly categories = signal<CategoryTreeDTO | null>(null);
 
   readonly selectedMainCategory = signal<OptionItem>({key: '', value: ''});
   readonly selectedSubCategory = signal<OptionItem>({key: '', value: ''});
+
+  readonly isSubmitting = signal<boolean>(false);
+  readonly submitError = signal<string | null>(null);
+
 
   readonly mainCategories = this.categoryService.mainCategories();
 
@@ -59,8 +69,8 @@ export class ProductForm{
     subcategory:new FormControl<OptionItem | null>({value: null, disabled: true}, Validators.required),
     isNegotiable: new FormControl<boolean>(false),
     localization: new FormControl<Localization | null>(null, Validators.required),
-    images: new FormControl([]),
-    description: new FormControl<string>('')
+    images: new FormControl<ImageMedia[]>([], Validators.required),
+    description: new FormControl<string>('', Validators.required)
   });
 
   selectMainCategory(option?: OptionItem){
@@ -105,12 +115,45 @@ export class ProductForm{
     };
   }
 
-  updateLocalization(localization: Localization | null): void {
+  submit() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-  }
+    this.isSubmitting.set(true);
+    this.submitError.set(null);
 
+    const imageFiles: File[] = this.form.value.images
+      ?.map(img => img.imageFile)
+      .filter((f): f is File => !!f) ?? [];
 
-  submit(){
+    const imageOrders = this.form.value.images?.map((img: ImageMedia) => img.imageOrder) ?? [];
 
+    const payload: PostProductListingDTO = {
+      name: this.form.value.name ?? '',
+      description: this.form.value.description ?? '',
+      locationLongitude: this.form.value.localization?.longitude ?? 0,
+      locationLattitude: this.form.value.localization?.latitude ?? 0,
+      locationCountry: this.form.value.localization?.country ?? '',
+      locationCity: this.form.value.localization?.city ?? '',
+      locationState: this.form.value.localization?.state ?? '',
+      price: this.form.value.price ?? 0,
+      isNegotiable: this.form.value.isNegotiable ?? false,
+      categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
+      images: imageFiles,
+      imageOrders: imageOrders,
+    };
+
+    this.productListingService.createProductListing(payload).subscribe({
+      next: createdProduct => {
+        this.isSubmitting.set(false);
+        this.router.navigate(['/products'], { queryParams: { id: createdProduct.createdProductListingId, type: "product" } });
+      },
+      error: err => {
+        this.isSubmitting.set(false);
+        this.submitError.set(err?.message || 'Something went wrong');
+      }
+    });
   }
 }

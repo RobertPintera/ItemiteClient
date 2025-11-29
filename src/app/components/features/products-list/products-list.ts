@@ -5,7 +5,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ListingFilter } from '../../../core/models/ListingFilter';
 import { ListingDTO } from '../../../core/models/ListingDTO';
 import {Subject, debounceTime, switchMap, takeUntil, finalize, catchError, of} from 'rxjs';
-import { ListingService } from '../../../core/services/listing/listing.service';
+import { ListingService } from '../../../core/services/listing-service/listing.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ListingType, SortBy, SortDirection} from '../../../core/constants/constants';
 

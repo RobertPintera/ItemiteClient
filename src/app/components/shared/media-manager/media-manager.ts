@@ -1,10 +1,10 @@
 import {Component, signal, ViewEncapsulation,} from '@angular/core';
-import {Image} from '../../../core/models/Image';
 import {CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {Button} from '../button/button';
 import {Dialog} from '../dialog/dialog';
 import {FileUpload} from '../file-upload/file-upload';
-
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ImageMedia} from '../../../core/models/ImageMedia';
 
 @Component({
   selector: 'app-media-manager',
@@ -19,13 +19,24 @@ import {FileUpload} from '../file-upload/file-upload';
   ],
   styleUrl: './media-manager.css',
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: MediaManager,
+      multi: true
+    }
+  ]
 })
-export class MediaManager {
-  readonly images = signal<Image[]>([]);
+export class MediaManager implements ControlValueAccessor{
+  private onChange: (value: ImageMedia[]) => void = () => {};
+  private onTouched: () => void = () => {};
+
+  readonly images = signal<ImageMedia[]>([]);
   readonly isEditOrder = signal<boolean>(false);
 
-  readonly selectedImage = signal<Image | null>(null);
+  readonly selectedImage = signal<ImageMedia | null>(null);
 
+  readonly isDisabled = signal<boolean>(false);
   readonly isEditItem = signal<boolean>(false);
   readonly isOpenDialog = signal<boolean>(false);
   readonly isOpenFileUpload = signal<boolean>(false);
@@ -34,32 +45,19 @@ export class MediaManager {
 
   toggleEditOrder() {
     this.isEditOrder.set(!this.isEditOrder());
+    this.onTouched();
   }
 
-  addImage(event: Event) {
-    const target = event.target as HTMLInputElement;
-    const file = target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const newImage: Image = {
-        imageId: this.nextId++,
-        imageUrl: reader.result as string,
-        imageOrder: this.images().length
-      };
-      this.images.update(arr => [...arr, newImage]);
-    };
-    reader.readAsDataURL(file);
-  }
-
-  drop(event: CdkDragDrop<Image[]>) {
+  drop(event: CdkDragDrop<ImageMedia[]>) {
     const arr = [...this.images()];
     moveItemInArray(arr, event.previousIndex, event.currentIndex);
 
     arr.forEach((img, index) => img.imageOrder = index);
 
     this.images.set(arr);
+
+    this.onTouched();
+    this.onChange(this.images());
   }
 
   // ---- FileUpload ----
@@ -70,12 +68,15 @@ export class MediaManager {
   fileUploadConfirm(file: File) {
     const reader = new FileReader();
     reader.onload = () => {
-      const newImage: Image = {
+      const newImages: ImageMedia = {
         imageId: this.nextId++,
         imageUrl: reader.result as string,
-        imageOrder: this.images().length
+        imageOrder: this.images().length,
+        existing: false
       };
-      this.images.update(arr => [...arr, newImage]);
+      this.images.update(arr => [...arr, newImages]);
+      this.onTouched();
+      this.onChange(this.images());
     };
     reader.readAsDataURL(file);
 
@@ -88,7 +89,7 @@ export class MediaManager {
 
   // ---- Dialog - Edit/Delete ----
 
-  openDialog(image: Image) {
+  openDialog(image: ImageMedia ) {
     this.selectedImage.set(image);
     this.isOpenDialog.set(true);
   }
@@ -101,13 +102,13 @@ export class MediaManager {
     const img = this.selectedImage();
     if (!img) return;
 
-    this.images.update(arr =>
-      arr.filter(i => i.imageId !== img.imageId)
-    );
+    this.images.update(arr => {
+      const filtered = arr.filter(i => i.imageId !== img.imageId);
+      return filtered.map((img, idx) => ({ ...img, imageOrder: idx }));
+    });
 
-    this.images.update(arr =>
-      arr.map((img, idx) => ({ ...img, imageOrder: idx }))
-    );
+    this.onTouched();
+    this.onChange(this.images());
 
     this.selectedImage.set(null);
     this.isOpenDialog.set(false);
@@ -127,16 +128,19 @@ export class MediaManager {
       this.images.update(arr =>
         arr.map(i =>
           i.imageId === img.imageId
-            ? { ...i, imageUrl: reader.result as string }
+            ?  { ...i, imageUrl: reader.result as string, existing: false, file: file }
             : i
         )
       );
+
+      this.onTouched();
+      this.onChange(this.images());
+
+      this.selectedImage.set(null);
+      this.isEditItem.set(false);
     };
 
     reader.readAsDataURL(file);
-
-    this.selectedImage.set(null);
-    this.isEditItem.set(false);
   }
 
   editFileUploadCancel(){
@@ -144,4 +148,27 @@ export class MediaManager {
     this.isEditItem.set(false);
   }
 
+
+  // ------ forms -----
+  writeValue(images: ImageMedia[] | null): void {
+    if (!images) { this.images.set([]); return; }
+
+    this.images.set(images);
+
+    const maxId = Math.max(0, ...images.map(i => i.imageId));
+    this.nextId = maxId + 1;
+  }
+
+  registerOnChange(fn: (value: ImageMedia[]) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled.set(isDisabled);
+  }
+  // -------------------
 }
