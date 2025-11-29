@@ -44,7 +44,6 @@ export class ProductForm{
   readonly isSubmitting = signal<boolean>(false);
   readonly submitError = signal<string | null>(null);
 
-
   readonly mainCategories = this.categoryService.mainCategories();
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
@@ -134,7 +133,7 @@ export class ProductForm{
       name: this.form.value.name ?? '',
       description: this.form.value.description ?? '',
       locationLongitude: this.form.value.localization?.longitude ?? 0,
-      locationLattitude: this.form.value.localization?.latitude ?? 0,
+      locationLatitude: this.form.value.localization?.latitude ?? 0,
       locationCountry: this.form.value.localization?.country ?? '',
       locationCity: this.form.value.localization?.city ?? '',
       locationState: this.form.value.localization?.state ?? '',
@@ -148,7 +147,7 @@ export class ProductForm{
     this.productListingService.createProductListing(payload).subscribe({
       next: createdProduct => {
         this.isSubmitting.set(false);
-        this.router.navigate(['/products'], { queryParams: { id: createdProduct.createdProductListingId, type: "product" } });
+        this.router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
       },
       error: err => {
         this.isSubmitting.set(false);

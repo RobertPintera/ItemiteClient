@@ -2,7 +2,7 @@ export interface PostProductListingDTO {
   name: string;
   description: string;
   locationLongitude: number;
-  locationLattitude: number;
+  locationLatitude: number;
   locationCountry: string;
   locationCity: string;
   locationState: string;

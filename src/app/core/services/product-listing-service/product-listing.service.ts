@@ -30,20 +30,20 @@ export class ProductListingService {
   // Logic
   createProductListing(productListing: PostProductListingDTO) {
     const formData = new FormData();
-    formData.append('name', productListing.name);
-    formData.append('description', productListing.description);
-    formData.append('price', productListing.price.toString());
-    formData.append('isNegotiable', productListing.isNegotiable.toString());
-    formData.append('categoryId', productListing.categoryId.toString());
-    formData.append('locationLongitude', productListing.locationLongitude.toString());
-    formData.append('locationLattitude', productListing.locationLattitude.toString());
-    formData.append('locationCountry', productListing.locationCountry);
-    formData.append('locationCity', productListing.locationCity);
-    formData.append('locationState', productListing.locationState);
+    formData.append('Name', productListing.name);
+    formData.append('Description', productListing.description);
+    formData.append('Price', parseFloat(productListing.price.toFixed(2)).toString());
+    formData.append('IsNegotiable', productListing.isNegotiable.toString());
+    formData.append('CategoryId', productListing.categoryId.toString());
+    formData.append('Location.Longitude', productListing.locationLongitude.toString());
+    formData.append('Location.Latitude', productListing.locationLatitude.toString());
+    formData.append('Location.Country', productListing.locationCountry);
+    formData.append('Location.City', productListing.locationCity);
+    formData.append('Location.State', productListing.locationState);
 
     productListing.images.forEach((file, idx) => {
-      formData.append('images', file);  // plik
-      formData.append('imageOrders', productListing.imageOrders[idx].toString());
+      formData.append('Images', file);
+      formData.append('ImageOrders', productListing.imageOrders[idx].toString());
     });
 
     return this.postProductListing(formData).pipe(

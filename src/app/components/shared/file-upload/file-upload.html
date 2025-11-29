@@ -44,14 +44,14 @@ fixed w-full max-w-[1920px] h-full bg-background/50 backdrop-grayscale-100 backd
 
     <!-- Buttons -->
     <div class="flex justify-around gap-10 flex-row mt-4 h-fit">
-      <button
+      <button type="button"
         (click)="OnCancelClicked()"
         class="hover:scale-105 transition-transform ease-in-out cursor-pointer
         bg-primary text-primary-foreground ring-2 shadow-md rounded-sm flex-1 shadow-input"
       >
         {{'controls.cancel' | translate}}
       </button>
-      <button [disabled]="invalid()"
+      <button type="button" [disabled]="invalid()"
         (click)="OnConfirmClicked()"
         class="enabled:hover:scale-105 transition-transform ease-in-out enabled:cursor-pointer
         bg-secondary disabled:bg-secondary/50 text-secondary-foreground ring-2 shadow-md rounded-sm h-20 flex-1 shadow-input"

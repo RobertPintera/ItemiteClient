@@ -6,6 +6,8 @@ import {FileUpload} from '../file-upload/file-upload';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ImageMedia} from '../../../core/models/ImageMedia';
 
+/* eslint-disable @typescript-eslint/no-empty-function */
+
 @Component({
   selector: 'app-media-manager',
   templateUrl: './media-manager.html',
@@ -52,7 +54,7 @@ export class MediaManager implements ControlValueAccessor{
     const arr = [...this.images()];
     moveItemInArray(arr, event.previousIndex, event.currentIndex);
 
-    arr.forEach((img, index) => img.imageOrder = index);
+    arr.forEach((img, index) => img.imageOrder = index + 1);
 
     this.images.set(arr);
 
@@ -66,22 +68,21 @@ export class MediaManager implements ControlValueAccessor{
   }
 
   fileUploadConfirm(file: File) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const newImages: ImageMedia = {
-        imageId: this.nextId++,
-        imageUrl: reader.result as string,
-        imageOrder: this.images().length,
-        existing: false
-      };
-      this.images.update(arr => [...arr, newImages]);
-      this.onTouched();
-      this.onChange(this.images());
+    const newImage: ImageMedia = {
+      imageId: this.nextId++,
+      imageOrder: this.images().length + 1,
+      existing: false,
+      imageFile: file,
+      imageUrl: URL.createObjectURL(file)
     };
-    reader.readAsDataURL(file);
+
+    this.images.update(arr => [...arr, newImage]);
+    this.onTouched();
+    this.onChange(this.images());
 
     this.isOpenFileUpload.set(false);
   }
+
 
   fileUploadCancel() {
     this.isOpenFileUpload.set(false);
@@ -104,7 +105,7 @@ export class MediaManager implements ControlValueAccessor{
 
     this.images.update(arr => {
       const filtered = arr.filter(i => i.imageId !== img.imageId);
-      return filtered.map((img, idx) => ({ ...img, imageOrder: idx }));
+      return filtered.map((img, index) => ({ ...img, imageOrder: index + 1 }));
     });
 
     this.onTouched();
@@ -119,28 +120,23 @@ export class MediaManager implements ControlValueAccessor{
     this.isEditItem.set(true);
   }
 
-  editFileUploadConfirm(file: File){
+  editFileUploadConfirm(file: File) {
     const img = this.selectedImage();
     if (!img) return;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.images.update(arr =>
-        arr.map(i =>
-          i.imageId === img.imageId
-            ?  { ...i, imageUrl: reader.result as string, existing: false, file: file }
-            : i
-        )
-      );
+    this.images.update(arr =>
+      arr.map(i =>
+        i.imageId === img.imageId
+          ? { ...i, imageFile: file, imageUrl: URL.createObjectURL(file), existing: false }
+          : i
+      )
+    );
 
-      this.onTouched();
-      this.onChange(this.images());
+    this.onTouched();
+    this.onChange(this.images());
 
-      this.selectedImage.set(null);
-      this.isEditItem.set(false);
-    };
-
-    reader.readAsDataURL(file);
+    this.selectedImage.set(null);
+    this.isEditItem.set(false);
   }
 
   editFileUploadCancel(){
@@ -153,7 +149,7 @@ export class MediaManager implements ControlValueAccessor{
   writeValue(images: ImageMedia[] | null): void {
     if (!images) { this.images.set([]); return; }
 
-    this.images.set(images);
+    this.images.set(images.map((img, index) => ({ ...img, imageOrder: index + 1 })));
 
     const maxId = Math.max(0, ...images.map(i => i.imageId));
     this.nextId = maxId + 1;
