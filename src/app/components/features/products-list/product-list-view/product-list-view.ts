@@ -44,15 +44,15 @@ export class ProductListView implements OnInit {
 
   sortDirectionOptions = [
     { key: 'none', value: '-'},
-    { key: 'ascending', value: 'sort_directions.ascending' },
-    { key: 'descending', value: 'sort_directions.descending' },
+    { key: 'Ascending', value: 'sort_directions.ascending' },
+    { key: 'Descending', value: 'sort_directions.descending' },
   ];
 
   sortByOptions = [
     { key: 'none', value: '-'},
-    { key: 'price', value: 'sort_by.price' },
-    { key: 'creationDate', value: 'sort_by.creation_date' },
-    { key: 'views', value: 'sort_by.views' },
+    { key: 'Price', value: 'sort_by.price' },
+    { key: 'CreationDate', value: 'sort_by.creation_date' },
+    { key: 'Views', value: 'sort_by.views' },
   ];
 
   ngOnInit() {

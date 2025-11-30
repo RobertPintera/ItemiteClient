@@ -38,19 +38,37 @@
   },
   "categories": {
     "header": "Categories",
+
     "agriculture": "Agriculture",
+
     "electronics": "Electronics",
+    "computer_accesories": "Computer accesories",
+    "mouses": "Mouses",
+    "keyboards": "Keyboards",
+    "computers": "Computers",
+
     "motorization": "Motorization",
+
     "fashion": "Fashion",
+
     "sports_hobbies": "Sports & Hobbies",
+
     "kids_baby": "Kids & Baby",
+
     "real_estate": "Real Estate",
+
     "home_garden": "Home & Garden",
+
     "pets": "Pets",
+
     "services_education": "Services & Education",
+
     "industry": "Industry",
+
     "health_beauty": "Health & Beauty",
+
     "events": "Events",
+
     "jobs": "Jobs"
   },
   "dedicated_products": {
@@ -179,5 +197,12 @@
   },
   "edit": "Edit",
   "save": "Save",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "products_filter": {
+    "prices": "Prices",
+    "listing_type": "Listing Type",
+    "localization": "Localization",
+    "find_city": "Find city",
+    "min_max_price_error": "Minimal price cannot be greater than maximal price"
+  }
 }

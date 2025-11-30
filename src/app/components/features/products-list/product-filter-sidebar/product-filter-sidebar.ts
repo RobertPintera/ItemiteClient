@@ -66,8 +66,8 @@ export class ProductFilterSidebar implements OnInit {
 
   listingTypesOptions: OptionItem[]  = [
     { key: 'none', value: '-'},
-    { key: 'auction', value: 'listing_types.auction' },
-    { key: 'product', value: 'listing_types.product' },
+    { key: 'Auction', value: 'listing_types.auction' },
+    { key: 'Product', value: 'listing_types.product' },
   ];
 
   distancesOptions: OptionItem[]  = [
@@ -206,7 +206,7 @@ export class ProductFilterSidebar implements OnInit {
   usePriceFrom(priceFrom: number | null) {
     const priceTo = this.filterSidebar().priceTo;
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
-      this.filterSidebar().priceError = 'Minimal price cannot be greater than maximal price.';
+      this.filterSidebar().priceError = 'products_filter.min_max_price_error';
       return;
     }
     this.filterSidebar().priceError = null;
@@ -219,7 +219,7 @@ export class ProductFilterSidebar implements OnInit {
   usePriceTo(priceTo: number | null) {
     const priceFrom = Number(this.filterSidebar().priceFrom);
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
-      this.filterSidebar().priceError = 'Minimal price cannot be greater than maximal price.';
+      this.filterSidebar().priceError = 'products_filter.min_max_price_error';
       return;
     }
     this.filterSidebar().priceError = null;
@@ -248,7 +248,7 @@ export class ProductFilterSidebar implements OnInit {
     const priceTo = sidebar.priceTo;
 
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
-      this.filterSidebar().priceError = 'Minimal price cannot be greater than maximal price.';
+      this.filterSidebar().priceError = 'products_filter.min_max_price_error';
       return;
     }
 

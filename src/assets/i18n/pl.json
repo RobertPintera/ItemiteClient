@@ -38,19 +38,37 @@
   },
   "categories": {
     "header": "Kategorie",
+
     "agriculture": "Rolnictwo",
+
     "electronics": "Elektronika",
+    "computer_accesories": "Akcesoria komputerowe",
+    "mouses": "Myszki",
+    "keyboards": "Klawiatury",
+    "computers": "Komputery",
+
     "motorization": "Motoryzacja",
+
     "fashion": "Moda",
+
     "sports_hobbies": "Sport i Hobby",
+
     "kids_baby": "Dzieci i Niemowlęta",
+
     "real_estate": "Nieruchomości",
+
     "home_garden": "Dom i Ogród",
+
     "pets": "Zwierzęta",
+
     "services_education": "Usługi i Edukacja",
+
     "industry": "Przemysł",
+
     "health_beauty": "Zdrowie i Uroda",
+
     "events": "Wydarzenia",
+
     "jobs": "Praca"
   },
   "dedicated_products": {
@@ -179,5 +197,12 @@
   },
   "edit": "Edytuj",
   "save": "Zapisz",
-  "cancel": "Anuluj"
+  "cancel": "Anuluj",
+  "products_filter": {
+    "prices": "Ceny",
+    "listing_type": "Typ oferty",
+    "localization": "Lokalizacja",
+    "find_city": "Znajdź miasto",
+    "min_max_price_error": "Cena minimalna nie może być większa od ceny maksymalnej"
+  }
 }
