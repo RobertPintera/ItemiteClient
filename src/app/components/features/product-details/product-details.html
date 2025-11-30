@@ -15,7 +15,7 @@
           <div class="flex flex-row flex-wrap gap-3 mb-4">
             @for (category of article()?.categories; track category.id){
               <div class="border-1 px-4 py-2 rounded-2xl">
-                <p class="text-base md:text-xl">{{category.name}}</p>
+                <p class="text-base md:text-xl">{{ `categories.${category.name}` | translate }}</p>
               </div>
             }
           </div>
@@ -64,6 +64,11 @@
               <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
               <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
               <app-button label="{{'product_details.bid' | translate}}"/>
+              <app-button label="{{'product_details.send_message' | translate}}" severity="secondary"/>
+              <app-button (clickButton)="ClickNumber()"
+                          [label]="isClickPhoneNumber() ? (auction.owner.phoneNumber || ( 'product_details.call' | translate ))
+                          : ( 'product_details.call' | translate )" severity="primary">
+              </app-button>
             }
           }
           <p>{{'product_details.localization' | translate}}: {{ article()?.location?.country }}, {{article()?.location?.city}}, {{article()?.location?.state}}</p>
