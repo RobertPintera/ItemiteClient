@@ -11,6 +11,7 @@ import {ExternalLoginError} from './components/features/login-register/external-
 import {Me} from './components/features/login-register/me/me';
 import {ProductForm} from './components/features/product-form/product-form';
 import {NotFound} from './components/features/not-found/not-found';
+import {UserProducts} from './components/features/user-products/user-products';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,10 @@ export const routes: Routes = [
       {
         path: 'profile',
         component: ProfilePage
+      },
+      {
+        path: 'user-products',
+        component: UserProducts
       },
       {
         path: '**',

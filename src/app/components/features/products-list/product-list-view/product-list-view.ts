@@ -4,7 +4,7 @@ import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
-import {ListingDTO} from '../../../../core/models/ListingDTO';
+import {ListingResponseDTO} from '../../../../core/models/ListingResponseDTO';
 import {Loader} from '../../../shared/loader/loader';
 import {SORT_DIRECTION, SortBy, SortDirection, SORTS_BY} from '../../../../core/constants/constants';
 import {ListingFilter} from '../../../../core/models/ListingFilter';
@@ -30,7 +30,7 @@ export class ProductListView implements OnInit {
   readonly filter = input.required<ListingFilter>();
   readonly isBlocked = input.required<boolean>();
   readonly totalPages = input.required<number>();
-  readonly listing = input.required<ListingDTO | null>();
+  readonly listing = input.required<ListingResponseDTO | null>();
   readonly loading = input.required<boolean>();
 
   readonly isMd = input.required<boolean>();

@@ -2,8 +2,9 @@ import {inject, Injectable, } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, Observable} from 'rxjs';
-import {ListingDTO} from '../../models/ListingDTO';
+import {ListingResponseDTO} from '../../models/ListingResponseDTO';
 import {ListingFilter} from '../../models/ListingFilter';
+import {PaginatedUserListingDTO} from '../../models/PaginatedUserListingDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -14,17 +15,21 @@ export class ListingService {
 
   // API
 
-  private getListing(): Observable<ListingDTO> {
-    return this.http.get<ListingDTO>(`${this.baseUrl}`);
+  private getListing(params: HttpParams): Observable<ListingResponseDTO> {
+    return this.http.get<ListingResponseDTO>(`${this.baseUrl}`, { params });
+  }
+
+  private getListingUser(id: number, params: HttpParams): Observable<ListingResponseDTO>{
+    return this.http.get<ListingResponseDTO>(`${this.baseUrl}`, { params } );
   }
 
   private deleteListing(id: number) {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
-  // Updating signals
+  // Logic
 
-  loadListing(filter?: ListingFilter): Observable<ListingDTO> {
+  loadListing(filter?: ListingFilter): Observable<ListingResponseDTO> {
     let params = new HttpParams();
 
     if (filter?.pageSize != null) params = params.set('pageSize', filter.pageSize);
@@ -43,7 +48,20 @@ export class ListingService {
       });
     }
 
-    return this.http.get<ListingDTO>(`${this.baseUrl}`, { params }).pipe(
+    return this.getListing(params).pipe(
+      catchError(err => {
+        console.error('Error getFilteredListings:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadUserListings(id: number, filter: PaginatedUserListingDTO) {
+    const params = new HttpParams()
+      .set('pageSize', filter.pageSize)
+      .set('pageNumber', filter.pageNumber);
+
+    return this.getListingUser(id, params).pipe(
       catchError(err => {
         console.error('Error getFilteredListings:', err);
         throw err;

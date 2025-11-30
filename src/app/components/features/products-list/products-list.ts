@@ -3,7 +3,7 @@ import { ProductListView } from './product-list-view/product-list-view';
 import { ProductFilterSidebar } from './product-filter-sidebar/product-filter-sidebar';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ListingFilter } from '../../../core/models/ListingFilter';
-import { ListingDTO } from '../../../core/models/ListingDTO';
+import { ListingResponseDTO } from '../../../core/models/ListingResponseDTO';
 import {Subject, debounceTime, switchMap, takeUntil, finalize, catchError, of} from 'rxjs';
 import { ListingService } from '../../../core/services/listing-service/listing.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -30,7 +30,7 @@ export class ProductsList implements OnInit, OnDestroy {
   readonly isMd = signal<boolean>(false);
   readonly isXl = signal<boolean>(false);
   readonly isFilterOpen = signal<boolean>(false);
-  readonly listing = signal<ListingDTO | null>(null);
+  readonly listing = signal<ListingResponseDTO | null>(null);
   readonly loading = signal<boolean>(true);
   readonly isBlocked = signal<boolean>(false);
 
