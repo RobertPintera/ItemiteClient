@@ -195,14 +195,22 @@
   "api_errors": {
     "try_again": "Proszę spróbować ponownie"
   },
-  "edit": "Edytuj",
-  "save": "Zapisz",
-  "cancel": "Anuluj",
   "products_filter": {
     "prices": "Ceny",
     "listing_type": "Typ oferty",
     "localization": "Lokalizacja",
     "find_city": "Znajdź miasto",
     "min_max_price_error": "Cena minimalna nie może być większa od ceny maksymalnej"
+  },
+  "edit": "Edytuj",
+  "create": "Stwórz",
+  "save": "Zapisz",
+  "cancel": "Anuluj",
+  "user_products": {
+    "header": "Twoje produkty i aukcje"
+  },
+  "product-form": {
+    "preview": "Podgląd",
+    "error_url_listing_type": "URL zawiera nieprawidłowy typ formularza."
   }
 }

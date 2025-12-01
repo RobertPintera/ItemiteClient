@@ -195,14 +195,22 @@
   "api_errors": {
     "try_again": "Please try again"
   },
-  "edit": "Edit",
-  "save": "Save",
-  "cancel": "Cancel",
   "products_filter": {
     "prices": "Prices",
     "listing_type": "Listing Type",
     "localization": "Localization",
     "find_city": "Find city",
     "min_max_price_error": "Minimal price cannot be greater than maximal price"
+  },
+  "edit": "Edit",
+  "create": "Create",
+  "save": "Save",
+  "cancel": "Cancel",
+  "user_products": {
+    "header": "Your products and auctions"
+  },
+  "product-form": {
+    "preview": "Preview",
+    "error_url_listing_type": "The URL contains an invalid form type."
   }
 }

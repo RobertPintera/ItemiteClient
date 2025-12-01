@@ -54,7 +54,7 @@ export class ProductsList implements OnInit, OnDestroy {
     this.breakpointObserver.observe([
       '(min-width: 768px)',
       '(min-width: 1280px)'
-    ]).subscribe(result => {
+    ]).pipe(takeUntil(this.destroy$)).subscribe(result => {
       this.isMd.set(result.breakpoints['(min-width: 768px)']);
       this.isXl.set(result.breakpoints['(min-width: 1280px)']);
     });
@@ -81,7 +81,7 @@ export class ProductsList implements OnInit, OnDestroy {
       next: (data) => this.listing.set(data),
     });
 
-    this.route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const updated: Partial<ListingFilter> = {};
 
       const num = (name: string) => {

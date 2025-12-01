@@ -3,12 +3,14 @@ import {RouterLink} from '@angular/router';
 import {ListingItemDTO} from '../../../../../core/models/LitstingItemDTO';
 import {LISTING_TYPES} from '../../../../../core/constants/constants';
 import {TranslatePipe} from '@ngx-translate/core';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-product-item',
   imports: [
     RouterLink,
-    TranslatePipe
+    TranslatePipe,
+    DatePipe
   ],
   templateUrl: './product-item.html',
   styleUrl: './product-item.css'

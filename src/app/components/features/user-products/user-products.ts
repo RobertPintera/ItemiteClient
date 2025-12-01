@@ -12,6 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Dialog} from '../../shared/dialog/dialog';
 import {LISTING_TYPES, ListingType} from '../../../core/constants/constants';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-products',
@@ -20,7 +21,8 @@ import {LISTING_TYPES, ListingType} from '../../../core/constants/constants';
     Button,
     Loader,
     UserProductItem,
-    Dialog
+    Dialog,
+    TranslatePipe
   ],
   templateUrl: './user-products.html',
   styleUrl: './user-products.css'

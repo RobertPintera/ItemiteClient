@@ -1,0 +1,122 @@
+<form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="submit()">
+  <h1 class="mb-4">Create Product</h1>
+  <!-- Name -->
+  <div class="flex flex-col gap-2 w-full">
+    <label for="name" class="text-xl font-semibold">Name</label>
+    <input id="name" name="name" formControlName="name" type="text" required class="border rounded px-3 py-2">
+    @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)){
+      <div>
+        <ul class="text-destructive text-sm list-disc pl-4">
+          @if(form.controls.name.hasError('required')){
+            <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+          }
+          @if(form.controls.name.hasError('minlength') || form.controls.name.hasError('maxlength')){
+            <li>{{ 'validator_errors_product_form.name_len' | translate }}</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+  <!-- Price -->
+  <div class="flex flex-col gap-2 w-full">
+    <label for="price" class="text-xl font-semibold">Price</label>
+    <input id="price" name="price" formControlName="price" type="number" min="0" step="0.01" class="border rounded px-3 py-2">
+    @if (form.controls.price.invalid && (form.controls.price.touched || form.controls.price.dirty)) {
+      <div>
+        <ul class="text-destructive text-sm list-disc pl-4">
+          @if (form.controls.price.hasError('required')) {
+            <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+          }
+          @if (form.controls.price.hasError('min') || form.controls.price.hasError('max')) {
+            <li>{{ 'validator_errors_product_form.price_range' | translate }}</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+  <!-- Negotiable -->
+  <div class="flex items-center gap-2">
+    <input id="negotiable" name="negotiable" type="checkbox"  class="w-4 h-4">
+    <label for="negotiable" class="font-semibold">Negotiable</label>
+  </div>
+  <!-- Categories -->
+  <div class="flex flex-row gap-8 w-full">
+    <div class="flex flex-col gap-2 w-full">
+      <label for="mainCategory" class="text-xl font-semibold">Main Category</label>
+      <app-combo-box formControlName="mainCategory" [items]="mainCategoriesOptions" (selectedItemChange)="selectMainCategory($event)"/>
+      @if (form.controls.mainCategory.invalid && (form.controls.mainCategory.touched || form.controls.mainCategory.dirty)) {
+        <div>
+          <ul class="text-destructive text-sm list-disc pl-4">
+            @if(form.controls.mainCategory.hasError('required')) {
+              <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+    <div class="flex flex-col gap-2 w-full">
+      <label for="subcategory" class="text-xl font-semibold">Subcategory</label>
+      <app-cascade-select formControlName="subcategory" [items]="subCategoriesOptions()" [(selectedItem)]="selectedSubCategory" (selectedItemChange)="selectSubCategory($event)" />
+      @if (form.controls.subcategory.invalid && (form.controls.subcategory.touched || form.controls.subcategory.dirty)) {
+        <div>
+          <ul class="text-destructive text-sm list-disc pl-4">
+            @if(form.controls.subcategory.hasError('required')) {
+              <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  </div>
+  <!-- Localization -->
+  <div class="flex flex-col gap-2 w-full">
+    <label for="localization" class="text-xl font-semibold">Localization</label>
+    <app-geo-map-autocomplete formControlName="localization"/>
+    @if (form.controls.localization.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
+      <div>
+        <ul class="text-destructive text-sm list-disc pl-4">
+          @if(form.controls.localization.hasError('required')) {
+            <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+  <!-- Images -->
+  <div class="flex flex-col gap-2 w-full">
+    <label for="images" class="text-xl font-semibold">Images</label>
+    <app-media-manager formControlName="images"/>
+    @if (form.controls.images.invalid && (form.controls.images.touched || form.controls.images.dirty)) {
+      <div>
+        <ul class="text-destructive text-sm list-disc pl-4">
+          @if(form.controls.images.hasError('required')) {
+            <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+
+  <!-- Description -->
+  <div class="flex flex-col gap-2 w-full">
+    <label for="description" class="text-xl font-semibold">Description</label>
+    <textarea id="description" name="description" formControlName="description" rows="5" class="border rounded px-3 py-2"></textarea>
+    @if (form.controls.description.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
+      <div>
+        <ul class="text-destructive text-sm list-disc pl-4">
+          @if(form.controls.localization.hasError('required')) {
+            <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+
+  <!-- Actions -->
+  <div class="flex flex-row flex-wrap w-full justify-between gap-8">
+    <app-button type="button" severity="accent" variant="outlined" label="Cancel"/>
+
+    <app-button type="button" label="Preview"/>
+    <app-button type="submit" label="Create"/>
+  </div>
+</form>
