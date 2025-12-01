@@ -1,1 +1,4 @@
-<app-chat-list />
+@if (hasChats()) {
+  <app-chat-list [chatList]="chatList()" />
+}
+
