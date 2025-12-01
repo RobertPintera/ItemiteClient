@@ -45,10 +45,6 @@ export const routes: Routes = [
         component: ProfilePage
       },
       {
-        path: '**',
-        component: NotFound,
-      },
-      {
         path: 'dev',
         component: Test
       }
