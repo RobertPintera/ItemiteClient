@@ -40,7 +40,12 @@
 
             <!-- Message content -->
             @if(content()) {
-                <p class="p-1 rounded-lg text-secondary-foreground bg-secondary">
+                <p class="p-1 rounded-lg text-secondary-foreground bg-secondary w-fit min-w-20"
+                  [class.self-end]="isOwnMessage()"
+                  [class.text-right]="isOwnMessage()"
+                  [class.italic]="isDeleted()"
+                  [class.font-mono]="isDeleted()"
+                >
                     {{content()}}
                 </p>
             }
@@ -64,13 +69,18 @@
                 </div>
             }
             <!-- dates -->
-            <p class="text-xs flex flex-row text-wrap"
+            <p class="text-xs flex flex-col text-wrap group"
                [class.text-right]="isOwnMessage()"
                [class.self-end]="isOwnMessage()"
             >
-                Sent {{dateSent()}}
+                @if(dateModified()) {
+                  <p class="group-hover:hidden flex"> {{dateSent() | date:"yyyy/MM/dd HH:mm"}} (edited)</p>
+                  <p class="group-hover:flex hidden"> Sent {{dateSent() | date:"yyyy/MM/dd HH:mm"}}</p>
+                  <p class="group-hover:flex hidden"> Edited {{ dateModified()! | date:"yyyy/MM/dd HH:mm"}} </p>
+                } @else {
+                  {{dateSent() | date:"yyyy/MM/dd HH:mm"}}
+                }
 
-                @if(dateModified()) { | modified {{dateModified()}}}
             </p>
         </div>
     </div>

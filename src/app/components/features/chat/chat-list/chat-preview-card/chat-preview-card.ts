@@ -12,13 +12,15 @@ export class ChatPreviewCard {
   index = input.required<number>();
   listingName = input.required<string>();
   mainImageUrl = input.required<string>();
-  price = input.required<number>();
+  price = input.required<string>();
   isArchived = input.required<boolean>();
   selected = input.required<boolean>();
 
+  lastMessageAuthor = input<string>();
   lastMessage = input<string>();
   dateSent = input<string>();
   otherMember = input<string>();
+  unreadMessages = input<number>(0);
 
   OnClicked() {
     this.onChatClicked.emit(this.index());

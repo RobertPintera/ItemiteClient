@@ -1,12 +1,16 @@
 import {AfterViewInit, Component, computed, input, InputSignal, output} from '@angular/core';
 import {MessageResponse} from '../../../../core/models/chat/MessageResponse';
 import {PhotoResponseDTO} from '../../../../core/models/PhotoResponseDTO';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-message',
-  imports: [],
+  imports: [
+    DatePipe
+  ],
   templateUrl: './message.html',
-  styleUrl: './message.css'
+  styleUrl: './message.css',
+  providers: [DatePipe]
 })
 export class Message {
 
@@ -24,6 +28,7 @@ export class Message {
   readonly isOwnMessage = input.required<boolean>();
   readonly profileImage = input<string>("");
   readonly backgroundImage = input<string>();
+  readonly isDeleted = input<boolean>(false);
 
   readonly hasPhotos = computed(() => this.photos().length !== 0);
 

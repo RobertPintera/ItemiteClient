@@ -1,7 +1,9 @@
 #edit {
-  display: none;
+  display: flex;
+  visibility: hidden;
 }
 
 #parent:hover #edit {
   display: flex;
+  visibility:  visible;
 }

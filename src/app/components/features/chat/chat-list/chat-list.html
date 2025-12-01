@@ -5,25 +5,49 @@
 />
 
 <div class="w-full h-[calc(100vh-32*var(--spacing))] m-0 bg-card grid
-  sm:grid-cols-[minmax(calc(30*var(--spacing)),1fr)_2fr]
-  sm:grid-rows-[auto_1fr]
-  grid-rows-[1fr_0]
-  grid-cols-[1fr_0]
+  sm:grid-cols-[min(calc(100*var(--spacing)),30vw)_2fr]
+  grid-rows-[1fr]
+  grid-cols-[100vw_100vw]
+  snap-mandatory
+  snap-x
+  overflow-x-auto
 "
 >
-  <p class="text-center m-auto"> Chat list </p>
-  <p class="text-center m-auto"> Selected chat name </p>
-  <!--
-  <app-chat-preview-card
-    [index]=""
-    [isArchived]
-    [listingName]=""
-    [mainImageUrl]=""
-    [price]=""
-    [selected]=""
-    [lastMessage]=""
-    [dateSent]=""
-  />
-  <app-chat/>
-  -->
+  <div class="snap-start shadow-inner">
+    <div class="overflow-y-auto">
+      @for (chatInfo of chatList(); track $index) {
+        <app-chat-preview-card
+          [index]="$index"
+          [isArchived]="false"
+          [listingName]="chatInfo.listing.name"
+          [mainImageUrl]="chatInfo.listing.mainImageUrl"
+          [price]="chatInfo.listing.price"
+          [selected]="$index === selected()"
+          [lastMessage]="chatInfo.lastMessage.content"
+          [dateSent]="chatInfo.lastMessage.dateSent.toString()"
+          [lastMessageAuthor]="chatInfo.lastMessage.userName"
+          [unreadMessages]="chatInfo.unreadMessagesCount"
+          (onChatClicked)="OnCardClicked($index)"
+        />
+      }
+  </div>
+  </div>
+
+  @if(!selectedListingId() || !selectedMembers()) {
+    <div class="w-1/2 h-1/2 m-auto shrink items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.5"
+           stroke="currentColor"
+           class="size-6 w-full shrink h-full text-foreground/10">
+        <path
+          stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+        />
+      </svg>
+    </div>
+  } @else {
+    <app-chat
+      class="snap-start min-h-full"
+      [chatMembers]="selectedMembers()!"
+      [listingId]="selectedListingId()!"
+    />
+  }
 </div>

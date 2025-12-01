@@ -1,10 +1,10 @@
 import {
-  AfterViewInit,
+  AfterViewInit, ChangeDetectorRef,
   Component,
   computed, effect,
   ElementRef,
   HostListener,
-  inject, Input,
+  inject,
   input,
   signal,
   Signal, ViewChild, WritableSignal
@@ -14,7 +14,6 @@ import {PhotoResponseDTO} from '../../../core/models/PhotoResponseDTO';
 import {Message} from './message/message';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {ChatMemberInfo} from '../../../core/models/chat/ChatMemberInfo';
-import {sign} from "node:crypto";
 import {FileUpload} from "../../shared/file-upload/file-upload";
 import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
 import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
@@ -22,6 +21,8 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {ImagePreview} from '../../shared/image-preview/image-preview';
 import {AttachedFiles} from './attached-files/attached-files';
 import {MessageService} from '../../../core/services/message-service/message.service';
+import {ErrorHandlerService} from '../../../core/services/error-handler-service/error-handler-service';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-chat',
@@ -32,21 +33,21 @@ import {MessageService} from '../../../core/services/message-service/message.ser
     ConfirmDialog,
     TranslatePipe,
     ImagePreview,
-    AttachedFiles
+    AttachedFiles,
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './chat.html',
   styleUrl: './chat.css'
 })
 export class Chat implements AfterViewInit {
-  // todo grab current and other user data from the service (Chat Member Info)
-  //  name, profile photo, profile pic
-  //  - ?use the | async pipe?
-  userService: UserService = inject(UserService);
-  messageService: MessageService = inject(MessageService);
+  private userService: UserService = inject(UserService);
+  private messageService: MessageService = inject(MessageService);
+  private errorService: ErrorHandlerService = inject(ErrorHandlerService);
 
-  //////////////////////////////////////////
-  // TESTING DELETE AFTER API INTEGRATION //
-  //////////////////////////////////////////
+  /////////////
+  // TESTING //
+  /////////////
   // region Testing
   testP1Vertical: PhotoResponseDTO = {
     photoId: 0,
@@ -123,13 +124,13 @@ export class Chat implements AfterViewInit {
 
   member1: ChatMemberInfo = {
     id: 1,
-    username: "Dawid Pacisław",
+    userName: "Dawid Pacisław",
     email: "robert@kozyra.pl",
     photoUrl: undefined
   }
   member2: ChatMemberInfo = {
     id: 2,
-    username: "Filip Wójcisław",
+    userName: "Filip Wójcisław",
     email: "robert2@kozyslaw.com",
     photoUrl: "https://cdn.prod.website-files.com/6859950a6a6d8258bcbc0c0f/68bf01df23fc967698fc204b_7485debfd9004eca65bebd1ee9c6a791_Mateusz%20Chrobok.webp"
   }
@@ -137,8 +138,8 @@ export class Chat implements AfterViewInit {
     this.member1, this.member2
   ];
 
-  readonly currentUserId = signal(2);
-  readonly chatMembers = input<ChatMemberInfo[]>(this.testMembers);
+  // readonly currentUserId = signal(2);
+  // readonly chatMembers = input<ChatMemberInfo[]>(this.testMembers);
 
   async CallApiTest() {
     // simulate messages loading
@@ -148,14 +149,18 @@ export class Chat implements AfterViewInit {
   // endregion
 
 
-  // TODO Uncomment when api ready
-/*  readonly currentUserId = computed(() => this.userService.userBasicInfo().id);
+  // TODO disable attaching images when editing message?
+  // TODO deleted messages should have disabled edit and delete controls
+  //  + "User deleted the message" should be transformed into translation "chat.deleted_message"
+  //    it should be in italics
 
- // This needs to be filled in parent component - s
- readonly chatMembers = input.required<ChatMemberInfo[]>();
- */
+  readonly currentUserId = computed(() => this.userService.userBasicInfo().id);
 
-  readonly currentUsername = computed(() => this.userMemberInfo().username);
+  // This needs to be filled in parent component - s
+  readonly chatMembers = input.required<ChatMemberInfo[]>();
+  readonly listingId = input.required<number>();
+
+  readonly currentUsername = computed(() => this.userMemberInfo().userName);
   readonly currentProfileImg = computed(() => this.userMemberInfo().photoUrl ??
     "../../../../assets/images/default_profile_pic.png");
   readonly userMemberInfo: Signal<ChatMemberInfo> = computed(() =>
@@ -165,11 +170,11 @@ export class Chat implements AfterViewInit {
   readonly otherMemberInfo: Signal<ChatMemberInfo> = computed(() =>
     this.chatMembers().find((member) => member.id !== this.currentUserId())!
   );
-  readonly otherUsername = computed(() => this.otherMemberInfo().username);
+
+  readonly otherUsername = computed(() => this.otherMemberInfo().userName);
   readonly otherProfileImg = computed(() => this.otherMemberInfo().photoUrl ??
     "../../../../assets/images/default_profile_pic.png");
 
-  // todo grab messages from the api
   private _messages = signal<MessageResponse[]>([]);
   readonly messages:Signal<MessageResponse[]> = this._messages.asReadonly();
 
@@ -195,33 +200,101 @@ export class Chat implements AfterViewInit {
   private _showAttachments = signal(false);
   readonly showAttachments = this._showAttachments.asReadonly();
 
+  private _resultCode = signal<number>(-1);
+  readonly resultCode = this._resultCode.asReadonly();
+  readonly success = computed(()=> this._resultCode() === 200);
+
   // stores id of currently edited
   private _selectedEditMessage: number = -1;
 
   // stores id of message to delete
   private _selectedDeleteMessage: number = -1;
 
+  form: FormGroup;
+
   constructor() {
-    // todo remove - TESTING
-    this.CallApiTest().then((value) =>
-      this._loading.set(false)
+    // Test();
+
+    effect(() => {
+      if(this.listingId() === undefined || this.currentUserId() < 0) return;
+      this.LoadMessages(this.listingId());
+    });
+
+    this.form = new FormGroup({
+      messageInput: new FormControl('')
+    });
+  }
+
+  Test() {
+    this.CallApiTest().then(() => {
+        this._loading.set(false);
+        if (this._parent) {
+          this.maxHeight = this._parent.clientHeight * 0.33;
+          this.el.nativeElement.style.maxHeight = `${this.maxHeight}px`;
+        }
+        this.adjustHeight();
+      }
+    );
+  }
+
+  LoadMessages(listingId: number, page: number = 1, pageSize: number = 20) {
+    console.log(this.otherMemberInfo());
+    console.log(this.otherUsername());
+
+    this.messageService.GetChat(listingId, this.otherMemberInfo().id, page, pageSize).subscribe({
+        next: chat => {
+          this._messages.set(chat.items);
+          this._resultCode.set(200);
+          this._loading.set(false);
+
+          this.adjustHeight();
+
+          setTimeout(() => {
+            const scrollContainer = this.scrollContainer.nativeElement as HTMLElement;
+            scrollContainer.scrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+          }, 50);
+        },
+        error: error => {
+          console.log(error);
+          this._loading.set(false);
+        }
+      }
     );
   }
 
   // region Submit
-  async OnSubmit() {
+  OnSubmit() {
+    const input = this.form.value.messageInput.trim();
+
+    // user didn't pass any input
+    if(input === "" && this.attachments().length === 0 ) return;
+
+    this.LoadTextIntoInput("");
+
     if(this.editingMessage()) {
+      this.OnEditMessageSubmit(input);
       return;
     }
+
+    this.ClearAttachments();
+
+    this.messageService.SendMessage(
+      this.otherMemberInfo().id,
+      this.listingId(),
+      input === "" ? undefined : input,
+      this.attachments().length === 0 ? undefined : this.attachments()
+    ).subscribe({
+      next: message => {
+        this._messages.update(messages => [...messages, message.message]);
+      },
+      error: error => {
+        this.errorService.SendErrorMessage(error);
+      }
+    });
   }
   // endregion
 
   // region Message Input
-  OnInputChanged(ev: Event) {
-    const event = ev as InputEvent;
-    if(event.data === null) return;
-    this._messageInput.set(event.data);
-  }
 
   private LoadTextIntoInput(text: string) {
     this._messageInput.set(text);
@@ -253,15 +326,12 @@ export class Chat implements AfterViewInit {
     this._hideInput.set(false);
     this._selectedEditMessage = messageId;
 
-    const m = this.messages().find(message=> message.messageId === messageId);
+    const m = this.messages().find(message => message.messageId === messageId);
     if(m) {
       this.LoadTextIntoInput(
         m.content ?? ""
       );
     }
-  }
-
-  async OnEditionConfirmed() {
   }
 
   OnEditionClosed() {
@@ -277,6 +347,40 @@ export class Chat implements AfterViewInit {
       return messages;
     });
   }
+
+  OnEditMessageSubmit(input: string) {
+    // editing message only allows editing text
+    if(input === "") return;
+
+    const message = this._messages().find(message => message.messageId === this._selectedEditMessage)
+    if(!message) return;
+
+    // don't call api if nothing changed
+    if(message.content === input) return;
+    this.ClearAttachments();
+
+    this.messageService.EditMessage(this._selectedEditMessage, input).subscribe({
+      next: chat => {
+        const index = this.messages().findIndex(message =>
+          message.messageId === this._selectedEditMessage
+        );
+
+        this._editingMessage.set(false);
+        this._selectedEditMessage = -1;
+
+        if (index === -1) return;
+
+        this._messages.update(messages => {
+          const newMessages = [...messages];
+          newMessages[index] = chat;
+          return newMessages;
+        });
+      },
+      error: error => {
+        this.errorService.SendErrorMessage(error);
+      }
+    });
+  }
   // endregion
 
   // region Message deletion
@@ -287,7 +391,7 @@ export class Chat implements AfterViewInit {
   }
 
   async OnDeletionConfirmed() {
-    this.LocalDelete();
+    await this.DeleteMessage();
     this.OnDeletionClosed();
   }
 
@@ -300,6 +404,24 @@ export class Chat implements AfterViewInit {
     return this.currentUserId() === senderId;
   }
 
+  async DeleteMessage() {
+    if(this._selectedDeleteMessage === -1) return;
+    const success = await this.messageService.DeleteMessage(this._selectedDeleteMessage);
+    if(!success) return;
+
+    const index = this.messages().findIndex(message => message.messageId === this._selectedDeleteMessage);
+    if (index === -1) return;
+
+    this._messages.update(messages => {
+      const newMessages = [...messages];
+      newMessages[index].content = "deleted_message";
+      newMessages[index].photos = [];
+      return newMessages;
+    });
+
+    this._selectedDeleteMessage = -1;
+  }
+
   private LocalDelete() {
     this._messages.update((messages) => {
       const index =  messages.findIndex(message => message.messageId === this._selectedDeleteMessage);
@@ -309,6 +431,7 @@ export class Chat implements AfterViewInit {
       return messages;
     });
   }
+
   // endregion
 
   // region Attachments
@@ -328,6 +451,11 @@ export class Chat implements AfterViewInit {
     );
     this._hasAttachments.set(this.attachments().length !== 0);
   }
+
+  ClearAttachments() {
+    this._attachments.set([]);
+    this._hasAttachments.set(false);
+  }
   // endregion
 
   // region Image Preview
@@ -344,15 +472,18 @@ export class Chat implements AfterViewInit {
 
   private _lastScrollPos: number = 0;
 
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+
   OnMessagesScroll(event:any) {
     const scrollContainer = event.srcElement as HTMLElement;
 
 
-    this._hideInput.set(
+/*    this._hideInput.set(
       scrollContainer.scrollTop < this._lastScrollPos
+      // The following line will show message input only when scroll is at the end
       // scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight > 30
     )
-    this._lastScrollPos = scrollContainer.scrollTop;
+    this._lastScrollPos = scrollContainer.scrollTop;*/
   }
   // endregion
 
@@ -367,9 +498,9 @@ export class Chat implements AfterViewInit {
   ngAfterViewInit(): void {
     this._parent = this.el.nativeElement.querySelector('#message_window');
     if (this._parent) {
-      this.maxHeight = this._parent.clientHeight * 0.5; // 50% max height
+      this.maxHeight = this._parent.clientHeight * 0.33; // 50% max height
       this.el.nativeElement.style.maxHeight = `${this.maxHeight}px`;
-      this.adjustHeight();
+
     }
     this._loading.set(true);
   }

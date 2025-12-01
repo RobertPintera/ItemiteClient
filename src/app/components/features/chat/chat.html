@@ -5,7 +5,6 @@
   />
 }
 
-
 @if(showFileInputDialog()) {
     <app-file-upload
       [maxSizeMB]="10"
@@ -22,7 +21,7 @@
   />
 }
 
-<div class="rounded-sm h-[calc(100vh-38*var(--spacing))] w-full max-w-7xl m-auto flex">
+<div class="rounded-sm h-full w-full m-auto flex shadow-inner">
   <!-- Message window -->
   <div
     id="message_window"
@@ -32,9 +31,16 @@
     }
     <div class="flex-1 w-full grow"></div>
       <!-- Messages -->
-    <div id="scrollContainer" class="relative flex flex-col max-h-100% overflow-y-auto h-fit w-full"
+    <div id="scrollContainer" #scrollContainer
+         class="relative flex flex-col-reverse max-h-100% overflow-y-auto h-fit w-full"
          (scroll)="OnMessagesScroll($event)"
     >
+      <!--
+        there is double flex-col-reverse
+        first ensures the scroll position is tracked from the bottom
+        second ensures proper sorting of messages
+      -->
+      <div class="flex-col-reverse">
       @for (message of messages(); track message.messageId) {
         <app-message
           [id]="message.messageId"
@@ -46,11 +52,13 @@
           [isOwnMessage]="IsOwnMessage(message.senderId)"
           [username]="IsOwnMessage(message.senderId) ? currentUsername() : otherUsername()"
           [profileImage]= "IsOwnMessage(message.senderId) ? currentProfileImg() : otherProfileImg()"
+          [isDeleted]="false"
           (onDeleteClicked)="OnDeletionRequested($event)"
           (onEditClicked)="OnEditionRequested($event)"
           (onImageClicked)="OnPreviewClicked($event)"
         />
       }
+      </div>
     </div>
 
     @if (hasAttachments() && !hideInput() && showAttachments()) {
@@ -62,11 +70,12 @@
     }
 
     <!-- Message input -->
-    <div id="message_input"
+    <form id="message_input"
          [class.scaleOut]="hideInput()"
          [class.scaleIn]="!hideInput()"
          class="relative flex flex-row w-full h-fit min-h-fit max-h-1/2 p-5 overflow-y-auto
          transition-all duration-100 ease-in origin-bottom"
+          [formGroup]="form" (ngSubmit)="OnSubmit()"
     >
 
 
@@ -82,8 +91,9 @@
       }
 
       <textarea
+        name="messageInput"
+        formControlName="messageInput"
         rows="1"
-        (change)="OnInputChanged($event)"
         [value]="messageInput()"
         autoResize
         class="w-full p-2 rounded border resize-none text-card-foreground bg-card"
@@ -91,8 +101,10 @@
       ></textarea>
 
       <div class="relative flex flex-row self-end gap-1 ml-5 h-full text-card-foreground justify-end">
-        <button class="relative h-full hover:text-primary hover:cursor-pointer"
-            (click)="OnAttachmentIconClicked()"
+        <button
+          type="button"
+          class="relative h-full hover:text-primary hover:cursor-pointer"
+          (click)="OnAttachmentIconClicked()"
         >
           <div>
             @if (hasAttachments()) {
@@ -105,7 +117,7 @@
             </svg>
           </div>
         </button>
-        <button type="submit" (click)="OnSubmit()"
+        <button type="submit"
           class="h-full hover:text-primary hover:cursor-pointer"
         >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -115,6 +127,6 @@
             </svg>
         </button>
       </div>
-    </div>
+    </form>
   </div>
 </div>
