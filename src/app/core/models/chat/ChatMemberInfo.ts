@@ -1,6 +1,6 @@
 export interface ChatMemberInfo {
   id: number;
-  username: string;
+  userName: string;
   email: string;
   photoUrl: string | undefined,
 }
