@@ -172,6 +172,9 @@
     "try_again": "Proszę spróbować ponownie"
   },
   "chat": {
-    "ask_deletion": "Czy na pewno chcesz usunąć tą wiadomość?"
+    "ask_deletion": "Czy na pewno chcesz usunąć tą wiadomość?",
+    "sent": "Wysłano",
+    "Edited": "Edytowano",
+    "deleted_message": "Użytkownik usunął wiadomość"
   }
 }

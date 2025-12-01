@@ -172,6 +172,9 @@
     "try_again": "Please try again"
   },
   "chat": {
-    "ask_deletion": "Are you sure you want to delete this message?"
+    "ask_deletion": "Are you sure you want to delete this message?",
+    "sent": "Sent",
+    "Edited": "Edited",
+    "deleted_message": "User deleted the message"
   }
 }
