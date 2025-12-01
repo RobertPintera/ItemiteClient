@@ -78,7 +78,9 @@ export class MessageService {
     messageId: number,
     newContent : string,
   ): Observable<MessageResponse> {
-    return this.http.put<MessageResponse>(`${environment.itemiteApiUrl}/message/${messageId}`, newContent, {timeout: 15000, withCredentials: true});
+    const params = new HttpParams()
+      .set('newContent', newContent);
+    return this.http.put<MessageResponse>(`${environment.itemiteApiUrl}/message/${messageId}`, {}, {params:params, timeout: 15000, withCredentials: true});
   }
 
   async DeleteMessage(
