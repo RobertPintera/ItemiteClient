@@ -114,13 +114,13 @@
 
   <!-- Actions -->
   <div class="flex flex-row flex-wrap w-full justify-between gap-4">
-    <app-button type="button" severity="accent" variant="outlined" label="Cancel"/>
+    <app-button type="button" severity="accent" variant="outlined" [label]="'cancel' | translate"/>
 
     <div class="flex flex-row flex-wrap gap-4">
       @if(product()){
-        <app-button routerLink="/product-details" [queryParams]="{ id: product()?.id, listingType: 'Product' }" type="button" label="Preview"/>
+        <app-button routerLink="/product" [queryParams]="{ id: product()?.id, type: 'Product' }" type="button" [label]="'product_form.preview' | translate" severity="secondary"/>
       }
-      <app-button type="submit" label="Create"/>
+      <app-button type="submit" [label]="product() ? ('edit' | translate) : ( 'create' | translate) "/>
     </div>
   </div>
 </form>

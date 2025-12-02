@@ -3,7 +3,7 @@ import {Image} from './Image';
 import {Localization} from './Localization';
 
 export interface ProductListingDTO {
-  id: string;
+  id: number;
   name: string;
   description: string;
   price: number;

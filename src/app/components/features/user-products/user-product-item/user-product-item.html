@@ -1,4 +1,4 @@
-<a routerLink="/product-form" [queryParams]="{ id: product()?.id, listingType: product()?.listingType }" class="w-full max-w-full">
+<a routerLink="/product-form" [queryParams]="{ id: product()?.id, type: product()?.listingType }" class="w-full max-w-full">
   <div class="flex bg-background flex-col w-full border-b-1 hover:border-b-transparent p-4 hover:rounded-xl hover:shadow-xl hover:z-10 hover:scale-[1.02] duration-150 ">
     @if (isMd()){
       <p class="text-xl md:text-4xl pb-4">{{ product()?.name }}</p>

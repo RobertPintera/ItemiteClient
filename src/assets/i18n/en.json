@@ -209,7 +209,7 @@
   "user_products": {
     "header": "Your products and auctions"
   },
-  "product-form": {
+  "product_form": {
     "preview": "Preview",
     "error_url_listing_type": "The URL contains an invalid form type."
   }

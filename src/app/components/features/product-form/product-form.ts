@@ -46,7 +46,7 @@ export class ProductForm{
       .pipe(
         takeUntilDestroyed(this._destroyRef),
         map(params => {
-          const type = params.get('listingType');
+          const type = params.get('type');
           const id = params.get('id');
 
           const formType =

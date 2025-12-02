@@ -18,6 +18,7 @@ import {MediaManager} from '../../../shared/media-manager/media-manager';
 import {InputNumber} from '../../../shared/input-number/input-number';
 import {localizationValidator} from '../../../../core/Utility/Validation';
 import {ProductListingDTO} from '../../../../core/models/ProductListingDTO';
+import {PutProductListingDTO} from '../../../../core/models/PutProductListingDTO';
 
 @Component({
   selector: 'app-product-general-form',
@@ -148,37 +149,98 @@ export class ProductGeneralForm {
     this.isSubmitting.set(true);
     this.submitError.set(null);
 
-    const imageFiles: File[] = this.form.value.images
-      ?.map(img => img.imageFile)
-      .filter((f): f is File => !!f) ?? [];
+    const images: ImageMedia[] = this.form.value.images ?? [];
 
-    const imageOrders = this.form.value.images?.map((img: ImageMedia) => img.imageOrder) ?? [];
+    const product = this.product();
 
-    const payload: PostProductListingDTO = {
-      name: this.form.value.name ?? '',
-      description: this.form.value.description ?? '',
-      locationLongitude: this.form.value.localization?.longitude ?? 0,
-      locationLatitude: this.form.value.localization?.latitude ?? 0,
-      locationCountry: this.form.value.localization?.country ?? '',
-      locationCity: this.form.value.localization?.city ?? '',
-      locationState: this.form.value.localization?.state ?? '',
-      price: this.form.value.price ?? 0,
-      isNegotiable: this.form.value.isNegotiable ?? false,
-      categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
-      images: imageFiles,
-      imageOrders: imageOrders,
-    };
+    if(product){
+      const existingPhotoIds = images
+        .filter(img => img.existing)
+        .map(img => img.imageId);
 
-    this.productListingService.createProductListing(payload).subscribe({
-      next: createdProduct => {
-        this.isSubmitting.set(false);
-        void this.router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
-      },
-      error: err => {
-        this.isSubmitting.set(false);
-        this.submitError.set(err?.message || 'Something went wrong');
-      }
-    });
+      const existingPhotoOrders = images
+        .filter(img => img.existing)
+        .map(img => img.imageOrder);
+
+      const newImages = images
+        .filter(
+          (img): img is ImageMedia & { imageFile: File } =>
+            !img.existing && img.imageFile instanceof File
+        )
+        .map(img => img.imageFile);
+
+
+      const newImageOrders = images
+        .filter(img => !img.existing)
+        .map(img => img.imageOrder);
+
+      const payload: PutProductListingDTO = {
+        name: this.form.value.name ?? '',
+        description: this.form.value.description ?? '',
+        locationLongitude: this.form.value.localization?.longitude ?? 0,
+        locationLatitude: this.form.value.localization?.latitude ?? 0,
+        locationCountry: this.form.value.localization?.country ?? '',
+        locationCity: this.form.value.localization?.city ?? '',
+        locationState: this.form.value.localization?.state ?? '',
+        price: this.form.value.price ?? 0,
+        isNegotiable: this.form.value.isNegotiable ?? false,
+        categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
+        existingPhotoIds: existingPhotoIds,
+        existingPhotoOrders: existingPhotoOrders,
+        newImages: newImages,
+        newImageOrders: newImageOrders
+      };
+
+      this.productListingService.updateProductListing(product.id ,payload).subscribe({
+        next: updatedProduct => {
+          this.isSubmitting.set(false);
+          void this.router.navigate(['/product'], { queryParams: { id: product.id, type: "Product" } });
+        },
+        error: err => {
+          this.isSubmitting.set(false);
+          this.submitError.set(err?.message || 'Something went wrong');
+        }
+      });
+    }
+    else{
+      const images: ImageMedia[] = this.form.value.images ?? [];
+
+      const imageFiles = (Array.isArray(images) ? images : [])
+        .filter(
+          (img): img is ImageMedia & { imageFile: File } =>
+            !!img && img.imageFile instanceof File
+        )
+        .map(img => img.imageFile);
+
+
+      const imageOrders = images.map(img => img.imageOrder);
+
+      const payload: PostProductListingDTO = {
+        name: this.form.value.name ?? '',
+        description: this.form.value.description ?? '',
+        locationLongitude: this.form.value.localization?.longitude ?? 0,
+        locationLatitude: this.form.value.localization?.latitude ?? 0,
+        locationCountry: this.form.value.localization?.country ?? '',
+        locationCity: this.form.value.localization?.city ?? '',
+        locationState: this.form.value.localization?.state ?? '',
+        price: this.form.value.price ?? 0,
+        isNegotiable: this.form.value.isNegotiable ?? false,
+        categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
+        images: imageFiles,
+        imageOrders: imageOrders,
+      };
+
+      this.productListingService.createProductListing(payload).subscribe({
+        next: createdProduct => {
+          this.isSubmitting.set(false);
+          void this.router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
+        },
+        error: err => {
+          this.isSubmitting.set(false);
+          this.submitError.set(err?.message || 'Something went wrong');
+        }
+      });
+    }
   }
 
   private fillForm(product: ProductListingDTO) {
