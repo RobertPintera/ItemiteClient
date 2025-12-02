@@ -1,8 +1,8 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, effect, inject, input, signal} from '@angular/core';
 import {ProductListingService} from '../../../../core/services/product-listing-service/product-listing.service';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {CategoryTreeDTO} from '../../../../core/models/CategoryTreeDTO';
 import {OptionItem} from '../../../../core/models/OptionItem';
 import {SelectNode} from '../../../../core/models/SelectNode';
@@ -15,6 +15,9 @@ import {CascadeSelect} from '../../../shared/cascade-select/cascade-select';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {GeoMapAutocomplete} from '../../../shared/geo-map-autocomplete/geo-map-autocomplete';
 import {MediaManager} from '../../../shared/media-manager/media-manager';
+import {InputNumber} from '../../../shared/input-number/input-number';
+import {localizationValidator} from '../../../../core/Utility/Validation';
+import {ProductListingDTO} from '../../../../core/models/ProductListingDTO';
 
 @Component({
   selector: 'app-product-general-form',
@@ -26,7 +29,9 @@ import {MediaManager} from '../../../shared/media-manager/media-manager';
     GeoMapAutocomplete,
     MediaManager,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    InputNumber,
+    RouterLink
   ],
   templateUrl: './product-general-form.html',
   styleUrl: './product-general-form.css'
@@ -36,6 +41,8 @@ export class ProductGeneralForm {
   private categoryService = inject(CategoryService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
+
+  readonly product = input<ProductListingDTO | null>(null);
 
   readonly categories = signal<CategoryTreeDTO | null>(null);
 
@@ -56,8 +63,8 @@ export class ProductGeneralForm {
   readonly form = this.formBuilder.group({
     name: new FormControl<string>('', [
       Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(200)]
+      Validators.minLength(2),
+      Validators.maxLength(30)]
     ),
     price: new FormControl<number>(0,[
       Validators.required,
@@ -68,10 +75,27 @@ export class ProductGeneralForm {
     mainCategory: new FormControl<OptionItem | null>(null, Validators.required),
     subcategory:new FormControl<OptionItem | null>({value: null, disabled: true}, Validators.required),
     isNegotiable: new FormControl<boolean>(false),
-    localization: new FormControl<Localization | null>(null, Validators.required),
+    localization: new FormControl<Localization | null>(null, [
+      Validators.required,
+      localizationValidator()
+    ]),
     images: new FormControl<ImageMedia[]>([], Validators.required),
-    description: new FormControl<string>('', Validators.required)
+    description: new FormControl<string>('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(500)
+    ])
   });
+
+  constructor() {
+    effect(() =>  {
+      const product = this.product();
+      if (product) {
+        this.fillForm(product);
+      }
+    });
+  }
+
 
   selectMainCategory(option?: OptionItem){
     if (!option) return;
@@ -148,12 +172,62 @@ export class ProductGeneralForm {
     this.productListingService.createProductListing(payload).subscribe({
       next: createdProduct => {
         this.isSubmitting.set(false);
-        this.router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
+        void this.router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
       },
       error: err => {
         this.isSubmitting.set(false);
         this.submitError.set(err?.message || 'Something went wrong');
       }
     });
+  }
+
+  private fillForm(product: ProductListingDTO) {
+    this.form.patchValue({
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      isNegotiable: product.isNegotiable,
+      localization: product.location
+    });
+
+    this.setCategories(product);
+
+    const mappedImages: ImageMedia[] = product.images.map(img => ({
+      imageId: img.imageId,
+      imageUrl: img.imageUrl,
+      imageOrder: img.imageOrder,
+      existing: true
+    }));
+
+    this.form.get('images')?.setValue(mappedImages);
+  }
+
+  private setCategories(product: ProductListingDTO) {
+    if (!product.categories || product.categories.length === 0) return;
+
+    const main = product.categories[0];
+    const sub = product.categories[product.categories.length - 1];
+
+    const mainOption = {
+      key: main.id.toString(),
+      value: main.name
+    };
+
+    this.selectMainCategory(mainOption);
+    this.form.get('mainCategory')?.setValue(mainOption);
+
+    if (product.categories.length === 1) {
+      this.form.get('subcategory')?.disable();
+      this.form.get('subcategory')?.reset();
+      return;
+    }
+
+    const subOption: OptionItem = {
+      key: sub.id.toString(),
+      value: sub.name
+    };
+
+
+    this.form.get('subcategory')?.setValue(subOption);
   }
 }

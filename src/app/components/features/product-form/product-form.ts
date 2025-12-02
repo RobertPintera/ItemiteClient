@@ -71,7 +71,6 @@ export class ProductForm{
       .subscribe({
         next: listing => {
           this.article.set(listing);
-          console.log(this.article());
         },
         error: err => console.error(err)
       });

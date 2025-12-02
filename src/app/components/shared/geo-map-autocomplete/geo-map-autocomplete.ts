@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, model, PLATFORM_ID, signal} from '@angular/core';
+import {AfterViewInit, Component, effect, inject, model, PLATFORM_ID, signal} from '@angular/core';
 import {GeocoderAutocomplete} from "../geocoder-autocomplete/geocoder-autocomplete";
 import {isPlatformBrowser} from '@angular/common';
 import {Localization} from '../../../core/models/Localization';
@@ -7,8 +7,7 @@ import {LatLonPayloadDTO} from '../../../core/models/LatLonPayloadDTO';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {Button} from '../button/button';
 import {TranslatePipe} from '@ngx-translate/core';
-import {OptionItem} from '../../../core/models/OptionItem';
-import {NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-empty-function */
@@ -30,30 +29,46 @@ import {NG_VALUE_ACCESSOR} from '@angular/forms';
     }
   ]
 })
-export class GeoMapAutocomplete implements AfterViewInit {
+export class GeoMapAutocomplete implements AfterViewInit, ControlValueAccessor {
   private platformId = inject(PLATFORM_ID);
   private geoapifyService = inject(GeoapifyService);
+  private _map!: Map;
+  private _isInitialized = false;
+
   private onChange: (value: Localization | null) => void = () => {};
   private onTouched: () => void = () => {};
 
-  private map!: Map;
-
   readonly currentLocalization = model<Localization | null>(null);
 
-  readonly currentMarker = signal<Marker | undefined>(undefined);
   readonly tempLocalization = model<Localization | null>(null);
 
+  readonly currentMarker = signal<Marker | undefined>(undefined);
   readonly isDisabled = signal<boolean>(false);
   readonly isEdit = signal<boolean>(false);
+  readonly isMapReady = signal<boolean>(false);
 
   async ngAfterViewInit() {
-    await this.initMap(50.2970546, 18.6926949, "Gliwice");
+    await this.initMap(50.2970546, 18.6926949);
+    this.isMapReady.set(true);
+  }
+
+  constructor() {
+    effect(() => {
+      const loc = this.currentLocalization();
+      const mapReady = this.isMapReady();
+
+      if (!(loc && mapReady && !this._isInitialized && this.validateLocalization(loc))) return;
+
+      this._isInitialized = true;
+      this.tempLocalization.set(this.currentLocalization());
+      void this.flyTo(loc.latitude, loc.longitude, loc.city);
+    });
   }
 
   updateLocalization(localization: Localization | null): void {
     if(localization == null) return;
     this.tempLocalization.set(localization);
-    this.flyTo(localization.latitude, localization.longitude, localization.city);
+    void this.flyTo(localization.latitude, localization.longitude, localization.city);
   }
 
   cancel(){
@@ -109,36 +124,36 @@ export class GeoMapAutocomplete implements AfterViewInit {
   private async flyTo(lat: number, lon: number, city: string) {
     if (isPlatformBrowser(this.platformId)) {
       const { marker } = await import('leaflet');
-      this.map.flyTo([lat, lon], 13);
+      this._map.flyTo([lat, lon], 13);
       this.clearMarker();
-      this.currentMarker.set(marker([lat, lon]).addTo(this.map).bindPopup(city).openPopup());
+      this.currentMarker.set(marker([lat, lon]).addTo(this._map).bindPopup(city).openPopup());
     }
   }
 
-  private async initMap(latitude: number, longitude: number, city: string) {
+  private async initMap(latitude: number, longitude: number) {
     this.clearMarker();
 
     if (!isPlatformBrowser(this.platformId)) return;
 
-    const { map, tileLayer, marker, Icon } = await import('leaflet');
+    const { map, tileLayer, Icon } = await import('leaflet');
 
-    if (!this.map) {
+    if (!this._map) {
       Icon.Default.prototype.options.iconRetinaUrl = 'marker-icon.png';
       Icon.Default.prototype.options.shadowUrl = 'marker-icon.png';
       Icon.Default.prototype.options.shadowSize = [25, 41];
 
       const baseMapURl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-      this.map = map('map').setView([latitude, longitude], 14);
-      tileLayer(baseMapURl, { attribution: '&copy; OpenStreetMap contributors' }).addTo(this.map);
+      this._map = map('map').setView([latitude, longitude], 14);
+      tileLayer(baseMapURl, { attribution: '&copy; OpenStreetMap contributors' }).addTo(this._map);
 
-      this.map.on('click', (e) => {
+      this._map.on('click', (e) => {
         if (!this.isEdit()) return;
         this.getPlace(e.latlng.lat, e.latlng.lng);
       });
 
       this.allowMapControl(false);
     } else {
-      this.map.setView([latitude, longitude], 14);
+      this._map.setView([latitude, longitude], 14);
     }
   }
 
@@ -171,21 +186,21 @@ export class GeoMapAutocomplete implements AfterViewInit {
 
   private allowMapControl(allow: boolean) {
     if(allow) {
-      this.map?.boxZoom?.enable();
-      this.map?.scrollWheelZoom?.enable();
-      this.map?.touchZoom?.enable();
-      this.map?.dragging?.enable();
-      this.map?.doubleClickZoom?.enable();
-      this.map?.setZoomAround(this.currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949],
+      this._map?.boxZoom?.enable();
+      this._map?.scrollWheelZoom?.enable();
+      this._map?.touchZoom?.enable();
+      this._map?.dragging?.enable();
+      this._map?.doubleClickZoom?.enable();
+      this._map?.setZoomAround(this.currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949],
         10);
       return;
     }
     this.resetMarkerToCurrentLocalization();
-    this.map?.doubleClickZoom?.disable();
-    this.map?.boxZoom?.disable();
-    this.map?.scrollWheelZoom?.disable();
-    this.map?.touchZoom?.disable();
-    this.map?.dragging?.disable();
+    this._map?.doubleClickZoom?.disable();
+    this._map?.boxZoom?.disable();
+    this._map?.scrollWheelZoom?.disable();
+    this._map?.touchZoom?.disable();
+    this._map?.dragging?.disable();
   }
 
   private resetMarkerToCurrentLocalization() {

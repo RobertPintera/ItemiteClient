@@ -1,6 +1,7 @@
 import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {errorTranslations} from '../constants/ErrorTranslations';
+import {Localization} from '../models/Localization';
 export function PasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const password = control.value;
@@ -159,6 +160,57 @@ export function UpdatePasswordErrors(formGroup: FormGroup, controlName = 'passwo
     }
   }
   return errors;
+}
+
+export function localizationValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const loc = control.value as Localization | null;
+    if (!loc) return null;
+
+    const hasAnyLocationField = !!(
+      loc.country?.trim() ||
+      loc.city?.trim() ||
+      loc.state?.trim() ||
+      loc.latitude !== null && loc.latitude !== undefined ||
+      loc.longitude !== null && loc.longitude !== undefined
+    );
+
+    if (!hasAnyLocationField) return null;
+
+    const errors: ValidationErrors = {};
+
+    // Country
+    if (!loc.country?.trim()) {
+      errors['countryRequired'] = 'Country is required';
+    } else if (loc.country.length < 2 || loc.country.length > 100) {
+      errors['countryLength'] = 'Country must be between 2 and 100 characters';
+    }
+
+    // City
+    if (!loc.city?.trim()) {
+      errors['cityRequired'] = 'City is required';
+    } else if (loc.city.length < 2 || loc.city.length > 100) {
+      errors['cityLength'] = 'City must be between 2 and 100 characters';
+    }
+
+    // State
+    if (!loc.state?.trim()) {
+      errors['stateRequired'] = 'State is required';
+    } else if (loc.state.length < 2 || loc.state.length > 100) {
+      errors['stateLength'] = 'State must be between 2 and 100 characters';
+    }
+
+    // Latitude & Longitude
+    if (loc.latitude < -90 || loc.latitude > 90) {
+      errors['latitudeRange'] = 'Latitude must be between -90 and 90';
+    }
+
+    if (loc.longitude < -180 || loc.longitude > 180) {
+      errors['longitudeRange'] = 'Longitude must be between -180 and 180';
+    }
+
+    return Object.keys(errors).length ? errors : null;
+  };
 }
 
 ///////////////////////////////

@@ -139,7 +139,6 @@ export class ProductFilterSidebar implements OnInit {
     const localizationText = this.localizationText();
     if(localizationText) {
       this.filterSidebar().localizationText = localizationText;
-      console.log(localizationText);
     }
 
     const latitude = this.filter().latitude;

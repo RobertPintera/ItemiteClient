@@ -20,7 +20,7 @@
   <!-- Price -->
   <div class="flex flex-col gap-2 w-full">
     <label for="price" class="text-xl font-semibold">Price</label>
-    <input id="price" name="price" formControlName="price" type="number" min="0" step="0.01" class="border rounded px-3 py-2">
+    <app-input-number id="price" formControlName="price" [min]="0" [max]="1000000" [step]="0.01"/>
     @if (form.controls.price.invalid && (form.controls.price.touched || form.controls.price.dirty)) {
       <div>
         <ul class="text-destructive text-sm list-disc pl-4">
@@ -113,10 +113,14 @@
   </div>
 
   <!-- Actions -->
-  <div class="flex flex-row flex-wrap w-full justify-between gap-8">
+  <div class="flex flex-row flex-wrap w-full justify-between gap-4">
     <app-button type="button" severity="accent" variant="outlined" label="Cancel"/>
 
-    <app-button type="button" label="Preview"/>
-    <app-button type="submit" label="Create"/>
+    <div class="flex flex-row flex-wrap gap-4">
+      @if(product()){
+        <app-button routerLink="/product-details" [queryParams]="{ id: product()?.id, listingType: 'Product' }" type="button" label="Preview"/>
+      }
+      <app-button type="submit" label="Create"/>
+    </div>
   </div>
 </form>
