@@ -74,8 +74,8 @@ export class ProductListingService {
 
 
     product.newImages.forEach((image, idx) => {
-      formData.append('ExistingPhotoIds', image.toString());
-      formData.append('ExistingPhotoOrders', product.newImageOrders[idx].toString() );
+      formData.append('newImages', image);
+      formData.append('newImageOrders', product.newImageOrders[idx].toString() );
     });
 
 

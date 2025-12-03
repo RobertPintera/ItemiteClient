@@ -149,7 +149,7 @@ export class MediaManager implements ControlValueAccessor{
   writeValue(images: ImageMedia[] | null): void {
     if (!images) { this.images.set([]); return; }
 
-    this.images.set(images.map((img, index) => ({ ...img, imageOrder: index + 1 })));
+    this.images.set([...images].sort((a, b) => a.imageOrder - b.imageOrder));
 
     const maxId = Math.max(0, ...images.map(i => i.imageId));
     this.nextId = maxId + 1;

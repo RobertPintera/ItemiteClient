@@ -191,6 +191,11 @@ export class ProductGeneralForm {
         newImageOrders: newImageOrders
       };
 
+      console.log(existingPhotoIds);
+      console.log(existingPhotoOrders);
+      console.log(newImages);
+      console.log(newImageOrders);
+
       this.productListingService.updateProductListing(product.id ,payload).subscribe({
         next: updatedProduct => {
           this.isSubmitting.set(false);
