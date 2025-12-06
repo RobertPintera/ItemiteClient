@@ -205,6 +205,7 @@
   "edit": "Edit",
   "create": "Create",
   "save": "Save",
+  "delete": "Delete",
   "cancel": "Cancel",
   "user_products": {
     "header": "Your products and auctions"

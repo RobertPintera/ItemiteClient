@@ -20,10 +20,10 @@ export class ListingService {
   }
 
   private getListingUser(id: number, params: HttpParams): Observable<ListingResponseDTO>{
-    return this.http.get<ListingResponseDTO>(`${this.baseUrl}`, { params } );
+    return this.http.get<ListingResponseDTO>(`${this.baseUrl}/${id}`, { params } );
   }
 
-  private deleteListing(id: number) {
+  private deleteArchiveListing(id: number) {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
@@ -64,6 +64,15 @@ export class ListingService {
     return this.getListingUser(id, params).pipe(
       catchError(err => {
         console.error('Error getFilteredListings:', err);
+        throw err;
+      })
+    );
+  }
+
+  deleteListing(id: number) {
+    return this.deleteArchiveListing(id).pipe(
+      catchError(err => {
+        console.error('Error deleteListing:', err);
         throw err;
       })
     );

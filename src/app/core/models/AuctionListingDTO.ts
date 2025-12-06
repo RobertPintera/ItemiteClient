@@ -1,9 +1,9 @@
-import {LocationDTO} from './LocationDTO';
 import {CategoryDTO} from './CategoryDTO';
 import {Image} from './Image';
+import {Localization} from './Localization';
 
 export interface AuctionListingDTO {
-  id: string;
+  id: number;
   name: string;
   description: string;
   startingBid: number;
@@ -19,12 +19,12 @@ export interface AuctionListingDTO {
     id: string;
     userName: string;
     email: string;
-    location: LocationDTO;
+    location: Localization;
     phoneNumber: string;
     photoUrl: string;
     backgroundUrl: string;
   };
-  location: LocationDTO;
+  location: Localization;
   categories: CategoryDTO[];
   images: Image[];
   mainImageUrl: string;

@@ -32,7 +32,7 @@ import {PutProductListingDTO} from '../../../../core/models/PutProductListingDTO
     ReactiveFormsModule,
     TranslatePipe,
     InputNumber,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './product-general-form.html',
   styleUrl: './product-general-form.css'
@@ -127,17 +127,6 @@ export class ProductGeneralForm {
     if (!option) return;
 
     this.selectedSubCategory.set(option);
-  }
-
-
-  private mapCategoryToSelectNode(category: CategoryTreeDTO): SelectNode {
-    return {
-      option: {
-        key: category.id.toString(),
-        value: category.name
-      },
-      childrenNodes: category.subCategories?.map(cat => this.mapCategoryToSelectNode(cat)) || []
-    };
   }
 
   submit() {
@@ -248,6 +237,16 @@ export class ProductGeneralForm {
     }
   }
 
+  private mapCategoryToSelectNode(category: CategoryTreeDTO): SelectNode {
+    return {
+      option: {
+        key: category.id.toString(),
+        value: category.name
+      },
+      childrenNodes: category.subCategories?.map(cat => this.mapCategoryToSelectNode(cat)) || []
+    };
+  }
+
   private fillForm(product: ProductListingDTO) {
     this.form.patchValue({
       name: product.name,
@@ -293,7 +292,6 @@ export class ProductGeneralForm {
       key: sub.id.toString(),
       value: sub.name
     };
-
 
     this.form.get('subcategory')?.setValue(subOption);
   }

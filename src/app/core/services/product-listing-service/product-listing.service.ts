@@ -72,16 +72,14 @@ export class ProductListingService {
       formData.append('ExistingPhotoOrders', product.existingPhotoOrders[idx].toString());
     });
 
-
     product.newImages.forEach((image, idx) => {
       formData.append('newImages', image);
       formData.append('newImageOrders', product.newImageOrders[idx].toString() );
     });
 
-
     return this.putProductListing(id, formData).pipe(
       catchError(err => {
-        console.error('Error updateProduct:', err);
+        console.error('Error updateProductListing:', err);
         throw err;
       })
     );
