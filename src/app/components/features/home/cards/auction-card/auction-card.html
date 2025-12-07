@@ -1,5 +1,6 @@
-<a routerLink="/product" [queryParams]="{ id: auction()?.id, type: auction()?.listingType }" class="flex flex-col border-1 rounded-2xl w-full my-2 h-120
-hover:border-transparent hover:rounded-xl hover:shadow-xl hover:z-10 hover:scale-[1.02] duration-150">
+<a routerLink="/product" [queryParams]="{ id: auction()?.id, type: auction()?.listingType }"
+   class="flex flex-col border-2 border-border rounded-2xl w-full my-2 h-120
+  hover:border-accent hover:rounded-xl hover:shadow-xl hover:z-10 hover:scale-[1.02] duration-150">
   <div class="relative w-full h-[60%]">
     <img [src]="auction()?.mainImageUrl ?? 'assets/laptop_chromebook_icon.svg'" [alt]="auction()?.name"
          class="object-contain w-full h-full select-none drag-none" draggable="false">
@@ -14,8 +15,8 @@ hover:border-transparent hover:rounded-xl hover:shadow-xl hover:z-10 hover:scale
       }
     </div>
     <div class="flex flex-col">
-      <p class="text-xl">{{ auction()?.price }} $</p>
-      <p class="text-base">{{ auction()?.isNegotiable ? "negotiable" : "\u00A0" }}</p>
+      <p class="text-xl">Current Bid: {{ auction()?.currentBid }} $</p>
+      <p class="text-base">Starting Bid: {{ auction()?.startingBid }}</p>
     </div>
   </div>
 </a>

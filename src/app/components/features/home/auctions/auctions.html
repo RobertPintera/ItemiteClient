@@ -1,11 +1,11 @@
-<section class="flex flex-col items-center gap-8 mx-8">
+<section class="flex flex-col items-center gap-8">
   <h1>{{'auctions.header' | translate}}</h1>
-  <app-carousel [items]="firstHalfAuctions()" [visibleSm]="1">
+  <app-carousel [items]="firstHalfAuctions()" [visibleSm]="2" [visibleLg]="1" [visibleXl]="2">
     <ng-template let-auction>
       <app-auction-card [auction]="auction" />
     </ng-template>
   </app-carousel>
-  <app-carousel [items]="secondHalfAuctions()" [visibleSm]="1">
+  <app-carousel [items]="secondHalfAuctions()" [visibleSm]="2" [visibleLg]="1" [visibleXl]="2">
     <ng-template let-auction>
       <app-auction-card [auction]="auction" />
     </ng-template>
