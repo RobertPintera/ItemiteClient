@@ -1,0 +1,35 @@
+<form class="flex flex-col z-10" [formGroup]="changeEmailForm" (ngSubmit)="OnSubmit()">
+  <label for="emailNew" class="w-full">
+    <app-scaled-text [text]="'user_edition.new_email' | translate" [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
+    @if(hasEmailErrors()) {
+      <div class="text-(--destructive)"> {{emailErrors()[0]}} </div>
+    }
+  </label>
+  <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
+         name="emailNew" id="emailNew" type="email" formControlName="emailNew"
+  />
+
+  <label for="password" class="w-full">
+    <app-scaled-text [text]="'login_register.password' | translate" [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
+    @if(hasPasswordErrors()) {
+      <div class="text-(--destructive)"> {{passwordErrors()[0]}} </div>
+    }
+  </label>
+  <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
+         name="password" id="password" type="password" formControlName="password"
+  />
+
+  <button type="submit"
+          [disabled]="hasEmailErrors() || hasPasswordErrors()"
+          class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
+              cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+    {{ 'user_edition.edit_email' | translate }}
+  </button>
+
+  <button type="button"
+          (click)="OnCancelClicked()"
+          class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
+              cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
+    {{ 'controls.cancel' | translate }}
+  </button>
+</form>
