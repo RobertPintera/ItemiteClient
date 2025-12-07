@@ -5,6 +5,8 @@ import {catchError, Observable} from 'rxjs';
 import {ListingResponseDTO} from '../../models/ListingResponseDTO';
 import {ListingFilter} from '../../models/ListingFilter';
 import {PaginatedUserListingDTO} from '../../models/PaginatedUserListingDTO';
+import {ListingType} from '../../constants/constants';
+import {ListingItemDTO} from '../../models/LitstingItemDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +29,15 @@ export class ListingService {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
+  private getDedicatedListing(listingType: ListingType): Observable<ListingItemDTO[]>{
+    return this.http.get<ListingItemDTO[]>(`${this.baseUrl}/dedicated`, {
+      params: { listingType }
+    });
+  }
+
   // Logic
 
-  loadListing(filter?: ListingFilter): Observable<ListingResponseDTO> {
+  loadListing(filter?: Partial<ListingFilter>): Observable<ListingResponseDTO> {
     let params = new HttpParams();
 
     if (filter?.pageSize != null) params = params.set('pageSize', filter.pageSize);
@@ -69,10 +77,19 @@ export class ListingService {
     );
   }
 
-  deleteListing(id: number) {
+  deleteArchivedListing(id: number) {
     return this.deleteArchiveListing(id).pipe(
       catchError(err => {
         console.error('Error deleteListing:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadDedicatedListing(type: ListingType): Observable<ListingItemDTO[]> {
+    return this.getDedicatedListing(type).pipe(
+      catchError(err => {
+        console.error('Error loadDedicatedListing:',err);
         throw err;
       })
     );

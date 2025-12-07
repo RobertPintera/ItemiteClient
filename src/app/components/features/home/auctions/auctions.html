@@ -1,17 +1,13 @@
 <section class="flex flex-col items-center gap-8 mx-8">
   <h1>{{'auctions.header' | translate}}</h1>
-  <div class="w-full py-1">
-    <div class="h-96 w-full px-4 flex-shrink-0">
-      @if (firstProduct()) {
-        <app-auction-product-card [product]="firstProduct()" />
-      }
-    </div>
-  </div>
-  <div class="w-full py-1">
-    <div class="h-96 w-full px-4 flex-shrink-0">
-      @if (secondProduct()) {
-        <app-auction-product-card [product]="secondProduct()" />
-      }
-    </div>
-  </div>
+  <app-carousel [items]="firstHalfAuctions()" [visibleSm]="1">
+    <ng-template let-auction>
+      <app-auction-card [auction]="auction" />
+    </ng-template>
+  </app-carousel>
+  <app-carousel [items]="secondHalfAuctions()" [visibleSm]="1">
+    <ng-template let-auction>
+      <app-auction-card [auction]="auction" />
+    </ng-template>
+  </app-carousel>
 </section>
