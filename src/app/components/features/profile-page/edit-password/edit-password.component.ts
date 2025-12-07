@@ -1,0 +1,94 @@
+import {Component, computed, inject, OnInit, signal, Signal, WritableSignal} from '@angular/core';
+import {PasswordValidator, UpdatePasswordErrors} from '../../../../core/Utility/Validation';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {UserService} from '../../../../core/services/user-service/user.service';
+import {ScaledText} from '../../../shared/scaled-text/scaled-text';
+import {TranslatePipe} from '@ngx-translate/core';
+
+@Component({
+  selector: 'app-change-password',
+  imports: [
+    ScaledText,
+    TranslatePipe,
+    ReactiveFormsModule
+  ],
+  templateUrl: './edit-password.component.html',
+  styleUrl: './edit-password.component.css'
+})
+export class EditPassword implements OnInit {
+  private _userService: UserService = inject(UserService);
+  changePasswordForm: FormGroup;
+
+  changePasswordFormHasErrors: Signal<boolean> = computed(() => {
+    return !this.repeatPassMatch() || this.hasPasswordErrors() || this.hasOldPasswordErrors();
+  });
+  private _oldPasswordErrors: WritableSignal<string[]> = signal([]);
+  private _passwordErrors: WritableSignal<string[]> = signal([]);
+  private _repeatPassMatch: WritableSignal<boolean> = signal(true);
+  oldPasswordErrors: Signal<string[]> = this._oldPasswordErrors;
+  repeatPassMatch: Signal<boolean> = this._repeatPassMatch;
+  passwordErrors: Signal<string[]> = this._passwordErrors;
+  hasPasswordErrors: Signal<boolean> = computed(() => this.passwordErrors().length != 0);
+  hasOldPasswordErrors: Signal<boolean> = computed(() => this.oldPasswordErrors().length != 0);
+
+  private _passwordChangeSuccess: WritableSignal<undefined | boolean> = signal(undefined);
+  readonly passwordChangeSuccess = this._passwordChangeSuccess.asReadonly();
+
+  ngOnInit(): void {
+    this.changePasswordForm.get('password')?.valueChanges.subscribe(() => {
+      this._passwordErrors.set(UpdatePasswordErrors(this.changePasswordForm));
+      this._repeatPassMatch.set(
+        this.changePasswordForm.get(
+          'repeatPassword'
+        )?.value === this.changePasswordForm.get('password')?.value
+      );
+    });
+    this.changePasswordForm.get('repeatPassword')?.valueChanges.subscribe(() => {
+      this._repeatPassMatch.set(
+        this.changePasswordForm.get('repeatPassword')?.value === this.changePasswordForm.get('password')?.value
+      );
+    });
+    this.changePasswordForm.get('passwordOld')?.valueChanges.subscribe(() => {
+      this._oldPasswordErrors.set(UpdatePasswordErrors(this.changePasswordForm, "passwordOld"));
+    });
+
+    this._passwordErrors.set(UpdatePasswordErrors(this.changePasswordForm));
+    this._oldPasswordErrors.set(UpdatePasswordErrors(this.changePasswordForm, "passwordOld"));
+  }
+
+  constructor() {
+    this.changePasswordForm = new FormGroup({
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(7),
+        Validators.maxLength(50),
+        PasswordValidator()
+      ]),
+      repeatPassword: new FormControl(''),
+      passwordOld: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(50)
+      ])
+    });
+  }
+
+  async OnPassChangeSubmit() {
+    if(!this.changePasswordForm.valid) return;
+
+    const success = await this._userService.ChangePassword(
+      this.changePasswordForm.get('passwordOld')!.value,
+      this.changePasswordForm.get('password')!.value
+    );
+    if(!success) return;
+
+    this.changePasswordForm.get('passwordOld')!.setValue("");
+    this.changePasswordForm.get('password')!.setValue("");
+    this.changePasswordForm.get('repeatPassword')!.setValue("");
+
+    this._passwordChangeSuccess.set(true);
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    this._passwordChangeSuccess.set(undefined);
+
+  }
+
+}
