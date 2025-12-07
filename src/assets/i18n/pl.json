@@ -93,24 +93,29 @@
     "localization" : "Lokalizacja",
     "security": "Bezpieczeństwo",
     "background_image": "Obraz w tle",
-    "profile_image": "Zdjęcie profilowe"
+    "profile_image": "Zdjęcie profilowe",
+    "phone": "Telefon"
   },
   "user_edition": {
     "edit_password": "Edytuj hasło",
     "old_password": "Stare hasło",
     "new_password": "Nowe hasło",
     "repeat_new_password": "Potwierdź nowe hasło",
-    "password_changed": "Hasło zostało zmienione, możesz się teraz zalogować nowym hasłem",
+    "password_changed": "Hasło zostało zmienione",
 
     "delete_background_image": "Usuń obraz w tle",
     "delete_profile_image": "Usuń zdjęcie profilowe",
     "edit_profile_image": "Edytuj zdjęcie profilowe",
     "edit_background_image": "Edytuj obraz w tle",
 
+    "new_email": "Nowy email",
     "edit_email": "Edytuj mail",
+    "email_changed": "Adres Email został pomyślnie zmieniony",
+    "email_failure": "Nie udało się zmienić adresu Email. Spróbuj później lub przeładuj stronę.",
 
     "delete_account": "Usuń konto",
     "logout": "Wyloguj się",
+    "logout_all": "Wyloguj ze wszystkich urządzeń",
 
     "ask_delete_profile_image": "Ta operacja na stałę usunie Twoje zdjęcie profilowe, chcesz kontynuować?",
     "ask_delete_background_image": "Ta operacja na stałę usunie Twoje zdjęcie w tle, chcesz kontynuować?"
@@ -127,7 +132,7 @@
     "cancel": "Anuluj",
     "confirm": "Potwierdź",
     "enable": "Aktywuj",
-    "enable_edition": "Aktywuj edycję",
+    "enable_edition": "Włącz edycję",
     "unsaved": "Niezapisane",
     "return": "Powrót"
   },
@@ -138,6 +143,9 @@
     "file_type": "Typ pliku",
     "file_size_too_big": "Rozmiar pliku jest za duży",
     "max_file_size_is": "Maksymalny rozmiar pliku to"
+  },
+  "geocoder": {
+    "enter_city_name": "Wprowadź nazwę miasta"
   },
   "validator_errors": {
     "field_empty" : "Pole nie może być puste",
