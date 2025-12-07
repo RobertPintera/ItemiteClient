@@ -89,7 +89,7 @@ export class ResetPassword implements OnInit {
     if(this.formHasErrors()) return;
 
     this._processing.set(true);
-    const success = await this._userService.ChangePassword(
+    const success = await this._userService.ResetPassword(
       this._email()!,
       this.form.get("password")!.value,
       this._token()!
