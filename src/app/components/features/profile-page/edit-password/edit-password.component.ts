@@ -4,13 +4,15 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {UserService} from '../../../../core/services/user-service/user.service';
 import {ScaledText} from '../../../shared/scaled-text/scaled-text';
 import {TranslatePipe} from '@ngx-translate/core';
+import {LoadingCircle} from "../../../shared/loading-circle/loading-circle";
 
 @Component({
   selector: 'app-change-password',
   imports: [
     ScaledText,
     TranslatePipe,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoadingCircle
   ],
   templateUrl: './edit-password.component.html',
   styleUrl: './edit-password.component.css'
@@ -33,6 +35,9 @@ export class EditPassword implements OnInit {
 
   private _passwordChangeSuccess: WritableSignal<undefined | boolean> = signal(undefined);
   readonly passwordChangeSuccess = this._passwordChangeSuccess.asReadonly();
+
+  private _loading = signal(false);
+  readonly loading = this._loading.asReadonly();
 
   ngOnInit(): void {
     this.changePasswordForm.get('password')?.valueChanges.subscribe(() => {
@@ -73,12 +78,14 @@ export class EditPassword implements OnInit {
   }
 
   async OnPassChangeSubmit() {
-    if(!this.changePasswordForm.valid) return;
+    if(!this.changePasswordForm.valid || this.loading()) return;
 
+    this._loading.set(true);
     const success = await this._userService.ChangePassword(
       this.changePasswordForm.get('passwordOld')!.value,
       this.changePasswordForm.get('password')!.value
     );
+    this._loading.set(false);
     if(!success) return;
 
     this.changePasswordForm.get('passwordOld')!.setValue("");

@@ -4,6 +4,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {PasswordValidator, UpdateEmailErrors, UpdatePasswordErrors} from '../../../../core/Utility/Validation';
 import {ScaledText} from '../../../shared/scaled-text/scaled-text';
 import {UserService} from '../../../../core/services/user-service/user.service';
+import {LoadingCircle} from "../../../shared/loading-circle/loading-circle";
 
 @Component({
   selector: 'app-edit-email',
@@ -11,7 +12,8 @@ import {UserService} from '../../../../core/services/user-service/user.service';
     FormsModule,
     TranslatePipe,
     ReactiveFormsModule,
-    ScaledText
+    ScaledText,
+    LoadingCircle
   ],
   templateUrl: './edit-email.html',
   styleUrl: './edit-email.css'
@@ -32,6 +34,9 @@ export class EditEmail implements OnInit {
 
   private _loading = signal(false);
   readonly loading = this._loading.asReadonly();
+
+  private _performedSuccessfulRequest = signal(false);
+  readonly performedSuccessfulRequest = this._performedSuccessfulRequest.asReadonly();
 
   changeEmailForm: FormGroup;
 
@@ -76,10 +81,7 @@ export class EditEmail implements OnInit {
       this.changeEmailForm.get("password")!.value,
     )
     this._loading.set(false);
-
-    if(success) {
-      this.onSubmitted.emit(this.changeEmailForm.get("emailNew")!.value);
-    }
+    this._performedSuccessfulRequest.set(success);
   }
 
 }

@@ -134,7 +134,8 @@
     "enable": "Enable",
     "enable_edition": "Enable edition",
     "unsaved": "Unsaved",
-    "return": "Return"
+    "return": "Return",
+    "close": "Close"
   },
   "file_upload": {
     "upload_file": "Upload file",

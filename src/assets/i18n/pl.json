@@ -134,7 +134,8 @@
     "enable": "Aktywuj",
     "enable_edition": "Włącz edycję",
     "unsaved": "Niezapisane",
-    "return": "Powrót"
+    "return": "Powrót",
+    "close": "Zamknij"
   },
   "file_upload": {
     "upload_file": "Prześlij plik",

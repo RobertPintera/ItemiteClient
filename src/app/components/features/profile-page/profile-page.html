@@ -88,7 +88,7 @@
           </svg>
         </button>
         @if (editEmail()) {
-          <div class="absolute z-10 inset-0 m-auto  bg-background flex items-center justify-center max-w-[1920px]">
+          <div class="absolute z-10 inset-0 m-auto bg-background flex items-center justify-center max-w-[1920px]">
             <app-edit-email
               (onCancel)="HideEditEmail()"
               (onSubmitted)="OnEmailSubmitted($event)"
