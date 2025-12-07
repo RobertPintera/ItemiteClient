@@ -13,14 +13,14 @@ import {NavigationEnd, Router, RouterLink} from '@angular/router';
   styleUrl: './navbar.css'
 })
 export class Navbar {
-  private categoryService = inject(CategoryService);
-  private router = inject(Router);
+  private _categoryService = inject(CategoryService);
+  private _router = inject(Router);
 
-  readonly categories = this.categoryService.mainCategories;
-  readonly isProductsPage = signal<boolean>(this.router.url.startsWith('/products'));
+  readonly categories = this._categoryService.mainCategories;
+  readonly isProductsPage = signal<boolean>(this._router.url.startsWith('/products'));
 
   constructor() {
-    this.router.events.subscribe(event => {
+    this._router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isProductsPage.set(event.urlAfterRedirects.startsWith('/products'));
       }
@@ -28,7 +28,7 @@ export class Navbar {
   }
 
   getHref(categoryId: number) {
-    return this.router
+    return this._router
       .createUrlTree(['/products'], { queryParams: { id: categoryId } })
       .toString();
   }

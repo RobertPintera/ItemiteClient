@@ -4,7 +4,7 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductListingService} from '../../../core/services/product-listing-service/product-listing.service';
 import {ProductListingDTO} from '../../../core/models/ProductListingDTO';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {AuctionListingDTO} from '../../../core/models/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
 import {AuctionListingService} from '../../../core/services/auction-listing-service/auction-listing.service';
@@ -19,6 +19,7 @@ import {Map, Marker} from 'leaflet';
     TranslatePipe,
     Gallery,
     DatePipe,
+    RouterLink,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'

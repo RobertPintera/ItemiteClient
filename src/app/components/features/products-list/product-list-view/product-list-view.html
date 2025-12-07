@@ -1,5 +1,5 @@
 <main class="flex flex-col w-full max-w-full p-4">
-  <div class="w-full flex flex-row flex-wrap  items-center gap-4 border-b-1 py-4">
+  <div class="w-full flex flex-row flex-wrap items-center gap-4 border-b-1 py-4">
     <div class="flex flex-row flex-wrap items-center gap-4">
       <p>{{"sort_directions.header" | translate}}:</p>
       <app-combo-box [items]="sortDirectionOptions" [selectedItem]="sortDirection()" (selectedItemChange)="useSortDirection($event)">

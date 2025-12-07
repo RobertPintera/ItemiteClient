@@ -1,7 +1,11 @@
 <div class="flex justify-center w-full ">
   <div class="flex flex-col w-full max-w-[1500px] py-4 px-8">
-    <div>
-      <p class="w-full">Home / Electronics</p>
+    <div class="w-full">
+      <a routerLink="/products" [queryParams]="{ id: article()?.categories?.[0]?.id ?? null  }"
+         class="text-muted-foreground
+         hover:text-muted-foreground/60
+         focus:text-muted-foreground/60
+         duration-75">Home / Electronics</a>
     </div>
     @if (!article()){
       <div class="flex w-full justify-center">

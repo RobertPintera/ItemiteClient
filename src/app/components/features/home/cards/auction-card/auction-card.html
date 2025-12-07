@@ -15,8 +15,8 @@
       }
     </div>
     <div class="flex flex-col">
-      <p class="text-xl">Current Bid: {{ auction()?.currentBid }} $</p>
-      <p class="text-base">Starting Bid: {{ auction()?.startingBid }}</p>
+      <p class="text-xl">{{ 'product_details.current_bid' | translate }}: {{ auction()?.currentBid }} $</p>
+      <p class="text-base">{{ 'product_details.starting_bid' | translate }}: {{ auction()?.startingBid }}</p>
     </div>
   </div>
 </a>
