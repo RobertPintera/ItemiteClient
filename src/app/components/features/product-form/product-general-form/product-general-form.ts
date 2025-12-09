@@ -16,7 +16,7 @@ import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {GeoMapAutocomplete} from '../../../shared/geo-map-autocomplete/geo-map-autocomplete';
 import {MediaManager} from '../../../shared/media-manager/media-manager';
 import {InputNumber} from '../../../shared/input-number/input-number';
-import {localizationValidator} from '../../../../core/Utility/Validation';
+import {isEmptyValidator, localizationValidator} from '../../../../core/Utility/Validation';
 import {ProductListingDTO} from '../../../../core/models/ProductListingDTO';
 import {PutProductListingDTO} from '../../../../core/models/PutProductListingDTO';
 
@@ -64,12 +64,13 @@ export class ProductGeneralForm {
   readonly form = this.formBuilder.group({
     name: new FormControl<string>('', [
       Validators.required,
+      isEmptyValidator,
       Validators.minLength(2),
       Validators.maxLength(30)]
     ),
     price: new FormControl<number>(0,[
       Validators.required,
-      Validators.min(0),
+      Validators.min(0.01),
       Validators.max(1000000),
       Validators.pattern(/^\d+(\.\d{1,2})?$/)
     ]),
@@ -83,6 +84,7 @@ export class ProductGeneralForm {
     images: new FormControl<ImageMedia[]>([], Validators.required),
     description: new FormControl<string>('', [
       Validators.required,
+      isEmptyValidator,
       Validators.minLength(2),
       Validators.maxLength(500)
     ])
@@ -96,7 +98,6 @@ export class ProductGeneralForm {
       }
     });
   }
-
 
   selectMainCategory(option?: OptionItem){
     if (!option) return;

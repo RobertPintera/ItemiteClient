@@ -10,6 +10,9 @@
           @if(form.controls.name.hasError('required')){
             <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
           }
+          @if(form.controls.name.hasError('empty')){
+            <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+          }
           @if(form.controls.name.hasError('minlength') || form.controls.name.hasError('maxlength')){
             <li>{{ 'validator_errors_product_form.name_len' | translate }}</li>
           }
@@ -29,6 +32,9 @@
           }
           @if (form.controls.price.hasError('min') || form.controls.price.hasError('max')) {
             <li>{{ 'validator_errors_product_form.price_range' | translate }}</li>
+          }
+          @if(form.controls.price.hasError('pattern')) {
+            <li>{{ 'validator_errors_product_form.price_decimal' | translate }}</li>
           }
         </ul>
       </div>
@@ -75,9 +81,7 @@
     @if (form.controls.localization.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
       <div>
         <ul class="text-destructive text-sm list-disc pl-4">
-          @if(form.controls.localization.hasError('required')) {
-            <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
-          }
+          <li>{{ 'validator_errors_product_form.localization_required' | translate }}</li>
         </ul>
       </div>
     }
@@ -104,8 +108,14 @@
     @if (form.controls.description.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
       <div>
         <ul class="text-destructive text-sm list-disc pl-4">
-          @if(form.controls.localization.hasError('required')) {
+          @if(form.controls.description.hasError('required')) {
             <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+          }
+          @if(form.controls.description.hasError('empty')){
+            <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+          }
+          @if(form.controls.description.hasError('minlength') || form.controls.description.hasError('maxlength')){
+            <li>{{ 'validator_errors_product_form.description_len' | translate }}</li>
           }
         </ul>
       </div>

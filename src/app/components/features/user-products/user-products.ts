@@ -123,7 +123,7 @@ export class UserProducts implements OnInit, OnDestroy {
 
   goToProductForm(listingType?: ListingType) {
     this._router.navigate(['/product-form'], {
-      queryParams: { listingType }
+      queryParams: { type: listingType }
     });
   }
 

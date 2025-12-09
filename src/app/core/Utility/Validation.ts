@@ -213,6 +213,11 @@ export function localizationValidator(): ValidatorFn {
   };
 }
 
+export function isEmptyValidator(control: AbstractControl): ValidationErrors | null {
+  const isEmpty = (control.value || '').trim().length === 0;
+  return isEmpty ? { empty: true } : null;
+}
+
 ///////////////////////////////
 // Update error translations //
 ///////////////////////////////
