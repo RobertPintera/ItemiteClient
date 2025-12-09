@@ -1,14 +1,17 @@
 <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="submit()">
-  <h1 class="mb-4">Create Product</h1>
+  <h1 class="mb-4">{{!auction() ? ('product_form.create_auction' | translate) : ('product_form.edit_auction' | translate)}}</h1>
   <!-- Name -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="name" class="text-xl font-semibold">Name</label>
+    <label for="name" class="text-xl font-semibold">{{ 'product_form.name' | translate }}</label>
     <input id="name" name="name" formControlName="name" type="text" required class="border rounded px-3 py-2">
     @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)){
       <div>
         <ul class="text-destructive text-sm list-disc pl-4">
           @if(form.controls.name.hasError('required')){
             <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+          }
+          @if(form.controls.name.hasError('empty')){
+            <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
           }
           @if(form.controls.name.hasError('minlength') || form.controls.name.hasError('maxlength')){
             <li>{{ 'validator_errors_product_form.name_len' | translate }}</li>
@@ -19,7 +22,7 @@
   </div>
   <!-- Starting Bid -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="startingBid" class="text-xl font-semibold">Starting Bid</label>
+    <label for="startingBid" class="text-xl font-semibold">{{ 'product_form.starting_bid' | translate }}</label>
     <app-input-number id="startingBid" formControlName="startingBid" [min]="0" [max]="1000000" [step]="0.01"/>
     @if (form.controls.startingBid.invalid && (form.controls.startingBid.touched || form.controls.startingBid.dirty)) {
       <div>
@@ -28,7 +31,10 @@
             <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
           }
           @if (form.controls.startingBid.hasError('min') || form.controls.startingBid.hasError('max')) {
-            <li>{{ 'validator_errors_product_form.price_range' | translate }}</li>
+            <li>{{ 'validator_errors_product_form.starting_bid_range' | translate }}</li>
+          }
+          @if(form.controls.startingBid.hasError('pattern')) {
+            <li>{{ 'validator_errors_product_form.starting_bid_pattern' | translate }}</li>
           }
         </ul>
       </div>
@@ -36,14 +42,24 @@
   </div>
   <!-- Date ends -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="dateEnds" class="text-xl font-semibold">Starting Bid</label>
-    <input id="dateEnds" type="date" formControlName="dateEnds" class="border rounded px-3 py-2"/>
+    <label for="dateEnds" class="text-xl font-semibold">{{ 'product_form.date_ends' | translate }}</label>
+    <input id="dateEnds" type="datetime-local" formControlName="dateEnds" class="border rounded px-3 py-2"/>
     @if (form.controls.dateEnds.invalid && (form.controls.dateEnds.touched || form.controls.dateEnds.dirty)) {
       <div>
         <ul class="text-destructive text-sm list-disc pl-4">
           @if (form.controls.dateEnds.hasError('required')) {
             <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
           }
+          @if (form.controls.dateEnds.hasError('minDuration')) {
+            <li>{{ 'validator_errors_product_form.date_ends_min_duration' | translate }}</li>
+          }
+          @if (form.controls.dateEnds.hasError('maxDuration')) {
+            <li>{{ 'validator_errors_product_form.date_ends_max_duration' | translate }}</li>
+          }
+          @if (form.controls.dateEnds.hasError('invalidDate')) {
+            <li>{{ 'validator_errors_product_form.date_ends_invalid' | translate }}</li>
+          }
+
         </ul>
       </div>
     }
@@ -51,8 +67,14 @@
   <!-- Categories -->
   <div class="flex flex-row gap-8 w-full">
     <div class="flex flex-col gap-2 w-full">
-      <label for="mainCategory" class="text-xl font-semibold">Main Category</label>
-      <app-combo-box formControlName="mainCategory" [items]="mainCategoriesOptions" (selectedItemChange)="selectMainCategory($event)"/>
+      <label for="mainCategory" class="text-xl font-semibold">{{ 'product_form.main_category' | translate }}</label>
+      <app-combo-box formControlName="mainCategory" [items]="mainCategoriesOptions" (selectedItemChange)="selectMainCategory($event)">
+        <ng-template let-item>
+          <span>
+            {{item?.value | translate}}
+          </span>
+        </ng-template>
+      </app-combo-box>
       @if (form.controls.mainCategory.invalid && (form.controls.mainCategory.touched || form.controls.mainCategory.dirty)) {
         <div>
           <ul class="text-destructive text-sm list-disc pl-4">
@@ -64,8 +86,19 @@
       }
     </div>
     <div class="flex flex-col gap-2 w-full">
-      <label for="subcategory" class="text-xl font-semibold">Subcategory</label>
-      <app-cascade-select formControlName="subcategory" [items]="subCategoriesOptions()" [(selectedItem)]="selectedSubCategory" (selectedItemChange)="selectSubCategory($event)" />
+      <label for="subcategory" class="text-xl font-semibold">{{ 'product_form.subcategory' | translate }}</label>
+      <app-cascade-select formControlName="subcategory" [items]="subCategoriesOptions()" [(selectedItem)]="selectedSubCategory" (selectedItemChange)="selectSubCategory($event)">
+        <ng-template #selectedItemTemplate let-item>
+          <span>
+            {{item?.value | translate}}
+          </span>
+        </ng-template>
+        <ng-template #nodeTemplate let-node>
+          <span>
+            {{node?.value | translate}}
+          </span>
+        </ng-template>
+      </app-cascade-select>
       @if (form.controls.subcategory.invalid && (form.controls.subcategory.touched || form.controls.subcategory.dirty)) {
         <div>
           <ul class="text-destructive text-sm list-disc pl-4">
@@ -79,7 +112,7 @@
   </div>
   <!-- Localization -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="localization" class="text-xl font-semibold">Localization</label>
+    <label for="localization" class="text-xl font-semibold">{{ 'product_form.localization' | translate }}</label>
     <app-geo-map-autocomplete formControlName="localization"/>
     @if (form.controls.localization.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
       <div>
@@ -93,7 +126,7 @@
   </div>
   <!-- Images -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="images" class="text-xl font-semibold">Images</label>
+    <label for="images" class="text-xl font-semibold">{{ 'product_form.images' | translate }}</label>
     <app-media-manager formControlName="images"/>
     @if (form.controls.images.invalid && (form.controls.images.touched || form.controls.images.dirty)) {
       <div>
@@ -108,13 +141,19 @@
 
   <!-- Description -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="description" class="text-xl font-semibold">Description</label>
+    <label for="description" class="text-xl font-semibold">{{ 'product_form.description' | translate }}</label>
     <textarea id="description" name="description" formControlName="description" rows="5" class="border rounded px-3 py-2"></textarea>
     @if (form.controls.description.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
       <div>
         <ul class="text-destructive text-sm list-disc pl-4">
-          @if(form.controls.localization.hasError('required')) {
+          @if(form.controls.description.hasError('required')) {
             <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+          }
+          @if(form.controls.description.hasError('empty')){
+            <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+          }
+          @if(form.controls.description.hasError('minlength') || form.controls.description.hasError('maxlength')){
+            <li>{{ 'validator_errors_product_form.description_len' | translate }}</li>
           }
         </ul>
       </div>
@@ -123,12 +162,9 @@
 
   <!-- Actions -->
   <div class="flex flex-row flex-wrap w-full justify-between gap-4">
-    <app-button type="button" severity="accent" variant="outlined" [label]="'cancel' | translate"/>
+    <app-button type="button" severity="accent" variant="outlined" [label]="'cancel' | translate" (clickButton)="cancel()"/>
 
     <div class="flex flex-row flex-wrap gap-4">
-      @if(auction()){
-        <app-button routerLink="/product" [queryParams]="{ id: auction()?.id, type: 'Product' }" type="button" [label]="'product_form.preview' | translate" severity="secondary"/>
-      }
       <app-button type="submit" [label]="auction() ? ('edit' | translate) : ( 'create' | translate) "/>
     </div>
   </div>

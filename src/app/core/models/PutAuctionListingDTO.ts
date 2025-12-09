@@ -10,6 +10,7 @@ export interface PutAuctionListingDTO {
   startingBid: number;
   existingPhotoIds: number[];
   existingPhotoOrders: number[];
+  dateEnds: string;
   newImages: File[];
   newImageOrders: number[];
 }

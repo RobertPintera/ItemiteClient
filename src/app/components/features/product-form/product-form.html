@@ -5,7 +5,7 @@
         <app-product-general-form [product]="product"/>
       }
       @else if (formType() === LISTING_TYPES.AUCTION) {
-        <app-auction-form />
+        <app-auction-form [auction]="auction"/>
       }
     </div>
   </div>

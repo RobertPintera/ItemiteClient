@@ -2,7 +2,7 @@ import {Component, effect, inject, input, signal} from '@angular/core';
 import {ProductListingService} from '../../../../core/services/product-listing-service/product-listing.service';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {CategoryTreeDTO} from '../../../../core/models/CategoryTreeDTO';
 import {OptionItem} from '../../../../core/models/OptionItem';
 import {SelectNode} from '../../../../core/models/SelectNode';
@@ -19,6 +19,7 @@ import {InputNumber} from '../../../shared/input-number/input-number';
 import {isEmptyValidator, localizationValidator} from '../../../../core/Utility/Validation';
 import {ProductListingDTO} from '../../../../core/models/ProductListingDTO';
 import {PutProductListingDTO} from '../../../../core/models/PutProductListingDTO';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-product-general-form',
@@ -32,16 +33,16 @@ import {PutProductListingDTO} from '../../../../core/models/PutProductListingDTO
     ReactiveFormsModule,
     TranslatePipe,
     InputNumber,
-    RouterLink,
   ],
   templateUrl: './product-general-form.html',
   styleUrl: './product-general-form.css'
 })
 export class ProductGeneralForm {
-  private productListingService = inject(ProductListingService);
-  private categoryService = inject(CategoryService);
-  private formBuilder = inject(FormBuilder);
-  private router = inject(Router);
+  private _productListingService = inject(ProductListingService);
+  private _categoryService = inject(CategoryService);
+  private _formBuilder = inject(FormBuilder);
+  private _router = inject(Router);
+  private _location = inject(Location);
 
   readonly product = input<ProductListingDTO | null>(null);
 
@@ -53,7 +54,7 @@ export class ProductGeneralForm {
   readonly isSubmitting = signal<boolean>(false);
   readonly submitError = signal<string | null>(null);
 
-  readonly mainCategories = this.categoryService.mainCategories();
+  readonly mainCategories = this._categoryService.mainCategories();
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
     key: cat.id.toString(),
@@ -61,7 +62,7 @@ export class ProductGeneralForm {
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
-  readonly form = this.formBuilder.group({
+  readonly form = this._formBuilder.group({
     name: new FormControl<string>('', [
       Validators.required,
       isEmptyValidator,
@@ -104,7 +105,7 @@ export class ProductGeneralForm {
 
     this.selectedMainCategory.set(option);
     const id = Number(option.key);
-    this.categoryService.loadCategoryTree(id).subscribe({
+    this._categoryService.loadCategoryTree(id).subscribe({
       next: tree => {
         this.categories.set(tree);
 
@@ -128,6 +129,10 @@ export class ProductGeneralForm {
     if (!option) return;
 
     this.selectedSubCategory.set(option);
+  }
+
+  cancel(){
+    this._location.back();
   }
 
   submit() {
@@ -181,10 +186,10 @@ export class ProductGeneralForm {
         newImageOrders: newImageOrders
       };
 
-      this.productListingService.updateProductListing(product.id ,payload).subscribe({
+      this._productListingService.updateProductListing(product.id ,payload).subscribe({
         next: updatedProduct => {
           this.isSubmitting.set(false);
-          void this.router.navigate(['/product'], { queryParams: { id: product.id, type: "Product" } });
+          void this._router.navigate(['/product'], { queryParams: { id: product.id, type: "Product" } });
         },
         error: err => {
           this.isSubmitting.set(false);
@@ -220,10 +225,10 @@ export class ProductGeneralForm {
         imageOrders: imageOrders,
       };
 
-      this.productListingService.createProductListing(payload).subscribe({
+      this._productListingService.createProductListing(payload).subscribe({
         next: createdProduct => {
           this.isSubmitting.set(false);
-          void this.router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
+          void this._router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
         },
         error: err => {
           this.isSubmitting.set(false);

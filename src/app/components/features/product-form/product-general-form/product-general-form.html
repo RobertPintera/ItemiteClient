@@ -141,12 +141,9 @@
 
   <!-- Actions -->
   <div class="flex flex-row flex-wrap w-full justify-between gap-4">
-    <app-button type="button" severity="accent" variant="outlined" [label]="'cancel' | translate"/>
+    <app-button type="button" severity="accent" variant="outlined" [label]="'cancel' | translate" (clickButton)="cancel()"/>
 
     <div class="flex flex-row flex-wrap gap-4">
-      @if(product()){
-        <app-button routerLink="/product" [queryParams]="{ id: product()?.id, type: 'Product' }" type="button" [label]="'product_form.preview' | translate" severity="secondary"/>
-      }
       <app-button type="submit" [label]="product() ? ('edit' | translate) : ( 'create' | translate) "/>
     </div>
   </div>

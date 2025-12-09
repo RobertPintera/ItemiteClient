@@ -213,6 +213,33 @@ export function localizationValidator(): ValidatorFn {
   };
 }
 
+export function auctionDurationValidator(minHours = 1, maxDays = 30): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) return null;
+
+    const endDate = new Date(value);
+    if (isNaN(endDate.getTime())) return { invalidDate: true };
+
+    const now = new Date();
+
+    const minEndTime = new Date(now.getTime() + minHours * 60 * 60 * 1000);
+    const maxEndTime = new Date(now.getTime() + maxDays * 24 * 60 * 60 * 1000);
+
+    const errors: ValidationErrors = {};
+
+    if (endDate < minEndTime) {
+      errors['minDuration'] = true;
+    }
+
+    if (endDate > maxEndTime) {
+      errors['maxDuration'] = true;
+    }
+
+    return Object.keys(errors).length ? errors : null;
+  };
+}
+
 export function isEmptyValidator(control: AbstractControl): ValidationErrors | null {
   const isEmpty = (control.value || '').trim().length === 0;
   return isEmpty ? { empty: true } : null;

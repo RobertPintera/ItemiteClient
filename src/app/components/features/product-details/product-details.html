@@ -44,10 +44,10 @@
                 <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
                 <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
                 <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
-                <app-button label="{{'product_details.bid' | translate}}"/>
                 @if (isOwner()){
                   <app-button label="{{'edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" severity="secondary"/>
                 } @else {
+                  <app-button label="{{'product_details.bid' | translate}}"/>
                   <app-button label="{{'product_details.send_message' | translate}}" severity="secondary"/>
                 }
                 <app-button (clickButton)="clickNumber()"
@@ -84,10 +84,10 @@
               <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
               <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
               <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
-              <app-button label="{{'product_details.bid' | translate}}"/>
               @if (isOwner()){
                 <app-button label="{{'edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" severity="secondary"/>
               } @else {
+                <app-button label="{{'product_details.bid' | translate}}"/>
                 <app-button label="{{'product_details.send_message' | translate}}" severity="secondary"/>
               }
               <app-button (clickButton)="clickNumber()"

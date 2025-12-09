@@ -6,19 +6,25 @@ import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} 
 import {GeoMapAutocomplete} from "../../../shared/geo-map-autocomplete/geo-map-autocomplete";
 import {InputNumber} from "../../../shared/input-number/input-number";
 import {MediaManager} from "../../../shared/media-manager/media-manager";
-import {Router, RouterLink} from "@angular/router";
+import {Router} from "@angular/router";
 import {TranslatePipe} from "@ngx-translate/core";
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {CategoryTreeDTO} from '../../../../core/models/CategoryTreeDTO';
 import {OptionItem} from '../../../../core/models/OptionItem';
 import {SelectNode} from '../../../../core/models/SelectNode';
 import {Localization} from '../../../../core/models/Localization';
-import {localizationValidator} from '../../../../core/Utility/Validation';
+import {
+  auctionDurationValidator,
+  isEmptyValidator,
+  localizationValidator,
+} from '../../../../core/Utility/Validation';
 import {ImageMedia} from '../../../../core/models/ImageMedia';
 import {AuctionListingDTO} from '../../../../core/models/AuctionListingDTO';
 import {PutAuctionListingDTO} from '../../../../core/models/PutAuctionListingDTO';
 import {AuctionListingService} from '../../../../core/services/auction-listing-service/auction-listing.service';
 import {PostAuctionListingDTO} from '../../../../core/models/PostAuctionListingDTO';
+import {Location} from '@angular/common';
+import {LISTING_TYPES} from '../../../../core/constants/constants';
 
 @Component({
   selector: 'app-auction-form',
@@ -31,17 +37,17 @@ import {PostAuctionListingDTO} from '../../../../core/models/PostAuctionListingD
     InputNumber,
     MediaManager,
     ReactiveFormsModule,
-    RouterLink,
     TranslatePipe
   ],
   templateUrl: './auction-form.html',
   styleUrl: './auction-form.css'
 })
 export class AuctionForm {
-  private auctionListingService = inject(AuctionListingService);
-  private categoryService = inject(CategoryService);
-  private formBuilder = inject(FormBuilder);
-  private router = inject(Router);
+  private _auctionListingService = inject(AuctionListingService);
+  private _categoryService = inject(CategoryService);
+  private _formBuilder = inject(FormBuilder);
+  private _router = inject(Router);
+  private _location = inject(Location);
 
   readonly auction = input<AuctionListingDTO | null>(null);
 
@@ -53,17 +59,18 @@ export class AuctionForm {
   readonly isSubmitting = signal<boolean>(false);
   readonly submitError = signal<string | null>(null);
 
-  readonly mainCategories = this.categoryService.mainCategories();
+  readonly mainCategories = this._categoryService.mainCategories();
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
     key: cat.id.toString(),
-    value: cat.name
+    value: "categories." + cat.name
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
-  readonly form = this.formBuilder.group({
+  readonly form = this._formBuilder.group({
     name: new FormControl<string>('', [
       Validators.required,
+      isEmptyValidator,
       Validators.minLength(2),
       Validators.maxLength(30)]
     ),
@@ -73,7 +80,10 @@ export class AuctionForm {
       Validators.max(100000),
       Validators.pattern(/^\d+(\.\d{1,2})?$/)
     ]),
-    dateEnds: new FormControl<string | null>(null, Validators.required),
+    dateEnds: new FormControl<string | null>(null, [
+      Validators.required,
+      auctionDurationValidator(1)
+    ]),
     mainCategory: new FormControl<OptionItem | null>(null, Validators.required),
     subcategory:new FormControl<OptionItem | null>({value: null, disabled: true}, Validators.required),
     localization: new FormControl<Localization | null>(null, [
@@ -83,6 +93,7 @@ export class AuctionForm {
     images: new FormControl<ImageMedia[]>([], Validators.required),
     description: new FormControl<string>('', [
       Validators.required,
+      isEmptyValidator,
       Validators.minLength(2),
       Validators.maxLength(500)
     ])
@@ -97,13 +108,12 @@ export class AuctionForm {
     });
   }
 
-
   selectMainCategory(option?: OptionItem){
     if (!option) return;
 
     this.selectedMainCategory.set(option);
     const id = Number(option.key);
-    this.categoryService.loadCategoryTree(id).subscribe({
+    this._categoryService.loadCategoryTree(id).subscribe({
       next: tree => {
         this.categories.set(tree);
 
@@ -127,6 +137,10 @@ export class AuctionForm {
     if (!option) return;
 
     this.selectedSubCategory.set(option);
+  }
+
+  cancel(){
+    this._location.back();
   }
 
   submit() {
@@ -172,16 +186,19 @@ export class AuctionForm {
         locationState: this.form.value.localization?.state ?? '',
         startingBid: this.form.value.startingBid ?? 0,
         categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
+        dateEnds: this.form.value.dateEnds ? this.form.value.dateEnds + "Z" : '',
         existingPhotoIds: existingPhotoIds,
         existingPhotoOrders: existingPhotoOrders,
         newImages: newImages,
         newImageOrders: newImageOrders
       };
 
-      this.auctionListingService.updateAuctionListing(auction.id ,payload).subscribe({
+      console.log(this.form.value.dateEnds);
+
+      this._auctionListingService.updateAuctionListing(auction.id ,payload).subscribe({
         next: updatedAuction => {
           this.isSubmitting.set(false);
-          void this.router.navigate(['/product'], { queryParams: { id: auction.id, type: "Product" } });
+          void this._router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
         },
         error: err => {
           this.isSubmitting.set(false);
@@ -217,10 +234,10 @@ export class AuctionForm {
         imageOrders: imageOrders,
       };
 
-      this.auctionListingService.createAuctionListing(payload).subscribe({
+      this._auctionListingService.createAuctionListing(payload).subscribe({
         next: createdAuction => {
           this.isSubmitting.set(false);
-          void this.router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type: "Product" } });
+          void this._router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type:  LISTING_TYPES.AUCTION } });
         },
         error: err => {
           this.isSubmitting.set(false);
@@ -234,7 +251,7 @@ export class AuctionForm {
     return {
       option: {
         key: category.id.toString(),
-        value: category.name
+        value: "categories." + category.name
       },
       childrenNodes: category.subCategories?.map(cat => this.mapCategoryToSelectNode(cat)) || []
     };
@@ -245,9 +262,24 @@ export class AuctionForm {
       name: auction.name,
       startingBid: auction.startingBid,
       description: auction.description,
-      localization: auction.location,
-      dateEnds: auction.dateEnds
     });
+
+    const dateLocal = new Date(auction.dateEnds)
+      .toISOString()
+      .slice(0, 16); // YYYY-MM-DDTHH:mm
+
+    this.form.patchValue({ dateEnds: dateLocal });
+
+    const localization: Localization = {
+      country: auction.location.country,
+      state: auction.location.state,
+      formatted: `${auction.location.city}, ${auction.location.state}, ${auction.location.country}`,
+      city: auction.location.city,
+      latitude: auction.location.latitude,
+      longitude: auction.location.longitude,
+    };
+
+    this.form.get('localization')?.setValue(localization);
 
     this.setCategories(auction);
 
@@ -269,7 +301,7 @@ export class AuctionForm {
 
     const mainOption = {
       key: main.id.toString(),
-      value: main.name
+      value: "categories." + main.name
     };
 
     this.selectMainCategory(mainOption);
@@ -283,7 +315,7 @@ export class AuctionForm {
 
     const subOption: OptionItem = {
       key: sub.id.toString(),
-      value: sub.name
+      value: "categories." + sub.name
     };
 
     this.form.get('subcategory')?.setValue(subOption);
