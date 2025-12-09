@@ -7,7 +7,7 @@ import {UserService} from '../../../core/services/user-service/user.service';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {UserProductItem} from './user-product-item/user-product-item';
 import {catchError, debounceTime, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
-import {PaginatedUserListingDTO} from '../../../core/models/PaginatedUserListingDTO';
+import {PaginatedListingDTO} from '../../../core/models/PaginatedListingDTO';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Dialog} from '../../shared/dialog/dialog';
@@ -41,13 +41,13 @@ export class UserProducts implements OnInit, OnDestroy {
 
   readonly totalPages = computed(() => this.listings()?.totalPages ?? 0);
 
-  readonly filter = signal<PaginatedUserListingDTO>({
+  readonly filter = signal<PaginatedListingDTO>({
     pageSize: 10,
     pageNumber: 1,
   });
   readonly isBlocked = signal<boolean>(false);
 
-  private _filterPageSubject = new Subject<PaginatedUserListingDTO>();
+  private _filterPageSubject = new Subject<PaginatedListingDTO>();
   private _destroy$ = new Subject<void>();
 
   ngOnInit() {
@@ -84,7 +84,7 @@ export class UserProducts implements OnInit, OnDestroy {
     });
 
     this._route.queryParamMap.subscribe(params => {
-      const updated: Partial<PaginatedUserListingDTO> = {};
+      const updated: Partial<PaginatedListingDTO> = {};
 
       const num = (name: string) => {
         const v = params.get(name);
@@ -133,7 +133,7 @@ export class UserProducts implements OnInit, OnDestroy {
     });
   }
 
-  private applyFilter(filter: PaginatedUserListingDTO) {
+  private applyFilter(filter: PaginatedListingDTO) {
     this.isBlocked.set(true);
     this._filterPageSubject.next(filter);
   }

@@ -1,4 +1,4 @@
-export interface PaginatedUserListingDTO {
+export interface PaginatedListingDTO {
   pageSize: number;
   pageNumber: number;
 }

@@ -4,9 +4,10 @@ import {environment} from '../../../../environments/environment';
 import {catchError, Observable} from 'rxjs';
 import {ListingResponseDTO} from '../../models/ListingResponseDTO';
 import {ListingFilter} from '../../models/ListingFilter';
-import {PaginatedUserListingDTO} from '../../models/PaginatedUserListingDTO';
+import {PaginatedListingDTO} from '../../models/PaginatedListingDTO';
 import {ListingType} from '../../constants/constants';
 import {ListingItemDTO} from '../../models/LitstingItemDTO';
+import {PostListingFollowDTO} from '../../models/PostListingFollowDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,18 @@ export class ListingService {
     return this.http.get<ListingItemDTO[]>(`${this.baseUrl}/dedicated`, {
       params: { listingType }
     });
+  }
+
+  private getListingFollow(params: HttpParams): Observable<ListingResponseDTO> {
+    return this.http.get<ListingResponseDTO>(`${this.baseUrl}/follow`, { params });
+  }
+
+  private postListingFollow(id: number): Observable<PostListingFollowDTO>{
+    return this.http.post<PostListingFollowDTO>(`${this.baseUrl}/follow/${id}`, null);
+  }
+
+  private deleteListingFollow(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/follow/${id}`);
   }
 
   // Logic
@@ -64,7 +77,7 @@ export class ListingService {
     );
   }
 
-  loadUserListings(id: number, filter: PaginatedUserListingDTO) {
+  loadUserListings(id: number, filter: PaginatedListingDTO) {
     const params = new HttpParams()
       .set('pageSize', filter.pageSize)
       .set('pageNumber', filter.pageNumber);
@@ -90,6 +103,37 @@ export class ListingService {
     return this.getDedicatedListing(type).pipe(
       catchError(err => {
         console.error('Error loadDedicatedListing:',err);
+        throw err;
+      })
+    );
+  }
+
+  loadFollowedListing(filter: PaginatedListingDTO){
+    const params = new HttpParams()
+      .set('pageSize', filter.pageSize)
+      .set('pageNumber', filter.pageNumber);
+
+    return this.getListingFollow(params).pipe(
+      catchError(err => {
+        console.error('Error getFilteredListings:', err);
+        throw err;
+      })
+    );
+  }
+
+  addFollowedListing(id: number): Observable<PostListingFollowDTO>{
+    return this.postListingFollow(id).pipe(
+      catchError(err => {
+        console.error('Error addFollowedListing:',err);
+        throw err;
+      })
+    );
+  }
+
+  deleteFollowedListing(id: number): Observable<void> {
+    return this.deleteListingFollow(id).pipe(
+      catchError(err => {
+        console.error('Error deleteFollowedListing:',err);
         throw err;
       })
     );
