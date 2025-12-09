@@ -92,7 +92,6 @@ export class UserProducts implements OnInit, OnDestroy {
       };
 
       updated.pageNumber = num('pageNumber') ?? this.filter().pageNumber;
-      updated.pageSize = num('pageSize') ?? this.filter().pageSize;
 
       const newFilter = { ...this.filter(), ...updated };
 
@@ -109,6 +108,13 @@ export class UserProducts implements OnInit, OnDestroy {
 
   usePaginator(pageNumber: number): void {
     this.filter().pageNumber = pageNumber;
+
+    this._router.navigate([], {
+      queryParams: {
+        pageNumber: pageNumber,
+      },
+      queryParamsHandling: 'merge'
+    });
 
     this.applyFilter(this.filter());
   }

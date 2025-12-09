@@ -91,7 +91,6 @@ export class ProductsList implements OnInit, OnDestroy {
       const str = (name: string) => params.get(name);
 
       updated.pageNumber = num('pageNumber') ?? this.filter().pageNumber;
-      updated.pageSize = num('pageSize') ?? this.filter().pageSize;
       updated.priceFrom = num('priceFrom');
       updated.priceTo = num('priceTo');
       updated.longitude = num('longitude');
@@ -218,7 +217,6 @@ export class ProductsList implements OnInit, OnDestroy {
     if (filter.sortBy) params['sortBy'] = filter.sortBy;
     if (filter.sortDirection) params['sortDirection'] = filter.sortDirection;
     if (filter.pageNumber != null) params['pageNumber'] = filter.pageNumber;
-    if (filter.pageSize != null) params['pageSize'] = filter.pageSize;
 
     return params;
   }
