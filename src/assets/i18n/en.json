@@ -210,7 +210,25 @@
   "user_products": {
     "header": "Your products and auctions"
   },
+  "geo_map_autocomplete": {
+    "selected_city": "Selected city",
+    "find_city": "Find city"
+  },
+  "media_manager": {
+    "edit_order": "Edit order",
+    "no_images": "There are no images!"
+  },
   "product_form": {
+    "name": "Name",
+    "description": "Description",
+    "price": "Price",
+    "starting_bid": "Starting bid",
+    "date_ends": "Date ends",
+    "negotiable": "Negotiable",
+    "main_category": "Kategoria główna",
+    "subcategory": "Podkategoria",
+    "localization": "Lokalizacja",
+    "images": "Images",
     "create_product": "Create product",
     "edit_product": "Edit product",
     "create_auction": "Create auction",

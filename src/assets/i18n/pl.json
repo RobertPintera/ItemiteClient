@@ -210,7 +210,25 @@
   "user_products": {
     "header": "Twoje produkty i aukcje"
   },
+  "geo_map_autocomplete": {
+    "selected_city": "Wybrane miasto",
+    "find_city": "Znajdź miasto"
+  },
+  "media_manager": {
+    "edit_order": "Edytuj kolejność",
+    "no_images": "Nie ma zdjęć!"
+  },
   "product_form": {
+    "name": "Nazwa",
+    "description": "Opis",
+    "price": "Cena",
+    "starting_bid": "Cena wywoławcza",
+    "date_ends": "Data zakończenia",
+    "negotiable": "Do negocjacji",
+    "main_category": "Kategoria główna",
+    "subcategory": "Podkategoria",
+    "localization": "Lokalizacja",
+    "images": "Zdjęcia",
     "create_product": "Tworzenie produktu",
     "edit_product": "Edycja produktu",
     "create_auction": "Tworzenie aukcji",

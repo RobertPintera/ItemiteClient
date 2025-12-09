@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-2">
   <div class="flex flex-row justify-between items-center gap-2">
-    <p>Selected city: {{currentLocalization()?.formatted ?? '-----'}}</p>
+    <p>{{ 'geo_map_autocomplete.selected_city' | translate }}: {{currentLocalization()?.formatted ?? '-----'}}</p>
     <div class="flex flex-row gap-2">
       @if(isEdit()){
         <app-button [label]="('cancel' | translate)" severity="accent" variant="outlined" (clickButton)="cancel()"/>
@@ -11,7 +11,7 @@
     </div>
   </div>
   @if (isEdit()) {
-    <app-geocoder-autocomplete placeHolder="Find city" (onCityPicked)="updateLocalization($event)"/>
+    <app-geocoder-autocomplete [placeHolder]="'geo_map_autocomplete.find_city' | translate" (onCityPicked)="updateLocalization($event)"/>
   }
   <div id="map" class="h-64 rounded-md max-w-full z-0"></div>
 </div>

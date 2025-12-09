@@ -1,8 +1,8 @@
 <form class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="submit()">
-  <h1 class="mb-4">Create Product</h1>
+  <h1 class="mb-4">{{!product() ? ('product_form.create_product' | translate) : ('product_form.edit_product' | translate)}}</h1>
   <!-- Name -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="name" class="text-xl font-semibold">Name</label>
+    <label for="name" class="text-xl font-semibold">{{ 'product_form.name' | translate }}</label>
     <input id="name" name="name" formControlName="name" type="text" required class="border rounded px-3 py-2">
     @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)){
       <div>
@@ -22,7 +22,7 @@
   </div>
   <!-- Price -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="price" class="text-xl font-semibold">Price</label>
+    <label for="price" class="text-xl font-semibold">{{ 'product_form.price' | translate }}</label>
     <app-input-number id="price" formControlName="price" [min]="0" [max]="1000000" [step]="0.01"/>
     @if (form.controls.price.invalid && (form.controls.price.touched || form.controls.price.dirty)) {
       <div>
@@ -43,13 +43,19 @@
   <!-- Negotiable -->
   <div class="flex items-center gap-2">
     <input id="negotiable" name="negotiable" type="checkbox"  class="w-4 h-4">
-    <label for="negotiable" class="font-semibold">Negotiable</label>
+    <label for="negotiable" class="font-semibold">{{ 'product_form.negotiable' | translate }}</label>
   </div>
   <!-- Categories -->
   <div class="flex flex-row gap-8 w-full">
     <div class="flex flex-col gap-2 w-full">
-      <label for="mainCategory" class="text-xl font-semibold">Main Category</label>
-      <app-combo-box formControlName="mainCategory" [items]="mainCategoriesOptions" (selectedItemChange)="selectMainCategory($event)"/>
+      <label for="mainCategory" class="text-xl font-semibold">{{ 'product_form.main_category' | translate }}</label>
+      <app-combo-box formControlName="mainCategory" [items]="mainCategoriesOptions" (selectedItemChange)="selectMainCategory($event)">
+        <ng-template let-item>
+          <span>
+            {{item?.value | translate}}
+          </span>
+        </ng-template>
+      </app-combo-box>
       @if (form.controls.mainCategory.invalid && (form.controls.mainCategory.touched || form.controls.mainCategory.dirty)) {
         <div>
           <ul class="text-destructive text-sm list-disc pl-4">
@@ -61,8 +67,19 @@
       }
     </div>
     <div class="flex flex-col gap-2 w-full">
-      <label for="subcategory" class="text-xl font-semibold">Subcategory</label>
-      <app-cascade-select formControlName="subcategory" [items]="subCategoriesOptions()" [(selectedItem)]="selectedSubCategory" (selectedItemChange)="selectSubCategory($event)" />
+      <label for="subcategory" class="text-xl font-semibold">{{ 'product_form.subcategory' | translate }}</label>
+      <app-cascade-select formControlName="subcategory" [items]="subCategoriesOptions()" [(selectedItem)]="selectedSubCategory" (selectedItemChange)="selectSubCategory($event)">
+        <ng-template #selectedItemTemplate let-item>
+          <span>
+            {{item?.value | translate}}
+          </span>
+        </ng-template>
+        <ng-template #nodeTemplate let-node>
+          <span>
+            {{node?.value | translate}}
+          </span>
+        </ng-template>
+      </app-cascade-select>
       @if (form.controls.subcategory.invalid && (form.controls.subcategory.touched || form.controls.subcategory.dirty)) {
         <div>
           <ul class="text-destructive text-sm list-disc pl-4">
@@ -76,7 +93,7 @@
   </div>
   <!-- Localization -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="localization" class="text-xl font-semibold">Localization</label>
+    <label for="localization" class="text-xl font-semibold">{{ 'product_form.localization' | translate }}</label>
     <app-geo-map-autocomplete formControlName="localization"/>
     @if (form.controls.localization.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
       <div>
@@ -88,7 +105,7 @@
   </div>
   <!-- Images -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="images" class="text-xl font-semibold">Images</label>
+    <label for="images" class="text-xl font-semibold">{{ 'product_form.images' | translate }}</label>
     <app-media-manager formControlName="images"/>
     @if (form.controls.images.invalid && (form.controls.images.touched || form.controls.images.dirty)) {
       <div>
@@ -103,7 +120,7 @@
 
   <!-- Description -->
   <div class="flex flex-col gap-2 w-full">
-    <label for="description" class="text-xl font-semibold">Description</label>
+    <label for="description" class="text-xl font-semibold">{{ 'product_form.description' | translate }}</label>
     <textarea id="description" name="description" formControlName="description" rows="5" class="border rounded px-3 py-2"></textarea>
     @if (form.controls.description.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
       <div>

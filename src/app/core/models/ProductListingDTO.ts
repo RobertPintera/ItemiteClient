@@ -1,6 +1,6 @@
 import {CategoryDTO} from './CategoryDTO';
 import {Image} from './Image';
-import {Localization} from './Localization';
+import {LocationDTO} from './LocationDTO';
 
 export interface ProductListingDTO {
   id: number;
@@ -18,12 +18,12 @@ export interface ProductListingDTO {
     id: number;
     userName: string;
     email: string;
-    location: Localization;
+    location: LocationDTO;
     phoneNumber: string;
     photoUrl: string;
     backgroundUrl: string;
   };
-  location: Localization;
+  location: LocationDTO;
   categories: CategoryDTO[];
   images: Image[];
   mainImageUrl: string;

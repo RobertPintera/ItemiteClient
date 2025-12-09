@@ -1,7 +1,7 @@
 <button type="button" class="cascade-selected w-full" (click)="toggleDropdown()" [disabled]="isDisabled()">
-  @if (templateRef){
+  @if (selectedItemTemplate){
     <ng-container
-      [ngTemplateOutlet]="templateRef"
+      [ngTemplateOutlet]="selectedItemTemplate"
       [ngTemplateOutletContext]="{ $implicit: selectedItem() }">
     </ng-container>
   } @else {
@@ -27,7 +27,13 @@
         [style.padding-left.px]="level * 16 + 8"
         (click)="onNodeClick(node); $event.stopPropagation()"
       >
-        <span>{{ node.option.value }}</span>
+        @if(nodeTemplate){
+          <ng-container [ngTemplateOutlet]="nodeTemplate" [ngTemplateOutletContext]="{ $implicit: node.option, level: level }">
+          </ng-container>
+        }
+        @else{
+          <span>{{ node.option.value }}</span>
+        }
 
         @if (node.childrenNodes?.length) {
           <span>{{ node.expanded ? '▼' : '►' }}</span>

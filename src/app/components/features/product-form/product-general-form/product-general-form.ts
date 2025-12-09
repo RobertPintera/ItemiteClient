@@ -57,7 +57,7 @@ export class ProductGeneralForm {
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
     key: cat.id.toString(),
-    value: cat.name
+    value: "categories." + cat.name
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
@@ -181,11 +181,6 @@ export class ProductGeneralForm {
         newImageOrders: newImageOrders
       };
 
-      console.log(existingPhotoIds);
-      console.log(existingPhotoOrders);
-      console.log(newImages);
-      console.log(newImageOrders);
-
       this.productListingService.updateProductListing(product.id ,payload).subscribe({
         next: updatedProduct => {
           this.isSubmitting.set(false);
@@ -242,7 +237,7 @@ export class ProductGeneralForm {
     return {
       option: {
         key: category.id.toString(),
-        value: category.name
+        value: 'categories.' + category.name
       },
       childrenNodes: category.subCategories?.map(cat => this.mapCategoryToSelectNode(cat)) || []
     };
@@ -254,8 +249,18 @@ export class ProductGeneralForm {
       price: product.price,
       description: product.description,
       isNegotiable: product.isNegotiable,
-      localization: product.location
     });
+
+    const localization: Localization = {
+      country: product.location.country,
+      state: product.location.state,
+      formatted: `${product.location.city}, ${product.location.state}, ${product.location.country}`,
+      city: product.location.city,
+      latitude: product.location.latitude,
+      longitude: product.location.longitude,
+    };
+
+    this.form.get('localization')?.setValue(localization);
 
     this.setCategories(product);
 
@@ -277,7 +282,7 @@ export class ProductGeneralForm {
 
     const mainOption = {
       key: main.id.toString(),
-      value: main.name
+      value: "categories." + main.name
     };
 
     this.selectMainCategory(mainOption);
@@ -291,7 +296,7 @@ export class ProductGeneralForm {
 
     const subOption: OptionItem = {
       key: sub.id.toString(),
-      value: sub.name
+      value: "categories." +  sub.name
     };
 
     this.form.get('subcategory')?.setValue(subOption);

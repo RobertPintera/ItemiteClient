@@ -1,10 +1,11 @@
-import {Component, signal, ViewEncapsulation,} from '@angular/core';
+import {Component, input, signal, ViewEncapsulation,} from '@angular/core';
 import {CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {Button} from '../button/button';
 import {Dialog} from '../dialog/dialog';
 import {FileUpload} from '../file-upload/file-upload';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ImageMedia} from '../../../core/models/ImageMedia';
+import {TranslatePipe} from '@ngx-translate/core';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
 
@@ -18,6 +19,7 @@ import {ImageMedia} from '../../../core/models/ImageMedia';
     CdkDragPlaceholder,
     Dialog,
     FileUpload,
+    TranslatePipe,
   ],
   styleUrl: './media-manager.css',
   encapsulation: ViewEncapsulation.None,
@@ -32,6 +34,8 @@ import {ImageMedia} from '../../../core/models/ImageMedia';
 export class MediaManager implements ControlValueAccessor{
   private onChange: (value: ImageMedia[]) => void = () => {};
   private onTouched: () => void = () => {};
+
+  readonly maxImages = input<number>(6);
 
   readonly images = signal<ImageMedia[]>([]);
   readonly isEditOrder = signal<boolean>(false);

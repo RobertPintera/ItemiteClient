@@ -1,9 +1,9 @@
 import {
   Component,
   ContentChild,
-  ElementRef, forwardRef,
+  ElementRef,
   HostBinding,
-  inject, Input,
+  inject,
   input, model, OnDestroy, OnInit,
   output, PLATFORM_ID,
   signal,
@@ -33,7 +33,8 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 })
 export class CascadeSelect implements OnInit, OnDestroy, ControlValueAccessor {
   @HostBinding('class') hostClass = 'cascade-container';
-  @ContentChild(TemplateRef) templateRef?: TemplateRef<unknown>;
+  @ContentChild('selectedItemTemplate', { static: false }) selectedItemTemplate?: TemplateRef<unknown>;
+  @ContentChild('nodeTemplate', { static: false }) nodeTemplate?: TemplateRef<unknown>;
 
   private elementRef = inject(ElementRef);
   private platformId = inject(PLATFORM_ID);
