@@ -11,6 +11,8 @@ import {AuctionListingService} from '../../../core/services/auction-listing-serv
 import {Gallery} from '../../shared/gallery/gallery';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {Map, Marker} from 'leaflet';
+import {UserService} from '../../../core/services/user-service/user.service';
+import {LISTING_TYPES} from '../../../core/constants/constants';
 
 @Component({
   selector: 'app-product-details',
@@ -25,20 +27,22 @@ import {Map, Marker} from 'leaflet';
   styleUrl: './product-details.css'
 })
 export class ProductDetails implements OnInit {
-  private breakpointObserver = inject(BreakpointObserver);
-  private productListingService = inject(ProductListingService);
-  private auctionListingService = inject(AuctionListingService);
-  private route = inject(ActivatedRoute);
-  private platformId = inject(PLATFORM_ID);
+  private _breakpointObserver = inject(BreakpointObserver);
+  private _productListingService = inject(ProductListingService);
+  private _auctionListingService = inject(AuctionListingService);
+  private _userService = inject(UserService);
+  private _route = inject(ActivatedRoute);
+  private _platformId = inject(PLATFORM_ID);
 
-  private mapInitialized = false;
-  private map?: Map ;
-  private readonly mapEl = 'map';
-  private currentMarker : WritableSignal<Marker | undefined> = signal(undefined);
+  private _mapInitialized = false;
+  private _map?: Map ;
+  private readonly _mapEl = 'map';
+  private _currentMarker : WritableSignal<Marker | undefined> = signal(undefined);
 
   readonly isLg = signal<boolean>(false);
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
   readonly isClickPhoneNumber = signal<boolean>(false);
+  readonly isOwner = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -51,7 +55,7 @@ export class ProductDetails implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
+    this._route.queryParamMap.subscribe(params => {
       const id = params.get('id');
       const type = params.get('type');
 
@@ -60,14 +64,14 @@ export class ProductDetails implements OnInit {
       if (validId === null) return;
 
       if(type === 'Product'){
-        this.productListingService.loadProductListing(validId).subscribe({
+        this._productListingService.loadProductListing(validId).subscribe({
           next: product => {
             this.article.set(product);
           },
           error: err => console.error(err)
         });
       }else if (type === 'Auction'){
-        this.auctionListingService.loadAuctionListing(validId).subscribe({
+        this._auctionListingService.loadAuctionListing(validId).subscribe({
           next: product => {
             this.article.set(product);
           },
@@ -78,42 +82,53 @@ export class ProductDetails implements OnInit {
   }
 
   constructor() {
-    this.breakpointObserver.observe(['(min-width: 1024px)']).subscribe(result => {
+    this._breakpointObserver.observe(['(min-width: 1024px)']).subscribe(result => {
       this.isLg.set(result.breakpoints['(min-width: 1024px)']);
     });
 
     effect(async () => {
       const a = this.article();
-      if (!this.mapInitialized && a?.location?.latitude != null && a?.location?.longitude != null && a?.location?.city) {
-        await this.InitMap(a.location.latitude, a.location.longitude, a.location.city);
-        this.mapInitialized = true;
+      if (!this._mapInitialized && a?.location?.latitude != null && a?.location?.longitude != null && a?.location?.city) {
+        await this.initMap(a.location.latitude, a.location.longitude, a.location.city);
+        this._mapInitialized = true;
+      }
+    });
+
+    effect(() => {
+      const user = this._userService.userBasicInfo();
+      const article = this.article();
+
+      if(user.id === article?.owner.id){
+        this.isOwner.set(true);
       }
     });
   }
 
-  async InitMap(lat:number, lng:number, city:string) {
-    if (isPlatformBrowser(this.platformId)) {
+  async initMap(lat:number, lng:number, city:string) {
+    if (isPlatformBrowser(this._platformId)) {
       const { map, tileLayer, marker, Icon } = await import('leaflet');
 
       Icon.Default.prototype.options.iconRetinaUrl = 'marker-icon.png';
       Icon.Default.prototype.options.shadowUrl = 'marker-icon.png';
       Icon.Default.prototype.options.shadowSize = [25, 41];
 
-      this.map = map(this.mapEl).setView([lat,lng], 13);
+      this._map = map(this._mapEl).setView([lat,lng], 13);
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(this.map);
-      this.currentMarker.set(marker([lat, lng]).addTo(this.map).bindPopup(city).openPopup());
+      }).addTo(this._map);
+      this._currentMarker.set(marker([lat, lng]).addTo(this._map).bindPopup(city).openPopup());
 
-      this.map.dragging.disable();
-      this.map.scrollWheelZoom.disable();
-      this.map.doubleClickZoom.disable();
-      this.map.boxZoom.disable();
-      this.map?.setZoomAround(this.currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949], 10);
+      this._map.dragging.disable();
+      this._map.scrollWheelZoom.disable();
+      this._map.doubleClickZoom.disable();
+      this._map.boxZoom.disable();
+      this._map?.setZoomAround(this._currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949], 10);
     }
   }
 
-  ClickNumber() {
+  clickNumber() {
     this.isClickPhoneNumber.set(true);
   }
+
+  protected readonly LISTING_TYPES = LISTING_TYPES;
 }

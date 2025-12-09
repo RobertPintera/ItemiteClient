@@ -15,7 +15,7 @@ export interface ProductListingDTO {
   isNegotiable: boolean;
   isFollowed: boolean | null;
   owner: {
-    id: string;
+    id: number;
     userName: string;
     email: string;
     location: Localization;

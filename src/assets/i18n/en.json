@@ -211,6 +211,10 @@
     "header": "Your products and auctions"
   },
   "product_form": {
+    "create_product": "Create product",
+    "edit_product": "Edit product",
+    "create_auction": "Create auction",
+    "edit_auction": "Edit auction",
     "preview": "Preview",
     "error_url_listing_type": "The URL contains an invalid form type."
   }

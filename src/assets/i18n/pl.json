@@ -211,6 +211,10 @@
     "header": "Twoje produkty i aukcje"
   },
   "product_form": {
+    "create_product": "Tworzenie produktu",
+    "edit_product": "Edycja produktu",
+    "create_auction": "Tworzenie aukcji",
+    "edit_auction": "Edycja aukcji",
     "preview": "Podgląd",
     "error_url_listing_type": "URL zawiera nieprawidłowy typ formularza."
   }
