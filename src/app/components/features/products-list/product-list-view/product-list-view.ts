@@ -1,5 +1,4 @@
 import {Component, input, model, OnInit, output, signal} from '@angular/core';
-import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -9,6 +8,7 @@ import {Loader} from '../../../shared/loader/loader';
 import {SORT_DIRECTION, SortBy, SortDirection, SORTS_BY} from '../../../../core/constants/constants';
 import {ListingFilter} from '../../../../core/models/ListingFilter';
 import {OptionItem} from '../../../../core/models/OptionItem';
+import {ProductItem} from '../../../shared/product-item/product-item';
 
 @Component({
   selector: 'app-product-list-view',
@@ -18,7 +18,8 @@ import {OptionItem} from '../../../../core/models/OptionItem';
     ComboBox,
     TranslatePipe,
     Button,
-    Loader
+    Loader,
+    ProductItem
   ],
   templateUrl: './product-list-view.html',
   styleUrl: './product-list-view.css'

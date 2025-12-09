@@ -5,7 +5,6 @@ import {Loader} from '../../shared/loader/loader';
 import {ListingResponseDTO} from '../../../core/models/ListingResponseDTO';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
-import {UserProductItem} from './user-product-item/user-product-item';
 import {catchError, debounceTime, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
 import {PaginatedListingDTO} from '../../../core/models/PaginatedListingDTO';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -13,6 +12,7 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 import {Dialog} from '../../shared/dialog/dialog';
 import {LISTING_TYPES, ListingType} from '../../../core/constants/constants';
 import {TranslatePipe} from '@ngx-translate/core';
+import {ProductItem} from '../../shared/product-item/product-item';
 
 @Component({
   selector: 'app-user-products',
@@ -20,9 +20,9 @@ import {TranslatePipe} from '@ngx-translate/core';
     Paginator,
     Button,
     Loader,
-    UserProductItem,
     Dialog,
-    TranslatePipe
+    TranslatePipe,
+    ProductItem
   ],
   templateUrl: './user-products.html',
   styleUrl: './user-products.css'

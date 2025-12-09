@@ -21,7 +21,7 @@
 
         @if(data && data.items.length){
           @for (product of data.items; track product.id){
-            <app-user-product-item [product]="product" [isMd]="isMd()"/>
+            <app-product-item [product]="product" [isMd]="isMd()"/>
           }
         }
       </div>
