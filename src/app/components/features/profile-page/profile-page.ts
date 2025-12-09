@@ -22,7 +22,7 @@ import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 import {FileUpload} from '../../shared/file-upload/file-upload';
 import {DomSanitizer} from '@angular/platform-browser';
 import {UserService} from '../../../core/services/user-service/user.service';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {Button} from '../../shared/button/button';
 
 @Component({
@@ -35,7 +35,8 @@ import {Button} from '../../shared/button/button';
     ScaledText,
     ConfirmDialog,
     FileUpload,
-    Button
+    Button,
+    RouterLink
   ],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.css'

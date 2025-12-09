@@ -12,6 +12,7 @@ import {Me} from './components/features/login-register/me/me';
 import {ProductForm} from './components/features/product-form/product-form';
 import {NotFound} from './components/features/not-found/not-found';
 import {UserProducts} from './components/features/user-products/user-products';
+import {FollowedProducts} from './components/features/followed-products/followed-products';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,10 @@ export const routes: Routes = [
       {
         path: 'user-products',
         component: UserProducts
+      },
+      {
+        path: 'followed-products',
+        component: FollowedProducts
       },
       {
         path: '**',
