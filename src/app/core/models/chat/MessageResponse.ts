@@ -9,5 +9,6 @@ export interface MessageResponse {
   senderId: number,
   listingId: number,
   recipientId: number,
+  isDeleted: boolean,
   photos: Array<PhotoResponseDTO>
 }

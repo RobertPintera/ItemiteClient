@@ -41,23 +41,32 @@
         second ensures proper sorting of messages
       -->
       <div class="flex-col-reverse">
-      @for (message of messages(); track message.messageId) {
-        <app-message
-          [id]="message.messageId"
-          [content]="message.content"
-          [dateModified]="message.dateModified"
-          [dateSent]="message.dateSent"
-          [dateRead]="message.dateRead"
-          [photos]="message.photos"
-          [isOwnMessage]="IsOwnMessage(message.senderId)"
-          [username]="IsOwnMessage(message.senderId) ? currentUsername() : otherUsername()"
-          [profileImage]= "IsOwnMessage(message.senderId) ? currentProfileImg() : otherProfileImg()"
-          [isDeleted]="false"
-          (onDeleteClicked)="OnDeletionRequested($event)"
-          (onEditClicked)="OnEditionRequested($event)"
-          (onImageClicked)="OnPreviewClicked($event)"
-        />
-      }
+        @if (hasMore()) {
+          <button type="button"
+            (click)="OnLoadMessagesClicked()"
+            class="text-center  border-dashed duration-100 text-foreground hover:text-primary w-full h-10 border-b-1 rounded-b-md hover:cursor-pointer"
+          >
+            Load older messages
+          </button>
+        }
+
+        @for (message of messages(); track message.messageId) {
+          <app-message
+            [id]="message.messageId"
+            [content]="message.content"
+            [dateModified]="message.dateModified"
+            [dateSent]="message.dateSent"
+            [dateRead]="message.dateRead"
+            [photos]="message.photos"
+            [isOwnMessage]="IsOwnMessage(message.senderId)"
+            [username]="IsOwnMessage(message.senderId) ? currentUsername() : otherUsername()"
+            [profileImage]= "IsOwnMessage(message.senderId) ? currentProfileImg() : otherProfileImg()"
+            [isDeleted]="message.isDeleted"
+            (onDeleteClicked)="OnDeletionRequested($event)"
+            (onEditClicked)="OnEditionRequested($event)"
+            (onImageClicked)="OnPreviewClicked($event)"
+          />
+        }
       </div>
     </div>
 
@@ -78,7 +87,6 @@
           [formGroup]="form" (ngSubmit)="OnSubmit()"
     >
 
-
       <!-- Message editing info + cancel -->
       @if (editingMessage()) {
           <div class="flex absolute z-5 flex-row items-center -translate-y-full text-accent-foreground m-1">
@@ -92,6 +100,7 @@
 
       <textarea
         name="messageInput"
+        (keyup.enter)="OnSubmit()"
         formControlName="messageInput"
         rows="1"
         [value]="messageInput()"
@@ -102,8 +111,11 @@
 
       <div class="relative flex flex-row self-end gap-1 ml-5 h-full text-card-foreground justify-end">
         <button
+          [disabled]="editingMessage()"
           type="button"
-          class="relative h-full hover:text-primary hover:cursor-pointer"
+          class="relative h-full
+            disabled:hover:cursor-no-drop
+            enabled:hover:text-primary enabled:hover:cursor-pointer"
           (click)="OnAttachmentIconClicked()"
         >
           <div>

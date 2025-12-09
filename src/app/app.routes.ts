@@ -5,7 +5,7 @@ import {LoginRegister} from './components/features/login-register/login-register
 import {ProductsList} from './components/features/products-list/products-list';
 import {ProductDetails} from './components/features/product-details/product-details';
 import {ProfilePage} from './components/features/profile-page/profile-page';
-import {Chat} from './components/features/chat/chat';
+import {Chat} from './components/features/chat/chat/chat';
 import {Test} from './components/features/test/test';
 import {ConfirmEmail} from './components/features/login-register/confirm-email/confirm-email';
 import {ResetPassword} from './components/features/login-register/reset-password/reset-password';

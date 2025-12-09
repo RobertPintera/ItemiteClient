@@ -2,10 +2,8 @@ import {MessageResponse} from './MessageResponse';
 
 export interface ChatResponseDTO {
   items: MessageResponse[],
-  totalPages: number,
-  currentPage: number,
-  itemsFrom: number,
-  itemsTo: number,
-  totalItemsCount: number,
-  hasNextPage: boolean,
+  nextCursor: string |  undefined,
+  count: number
+  limit: number
+  hasMore: boolean,
 }

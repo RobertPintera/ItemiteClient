@@ -1,12 +1,14 @@
 import {AfterViewInit, Component, computed, input, InputSignal, output} from '@angular/core';
-import {MessageResponse} from '../../../../core/models/chat/MessageResponse';
-import {PhotoResponseDTO} from '../../../../core/models/PhotoResponseDTO';
+import {MessageResponse} from '../../../../../core/models/chat/MessageResponse';
+import {PhotoResponseDTO} from '../../../../../core/models/PhotoResponseDTO';
 import {DatePipe} from '@angular/common';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-message',
   imports: [
-    DatePipe
+    DatePipe,
+    TranslatePipe
   ],
   templateUrl: './message.html',
   styleUrl: './message.css',

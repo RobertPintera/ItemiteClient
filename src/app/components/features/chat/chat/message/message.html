@@ -19,7 +19,7 @@
                 [class.self-end]="isOwnMessage()"
                 class="flex flex-row items-center"
             >
-                @if(isOwnMessage()) {
+                @if(isOwnMessage() && !isDeleted()) {
                     <div id="edit" class="flex flex-row text-card-foreground items-center">
                         <button (click)="OnEditClicked()"
                           class="h-full hover:text-primary hover:cursor-pointer">
@@ -46,7 +46,12 @@
                   [class.italic]="isDeleted()"
                   [class.font-mono]="isDeleted()"
                 >
+                  @if(isDeleted()) {
+                    {{"chat.deleted_message" | translate}}
+                  }
+                  @else {
                     {{content()}}
+                  }
                 </p>
             }
             <!-- Images -->

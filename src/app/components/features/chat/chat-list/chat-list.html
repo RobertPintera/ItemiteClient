@@ -14,11 +14,12 @@
 "
 >
   <div class="snap-start shadow-inner">
+    <div></div>
     <div class="overflow-y-auto">
       @for (chatInfo of chatList(); track $index) {
         <app-chat-preview-card
           [index]="$index"
-          [isArchived]="false"
+          [isArchived]="chatInfo.listing.isArchived"
           [listingName]="chatInfo.listing.name"
           [mainImageUrl]="chatInfo.listing.mainImageUrl"
           [price]="chatInfo.listing.price"

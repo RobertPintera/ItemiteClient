@@ -9,19 +9,19 @@ import {
   signal,
   Signal, ViewChild, WritableSignal
 } from '@angular/core';
-import {MessageResponse} from '../../../core/models/chat/MessageResponse';
-import {PhotoResponseDTO} from '../../../core/models/PhotoResponseDTO';
+import {MessageResponse} from '../../../../core/models/chat/MessageResponse';
+import {PhotoResponseDTO} from '../../../../core/models/PhotoResponseDTO';
 import {Message} from './message/message';
-import {UserService} from '../../../core/services/user-service/user.service';
-import {ChatMemberInfo} from '../../../core/models/chat/ChatMemberInfo';
-import {FileUpload} from "../../shared/file-upload/file-upload";
-import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
-import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
+import {UserService} from '../../../../core/services/user-service/user.service';
+import {ChatMemberInfo} from '../../../../core/models/chat/ChatMemberInfo';
+import {FileUpload} from "../../../shared/file-upload/file-upload";
+import {LoadingCircle} from '../../../shared/loading-circle/loading-circle';
+import {ConfirmDialog} from '../../../shared/confirm-dialog/confirm-dialog';
 import {TranslatePipe} from '@ngx-translate/core';
-import {ImagePreview} from '../../shared/image-preview/image-preview';
-import {AttachedFiles} from './attached-files/attached-files';
-import {MessageService} from '../../../core/services/message-service/message.service';
-import {ErrorHandlerService} from '../../../core/services/error-handler-service/error-handler-service';
+import {ImagePreview} from '../../../shared/image-preview/image-preview';
+import {AttachedFiles} from '../attached-files/attached-files';
+import {MessageService} from '../../../../core/services/message-service/message.service';
+import {ErrorHandlerService} from '../../../../core/services/error-handler-service/error-handler-service';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
@@ -44,6 +44,8 @@ export class Chat implements AfterViewInit {
   private userService: UserService = inject(UserService);
   private messageService: MessageService = inject(MessageService);
   private errorService: ErrorHandlerService = inject(ErrorHandlerService);
+
+  private readonly LIMIT = 20;
 
   /////////////
   // TESTING //
@@ -75,7 +77,8 @@ export class Chat implements AfterViewInit {
     messageId: 1,
     photos: [],
     recipientId: 2,
-    senderId: 1
+    senderId: 1,
+    isDeleted: false
   };
   testM2: MessageResponse = {
     content: "Short text",
@@ -86,7 +89,8 @@ export class Chat implements AfterViewInit {
     messageId: 2,
     photos: [],
     recipientId: 2,
-    senderId: 1
+    senderId: 1,
+    isDeleted: false
   };
   testM3: MessageResponse = {
     content: undefined,
@@ -97,7 +101,8 @@ export class Chat implements AfterViewInit {
     messageId: 3,
     photos: [this.testP1Vertical, this.testP4Vertical],
     recipientId: 2,
-    senderId: 2
+    senderId: 2,
+    isDeleted: false
   };
   testM4: MessageResponse = {
     content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
@@ -108,7 +113,8 @@ export class Chat implements AfterViewInit {
     messageId: 4,
     photos: [this.testP2Horizontal, this.testP3SquareLowRes],
     recipientId: 2,
-    senderId: 1
+    senderId: 1,
+    isDeleted: false
   };
   testM5: MessageResponse = {
     content: "All we had to do was to follow that damn train CJ.",
@@ -119,7 +125,8 @@ export class Chat implements AfterViewInit {
     messageId: 5,
     recipientId: 2,
     photos: [],
-    senderId: 2
+    senderId: 2,
+    isDeleted: false
   };
 
   member1: ChatMemberInfo = {
@@ -177,6 +184,9 @@ export class Chat implements AfterViewInit {
 
   private _messages = signal<MessageResponse[]>([]);
   readonly messages:Signal<MessageResponse[]> = this._messages.asReadonly();
+  private _cursor : string | undefined;
+  private _hasMore = signal<boolean>(false);
+  readonly hasMore = this._hasMore.asReadonly();
 
   private _showFileInputDialog = signal(false);
   readonly showFileInputDialog = this._showFileInputDialog.asReadonly();
@@ -217,7 +227,7 @@ export class Chat implements AfterViewInit {
 
     effect(() => {
       if(this.listingId() === undefined || this.currentUserId() < 0) return;
-      this.LoadMessages(this.listingId());
+      this.LoadMessages(this.listingId(), this.LIMIT);
     });
 
     this.form = new FormGroup({
@@ -232,27 +242,37 @@ export class Chat implements AfterViewInit {
           this.maxHeight = this._parent.clientHeight * 0.33;
           this.el.nativeElement.style.maxHeight = `${this.maxHeight}px`;
         }
-        this.adjustHeight();
+        this.AdjustHeight();
       }
     );
   }
 
-  LoadMessages(listingId: number, page: number = 1, pageSize: number = 20) {
+  @ViewChild('chatContainer') chatContainer!: ElementRef<HTMLDivElement>;
+
+
+  LoadMessages(listingId: number, limit: number, cursor: string | undefined = undefined) {
+
+    const el = this.chatContainer?.nativeElement;
+    const prevScrollHeight = el?.scrollHeight;
+
     console.log(this.otherMemberInfo());
     console.log(this.otherUsername());
 
-    this.messageService.GetChat(listingId, this.otherMemberInfo().id, page, pageSize).subscribe({
+    this.messageService.GetChat(listingId, this.otherMemberInfo().id, limit, cursor).subscribe({
         next: chat => {
-          this._messages.set(chat.items);
+          this._messages.set([...chat.items, ...this._messages()]);
           this._resultCode.set(200);
           this._loading.set(false);
+          this._cursor = chat.nextCursor;
+          this._hasMore.set(chat.hasMore);
+          console.log(chat.nextCursor);
 
-          this.adjustHeight();
+          // this.adjustHeight();
 
-          setTimeout(() => {
+          /*setTimeout(() => {
             const scrollContainer = this.scrollContainer.nativeElement as HTMLElement;
             scrollContainer.scrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-          }, 50);
+          }, 50);*/
         },
         error: error => {
           console.log(error);
@@ -262,12 +282,13 @@ export class Chat implements AfterViewInit {
     );
   }
 
+  OnLoadMessagesClicked() {
+    this.LoadMessages(this.listingId(), this.LIMIT, this._cursor);
+  }
+
   // region Submit
   OnSubmit() {
     const input = this.form.value.messageInput.trim();
-
-    // user didn't pass any input
-    if(input === "" && this.attachments().length === 0 ) return;
 
     this.LoadTextIntoInput("");
 
@@ -275,6 +296,9 @@ export class Chat implements AfterViewInit {
       this.OnEditMessageSubmit(input);
       return;
     }
+
+    // user didn't pass any input
+    if(input === "" && this.attachments().length === 0 ) return;
 
     this.ClearAttachments();
 
@@ -298,6 +322,16 @@ export class Chat implements AfterViewInit {
 
   private LoadTextIntoInput(text: string) {
     this._messageInput.set(text);
+    if(text === "") {
+      this.form.get("messageInput")?.setValue("");
+      setTimeout(() => {
+        const el = document.getElementById("messageInput") as HTMLTextAreaElement;
+        if (el) {
+          el.selectionStart = el.selectionEnd = 0;
+        }
+      });
+    }
+    this.AdjustHeight();
   }
 
   OnAttachmentIconClicked() {
@@ -349,11 +383,11 @@ export class Chat implements AfterViewInit {
   }
 
   OnEditMessageSubmit(input: string) {
-    // editing message only allows editing text
-    if(input === "") return;
-
+    // ! editing message only allows editing text
     const message = this._messages().find(message => message.messageId === this._selectedEditMessage)
     if(!message) return;
+
+    if(input === "" && message.photos.length === 0) return;
 
     // don't call api if nothing changed
     if(message.content === input) return;
@@ -414,8 +448,8 @@ export class Chat implements AfterViewInit {
 
     this._messages.update(messages => {
       const newMessages = [...messages];
-      newMessages[index].content = "deleted_message";
       newMessages[index].photos = [];
+      newMessages[index].isDeleted = true;
       return newMessages;
     });
 
@@ -507,10 +541,10 @@ export class Chat implements AfterViewInit {
 
   @HostListener('input')
   onInput() {
-    this.adjustHeight();
+    this.AdjustHeight();
   }
 
-  private adjustHeight() {
+  private AdjustHeight() {
     if(!this._parent) return;
 
     this.maxHeight = this._parent.clientHeight * 0.33; // 50% max height

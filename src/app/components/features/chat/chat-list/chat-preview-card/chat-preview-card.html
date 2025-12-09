@@ -17,15 +17,21 @@
     </div>
   }
 
-  <div class="flex flex-row items-center border-b-2">
+  <div class="relative flex flex-row items-center border-b-2">
     <img alt="listing image" [src]="mainImageUrl()"
          class="w-20 aspect-square object-contain" />
 
-    <div class="flex flex-wrap flex-1 justify-center text-center flex-col items-center">
-      <p class="text-xl mr-2 text-wrap wrap-anywhere">
-        {{ listingName() }}
+    @if (isArchived()) {
+      <p class="absolute self-start -right-3 top-2 m-0 p-0
+       text-secondary z-0 opacity-30 text-wrap wrap-anywhere text-xl text-center rotate-45 overflow-hidden">
+        Archived
       </p>
-      <p> {{ price() }} </p>
+    }
+
+    <div class="flex relative flex-wrap flex-1 justify-center text-center flex-col items-center">
+      <p class="z-2 text-xl mr-2 text-wrap wrap-anywhere">
+        {{ listingName() }} - {{ price() }}
+      </p>
       <p class="text-xl">
         {{ otherMember() }}
       </p>

@@ -21,11 +21,13 @@ export class MessageService {
   // region general chat queries
   GetAllChats(
     pageNumber: number,
+    perspective: "Buyer" | "Seller",
     pageSize: number = 10,
   ): Observable<ChatListResponseDTO> {
     const params = new HttpParams()
       .set('pageNumber', pageNumber)
-      .set('pageSize', pageSize);
+      .set('pageSize', pageSize)
+      .set("perspective", perspective);
     return this.http.get<ChatListResponseDTO>(`${environment.itemiteApiUrl}/message/chats`, {params:params, timeout: 15000, withCredentials: true});
   }
 
@@ -43,12 +45,12 @@ export class MessageService {
   GetChat(
     listingId: number,
     otherUserId: number,
-    pageNumber: number,
-    pageSize: number = 20,
+    limit: number = 20,
+    cursor: string | undefined = undefined
   ): Observable<ChatResponseDTO> {
     const params = new HttpParams()
-      .set('pageNumber', pageNumber)
-      .set('pageSize', pageSize);
+      .set('limit', limit)
+      .set('cursor', cursor ?? "");
     return this.http.get<ChatResponseDTO>(`${environment.itemiteApiUrl}/message/${listingId}/chats/${otherUserId}`, {params:params, timeout: 15000, withCredentials: true});
   }
   // endregion

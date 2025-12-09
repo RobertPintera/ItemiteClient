@@ -1,8 +1,9 @@
-import {Component, computed, effect, input, signal} from '@angular/core';
-import {Chat} from '../chat';
+import {AfterViewInit, Component, computed, effect, inject, input, signal} from '@angular/core';
+import {Chat} from '../chat/chat';
 import {ChatPreviewCard} from './chat-preview-card/chat-preview-card';
 import {ChatListResponseDTO} from '../../../../core/models/chat/ChatListResponseDTO';
 import {ChatInfoResponse} from '../../../../core/models/chat/ChatInfoResponse';
+import {MessageService} from '../../../../core/services/message-service/message.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -13,8 +14,21 @@ import {ChatInfoResponse} from '../../../../core/models/chat/ChatInfoResponse';
   templateUrl: './chat-list.html',
   styleUrl: './chat-list.css'
 })
-export class ChatList {
-  chatList = input<ChatInfoResponse[]>([]);
+export class ChatList implements AfterViewInit {
+  readonly perspective = input.required<"Buyer" | "Seller">();
+
+  chatList = signal<ChatInfoResponse[]>([]);
+  private messageService = inject(MessageService);
+
+  hasChats = computed(() => {
+    return this.chatList().length != 0
+  });
+
+  async ngAfterViewInit() {
+    this.messageService.GetAllChats(1, this.perspective()).subscribe(data => {
+      this.chatList.set(data.items);
+    })
+  }
 
   private _showMessagesOnly = signal(false);
   showMessagesOnly = this._showMessagesOnly.asReadonly();
@@ -29,7 +43,6 @@ export class ChatList {
   });
   readonly selectedListingId = computed(() => {
     if(this.chatList().length > 0 && this._selected() >= 0) {
-      console.log(this.chatList()[this._selected()].listing.id);
       return this.chatList()[this._selected()].listing.id;
     }
     return undefined;
