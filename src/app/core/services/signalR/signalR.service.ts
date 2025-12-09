@@ -5,6 +5,6 @@ import * as signalR from '@microsoft/signalR'
   providedIn: 'root',
 })
 export class SignalRService {
-  private _hub: signalR.HubConnection;
+
 
 }
