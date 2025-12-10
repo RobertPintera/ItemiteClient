@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit, PLATFORM_ID, signal, WritableSignal} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit, PLATFORM_ID, signal, WritableSignal} from '@angular/core';
 import {Button} from '../../shared/button/button';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -13,6 +13,8 @@ import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {Map, Marker} from 'leaflet';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {LISTING_TYPES} from '../../../core/constants/constants';
+import {ListingService} from '../../../core/services/listing-service/listing.service';
+import {debounceTime, Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
@@ -26,13 +28,17 @@ import {LISTING_TYPES} from '../../../core/constants/constants';
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
 })
-export class ProductDetails implements OnInit {
+export class ProductDetails implements OnInit, OnDestroy {
   private _breakpointObserver = inject(BreakpointObserver);
   private _productListingService = inject(ProductListingService);
   private _auctionListingService = inject(AuctionListingService);
   private _userService = inject(UserService);
+  private _listingService = inject(ListingService);
   private _route = inject(ActivatedRoute);
   private _platformId = inject(PLATFORM_ID);
+
+  private _toggleFollowSubject = new Subject<void>();
+  private destroy$ = new Subject<void>();
 
   private _mapInitialized = false;
   private _map?: Map ;
@@ -41,8 +47,11 @@ export class ProductDetails implements OnInit {
 
   readonly isLg = signal<boolean>(false);
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
+  readonly isFollowed = signal<boolean>(false);
+  readonly isFollowLoading = signal<boolean>(false);
   readonly isClickPhoneNumber = signal<boolean>(false);
   readonly isOwner = signal<boolean>(false);
+
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -55,7 +64,11 @@ export class ProductDetails implements OnInit {
   }
 
   ngOnInit() {
-    this._route.queryParamMap.subscribe(params => {
+    this._breakpointObserver.observe(['(min-width: 1024px)']).pipe(takeUntil(this.destroy$)).subscribe(result => {
+      this.isLg.set(result.breakpoints['(min-width: 1024px)']);
+    });
+
+    this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('id');
       const type = params.get('type');
 
@@ -67,6 +80,8 @@ export class ProductDetails implements OnInit {
         this._productListingService.loadProductListing(validId).subscribe({
           next: product => {
             this.article.set(product);
+            this.isFollowed.set(product.isFollowed ?? false);
+            this._listingService.addFollowedListing(product.id)
           },
           error: err => console.error(err)
         });
@@ -74,18 +89,24 @@ export class ProductDetails implements OnInit {
         this._auctionListingService.loadAuctionListing(validId).subscribe({
           next: product => {
             this.article.set(product);
+            this.isFollowed.set(product.isFollowed ?? false);
           },
           error: err => console.error(err)
         });
       }
     });
+
+    this._toggleFollowSubject
+      .pipe(debounceTime(300), takeUntil(this.destroy$))
+      .subscribe(() => this._handleToggle());
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   constructor() {
-    this._breakpointObserver.observe(['(min-width: 1024px)']).subscribe(result => {
-      this.isLg.set(result.breakpoints['(min-width: 1024px)']);
-    });
-
     effect(async () => {
       const a = this.article();
       if (!this._mapInitialized && a?.location?.latitude != null && a?.location?.longitude != null && a?.location?.city) {
@@ -128,6 +149,38 @@ export class ProductDetails implements OnInit {
 
   clickNumber() {
     this.isClickPhoneNumber.set(true);
+  }
+
+  toggleFollowed() {
+    this._toggleFollowSubject.next();
+  }
+
+  private _handleToggle() {
+    if (this.isFollowLoading()) return;
+
+    const id = this.article()?.id;
+    if (!id) return;
+
+    this.isFollowLoading.set(true);
+    const currentlyFollowed = this.isFollowed();
+
+    if(!currentlyFollowed){
+      this._listingService.addFollowedListing(id).subscribe({
+        next: _ => {
+          this.isFollowed.set(true);
+          this.isFollowLoading.set(false);
+        },
+        error: err => console.error(err)
+      });
+    } else{
+      this._listingService.deleteFollowedListing(id).subscribe({
+        next: _ => {
+          this.isFollowed.set(false);
+          this.isFollowLoading.set(false);
+        },
+        error: err => console.error(err)
+      });
+    }
   }
 
   protected readonly LISTING_TYPES = LISTING_TYPES;

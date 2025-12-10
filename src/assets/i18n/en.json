@@ -1,6 +1,7 @@
 {
   "authors": "Authors",
   "product_details": {
+    "home": "Home",
     "send_message": "Send Message",
     "call": "Call",
     "price": "Price",
@@ -241,5 +242,8 @@
     "edit_auction": "Edit auction",
     "preview": "Preview",
     "error_url_listing_type": "The URL contains an invalid form type."
+  },
+  "followed_products": {
+    "header": "Followed products"
   }
 }
