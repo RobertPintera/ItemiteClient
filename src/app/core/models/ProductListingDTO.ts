@@ -4,7 +4,7 @@ import {LocationDTO} from './LocationDTO';
 import {User} from './User';
 
 export interface ProductListingDTO {
-  id: string;
+  id: number;
   name: string;
   description: string;
   price: number;
