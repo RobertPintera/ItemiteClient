@@ -1,1 +1,58 @@
-<app-chat [chatMembers]="" [listingId]=""/>
+@if(canChat()) {
+  <div class="boundary fixed w-full max-w-[1920px] ml-auto mr-auto inset-0 flex justify-end items-end z-199 h-lvh pointer-events-none">
+    <div
+      [class.w-full]="maximize()"
+      [class.h-full]="maximize()"
+
+      [class.w-100]="!maximize()"
+      [class.max40lvh]="!maximize()"
+      [class.h-200]="!maximize()"
+      class="flex rounded-md flex-col max-w-full bg-card drop-shadow-2xl pointer-events-auto" cdkDrag [cdkDragFreeDragPosition]="dragPosition"  #dragElement cdkDragBoundary=".boundary" >
+      <div class="w-full overflow-hidden bg-primary mb-1 p-2 flex flex-row justify-between text-primary-foreground" [class.rounded-t-md]="!maximize()">
+
+
+        <div class="flex-1 hover:cursor-move border-b" cdkDragHandle>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" class="size-6">
+            <path d="M480-96 312-264l51-51 81 81v-174h72v174l81-81 51 51L480-96ZM264-312 96-480l168-168 51 51-81 81h174v72H234l81 81-51 51Zm432 0-51-51 81-81H552v-72h174l-81-81 51-51 168 168-168 168ZM444-552v-174l-81 81-51-51 168-168 168 168-51 51-81-81v174h-72Z"/>
+          </svg>
+        </div>
+
+        <div class="flex flex-row items-center gap-2">
+
+          @if (maximize()) {
+            <button class="hover:cursor-pointer hover:text-secondary" (click)="OnMaximizeClicked()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <path fill-rule="evenodd" d="M3.22 3.22a.75.75 0 0 1 1.06 0l3.97 3.97V4.5a.75.75 0 0 1 1.5 0V9a.75.75 0 0 1-.75.75H4.5a.75.75 0 0 1 0-1.5h2.69L3.22 4.28a.75.75 0 0 1 0-1.06Zm17.56 0a.75.75 0 0 1 0 1.06l-3.97 3.97h2.69a.75.75 0 0 1 0 1.5H15a.75.75 0 0 1-.75-.75V4.5a.75.75 0 0 1 1.5 0v2.69l3.97-3.97a.75.75 0 0 1 1.06 0ZM3.75 15a.75.75 0 0 1 .75-.75H9a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-2.69l-3.97 3.97a.75.75 0 0 1-1.06-1.06l3.97-3.97H4.5a.75.75 0 0 1-.75-.75Zm10.5 0a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-2.69l3.97 3.97a.75.75 0 1 1-1.06 1.06l-3.97-3.97v2.69a.75.75 0 0 1-1.5 0V15Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+
+          } @else {
+            <button class="hover:cursor-pointer hover:text-secondary" (click)="OnMaximizeClicked()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <path fill-rule="evenodd" d="M15 3.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V5.56l-3.97 3.97a.75.75 0 1 1-1.06-1.06l3.97-3.97h-2.69a.75.75 0 0 1-.75-.75Zm-12 0A.75.75 0 0 1 3.75 3h4.5a.75.75 0 0 1 0 1.5H5.56l3.97 3.97a.75.75 0 0 1-1.06 1.06L4.5 5.56v2.69a.75.75 0 0 1-1.5 0v-4.5Zm11.47 11.78a.75.75 0 1 1 1.06-1.06l3.97 3.97v-2.69a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1 0-1.5h2.69l-3.97-3.97Zm-4.94-1.06a.75.75 0 0 1 0 1.06L5.56 19.5h2.69a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 1 1.5 0v2.69l3.97-3.97a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          }
+          <button class="hover:cursor-pointer hover:text-secondary" (click)="OnExitClicked()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
+              <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+        </div>
+
+      </div>
+      <div class="flex flex-1">
+        <app-chat
+          [chatMembers]="chatMembers()"
+          [listingId]="listingId()"
+          class="min-h-full w-full"
+        />
+      </div>
+
+    </div>
+  </div>
+
+}
+
+
