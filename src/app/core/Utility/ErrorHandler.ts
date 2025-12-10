@@ -20,6 +20,6 @@ export function ErrorHandler(error: HttpErrorResponse): Array<string> {
     }
     return [message, error.status.toString()];
   } else {
-    return [error.statusText, error.status.toString()];
+    return [error.statusText, error?.status?.toString() ?? "Unknown error"];
   }
 }
