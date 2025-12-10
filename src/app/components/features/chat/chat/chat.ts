@@ -262,9 +262,6 @@ export class Chat implements AfterViewInit {
     const el = this.chatContainer?.nativeElement;
     const prevScrollHeight = el?.scrollHeight;
 
-    console.log(this.otherMemberInfo());
-    console.log(this.otherUsername());
-
     this.messageService.GetChat(listingId, this.otherMemberInfo().id, limit, cursor).subscribe({
         next: chat => {
           this._messages.set([...chat.items, ...this._messages()]);
@@ -272,7 +269,6 @@ export class Chat implements AfterViewInit {
           this._loading.set(false);
           this._cursor = chat.nextCursor;
           this._hasMore.set(chat.hasMore);
-          console.log(chat.nextCursor);
 
           // this.adjustHeight();
 
