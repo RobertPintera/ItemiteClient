@@ -144,9 +144,13 @@ export class ProfilePage implements AfterViewInit, OnInit {
   }
 
   async LoadUserInfo() {
-    const success = await this._userService.FetchCurrentUserInfo();
-    if(!success) {
-      return;
+
+    // Fetch info if it wasn't fetched before
+    if(this._userService.userInfo().id === -1) {
+      const success = await this._userService.FetchCurrentUserInfo();
+      if(!success) {
+        return;
+      }
     }
 
     const location = this._userService.userInfo().location;
