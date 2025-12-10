@@ -1,7 +1,8 @@
 {
   "authors": "Authors",
   "product_details": {
-    "send_message": "Send Message",
+    "send_message": "Send message",
+    "view_messages": "View messages",
     "call": "Call",
     "price": "Price",
     "starting_bid": "Starting bid",
