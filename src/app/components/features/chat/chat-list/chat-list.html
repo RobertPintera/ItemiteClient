@@ -13,25 +13,55 @@
   overflow-x-auto
 "
 >
-  <div class="snap-start shadow-inner">
-    <div></div>
-    <div class="overflow-y-auto">
-      @for (chatInfo of chatList(); track $index) {
-        <app-chat-preview-card
-          [index]="$index"
-          [isArchived]="chatInfo.listing.isArchived"
-          [listingName]="chatInfo.listing.name"
-          [mainImageUrl]="chatInfo.listing.mainImageUrl"
-          [price]="chatInfo.listing.price"
-          [selected]="$index === selected()"
-          [lastMessage]="chatInfo.lastMessage.content"
-          [dateSent]="chatInfo.lastMessage.dateSent.toString()"
-          [lastMessageAuthor]="chatInfo.lastMessage.userName"
-          [unreadMessages]="chatInfo.unreadMessagesCount"
-          (onChatClicked)="OnCardClicked($index)"
-        />
-      }
-  </div>
+  <div class="snap-start shadow-inner relative">
+    <!-- left/right navigation arrows -->
+    @if (hasManyPages()) {
+      <div class="flex h-8 flex-row ml-2 mr-2 mt-2">
+        <button (click)="ChangePageLeft()" [disabled]="loading()"
+          class="disabled:cursor-no-drop
+          enabled:hover:cursor-pointer enabled:hover:text-secondary flex-1 min-h-full text-center flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+               class="size-6">
+            <path fill-rule="evenodd" d="M7.28 7.72a.75.75 0 0 1 0 1.06l-2.47 2.47H21a.75.75 0 0 1 0 1.5H4.81l2.47 2.47a.75.75 0 1 1-1.06 1.06l-3.75-3.75a.75.75 0 0 1 0-1.06l3.75-3.75a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <button (click)="ChangePageRight()" [disabled]="loading()"
+          class="disabled:cursor-no-drop
+          enabled:hover:cursor-pointer enabled:hover:text-secondary flex-1 min-h-full text-center flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+               class="size-6">
+            <path fill-rule="evenodd" d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="absolute inset-0 flex items-center w-full justify-center">
+        <app-loading-circle />
+      </div>
+    } @else {
+      <div class="overflow-y-auto">
+        @for (chatInfo of chatList(); track $index) {
+          <app-chat-preview-card
+            [index]="$index"
+            [isArchived]="chatInfo.listing.isArchived"
+            [listingName]="chatInfo.listing.name"
+            [mainImageUrl]="chatInfo.listing.mainImageUrl"
+            [price]="chatInfo.listing.price"
+            [selected]="$index === selected()"
+            [lastMessage]="chatInfo.lastMessage.content"
+            [dateSent]="chatInfo.lastMessage.dateSent.toString()"
+            [lastMessageAuthor]="chatInfo.lastMessage.userName"
+            [unreadMessages]="chatInfo.unreadMessagesCount"
+            (onChatClicked)="OnCardClicked($index)"
+          />
+        }
+      </div>
+    }
+
   </div>
 
   @if(!selectedListingId() || !selectedMembers()) {
