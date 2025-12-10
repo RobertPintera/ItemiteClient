@@ -233,7 +233,9 @@ export class Chat implements AfterViewInit {
     })
 
     effect(() => {
-      if(this.listingId() === undefined || this.currentUserId() < 0) return;
+      if(this.listingId() === undefined
+        || this.currentUserId() < 0
+        || !this.otherMemberInfo()) return;
       this.LoadMessages(this.listingId(), this.LIMIT);
     });
 

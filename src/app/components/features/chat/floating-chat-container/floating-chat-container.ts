@@ -45,6 +45,9 @@ export class FloatingChatContainer {
   readonly canChat = computed(() =>
     this.chatMembers().length === 2
     && this._currentUser() !== this.productOwner()
+    && this.productOwner().id
+    && this._currentUser().id > -1
+    && this.productOwner().id > -1
   );
 
   dragPosition = {x: 0, y: 0};
