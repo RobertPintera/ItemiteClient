@@ -4,7 +4,7 @@ import {Image} from './Image';
 import {User} from './User';
 
 export interface AuctionListingDTO {
-  id: string;
+  id: number;
   name: string;
   description: string;
   startingBid: number;
