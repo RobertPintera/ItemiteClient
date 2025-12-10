@@ -4,4 +4,5 @@ export const environment = {
   cloudinaryName: '',
   geoapifyUrl: 'https://api.geoapify.com/v1/geocode',
   geoapifyApiKey: '',
+  itemiteHubs: 'http://localhost:5066/hubs'
 };

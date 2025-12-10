@@ -5,6 +5,7 @@ import {RouterOutlet} from '@angular/router';
 import {ErrorNotification} from '../../shared/error-notification/error-notification';
 import {Footer} from '../../shared/footer/footer';
 import {CategoryService} from '../../../core/services/category-service/category.service';
+import {NotificationService} from '../../../core/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -20,6 +21,7 @@ import {CategoryService} from '../../../core/services/category-service/category.
 })
 export class MainLayout implements OnInit {
   private categoryService = inject(CategoryService);
+  private notificationService = inject(NotificationService);
 
   ngOnInit() {
     this.categoryService.loadMainCategories().subscribe({

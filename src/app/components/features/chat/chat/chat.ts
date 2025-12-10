@@ -23,6 +23,7 @@ import {AttachedFiles} from '../attached-files/attached-files';
 import {MessageService} from '../../../../core/services/message-service/message.service';
 import {ErrorHandlerService} from '../../../../core/services/error-handler-service/error-handler-service';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NotificationService} from '../../../../core/services/notification-service/notification.service';
 
 @Component({
   selector: 'app-chat',
@@ -44,6 +45,7 @@ export class Chat implements AfterViewInit {
   private userService: UserService = inject(UserService);
   private messageService: MessageService = inject(MessageService);
   private errorService: ErrorHandlerService = inject(ErrorHandlerService);
+  private notificationService: NotificationService = inject(NotificationService);
 
   private readonly LIMIT = 20;
 
@@ -224,6 +226,11 @@ export class Chat implements AfterViewInit {
 
   constructor() {
     // Test();
+
+    this.notificationService.onMessageReceived.subscribe((message: MessageResponse) => {
+      console.log("Received", message);
+      this._messages.update(messages => [...messages, message]);
+    })
 
     effect(() => {
       if(this.listingId() === undefined || this.currentUserId() < 0) return;
