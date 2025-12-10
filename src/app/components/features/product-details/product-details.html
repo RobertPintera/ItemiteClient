@@ -1,4 +1,13 @@
 <div class="flex justify-center w-full ">
+  @if (auction) {
+    <app-floating-chat-container
+      [class.hidden]="!showChat()"
+      (onExitClicked)="DisableChatVisibility()" [listingId]="auction.id" [productOwner]="auction.owner"/>
+  } @else if (product) {
+    <app-floating-chat-container
+      [class.hidden]="!showChat()"
+      (onExitClicked)="DisableChatVisibility()" [listingId]="product.id" [productOwner]="product.owner"/>
+  }
   <div class="flex flex-col w-full max-w-[1500px] py-4 px-8">
     <div>
       <p class="w-full">Home / Electronics</p>
@@ -25,7 +34,7 @@
                 <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
                 <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
                 <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
-                <app-button label="{{'product_details.send_message' | translate}}"/>
+                <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
                 <app-button (clickButton)="ClickNumber()"
                             [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
                           : ( 'product_details.call' | translate )" severity="secondary">
@@ -45,14 +54,19 @@
             <p class="text-sm sm:text-base">{{article()?.description}}</p>
           </div>
         </div>
-        <div class="hidden lg:block self-stretch min-w-0.5 bg-muted-foreground z-10"></div>
+        <div class="hidden lg:block self-stretch min-w-0.5 bg-muted-foreground z-1"></div>
         <div class="text-xl mt-2 flex flex-col gap-2 lg:w-2/6 lg:p-4  lg:mt-0">
           @if (isLg()){
             @if(product){
               <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
               <p>{{'product_details.price' | translate}}: {{ product.price }}$ {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
               <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
-              <app-button label="{{'product_details.send_message' | translate}}"/>
+              @if (isAuthorLogged()) {
+                <app-button label="{{ 'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()"/>
+              } @else {
+                <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
+              }
+
               <app-button (clickButton)="ClickNumber()"
                           [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
                           : ( 'product_details.call' | translate )" severity="secondary">
@@ -67,9 +81,10 @@
             }
           }
           <p>{{'product_details.localization' | translate}}: {{ article()?.location?.country }}, {{article()?.location?.city}}, {{article()?.location?.state}}</p>
-          <div id="map" class="h-64 rounded-md max-w-full"></div>
+          <div id="map" class="h-64 rounded-md max-w-full z-0"></div>
         </div>
       </div>
     }
+
   </div>
 </div>

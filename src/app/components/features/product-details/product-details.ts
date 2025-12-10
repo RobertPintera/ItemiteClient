@@ -1,16 +1,18 @@
-import {Component, effect, inject, OnInit, PLATFORM_ID, signal, WritableSignal} from '@angular/core';
+import {Component, computed, effect, inject, OnInit, PLATFORM_ID, signal, WritableSignal} from '@angular/core';
 import {Button} from '../../shared/button/button';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductListingService} from '../../../core/services/product-listing-service/product-listing.service';
 import {ProductListingDTO} from '../../../core/models/ProductListingDTO';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AuctionListingDTO} from '../../../core/models/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
 import {AuctionListingService} from '../../../core/services/auction-listing-service/auction-listing.service';
 import {Gallery} from '../../shared/gallery/gallery';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {Map, Marker} from 'leaflet';
+import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
+import {UserService} from '../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-product-details',
@@ -19,6 +21,7 @@ import {Map, Marker} from 'leaflet';
     TranslatePipe,
     Gallery,
     DatePipe,
+    FloatingChatContainer,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
@@ -29,11 +32,21 @@ export class ProductDetails implements OnInit {
   private auctionListingService = inject(AuctionListingService);
   private route = inject(ActivatedRoute);
   private platformId = inject(PLATFORM_ID);
+  private userService: UserService = inject(UserService);
+  private _router = inject(Router);
 
   private mapInitialized = false;
   private map?: Map ;
   private readonly mapEl = 'map';
   private currentMarker : WritableSignal<Marker | undefined> = signal(undefined);
+
+  private _showChat = signal(false);
+  readonly showChat = this._showChat.asReadonly();
+  readonly isAuthorLogged = computed(() => {
+    if(!this.userService.isUserLoggedIn()) return false;
+    return this.userService.userBasicInfo().id === this.article()?.owner.id;
+  });
+
 
   readonly isLg = signal<boolean>(false);
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
@@ -47,6 +60,31 @@ export class ProductDetails implements OnInit {
   get auction(): AuctionListingDTO | null {
     const value = this.article();
     return isAuctionListing(value) ? value : null;
+  }
+
+  OnMessageClicked(): void {
+    // User not logged in
+    //  => send message leads to logging page
+    if(!this.userService.isUserLoggedIn()){
+      this._router.navigate(['login']);
+      return;
+    }
+
+    // User is listing author
+    //  => show chat list of specific listing
+    if(this.isAuthorLogged()) {
+      // todo show chat list of specific listing
+      return;
+    }
+
+    this.SwitchChatVisibility();
+  }
+
+  DisableChatVisibility(): void {
+    this._showChat.set(false);
+  }
+  SwitchChatVisibility(): void {
+    this._showChat.set(!this._showChat());
   }
 
   ngOnInit() {
