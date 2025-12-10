@@ -1,6 +1,7 @@
 import {CategoryDTO} from './CategoryDTO';
 import {Image} from './Image';
 import {LocationDTO} from './LocationDTO';
+import {User} from './User';
 
 export interface ProductListingDTO {
   id: string;
@@ -14,15 +15,7 @@ export interface ProductListingDTO {
   isFeatured: boolean;
   isNegotiable: boolean;
   isFollowed: boolean | null;
-  owner: {
-    id: string;
-    userName: string;
-    email: string;
-    location: LocationDTO;
-    phoneNumber: string;
-    photoUrl: string;
-    backgroundUrl: string;
-  };
+  owner: User;
   location: LocationDTO;
   categories: CategoryDTO[];
   images: Image[];
