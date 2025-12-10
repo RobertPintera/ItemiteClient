@@ -62,13 +62,14 @@ export class NotificationService {
   }
 
   private RegisterMessageEvents() {
-    this._hub.on("MessageResponse", (message: MessageResponse) => {
+    this._hub.on("MessageReceived", (message: MessageResponse) => {
+      console.log("Received message " + message)
       this._onMessageReceived.next(message);
     });
   }
 
   private UnregisterMessageEvents() {
-    this._hub.off("MessageResponse");
+    this._hub.off("MessageReceived");
   }
 
 }
