@@ -1,23 +1,23 @@
 <div class="flex border-transparent border-t-2 border-b-2 relative shadow-md flex-col rounded-md m-4 p-2 hover:border-secondary transition-all duration-100 ease-out hover:cursor-pointer"
-  [class.bg-primary]="selected() && !isArchived()"
-  [class.text-primary-foreground]="selected() && !isArchived()"
+  [class.border-secondary]="selected() && !isArchived()"
+  [class.border-transparent]="!selected()"
   [class.bg-background]="!selected() || isArchived()"
   [class.text-foreground]="!selected() || isArchived()"
   (click)="OnClicked()"
 >
   @if(unreadMessages() > 0) {
-    <div class="absolute flex self-start flex-row items-center rounded-full bg-background/85 aspect-square p-[1px]">
+    <div class="absolute z-1 flex self-start flex-row items-center rounded-full bg-destructive/80 aspect-square p-px">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-           class="size-6 text-[rgb(255,150,0)]">
+           class="size-6 text-destructive-foreground">
         <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
       </svg>
-      <p class="font-bold text-lg text-foreground">
+      <p class="font-bold text-lg text-destructive-foreground">
         {{ unreadMessages() }}
       </p>
     </div>
   }
 
-  <div class="relative flex flex-row items-center border-b-2">
+  <div class="relative z-0 flex flex-row items-center border-b-2">
     <img alt="listing image" [src]="mainImageUrl()"
          class="w-20 aspect-square object-contain" />
 
