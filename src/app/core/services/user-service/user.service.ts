@@ -41,7 +41,7 @@ export class UserService {
   );
 
   // Token refresh
-  refreshTokenMinutesSpacing: number = 1;
+  private readonly _refreshTokenMinutesSpacing: number = 10;
   private _tokenRefreshLoopRunning: boolean = false;
 
   private http: HttpClient = inject(HttpClient);
@@ -106,6 +106,7 @@ export class UserService {
     this._tokenRefreshLoopRunning = true;
     while (this.isUserLoggedIn()) {
       if(await this.RefreshToken() == 401) {
+        this.ClearUserInfo();
         break;
       }
 
@@ -115,7 +116,7 @@ export class UserService {
 
       await lastValueFrom(
         race(
-          timer(this.refreshTokenMinutesSpacing * 60 * 1000),
+          timer(this._refreshTokenMinutesSpacing * 60 * 1000),
           stop
         )
       );
