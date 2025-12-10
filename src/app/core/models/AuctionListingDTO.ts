@@ -1,6 +1,7 @@
 import {LocationDTO} from './LocationDTO';
 import {CategoryDTO} from './CategoryDTO';
 import {Image} from './Image';
+import {User} from './User';
 
 export interface AuctionListingDTO {
   id: string;
@@ -15,15 +16,7 @@ export interface AuctionListingDTO {
   isArchived: boolean;
   isFeatured: boolean;
   isFollowed: boolean;
-  owner: {
-    id: string;
-    userName: string;
-    email: string;
-    location: LocationDTO;
-    phoneNumber: string;
-    photoUrl: string;
-    backgroundUrl: string;
-  };
+  owner: User;
   location: LocationDTO;
   categories: CategoryDTO[];
   images: Image[];
