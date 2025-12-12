@@ -14,7 +14,7 @@ export interface AuctionListingDTO {
   dateEnds: string;
   isArchived: boolean;
   isFeatured: boolean;
-  isFollowed: boolean;
+  isFollowed: boolean | null;
   owner: {
     id: string;
     userName: string;

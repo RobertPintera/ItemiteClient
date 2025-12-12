@@ -88,8 +88,9 @@ export class AuctionListingService {
 
   loadAuctionListing(id: number){
     return this.getAuctionListing(id).pipe(
-      map(product => {
-        return product;
+      map(auction => {
+        console.log(auction);
+        return auction;
       }),
       catchError(err => {
         console.error('Error loadProductListing:', err);
