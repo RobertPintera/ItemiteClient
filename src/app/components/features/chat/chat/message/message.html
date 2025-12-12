@@ -1,9 +1,18 @@
 <div
-    class="flex p-1 rounded-md flex-col grow-0 sm:max-w-[90%] max-w-full w-fit ml-5 mr-5 mt-2 text-card-foreground"
+    class="flex relative p-1 rounded-md flex-col grow-0 sm:max-w-[90%] max-w-full w-fit ml-5 mr-5 mt-2 text-card-foreground"
     [class.justify-self-start]="!isOwnMessage()"
     [class.justify-self-end]="isOwnMessage()"
     id="parent"
 >
+    @if (isAwaitingUpdate()) {
+        <div class="absolute z-1 inset-0 flex items-center w-full justify-center">
+          <div class="absolute z-1 inset-0 flex items-center w-full h-full justify-center bg-background/50 rounded-md">
+            <app-loading-circle />
+          </div>
+        </div>
+    }
+
+
     <div class="flex flex-row gap-1 items-start">
         <!-- profile pic -->
         <img alt="profile" [src]="profileImage()"
@@ -19,7 +28,7 @@
                 [class.self-end]="isOwnMessage()"
                 class="flex flex-row items-center"
             >
-                @if(isOwnMessage() && !isDeleted()) {
+                @if(isOwnMessage() && !isDeleted() && !isAwaitingUpdate()) {
                     <div id="edit" class="flex flex-row text-card-foreground items-center">
                         <button (click)="OnEditClicked()"
                           class="h-full hover:text-primary hover:cursor-pointer">
@@ -79,7 +88,10 @@
                [class.self-end]="isOwnMessage()"
             >
                 @if(dateModified()) {
-                  <p class="group-hover:hidden flex"> {{dateSent() | date:"yyyy/MM/dd HH:mm"}} (edited)</p>
+                  <p class="group-hover:hidden flex">
+                    {{dateSent() | date:"yyyy/MM/dd HH:mm"}}
+                    ({{"chat.edited" | translate}})
+                  </p>
                   <p class="group-hover:flex hidden"> Sent {{dateSent() | date:"yyyy/MM/dd HH:mm"}}</p>
                   <p class="group-hover:flex hidden"> Edited {{ dateModified()! | date:"yyyy/MM/dd HH:mm"}} </p>
                 } @else {

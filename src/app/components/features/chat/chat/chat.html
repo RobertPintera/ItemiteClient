@@ -21,18 +21,18 @@
   />
 }
 
-<div class="rounded-sm h-full w-full m-auto flex shadow-inner">
+<div class="rounded-sm h-full w-full m-auto flex shadow-inner" #chatWrapper>
   <!-- Message window -->
   <div
     id="message_window"
-    class="relative flex flex-col items-center h-full w-full bg-card ">
+    class="relative flex flex-col items-center h-full w-full bg-card">
     @if (loading()) {
       <app-loading-circle class="absolute m-auto top-1/2 -translate-y-1/2"/>
     }
     <div class="flex-1 w-full grow"></div>
       <!-- Messages -->
     <div id="scrollContainer" #scrollContainer
-         class="relative flex flex-col-reverse max-h-100% overflow-y-auto h-fit w-full"
+         class="relative flex flex-col-reverse max-h-100% overflow-y-auto h-fit w-full scroll-thin"
          (scroll)="OnMessagesScroll($event)"
     >
       <!--
@@ -62,6 +62,7 @@
             [username]="IsOwnMessage(message.senderId) ? currentUsername() : otherUsername()"
             [profileImage]= "IsOwnMessage(message.senderId) ? currentProfileImg() : otherProfileImg()"
             [isDeleted]="message.isDeleted"
+            [isAwaitingUpdate]="message.messageId === awaitingUpdate()"
             (onDeleteClicked)="OnDeletionRequested($event)"
             (onEditClicked)="OnEditionRequested($event)"
             (onImageClicked)="OnPreviewClicked($event)"
@@ -114,6 +115,7 @@
           [disabled]="editingMessage()"
           type="button"
           class="relative h-full
+            disabled:text-card-foreground/60
             disabled:hover:cursor-no-drop
             enabled:hover:text-primary enabled:hover:cursor-pointer"
           (click)="OnAttachmentIconClicked()"

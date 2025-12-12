@@ -5,7 +5,7 @@ import {
   ElementRef,
   HostListener,
   inject,
-  input,
+  input, output,
   signal,
   Signal, ViewChild, WritableSignal
 } from '@angular/core';
@@ -159,15 +159,17 @@ export class Chat implements AfterViewInit {
 
 
   // TODO disable attaching images when editing message?
-  // TODO deleted messages should have disabled edit and delete controls
-  //  + "User deleted the message" should be transformed into translation "chat.deleted_message"
-  //    it should be in italics
 
   readonly currentUserId = computed(() => this.userService.userBasicInfo().id);
 
   // This needs to be filled in parent component - s
   readonly chatMembers = input.required<ChatMemberInfo[]>();
   readonly listingId = input.required<number>();
+
+  updateLastMessageByDeletion = output<number>();
+  updateLastMessageBySending = output<MessageResponse>();
+  updateLastMessageByEdition = output<MessageResponse>();
+  onListingLoaded = output<number>();
 
   readonly currentUsername = computed(() => this.userMemberInfo().userName);
   readonly currentProfileImg = computed(() => this.userMemberInfo().photoUrl ??
@@ -215,6 +217,8 @@ export class Chat implements AfterViewInit {
   private _resultCode = signal<number>(-1);
   readonly resultCode = this._resultCode.asReadonly();
   readonly success = computed(()=> this._resultCode() === 200);
+  private _awaitingUpdate = signal<number>(-1);
+  readonly awaitingUpdate = this._awaitingUpdate.asReadonly();
 
   // stores id of currently edited
   private _selectedEditMessage: number = -1;
@@ -228,9 +232,18 @@ export class Chat implements AfterViewInit {
     // Test();
 
     this.notificationService.onMessageReceived.subscribe((message: MessageResponse) => {
-      console.log("Received", message);
+      if(message.listingId !== this.listingId()) return;
       this._messages.update(messages => [...messages, message]);
-    })
+    });
+
+    this.notificationService.onMessageDeleted.subscribe((messageId) => {
+      this.LocalDelete(messageId);
+    });
+
+    this.notificationService.onMessageUpdated.subscribe((message) => {
+      if(message.listingId !== this.listingId()) return;
+      this.EditMessage(message);
+    });
 
     effect(() => {
       if(this.listingId() === undefined
@@ -257,6 +270,7 @@ export class Chat implements AfterViewInit {
   }
 
   @ViewChild('chatContainer') chatContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('chatWrapper') chatWrapper: ElementRef | undefined;
 
 
   LoadMessages(listingId: number, limit: number, cursor: string | undefined = undefined) {
@@ -271,6 +285,7 @@ export class Chat implements AfterViewInit {
           this._loading.set(false);
           this._cursor = chat.nextCursor;
           this._hasMore.set(chat.hasMore);
+          this.onListingLoaded.emit(listingId);
 
           // this.adjustHeight();
 
@@ -295,8 +310,6 @@ export class Chat implements AfterViewInit {
   OnSubmit() {
     const input = this.form.value.messageInput.trim();
 
-    this.LoadTextIntoInput("");
-
     if(this.editingMessage()) {
       this.OnEditMessageSubmit(input);
       return;
@@ -304,17 +317,20 @@ export class Chat implements AfterViewInit {
 
     // user didn't pass any input
     if(input === "" && this.attachments().length === 0 ) return;
+    this.LoadTextIntoInput("");
 
+    const attachments = this.attachments();
     this.ClearAttachments();
 
     this.messageService.SendMessage(
       this.otherMemberInfo().id,
       this.listingId(),
       input === "" ? undefined : input,
-      this.attachments().length === 0 ? undefined : this.attachments()
+      attachments.length === 0 ? undefined : attachments
     ).subscribe({
       next: message => {
         this._messages.update(messages => [...messages, message.message]);
+        this.updateLastMessageBySending.emit(message.message);
       },
       error: error => {
         this.errorService.SendErrorMessage(error);
@@ -364,6 +380,7 @@ export class Chat implements AfterViewInit {
     this._editingMessage.set(true);
     this._hideInput.set(false);
     this._selectedEditMessage = messageId;
+    this._showAttachments.set(false);
 
     const m = this.messages().find(message => message.messageId === messageId);
     if(m) {
@@ -379,11 +396,17 @@ export class Chat implements AfterViewInit {
     this._selectedEditMessage = -1;
   }
 
-  private LocalEdit(editedMessage: MessageResponse) {
-    this._messages.update((messages) => {
-      const index =  messages.findIndex(message => message.messageId === this._selectedEditMessage);
-      messages[index] = editedMessage;
-      return messages;
+  private EditMessage(message: MessageResponse) {
+    const index = this.messages().findIndex(messageResponse =>
+      message.messageId === messageResponse.messageId
+    );
+
+    if (index === -1) return;
+
+    this._messages.update(messages => {
+      const newMessages = [...messages];
+      newMessages[index] = message;
+      return newMessages;
     });
   }
 
@@ -394,29 +417,27 @@ export class Chat implements AfterViewInit {
 
     if(input === "" && message.photos.length === 0) return;
 
+    this.LoadTextIntoInput("");
+
     // don't call api if nothing changed
     if(message.content === input) return;
     this.ClearAttachments();
 
+    const content = input;
+
+    this._awaitingUpdate.set(message.messageId);
     this.messageService.EditMessage(this._selectedEditMessage, input).subscribe({
-      next: chat => {
-        const index = this.messages().findIndex(message =>
-          message.messageId === this._selectedEditMessage
-        );
-
+      next: message => {
         this._editingMessage.set(false);
+        this.EditMessage(message);
+        this.updateLastMessageByEdition.emit(message);
         this._selectedEditMessage = -1;
-
-        if (index === -1) return;
-
-        this._messages.update(messages => {
-          const newMessages = [...messages];
-          newMessages[index] = chat;
-          return newMessages;
-        });
+        this._awaitingUpdate.set(-1);
       },
       error: error => {
+        this.LoadTextIntoInput(content);
         this.errorService.SendErrorMessage(error);
+        this._awaitingUpdate.set(-1);
       }
     });
   }
@@ -445,10 +466,19 @@ export class Chat implements AfterViewInit {
 
   async DeleteMessage() {
     if(this._selectedDeleteMessage === -1) return;
+    this._awaitingUpdate.set(this._selectedDeleteMessage);
     const success = await this.messageService.DeleteMessage(this._selectedDeleteMessage);
+    this._awaitingUpdate.set(-1);
     if(!success) return;
 
-    const index = this.messages().findIndex(message => message.messageId === this._selectedDeleteMessage);
+    this.LocalDelete(this._selectedDeleteMessage);
+    this.updateLastMessageByDeletion.emit(this._selectedDeleteMessage);
+
+    this._selectedDeleteMessage = -1;
+  }
+
+  private LocalDelete(messageId:number) {
+    const index = this.messages().findIndex(message => message.messageId === messageId);
     if (index === -1) return;
 
     this._messages.update(messages => {
@@ -456,18 +486,6 @@ export class Chat implements AfterViewInit {
       newMessages[index].photos = [];
       newMessages[index].isDeleted = true;
       return newMessages;
-    });
-
-    this._selectedDeleteMessage = -1;
-  }
-
-  private LocalDelete() {
-    this._messages.update((messages) => {
-      const index =  messages.findIndex(message => message.messageId === this._selectedDeleteMessage);
-      if(index > -1) {
-        messages.splice(index, 1);
-      }
-      return messages;
     });
   }
 
@@ -499,6 +517,7 @@ export class Chat implements AfterViewInit {
 
   // region Image Preview
   OnPreviewClicked(url: string) {
+    if(this.editingMessage()) return;
     this._imagePreview.set(url);
   }
 

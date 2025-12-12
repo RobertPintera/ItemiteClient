@@ -3,12 +3,14 @@ import {MessageResponse} from '../../../../../core/models/chat/MessageResponse';
 import {PhotoResponseDTO} from '../../../../../core/models/PhotoResponseDTO';
 import {DatePipe} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
+import {LoadingCircle} from '../../../../shared/loading-circle/loading-circle';
 
 @Component({
   selector: 'app-message',
   imports: [
     DatePipe,
-    TranslatePipe
+    TranslatePipe,
+    LoadingCircle
   ],
   templateUrl: './message.html',
   styleUrl: './message.css',
@@ -31,6 +33,7 @@ export class Message {
   readonly profileImage = input<string>("");
   readonly backgroundImage = input<string>();
   readonly isDeleted = input<boolean>(false);
+  readonly isAwaitingUpdate:InputSignal<boolean> = input<boolean>(false);
 
   readonly hasPhotos = computed(() => this.photos().length !== 0);
 

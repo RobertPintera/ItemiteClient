@@ -73,7 +73,8 @@ export class ProductDetails implements OnInit {
     // User is listing author
     //  => show chat list of specific listing
     if(this.isAuthorLogged()) {
-      // todo show chat list of specific listing
+      const productId = this.product!.id;
+      this._router.navigate(['chats'], { queryParams: { productId }});
       return;
     }
 

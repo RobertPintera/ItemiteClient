@@ -13,6 +13,7 @@ import {ExternalLoginError} from './components/features/login-register/external-
 import {Me} from './components/features/login-register/me/me';
 import {ProductForm} from './components/features/product-form/product-form';
 import {NotFound} from './components/features/not-found/not-found';
+import {ChatsMainWindow} from './components/features/chat/chats-main-window/chats-main-window';
 
 
 export const routes: Routes = [
@@ -47,6 +48,10 @@ export const routes: Routes = [
       {
         path: 'dev',
         component: Test
+      },
+      {
+        path: 'chats',
+        component: ChatsMainWindow
       }
     ]
   },
