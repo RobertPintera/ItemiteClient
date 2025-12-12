@@ -1,7 +1,7 @@
 import {Component, computed, effect, input, OnInit, output, Signal, signal, WritableSignal} from '@angular/core';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {FormControl, FormGroup, ReactiveFormsModule, ValidatorFn} from '@angular/forms';
-import { UpdateErrorTranslations } from '../../../core/Utility/Validation';
+import { UpdateErrorTranslations } from '../../../core/utility/Validation';
 import {errorTranslations} from '../../../core/constants/ErrorTranslations';
 
 @Component({

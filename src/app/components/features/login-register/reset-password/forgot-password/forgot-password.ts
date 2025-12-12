@@ -2,7 +2,7 @@ import {Component, computed, inject, OnInit, output, signal, Signal, WritableSig
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ScaledText} from "../../../../shared/scaled-text/scaled-text";
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {UpdateEmailErrors, UpdateErrorTranslations} from '../../../../../core/Utility/Validation';
+import {UpdateEmailErrors, UpdateErrorTranslations} from '../../../../../core/utility/Validation';
 import {UserService} from '../../../../../core/services/user-service/user.service';
 import {LoadingCircle} from '../../../../shared/loading-circle/loading-circle';
 

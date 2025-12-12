@@ -17,7 +17,7 @@ import {EditableText} from '../../shared/editable-text/editable-text';
 import {FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ScaledText} from '../../shared/scaled-text/scaled-text';
-import {PasswordValidator, UpdatePasswordErrors} from '../../../core/Utility/Validation';
+import {PasswordValidator, UpdatePasswordErrors} from '../../../core/utility/Validation';
 import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 import {FileUpload} from '../../shared/file-upload/file-upload';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';

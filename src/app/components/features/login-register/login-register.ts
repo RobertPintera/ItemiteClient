@@ -13,7 +13,7 @@ import {
   UpdatePasswordErrors,
   UpdatePhoneErrors,
   UpdateUsernameErrors,
-} from '../../../core/Utility/Validation';
+} from '../../../core/utility/Validation';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {Router} from '@angular/router';
 import {ForgotPassword} from './reset-password/forgot-password/forgot-password';

@@ -6,7 +6,7 @@ import {ScaledText} from '../../../shared/scaled-text/scaled-text';
 import {
   PasswordValidator,
   UpdatePasswordErrors,
-} from '../../../../core/Utility/Validation';
+} from '../../../../core/utility/Validation';
 import {UserService} from '../../../../core/services/user-service/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoadingCircle} from '../../../shared/loading-circle/loading-circle';
