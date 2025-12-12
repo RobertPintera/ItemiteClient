@@ -1,5 +1,5 @@
 import {Injectable, Signal, signal} from '@angular/core';
-import {ErrorHandler} from '../../Utility/ErrorHandler';
+import {ErrorHandler} from '../../utility/ErrorHandler';
 import {HttpErrorResponse} from '@angular/common/http';
 
 @Injectable(
@@ -18,6 +18,12 @@ export class ErrorHandlerService {
   // These persist
   readonly lastErrorMessage: Signal<string> = this._lastErrorMessage.asReadonly();
   readonly lastErrorCode : Signal<string> = this._lastErrorCode.asReadonly();
+
+  async SendRawErrorMessage(error: string, displayTime: number = 5000) {
+    this._errorMessage.set(error);
+    await new Promise(resolve => setTimeout(resolve, displayTime));
+    this._errorMessage.set("");
+  }
 
   async SendErrorMessage(error: HttpErrorResponse, displayTime: number = 5000) {
     const message = ErrorHandler(error);
