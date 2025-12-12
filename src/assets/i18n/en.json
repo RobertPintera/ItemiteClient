@@ -175,7 +175,12 @@
   "chat": {
     "ask_deletion": "Are you sure you want to delete this message?",
     "sent": "Sent",
-    "Edited": "Edited",
+    "edited": "Edited",
     "deleted_message": "User deleted the message"
+  },
+  "chats_main": {
+    "messages": "Messages",
+    "you_buy": "You buy",
+    "you_sell": "You sell"
   }
 }
