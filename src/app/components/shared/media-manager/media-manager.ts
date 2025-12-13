@@ -55,12 +55,12 @@ export class MediaManager implements ControlValueAccessor{
   }
 
   drop(event: CdkDragDrop<ImageMedia[]>) {
-    const arr = [...this.images()];
-    moveItemInArray(arr, event.previousIndex, event.currentIndex);
+    const array = [...this.images()];
+    moveItemInArray(array, event.previousIndex, event.currentIndex);
 
-    arr.forEach((img, index) => img.imageOrder = index + 1);
+    array.forEach((img, index) => img.imageOrder = index + 1);
 
-    this.images.set(arr);
+    this.images.set(array);
 
     this.onTouched();
     this.onChange(this.images());
@@ -128,11 +128,11 @@ export class MediaManager implements ControlValueAccessor{
     const img = this.selectedImage();
     if (!img) return;
 
-    this.images.update(arr =>
-      arr.map(i =>
-        i.imageId === img.imageId
-          ? { ...i, imageFile: file, imageUrl: URL.createObjectURL(file), existing: false }
-          : i
+    this.images.update(array =>
+      array.map(image =>
+        image.imageId === img.imageId
+          ? { ...image, imageFile: file, imageUrl: URL.createObjectURL(file), existing: false }
+          : image
       )
     );
 

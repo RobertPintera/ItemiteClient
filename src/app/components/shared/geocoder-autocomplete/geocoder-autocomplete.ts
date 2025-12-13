@@ -47,7 +47,6 @@ export class GeocoderAutocomplete  {
   readonly selectedLocalization: WritableSignal<Localization | null> = signal(null);
   suggestions: Signal<Localization[]> = this._suggestions;
 
-
   // Listen to this signal to detect if address is valid
   readonly onCityPicked = output<Localization|null>();
   readonly onInputEnter = output<string>();

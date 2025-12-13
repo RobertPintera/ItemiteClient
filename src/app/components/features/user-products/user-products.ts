@@ -87,8 +87,8 @@ export class UserProducts implements OnInit, OnDestroy {
       const updated: Partial<PaginatedListingDTO> = {};
 
       const num = (name: string) => {
-        const v = params.get(name);
-        return v !== null ? Number(v) : null;
+        const value = params.get(name);
+        return value !== null ? Number(value) : null;
       };
 
       updated.pageNumber = num('pageNumber') ?? this.filter().pageNumber;

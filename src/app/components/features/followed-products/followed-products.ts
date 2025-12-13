@@ -4,13 +4,12 @@ import {Paginator} from "../../shared/paginator/paginator";
 import {ProductItem} from "../../shared/product-item/product-item";
 import {TranslatePipe} from "@ngx-translate/core";
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {UserService} from '../../../core/services/user-service/user.service';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ListingResponseDTO} from '../../../core/models/ListingResponseDTO';
 import {PaginatedListingDTO} from '../../../core/models/PaginatedListingDTO';
 import {catchError, debounceTime, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
-import {LISTING_TYPES, ListingType} from '../../../core/constants/constants';
+import {LISTING_TYPES} from '../../../core/constants/constants';
 
 @Component({
   selector: 'app-followed-products',
@@ -111,12 +110,6 @@ export class FollowedProducts implements OnInit, OnDestroy {
     });
 
     this.applyFilter(this.filter());
-  }
-
-  goToProductForm(listingType?: ListingType) {
-    this._router.navigate(['/product-form'], {
-      queryParams: { type: listingType }
-    });
   }
 
   private applyFilter(filter: PaginatedListingDTO) {
