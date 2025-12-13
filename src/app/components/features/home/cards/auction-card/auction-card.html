@@ -1,0 +1,22 @@
+<a routerLink="/product" [queryParams]="{ id: auction()?.id, type: auction()?.listingType }"
+   class="flex flex-col border-2 border-border rounded-2xl w-full my-2 h-120
+  hover:border-accent hover:rounded-xl hover:shadow-xl hover:z-10 hover:scale-[1.02] duration-150">
+  <div class="relative w-full h-[60%]">
+    <img [src]="auction()?.mainImageUrl ?? 'assets/laptop_chromebook_icon.svg'" [alt]="auction()?.name"
+         class="object-contain w-full h-full select-none drag-none" draggable="false">
+  </div>
+  <div class="flex flex-col p-2 mt-2 gap-2">
+    <p class="text-2xl">{{ auction()?.name }}</p>
+    <div class="flex flex-row">
+      @if(auction()?.categories?.length){
+        <div class="border-2 border-border px-4 py-2 rounded-2xl">
+          <p class="text-sm">{{ `categories.${auction()?.categories?.[0]?.name}` | translate }}</p>
+        </div>
+      }
+    </div>
+    <div class="flex flex-col">
+      <p class="text-xl">{{ 'product_details.current_bid' | translate }}: {{ auction()?.currentBid }} $</p>
+      <p class="text-base">{{ 'product_details.starting_bid' | translate }}: {{ auction()?.startingBid }}</p>
+    </div>
+  </div>
+</a>

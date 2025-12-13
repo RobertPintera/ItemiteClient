@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuctionProductCard } from './auction-product-card';
+import { GeoMapAutocomplete } from './geo-map-autocomplete';
 
-describe('AuctionProductCard', () => {
-  let component: AuctionProductCard;
-  let fixture: ComponentFixture<AuctionProductCard>;
+describe('GeoMapAutocomplete', () => {
+  let component: GeoMapAutocomplete;
+  let fixture: ComponentFixture<GeoMapAutocomplete>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AuctionProductCard]
+      imports: [GeoMapAutocomplete]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AuctionProductCard);
+    fixture = TestBed.createComponent(GeoMapAutocomplete);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

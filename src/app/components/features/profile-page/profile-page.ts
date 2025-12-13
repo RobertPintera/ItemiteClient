@@ -14,18 +14,19 @@ import {Localization} from '../../../core/models/Localization';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {LatLonPayloadDTO} from '../../../core/models/LatLonPayloadDTO';
 import {EditableText} from '../../shared/editable-text/editable-text';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
+import {FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ScaledText} from '../../shared/scaled-text/scaled-text';
 import {PasswordValidator, UpdatePasswordErrors} from '../../../core/Utility/Validation';
 import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 import {FileUpload} from '../../shared/file-upload/file-upload';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 import {UserService} from '../../../core/services/user-service/user.service';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
 import {EditEmail} from './edit-email/edit-email';
 import {EditPassword} from './edit-password/edit-password.component';
+import {Button} from '../../shared/button/button';
 
 @Component({
   selector: 'app-profile-page',
@@ -34,7 +35,11 @@ import {EditPassword} from './edit-password/edit-password.component';
     EditableText,
     TranslatePipe,
     ReactiveFormsModule,
+    ScaledText,
     ConfirmDialog,
+    FileUpload,
+    Button,
+    RouterLink,
     FileUpload,
     LoadingCircle,
     FormsModule,
@@ -121,7 +126,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
   });
   readonly tempLocIsValid:Signal<boolean> = computed(() => {
     return this.ValidateLocalization(this._tempLocalization());
-  })
+  });
   readonly phoneNumber = computed(() =>
     this._phone() === "" ? "----" : this._phone() );
   // endregion
@@ -451,7 +456,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
       latitude: lat,
       longitude: lng,
       filter: "city"
-    }
+    };
     this._geoapify.ReverseGeocode(request).subscribe({
       next: (response) => {
         if(this.ValidateLocalization(response)) {
@@ -467,5 +472,20 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
   async ngAfterViewInit() {
     await this.InitMap(50.2970546, 18.6926949, "Gliwice");
+  }
+
+  onPassChangeSubmit() {
+
+  }
+
+  async OnLogoutClicked() {
+    const success = await this._userService.Logout();
+    if(success) {
+      await this._router.navigateByUrl('');
+    }
+  }
+
+  goToUserProducts(){
+    this._router.navigate(['/user-products']);
   }
 }

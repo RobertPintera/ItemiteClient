@@ -43,6 +43,9 @@ export class Gallery implements AfterContentInit, AfterViewInit, OnDestroy {
   readonly itemWidth = signal<number>(0);
   readonly hideArrowsOnButtons = signal<boolean>(false);
 
+  readonly sortedImages = signal<Image[]>([]);
+
+
   translateX = 0;
   visibleCount = 3;
   activeIndex = 0;
@@ -53,8 +56,11 @@ export class Gallery implements AfterContentInit, AfterViewInit, OnDestroy {
   constructor() {
     effect(() => {
       const images = this.images();
-      if(images.length > 0) {
-        this.selectedImage.set(images[0]);
+      const sorted = images.sort((a,b) => a.imageOrder - b.imageOrder);
+      this.sortedImages.set(sorted);
+
+      if (sorted.length > 0) {
+        this.selectedImage.set(sorted[0]);
       }
     });
   }
@@ -110,7 +116,7 @@ export class Gallery implements AfterContentInit, AfterViewInit, OnDestroy {
 
     this.itemWidth.set(containerWidth / this.visibleCount);
 
-    const maxActiveIndex = this.images().length - this.visibleCount;
+    const maxActiveIndex = this.sortedImages().length - this.visibleCount;
     if (this.activeIndex > maxActiveIndex) {
       this.activeIndex = maxActiveIndex >= 0 ? maxActiveIndex : 0;
     }
@@ -123,7 +129,7 @@ export class Gallery implements AfterContentInit, AfterViewInit, OnDestroy {
 
     if (this.hideArrows()) return;
 
-    this.hideArrowsOnButtons.set(this.images().length <= this.visibleCount);
+    this.hideArrowsOnButtons.set(this.sortedImages().length <= this.visibleCount);
   }
 
   updateVisibleCount() {
@@ -152,7 +158,7 @@ export class Gallery implements AfterContentInit, AfterViewInit, OnDestroy {
   }
 
   next() {
-    this.activeIndex = Math.min(this.activeIndex + 1, this.images().length - this.visibleCount);
+    this.activeIndex = Math.min(this.activeIndex + 1, this.sortedImages().length - this.visibleCount);
     this.translateX = this.activeIndex * this.itemWidth();
   }
 

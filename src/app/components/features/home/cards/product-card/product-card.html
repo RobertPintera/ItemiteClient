@@ -1,11 +1,22 @@
-<div class="flex flex-col border-1 rounded-2xl w-full h-96">
+<a routerLink="/product" [queryParams]="{ id: product()?.id, type: product()?.listingType }"
+   class="flex flex-col border-2 border-border rounded-2xl w-full my-2 h-120
+  hover:border-accent hover:rounded-xl hover:shadow-xl hover:z-10 hover:scale-[1.02] duration-150">
   <div class="relative w-full h-[60%]">
-    <img [ngSrc]="product()?.image ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name"
-         class="object-contain w-full h-full select-none drag-none" draggable="false" fill>
+    <img [src]="product()?.mainImageUrl ?? 'assets/laptop_chromebook_icon.svg'" [alt]="product()?.name"
+         class="object-contain w-full h-full select-none drag-none" draggable="false">
   </div>
-  <div class="flex flex-col gap-2 p-2">
-    <p class="text-xl">{{ product()?.price }} $</p>
-    <p class="text-base">{{ product()?.isNegotiable ? "negotiable" : "" }}</p>
-    <p class="text-base">{{ product()?.name }}</p>
+  <div class="flex flex-col p-2 mt-2 gap-2">
+    <p class="text-2xl">{{ product()?.name }}</p>
+    <div class="flex flex-row">
+      @if(product()?.categories?.length){
+        <div class="border-2 border-border px-4 py-2 rounded-2xl">
+          <p class="text-sm">{{ `categories.${product()?.categories?.[0]?.name}` | translate }}</p>
+        </div>
+      }
+    </div>
+    <div class="flex flex-col">
+      <p class="text-xl">{{'product_details.price' | translate}}: {{ product()?.price }} $</p>
+      <p class="text-base">{{ product()?.isNegotiable ? "negotiable" : "\u00A0" }}</p>
+    </div>
   </div>
-</div>
+</a>

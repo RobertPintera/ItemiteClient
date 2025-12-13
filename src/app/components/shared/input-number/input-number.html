@@ -1,2 +1,2 @@
 <input type="text" inputmode="decimal" class="flex-1 border rounded p-2 w-full" [placeholder]="placeholder()"
-       [value]="value()" (keydown)="onKeyDown($event)"  (blur)="onBlur($event)" (keyup.enter)="onEnter($event)"/>
+       [value]="value()" (keydown)="onKeyDown($event)" (input)="onInput($event)" (blur)="onBlur($event)" (keyup.enter)="onEnter($event)"/>
