@@ -5,7 +5,8 @@
 
   <div class="mr-5 relative whitespace-pre flex flex-row items-center wrap-anywhere text-wrap">
     @if (editing()) {
-      <input type="text" class="border-2 text-wrap-auto  rounded-sm opacity-100 z-1 absolute flex-1 w-full h-full text-start"
+      <input type="text"
+             class="border-2 text-wrap-auto bg-background border-input text-foreground rounded-sm opacity-100 z-1 absolute flex-1 w-full h-full text-start"
              value="{{unsavedEdit()}}"
              formControlName="textField"
              name="textField"

@@ -3,7 +3,7 @@ import {
   Component,
   computed,
   inject, OnInit,
-  PLATFORM_ID, Signal,
+  PLATFORM_ID, Signal, SecurityContext,
   signal,
   WritableSignal
 } from '@angular/core';
@@ -14,16 +14,17 @@ import {Localization} from '../../../core/models/Localization';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {LatLonPayloadDTO} from '../../../core/models/LatLonPayloadDTO';
 import {EditableText} from '../../shared/editable-text/editable-text';
-import {FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
-import {ScaledText} from '../../shared/scaled-text/scaled-text';
-import {PasswordValidator, UpdatePasswordErrors} from '../../../core/Utility/Validation';
 import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 import {FileUpload} from '../../shared/file-upload/file-upload';
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {Router, RouterLink} from '@angular/router';
 import {Button} from '../../shared/button/button';
+import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
+import {EditEmail} from './edit-email/edit-email';
+import {EditPassword} from './edit-password/edit-password.component';
 
 @Component({
   selector: 'app-profile-page',
@@ -32,154 +33,180 @@ import {Button} from '../../shared/button/button';
     EditableText,
     TranslatePipe,
     ReactiveFormsModule,
-    ScaledText,
     ConfirmDialog,
     FileUpload,
     Button,
-    RouterLink
+    RouterLink,
+    LoadingCircle,
+    FormsModule,
+    EditEmail,
+    EditPassword
   ],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.css'
 })
 export class ProfilePage implements AfterViewInit, OnInit {
+
+  // region Injectables
+  private _geoapify: GeoapifyService = inject(GeoapifyService);
+  private _sanitizer: DomSanitizer = inject(DomSanitizer);
+  private _userService: UserService = inject(UserService);
+  private _router: Router = inject(Router);
+  // endregion
+
+  // region Leaflet map utilities
   private _map! : Map;
   private readonly _mapEl = 'map';
   private _currentMarker : WritableSignal<Marker | undefined> = signal(undefined);
+  // endregion
 
-  // Local images are undefined when they haven't been changed with file dialogs
-  private _localBackgroundImageUrl: WritableSignal<string | undefined> = signal(undefined);
-  private _localProfileImageUrl: WritableSignal<string | undefined> = signal(undefined);
-
+  // region private user fields
+  // local images are undefined when they haven't been changed with file dialogs
+  private _localBackgroundImageUrl: WritableSignal<SafeUrl  | undefined> = signal(undefined);
+  private _localProfileImageUrl: WritableSignal<SafeUrl  | undefined> = signal(undefined);
   private _backgroundImageUrl:WritableSignal<string | undefined> = signal(undefined);
   private _profileImageUrl:WritableSignal<string | undefined> = signal(undefined);
-  private _userName  = signal("Dawid Pacia");
-  private _email = signal("robert@wojcik.pl");
-  private _phone = signal("+48 233 122 423");
+  private _userName  = signal("");
+  private _email = signal("");
+  private _phone = signal<undefined | string>(undefined);
   private _localization = signal<Localization | null> (null);
+  // endregion
+
+  // region Utility layout handling
   private _tempLocalization = signal<Localization | null> (null);
   private _dialogToTranslate = signal("");
   private _currentDialog: "" | "profileImage" | "backgroundImage"  = "";
   private _currentImageEdition: "" | "profile" | "background" = "";
+  private _loading = signal(true);
+  readonly loading = this._loading.asReadonly();
+  // endregion
 
-  changePasswordForm: FormGroup;
-  changePasswordFormHasErrors: Signal<boolean> = computed(() => {
-    return !this.repeatPassMatch() || this.hasPasswordErrors() || this.hasOldPasswordErrors();
-  });
-  private _oldPasswordErrors: WritableSignal<string[]> = signal([]);
-  private _passwordErrors: WritableSignal<string[]> = signal([]);
-  private _repeatPassMatch: WritableSignal<boolean> = signal(true);
-  oldPasswordErrors: Signal<string[]> = this._oldPasswordErrors;
-  repeatPassMatch: Signal<boolean> = this._repeatPassMatch;
-  passwordErrors: Signal<string[]> = this._passwordErrors;
-  hasPasswordErrors: Signal<boolean> = computed(() => this.passwordErrors().length != 0);
-  hasOldPasswordErrors: Signal<boolean> = computed(() => this.oldPasswordErrors().length != 0);
+  // region email edition
+  OnEmailSubmitted(newEmail: string) {
+    this._email.set(newEmail);
+  }
+  // endregion
 
-  profileImage:Signal<string> = computed(() => {
+  // region readonly user fields
+  readonly profileImage:Signal<string> = computed(() => {
     if(this._localProfileImageUrl()) {
-      return this._localProfileImageUrl()!;
+      return this._localProfileImageUrl()! as string;
     }
     if(this._profileImageUrl()) {
       return this._profileImageUrl()!;
     }
     return "../../../../assets/images/default_profile_pic.png";
   });
-  backgroundImage: Signal<string> = computed(() => {
+  readonly backgroundImage: Signal<string> = computed(() => {
     if(this._localBackgroundImageUrl()) {
-      return this._localBackgroundImageUrl()!;
+      return this._localBackgroundImageUrl()! as string;
     }
     return this._backgroundImageUrl()!;
   });
-  hasBackgroundImage: Signal<boolean> = computed(() => !!this._backgroundImageUrl() || !!this._localBackgroundImageUrl());
-
-  userName: Signal<string> = this._userName;
-  email: Signal<string> = this._email;
-  phone: Signal<string> = computed(() =>
-    this._phone() == "" ? "----" : this._phone()
+  readonly hasBackgroundImage: Signal<boolean> = computed(() => !!this._backgroundImageUrl() || !!this._localBackgroundImageUrl());
+  readonly userName: Signal<string> = this._userName.asReadonly();
+  readonly email: Signal<string> = this._email.asReadonly();
+  readonly phone: Signal<string> = computed(() =>
+    this._phone() ?? "----"
   );
-  dialogToTranslate: Signal<string> = this._dialogToTranslate;
-
-  localization:Signal<string> = computed(() => {
+  readonly dialogToTranslate: Signal<string> = this._dialogToTranslate.asReadonly();
+  readonly localization:Signal<string> = computed(() => {
     if (this.editLocalization()) {
       return this._tempLocalization()?.formatted ?? "----";
     }
     return this._localization()?.formatted ?? "----";
   });
-  displayUnsavedLocalization:Signal<boolean> = computed(() => {
+  readonly displayUnsavedLocalization:Signal<boolean> = computed(() => {
     if(!this.editLocalization()) return false;
     return this._tempLocalization() !== this._localization();
   });
-  tempLocIsValid:Signal<boolean> = computed(() => {
+  readonly tempLocIsValid:Signal<boolean> = computed(() => {
     return this.ValidateLocalization(this._tempLocalization());
   });
-
-  phoneNumber = computed(() =>
+  readonly phoneNumber = computed(() =>
     this._phone() === "" ? "----" : this._phone() );
+  // endregion
 
-  // Edit switches
+  // region Edit switches
   private _editLocalization = signal(false);
-  editLocalization: Signal<boolean> = this._editLocalization;
+  readonly editLocalization: Signal<boolean> = this._editLocalization.asReadonly();
   private _editPassword = signal(false);
-  editPassword: Signal<boolean> = this._editPassword;
+  readonly editPassword: Signal<boolean> = this._editPassword.asReadonly();
   private _showConfirmationDialog = signal(false);
-  showConfirmationDialog: Signal<boolean> = this._showConfirmationDialog;
+  readonly showConfirmationDialog: Signal<boolean> = this._showConfirmationDialog.asReadonly();
   private _showImageEditionDialog = signal(false);
-  showImageEditionDialog: Signal<boolean> = this._showImageEditionDialog;
+  readonly showImageEditionDialog: Signal<boolean> = this._showImageEditionDialog.asReadonly();
+  private _editEmail = signal(false);
+  readonly editEmail: Signal<boolean> = this._editEmail.asReadonly();
+  // endregion
 
-  private _geoapify: GeoapifyService = inject(GeoapifyService);
-  private _sanitizer: DomSanitizer = inject(DomSanitizer);
-  private _userService: UserService = inject(UserService);
-  private _router: Router = inject(Router);
+  async ngOnInit() {
+    await this.LoadUserInfo();
+  }
 
-  constructor() {
-    this.changePasswordForm = new FormGroup({
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(7),
-        Validators.maxLength(50),
-        PasswordValidator()
-      ]),
-      repeatPassword: new FormControl(''),
-      passwordOld: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(50)
-      ])
+  async LoadUserInfo() {
+
+    // Fetch info if it wasn't fetched before
+    if(this._userService.userInfo().id === -1) {
+      const success = await this._userService.FetchCurrentUserInfo();
+      if(!success) {
+        return;
+      }
+    }
+
+    const location = this._userService.userInfo().location;
+    this._userName.set(this._userService.userInfo().userName);
+    this._email.set(this._userService.userInfo().email);
+    this._phone.set(this._userService.userInfo().phoneNumber);
+    this._profileImageUrl.set(this._userService.userInfo().photoUrl);
+    this._backgroundImageUrl.set(this._userService.userInfo().backgroundUrl);
+    this._loading.set(false);
+
+    if(!location) return;
+
+    this._localization.set({
+      city: location.city,
+      country: location.country,
+      formatted: `${location.city}, ${location.state}, ${location.country}`,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      state: location.state,
     });
   }
 
-  ngOnInit() {
-    this.changePasswordForm.get('password')?.valueChanges.subscribe(() => {
-      this._passwordErrors.set(UpdatePasswordErrors(this.changePasswordForm));
-      this._repeatPassMatch.set(
-        this.changePasswordForm.get(
-          'repeatPassword'
-        )?.value === this.changePasswordForm.get('password')?.value
-      );
-    });
-
-    this.changePasswordForm.get('repeatPassword')?.valueChanges.subscribe(() => {
-      this._repeatPassMatch.set(
-        this.changePasswordForm.get('repeatPassword')?.value === this.changePasswordForm.get('password')?.value
-      );
-    });
-
-    this.changePasswordForm.get('passwordOld')?.valueChanges.subscribe(() => {
-      this._oldPasswordErrors.set(UpdatePasswordErrors(this.changePasswordForm, "passwordOld"));
-    });
-
-    this._passwordErrors.set(UpdatePasswordErrors(this.changePasswordForm));
-    this._oldPasswordErrors.set(UpdatePasswordErrors(this.changePasswordForm, "passwordOld"));
+  async OnLogoutClicked() {
+    const success = await this._userService.Logout();
+    if(success) {
+      await this._router.navigateByUrl('');
+    }
   }
 
-  // Field updating
-  UpdateUsername(name: string): void {
+  async LogoutAllDevices() {
+    const success = await this._userService.LogoutAllDevices();
+    if(!success) return;
+    this._router.navigateByUrl('');
+  }
+
+  // region Field updating
+  async UpdateUsername(name: string) {
+    const success = await this._userService.ChangeUsername(name);
+    if(!success) return;
+
     this._userName.set(name);
   }
-  UpdatePhone(phone: string): void {
+  async UpdatePhone(phone: string) {
+    const success = await this._userService.ChangePhoneNumber(phone);
+    if(!success) return;
+
     this._phone.set(phone);
   }
-  UpdateLocalization() {
+  async UpdateLocalization() {
     if(this._tempLocalization() === this._localization()) return;
-    if(this._tempLocalization() == null) return;
+    if(this._tempLocalization() === null) return;
+
+    const success = await this._userService.ChangeLocation(this._tempLocalization()!);
+    if(!success) return;
+
     this._localization.set(this._tempLocalization());
     this.SwitchLocalizationEdition();
   }
@@ -201,63 +228,95 @@ export class ProfilePage implements AfterViewInit, OnInit {
     this._showImageEditionDialog.set(true);
     this._currentImageEdition = image;
   }
+  private async DeleteProfileImage() {
 
-  // Confirmation dialogs
+    const success = this._userService.DeleteProfileImage();
+    if(!success) return;
+
+    if(this._localProfileImageUrl()) {
+      URL.revokeObjectURL(this._localProfileImageUrl() as string);
+      this._localProfileImageUrl.set(undefined);
+    }
+    this._profileImageUrl.set(undefined);
+
+  }
+  private async DeleteBackgroundImage() {
+
+    const success = this._userService.DeleteBackgroundImage();
+    if(!success) return;
+
+    if(this._localBackgroundImageUrl()) {
+      URL.revokeObjectURL(this._localBackgroundImageUrl() as string);
+      this._localBackgroundImageUrl.set(undefined);
+    }
+
+    this._backgroundImageUrl.set(undefined);
+  }
+  ShowEditEmail() {
+    this._editEmail.set(true);
+  }
+  HideEditEmail() {
+    this._editEmail.set(false);
+  }
+
+  // endregion
+
+  // region Confirmation dialogs
   OnDialogConfirmClicked() {
     if(this._currentDialog === "") return;
     this.CloseConfirmationDialog();
 
     if(this._currentDialog === "profileImage") {
-      if(this._localProfileImageUrl()) {
-        URL.revokeObjectURL(this._localProfileImageUrl()!);
-        this._localProfileImageUrl.set(undefined);
-      }
-      // TODO call API
+      this.DeleteProfileImage();
       return;
     }
 
     if(this._currentDialog === "backgroundImage") {
-      if(this._localBackgroundImageUrl()) {
-        URL.revokeObjectURL(this._localBackgroundImageUrl()!);
-        this._localBackgroundImageUrl.set(undefined);
-      }
-      // TODO call API
+      this.DeleteBackgroundImage();
       return;
     }
   }
+
   OnDialogCancelClicked() {
     this._currentDialog = "";
     this.CloseConfirmationDialog();
   }
+  // endregion
 
-  // Image edition dialogs
+  // region Image edition dialogs
   OnImageEditionCancelled() {
     this._showImageEditionDialog.set(false);
     this._currentImageEdition = "";
   }
-  OnImageEditionSubmitted(file: File) {
+  async OnImageEditionSubmitted(file: File) {
     this._showImageEditionDialog.set(false);
     if(this._currentImageEdition === "") return;
 
     if(this._currentImageEdition === "profile") {
       if(this._localProfileImageUrl()) {
-        URL.revokeObjectURL(this._localProfileImageUrl()!);
+        URL.revokeObjectURL(this._localProfileImageUrl() as string);
       }
-      this._localProfileImageUrl.set(URL.createObjectURL(file));
-      this._sanitizer.bypassSecurityTrustUrl(this._localProfileImageUrl()!);
 
-      // TODO call API
+      const success = await this._userService.ChangeProfileImage(file);
+      if(!success) return;
+
+      const objectUrl = URL.createObjectURL(file);
+      this._localProfileImageUrl.set(this._sanitizer.sanitize(SecurityContext.URL, objectUrl) as SafeUrl);
+
       return;
     }
 
     if(this._currentImageEdition === "background") {
       if(this._localBackgroundImageUrl()) {
-        URL.revokeObjectURL(this._localBackgroundImageUrl()!);
+        URL.revokeObjectURL(this._localBackgroundImageUrl() as string);
       }
-      this._localBackgroundImageUrl.set(URL.createObjectURL(file));
-      this._sanitizer.bypassSecurityTrustUrl(this._localBackgroundImageUrl()!);
 
-      // TODO call API
+      const success = await this._userService.ChangeBackgroundImage(file);
+      if(!success) return;
+
+      const objectUrl = URL.createObjectURL(file);
+      this._localBackgroundImageUrl.set(this._sanitizer.sanitize(SecurityContext.URL, objectUrl) as SafeUrl);
+
       return;
     }
   }
@@ -271,8 +330,9 @@ export class ProfilePage implements AfterViewInit, OnInit {
     this._dialogToTranslate.set('user_edition.ask_delete_background_image');
     this._currentDialog = "backgroundImage";
   }
+  // endregion
 
-  // Validators
+  // region Validators (for inputs)
   readonly phoneValidators: ValidatorFn | ValidatorFn[] = [
     Validators.pattern(RegExp("\\+(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]|8[6421]6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*(\\d{1,2})$")),
     Validators.maxLength(20)
@@ -280,8 +340,11 @@ export class ProfilePage implements AfterViewInit, OnInit {
   readonly usernameValidators: ValidatorFn | ValidatorFn[] = [
     Validators.required,
     Validators.minLength(3),
-    Validators.maxLength(20)
+    Validators.maxLength(20),
+    Validators.pattern(RegExp("^[a-zA-Z0-9._@+-]+$"))
   ];
+  // endregion
+
 
   //////////////////
   // Map handling //
@@ -377,10 +440,10 @@ export class ProfilePage implements AfterViewInit, OnInit {
   }
 
   private ValidateLocalization(loc : Localization | null) : boolean {
-    if(loc == null) return false;
+    if(loc === null) return false;
     if(!loc.city) return false;
     if(!loc.state) return false;
-    return loc.country != undefined;
+    return loc.country !== undefined;
   }
 
   GetPlace(lat :number, lng:number) {
@@ -404,17 +467,6 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
   async ngAfterViewInit() {
     await this.InitMap(50.2970546, 18.6926949, "Gliwice");
-  }
-
-  onPassChangeSubmit() {
-
-  }
-
-  async OnLogoutClicked() {
-    const success = await this._userService.Logout();
-    if(success) {
-      await this._router.navigateByUrl('');
-    }
   }
 
   goToUserProducts(){

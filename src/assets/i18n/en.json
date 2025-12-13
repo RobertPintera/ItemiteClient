@@ -109,27 +109,32 @@
   },
   "user_info": {
     "details": "Details",
-    "Localization" : "Localization",
+    "localization" : "Localization",
     "security": "Security",
     "background_image": "Background image",
-    "profile_image": "Profile image"
+    "profile_image": "Profile image",
+    "phone": "Phone"
   },
   "user_edition": {
     "edit_password": "Edit password",
     "old_password": "Old password",
     "new_password": "New password",
     "repeat_new_password": "Confirm new password",
-    "password_changed": "Password changed, you can now log-in with new credentials",
+    "password_changed": "Password changed successfully",
 
     "delete_background_image": "Delete background image",
     "delete_profile_image": "Delete profile image",
     "edit_profile_image": "Edit profile image",
     "edit_background_image": "Edit background image",
 
+    "new_email": "New email",
     "edit_email": "Edit email",
+    "email_changed": "Email has been changed successfully",
+    "email_failure": "Error occurred when trying to change email. Please try again later.",
 
     "delete_account": "Delete account",
     "logout": "Logout",
+    "logout_all": "Logout from all devices",
 
     "ask_delete_profile_image": "This will permanently delete your profile image, do you want to proceed?",
     "ask_delete_background_image": "This will permanently delete your background image, do you want to proceed?"
@@ -148,7 +153,8 @@
     "enable": "Enable",
     "enable_edition": "Enable edition",
     "unsaved": "Unsaved",
-    "return": "Return"
+    "return": "Return",
+    "close": "Close"
   },
   "file_upload": {
     "upload_file": "Upload file",
@@ -157,6 +163,9 @@
     "file_type": "File type",
     "file_size_too_big": "File size is too big",
     "max_file_size_is": "Max supported file is"
+  },
+  "geocoder": {
+    "enter_city_name": "Enter city name"
   },
   "validator_errors": {
     "field_empty" : "Field can't be empty",

@@ -1,35 +1,73 @@
-<div class="flex m-auto flex-col max-w-7xl shrink-1 w-full text-foreground bg-background p-5">
-  <div class="flex relative h-60 sm:h-100 flex-row space-x-10 items-center shadow-md p-4 bg-card text-card-foreground rounded-sm">
-    @if (hasBackgroundImage()) {
-      <img class="absolute w-full h-full rounded-sm object-cover z-0 inset-0"
-           [src]="backgroundImage()"
-           alt="background image"
-      />
-    }
-    <div class="absolute z-2 self-start justify-self-end flex items-end justify-end m-1 inset-0 place-self-end">
-      <button (click)="OnLogoutClicked()"
-        class="rounded-md hover:underline shadow-md shadow-(color:--secondary) bg-card/90 text-card-foreground
+<div class="flex relative m-auto flex-col max-w-7xl shrink-1 w-full text-foreground bg-background p-5">
+  @if (loading()) {
+    <app-loading-circle class="m-auto"/>
+  } @else {
+    <div class="flex relative h-60 sm:h-100 flex-row space-x-10 items-center shadow-md p-4 bg-card text-card-foreground rounded-sm">
+      @if (hasBackgroundImage()) {
+        <img class="absolute w-full h-full rounded-sm object-cover z-0 inset-0"
+             [src]="backgroundImage()"
+             alt="background image"
+        />
+      }
+      <div class="absolute z-2 self-start justify-self-end flex items-end justify-end m-1 inset-0 place-self-end">
+        <button (click)="OnLogoutClicked()"
+                class="rounded-md hover:underline shadow-md shadow-(color:--secondary) bg-card/90 text-card-foreground
       cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-        <div class="text-sm sm:text-lg">{{'user_edition.logout' | translate}}</div>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-             class="bg-destructive text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
-          <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-        </svg>
-      </button>
+          <div class="text-sm sm:text-lg">{{'user_edition.logout' | translate}}</div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+               class="bg-destructive text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
+            <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+      <div class="absolute z-2 self-end flex flex-row items-center bg-(--background)/80 text-foreground">
+        <p class="text-sm sm:text-lg mr-2 border-accent">
+          {{'user_info.profile_image' | translate}}
+        </p>
+        <button (click)="TryDeleteProfileImage()"
+                class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+          <div class="text-sm sm:text-lg">{{'controls.delete' | translate}}</div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-destructive text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
+            <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <button (click)='ShowImageEditionDialog("profile")'
+                class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+          <div class="text-sm sm:text-lg">{{'controls.edit' | translate}}</div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
+            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+          </svg>
+        </button>
+      </div>
+
+      <img class="max-w-1/3 drop-shadow-2xl rounded-full max-h-80 aspect-square object-contain z-1 bg-card p-1"
+           alt="Profile picture"
+           [src]="profileImage()"/>
+      <div class="flex flex-col">
+        <div class="relative italic text-2xl md:text-3xl lg:text-4xl flex flex-col w-full justify-start text-start items-center rounded-sm bg-card/90 text-card-foreground">
+          <app-editable-text
+            [text]="userName()"
+            [validators]="usernameValidators"
+            [verticalLayout]="true"
+            (onEdit)="UpdateUsername($event)
+        "/>
+        </div>
+      </div>
     </div>
-    <div class="absolute z-2 self-end flex flex-row items-center bg-(--background)/80 text-foreground">
-      <p class="text-sm sm:text-lg mr-2 border-accent">
-        {{'user_info.profile_image' | translate}}
+
+    <div class="ml-5 w-fit flex self-end flex-row items-center ">
+      <p class="text-sm sm:text-lg mr-2 border-accent border-l-2 border-b-2 rounded-l-lg">
+        {{'user_info.background_image' | translate}}
       </p>
-      <button (click)="TryDeleteProfileImage()"
-       class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+      <button (click)="TryDeleteBackgroundImage()"
+              class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
         <div class="text-sm sm:text-lg">{{'controls.delete' | translate}}</div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-destructive text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
           <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
         </svg>
       </button>
-      <button (click)='ShowImageEditionDialog("profile")'
-        class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+      <button (click)='ShowImageEditionDialog("background")'
+              class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
         <div class="text-sm sm:text-lg">{{'controls.edit' | translate}}</div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
           <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
@@ -37,61 +75,35 @@
       </button>
     </div>
 
-    <img class="max-w-1/3 drop-shadow-2xl rounded-full max-h-80 aspect-square object-contain z-1 bg-card p-1"
-         alt="Profile picture"
-         [src]="profileImage()"/>
-    <div class="flex flex-col">
-      <div class="relative italic text-2xl md:text-3xl lg:text-4xl flex flex-col w-full justify-start text-start items-center rounded-sm bg-card/90 text-card-foreground">
-        <app-editable-text
-          [text]="userName()"
-          [validators]="usernameValidators"
-          [verticalLayout]="true"
-          (onEdit)="UpdateUsername($event)
-        "/>
+    <p id="details" class="text-2xl md:text-3xl lg:text-4xl">{{"user_info.details" | translate}}</p>
+    <div class="text-base sm:text-xl ml-5 grid grid-custom items-center max-w-full sm:">
+      <p>Email:</p>
+      <div class="flex items-center flex-row">
+        <p class="mr-5">{{email()}}</p>
+        <button (click)="ShowEditEmail()"
+          class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+          <div class="text-sm sm:text-lg ">{{'controls.edit' | translate}}</div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
+            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+          </svg>
+        </button>
+        @if (editEmail()) {
+          <div class="absolute z-10 inset-0 m-auto bg-background flex items-center justify-center max-w-[1920px]">
+            <app-edit-email
+              (onCancel)="HideEditEmail()"
+              (onSubmitted)="OnEmailSubmitted($event)"
+            />
+          </div>
+        }
       </div>
+
+      <p>{{"user_info.phone" | translate}}:</p>
+      <app-editable-text [text]="phone()" [validators]="phoneValidators" (onEdit)="UpdatePhone($event)"/>
     </div>
-  </div>
 
-  <div class="ml-5 w-fit flex self-end flex-row items-center ">
-    <p class="text-sm sm:text-lg mr-2 border-accent border-l-2 border-b-2 rounded-l-lg">
-      {{'user_info.background_image' | translate}}
-    </p>
-    <button (click)="TryDeleteBackgroundImage()"
-      class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-      <div class="text-sm sm:text-lg">{{'controls.delete' | translate}}</div>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-destructive text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
-        <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
-      </svg>
-    </button>
-    <button (click)='ShowImageEditionDialog("background")'
-      class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-      <div class="text-sm sm:text-lg">{{'controls.edit' | translate}}</div>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
-        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-      </svg>
-    </button>
-  </div>
-
-  <p id="details" class="text-2xl md:text-3xl lg:text-4xl">Details</p>
-  <div class="text-base sm:text-xl ml-5 grid grid-custom items-center max-w-full sm:">
-        <p>Email:</p>
-        <div class="flex items-center flex-row">
-          <p class="mr-5">{{email()}}</p>
-          <button class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-            <div class="text-sm sm:text-lg ">{{'controls.edit' | translate}}</div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
-              <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-            </svg>
-          </button>
-        </div>
-
-        <p>Phone nr:</p>
-        <app-editable-text [text]="phone()" [validators]="phoneValidators" (onEdit)="UpdatePhone($event)"/>
-  </div>
-
-  <p id="localization" class="text-2xl md:text-3xl lg:text-4xl">Localization</p>
-  <div class="text-base sm:text-xl ml-5 max-w-full grid items-center grid-custom">
-      <p>Localization:</p>
+    <p id="localization" class="text-2xl md:text-3xl lg:text-4xl">{{"user_info.localization" | translate}}</p>
+    <div class="text-base sm:text-xl ml-5 max-w-full grid items-center grid-custom">
+      <p>{{"user_info.localization" | translate}}:</p>
       <div class="flex flex-row items-center flex-wrap break-all">
         <p class="mr-5">{{localization()}}</p>
         @if (displayUnsavedLocalization()) {
@@ -100,132 +112,100 @@
           </p>
         }
       </div>
-  </div>
+    </div>
 
-  <!-- Localization buttons  -->
-  <div class="ml-5 flex items-center flex-row">
-    <button
-      (click)="SwitchLocalizationEdition()"
-      class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-      <div class="text-sm sm:text-lg">
-        @if (editLocalization()) {
-          {{"controls.cancel" | translate}}
-        } @else {
-          {{"controls.enable_edition" | translate}}
-        }
-      </div>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent rounded-r-md size-6 p-1 h-fit">
-        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-      </svg>
-    </button>
-
-    @if (editLocalization()) {
+    <!-- Localization buttons  -->
+    <div class="ml-5 flex items-center flex-row">
       <button
-        [disabled]="!tempLocIsValid()"
-        (click)="UpdateLocalization()"
-        class="disabled:bg-primary/50 disabled:text-primary-foreground/50 disabled:cursor-no-drop
-        bg-primary text-primary-foreground rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit ">
-        <div class="text-sm sm:text-lg text-primary-foreground">
-          {{"controls.save" | translate}}
+        (click)="SwitchLocalizationEdition()"
+        class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+        <div class="text-sm sm:text-lg">
+          @if (editLocalization()) {
+            {{"controls.cancel" | translate}}
+          } @else {
+            {{"controls.enable_edition" | translate}}
+          }
         </div>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-primary-foreground size-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent rounded-r-md size-6 p-1 h-fit">
+          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
         </svg>
       </button>
-    }
-  </div>
 
-  <!-- Geoapify -->
-  <div [class.scale-y-full]="editLocalization()"
-       [class.scale-y-0]="!editLocalization()"
-       class="ml-5 flex
-  transition-transform origin-top duration-300
-">
-    <app-geocoder-autocomplete placeHolder="Find city" class="flex-1" (onCityPicked)="UpdateTempLocalization($event)"/>
-  </div>
-
-  <!-- leaflet map -->
-  <div id="map" class="h-100 rounded-md max-w-full ml-5 z-0"></div>
-
-  <!-- Security -->
-  <p id="security" class="text-2xl md:text-3xl lg:text-4xl">Security</p>
-  <div class="ml-5 flex flex-col w-full">
-
-    <button (click)="SwitchEditPassword()"
-      class="mt-2  rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-      <div class="text-sm sm:text-lg">Change password</div>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
-        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-      </svg>
-    </button>
-
-    <input type="checkbox" class="hidden peer" [checked]="editPassword()"/>
-
-    <form class="transition-all origin-top h-0 peer-checked:h-fit transition-discrete peer-checked:scale-y-100 scale-y-0 duration-300
-    flex m-auto flex-col items-center justify-center sm:w-70 w-full max-w-70" [formGroup]="changePasswordForm" (ngSubmit)="onPassChangeSubmit()">
-      <label for="passwordOld" class="w-full">
-        <app-scaled-text [text]="'user_edition.old_password' | translate" [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
-        @if(hasOldPasswordErrors()) {
-          <div class="text-(--destructive)"> {{passwordErrors()[0]}} </div>
-        }
-      </label>
-      <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
-             name="passwordOld" id="passwordOld" type="password" formControlName="passwordOld"
-      />
-
-      <label for="passwordR" class="w-full">
-        <app-scaled-text [text]="'user_edition.new_password' | translate" [step]="-1" base="text-sm" [maxGrowTimes]="2"/>
-        @if(hasPasswordErrors()) {
-          <div class="text-(--destructive)"> {{passwordErrors()[0]}} </div>
-        }
-      </label>
-      <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
-             name="passwordR" id="passwordR" type="password" formControlName="password"
-      />
-
-      <label for="repeat_passwordR" class="w-full">
-        <app-scaled-text [text]="'user_edition.repeat_new_password' | translate" [step]="-1"
-                         base="text-sm" [maxGrowTimes]="2"/>
-        @if(!repeatPassMatch()) {<div class="text-(--destructive)">{{"validator_errors.pass_match"|translate}}</div>}
-      </label>
-      <input class="w-full h-12 sm:h-10 border-solid p-1 rounded-lg m-0 mb-2 border-(--input) text-(--muted-foreground) focus:border-(--ring) border-1"
-             name="repeat_passwordR" id=repeat_passwordR type="password" formControlName="repeatPassword"
-      />
-
-      <button type="submit"
-              [disabled]="changePasswordFormHasErrors()"
-              class="disabled:cursor-default disabled:bg-(--primary)/40 disabled:border-0
-              cursor-pointer h-15 sm:h-10 mt-3 w-full rounded-md bg-(--primary) hover:bg-(--primary)/90 border-1 text-(--primary-foreground) border-(--ring) focus:border-(--ring) text-xl md:text-2xl" >
-        {{ 'user_edition.edit_password' | translate }}
-      </button>
-    </form>
-
-    <button class="mt-2 rounded-md hover:underline bg-destructive text-destructive-foreground shadow-md cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-      <div class="text-sm sm:text-lg">{{'user_edition.delete_account' | translate}}</div>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
-        <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
-      </svg>
-    </button>
-  </div>
-  <div class="flex flex-col mt-4 gap-2">
-    <p id="security" class="text-2xl md:text-3xl lg:text-4xl">Your articles</p>
-    <div class="flex flex-wrap gap-2 w-full pl-4">
-      <app-button label="Your products and autions" (clickButton)="goToUserProducts()"/>
-      <app-button routerLink="/followed-products" label="Followed products" severity="secondary"/>
+      @if (editLocalization()) {
+        <button
+          [disabled]="!tempLocIsValid()"
+          (click)="UpdateLocalization()"
+          class="disabled:bg-primary/50 disabled:text-primary-foreground/50 disabled:cursor-no-drop
+        bg-primary text-primary-foreground rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit ">
+          <div class="text-sm sm:text-lg text-primary-foreground">
+            {{"controls.save" | translate}}
+          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-primary-foreground size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </button>
+      }
     </div>
-  </div>
 
+    <!-- Geoapify -->
+    <div [class.scale-y-full]="editLocalization()"
+         [class.scale-y-0]="!editLocalization()"
+         class="ml-5 flex
+        transition-transform origin-top duration-300"
+    >
+      <app-geocoder-autocomplete placeHolder="{{'geocoder.enter_city_name' | translate}}"
+        class="flex-1" (onCityPicked)="UpdateTempLocalization($event)"
+      />
+    </div>
 
-  @if(showConfirmationDialog()) {
-    <app-confirm-dialog (onCancelClicked)="OnDialogCancelClicked()" (onConfirmClicked)="OnDialogConfirmClicked()" [prompt]="dialogToTranslate() | translate"/>
-  }
+    <!-- leaflet map -->
+    <div id="map" class="h-100 rounded-md max-w-full ml-5 z-0"></div>
 
-  @if(showImageEditionDialog()) {
-    <app-file-upload
-      [supportsPreview]="true"
-      (onCancelClicked)="OnImageEditionCancelled()"
-      (onConfirmClicked)='OnImageEditionSubmitted($event)'
-    />
+    <!-- Security -->
+    <p id="security" class="text-2xl md:text-3xl lg:text-4xl">{{"user_info.security" | translate}}</p>
+    <div class="ml-5 flex flex-col w-full">
+
+      <button (click)="SwitchEditPassword()"
+              class="mt-2  rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+        <p class="text-sm sm:text-lg">{{"login_register.reset_password" | translate}}</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
+          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+        </svg>
+      </button>
+
+      <input type="checkbox" class="hidden peer" [checked]="editPassword()"/>
+      <app-change-password class="transition-all origin-top h-0 peer-checked:h-fit transition-discrete peer-checked:scale-y-100 scale-y-0 duration-300"/>
+
+      <button (click)="LogoutAllDevices()"
+        class="mt-2 rounded-md hover:underline  shadow-md cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+        <div class="text-sm sm:text-lg">{{'user_edition.logout_all' | translate}}</div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-destructive text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
+          <path d="m20.798 11.012-3.188 3.416L9.462 6.28l4.24-4.542a.75.75 0 0 1 1.272.71L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262ZM3.202 12.988 6.39 9.572l8.148 8.148-4.24 4.542a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262ZM3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18Z" />
+        </svg>
+
+      </button>
+
+    </div>
+
+    <div class="flex flex-col mt-4 gap-2">
+      <p id="security" class="text-2xl md:text-3xl lg:text-4xl">Your articles</p>
+      <div class="flex flex-wrap gap-2 w-full pl-4">
+        <app-button label="Your products and autions" (clickButton)="goToUserProducts()"/>
+        <app-button routerLink="/followed-products" label="Followed products" severity="secondary"/>
+      </div>
+    </div>
+
+    @if(showConfirmationDialog()) {
+      <app-confirm-dialog (onCancelClicked)="OnDialogCancelClicked()" (onConfirmClicked)="OnDialogConfirmClicked()" [prompt]="dialogToTranslate() | translate"/>
+    }
+
+    @if(showImageEditionDialog()) {
+      <app-file-upload
+        [supportsPreview]="true"
+        (onCancelClicked)="OnImageEditionCancelled()"
+        (onConfirmClicked)='OnImageEditionSubmitted($event)'
+      />
+    }
   }
 </div>
 

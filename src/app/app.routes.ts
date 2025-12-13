@@ -13,6 +13,7 @@ import {ProductForm} from './components/features/product-form/product-form';
 import {NotFound} from './components/features/not-found/not-found';
 import {UserProducts} from './components/features/user-products/user-products';
 import {FollowedProducts} from './components/features/followed-products/followed-products';
+import {ConfirmNewEmail} from './components/features/profile-page/edit-email/confirm-new-email/confirm-new-email';
 
 export const routes: Routes = [
   {
@@ -50,16 +51,16 @@ export const routes: Routes = [
       {
         path: 'followed-products',
         component: FollowedProducts
-      },
-      {
-        path: '**',
-        component: NotFound,
-      },
+      }
     ]
   },
   {
     path: 'confirm-email',
     component: ConfirmEmail
+  },
+  {
+    path: 'change-email',
+    component: ConfirmNewEmail
   },
   {
     path: 'reset-password',
