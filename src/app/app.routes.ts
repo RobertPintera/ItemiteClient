@@ -10,10 +10,10 @@ import {ResetPassword} from './components/features/login-register/reset-password
 import {ExternalLoginError} from './components/features/login-register/external-login-error/external-login-error';
 import {Me} from './components/features/login-register/me/me';
 import {ProductForm} from './components/features/product-form/product-form';
-import {NotFound} from './components/features/not-found/not-found';
 import {UserProducts} from './components/features/user-products/user-products';
 import {FollowedProducts} from './components/features/followed-products/followed-products';
 import {ConfirmNewEmail} from './components/features/profile-page/edit-email/confirm-new-email/confirm-new-email';
+import {authGuard} from './core/guards/auth-guard/auth-guard';
 
 export const routes: Routes = [
   {
@@ -35,6 +35,7 @@ export const routes: Routes = [
       {
         path: 'product-form',
         component: ProductForm,
+        canActivate: [authGuard],
       },
       {
         path: 'login',
@@ -42,36 +43,44 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        component: ProfilePage
+        component: ProfilePage,
+        canActivate: [authGuard],
       },
       {
         path: 'user-products',
-        component: UserProducts
+        component: UserProducts,
+        canActivate: [authGuard],
       },
       {
         path: 'followed-products',
-        component: FollowedProducts
+        component: FollowedProducts,
+        canActivate: [authGuard],
       }
     ]
   },
   {
     path: 'confirm-email',
-    component: ConfirmEmail
+    component: ConfirmEmail,
+    canActivate: [authGuard],
   },
   {
     path: 'change-email',
-    component: ConfirmNewEmail
+    component: ConfirmNewEmail,
+    canActivate: [authGuard],
   },
   {
     path: 'reset-password',
-    component: ResetPassword
+    component: ResetPassword,
+    canActivate: [authGuard],
   },
   {
     path: 'external-login-error',
-    component: ExternalLoginError
+    component: ExternalLoginError,
+    canActivate: [authGuard],
   },
   {
     path: 'me',
-    component: Me
+    component: Me,
+    canActivate: [authGuard],
   }
 ];
