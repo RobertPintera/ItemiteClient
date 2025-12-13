@@ -55,14 +55,12 @@ export class ProductDetails implements OnInit, OnDestroy {
     return this._userService.userBasicInfo().id === this.article()?.owner.id;
   });
 
-
   readonly isLg = signal<boolean>(false);
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
   readonly isFollowed = signal<boolean>(false);
   readonly isFollowLoading = signal<boolean>(false);
   readonly isClickPhoneNumber = signal<boolean>(false);
   readonly isOwner = signal<boolean>(false);
-
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -85,7 +83,7 @@ export class ProductDetails implements OnInit, OnDestroy {
     // User is listing author
     //  => show chat list of specific listing
     if(this.isAuthorLogged()) {
-      const productId = this.product!.id;
+      const productId = this.article()?.id;
       this._router.navigate(['chats'], { queryParams: { productId }});
       return;
     }
@@ -122,7 +120,7 @@ export class ProductDetails implements OnInit, OnDestroy {
           },
           error: err => console.error(err)
         });
-      }else if (type === 'Auction'){
+      } else if (type === 'Auction'){
         this._auctionListingService.loadAuctionListing(validId).subscribe({
           next: product => {
             this.article.set(product);

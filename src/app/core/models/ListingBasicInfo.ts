@@ -5,5 +5,5 @@ export interface ListingBasicInfo {
   isArchived: boolean,
   ownerId: number,
   listingType: string,
-  price: string
+  price: number
 }

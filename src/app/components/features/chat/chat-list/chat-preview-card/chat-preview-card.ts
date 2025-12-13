@@ -12,7 +12,7 @@ export class ChatPreviewCard {
   index = input.required<number>();
   listingName = input.required<string>();
   mainImageUrl = input.required<string>();
-  price = input.required<string>();
+  price = input.required<number>();
   isArchived = input.required<boolean>();
   selected = input.required<boolean>();
 

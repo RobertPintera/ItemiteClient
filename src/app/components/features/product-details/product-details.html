@@ -49,7 +49,7 @@
                   <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()"/>
                   <app-button label="{{'edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                 } @else {
-                  <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>>
+                  <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 }
                 <app-button (clickButton)="clickNumber()"
                             [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
@@ -62,10 +62,11 @@
                 <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
                 <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
                 @if (isAuthorLogged()){
-                  <app-button label="{{'edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" severity="secondary"/>
+                  <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" severity="secondary"/>
+                  <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 } @else {
                   <app-button label="{{'product_details.bid' | translate}}"/>
-                  <app-button label="{{'product_details.send_message' | translate}}" severity="secondary"/>
+                  <app-button (clickButton)="OnMessageClicked()" label="{{'product_details.send_message' | translate}}" />
                 }
                 <app-button (clickButton)="clickNumber()"
                             [label]="isClickPhoneNumber() ? (auction.owner.phoneNumber || ( 'product_details.call' | translate ))
@@ -90,7 +91,7 @@
                 <app-button label="{{ 'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()"/>
                 <app-button label="{{'edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
               } @else {
-                <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
+                <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               }
 
               <app-button (clickButton)="clickNumber()"
@@ -103,11 +104,12 @@
               <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
               <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
               <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
-              @if (isOwner()){
+              @if (isAuthorLogged()){
                 <app-button label="{{'edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" severity="secondary"/>
+                <app-button label="{{'product_details.view_messages' | translate}}" severity="secondary" (clickButton)="OnMessageClicked()"/>
               } @else {
                 <app-button label="{{'product_details.bid' | translate}}"/>
-                <app-button label="{{'product_details.send_message' | translate}}" severity="secondary"/>
+                <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
               }
               <app-button (clickButton)="clickNumber()"
                           [label]="isClickPhoneNumber() ? (auction.owner.phoneNumber || ( 'product_details.call' | translate ))
