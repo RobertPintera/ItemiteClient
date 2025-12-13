@@ -24,19 +24,19 @@ export class EditPassword implements OnInit {
   changePasswordFormHasErrors: Signal<boolean> = computed(() => {
     return !this.repeatPassMatch() || this.hasPasswordErrors() || this.hasOldPasswordErrors();
   });
-  private _oldPasswordErrors: WritableSignal<string[]> = signal([]);
-  private _passwordErrors: WritableSignal<string[]> = signal([]);
-  private _repeatPassMatch: WritableSignal<boolean> = signal(true);
-  oldPasswordErrors: Signal<string[]> = this._oldPasswordErrors;
-  repeatPassMatch: Signal<boolean> = this._repeatPassMatch;
-  passwordErrors: Signal<string[]> = this._passwordErrors;
-  hasPasswordErrors: Signal<boolean> = computed(() => this.passwordErrors().length != 0);
-  hasOldPasswordErrors: Signal<boolean> = computed(() => this.oldPasswordErrors().length != 0);
+  private _oldPasswordErrors = signal<string[]>([]);
+  private _passwordErrors = signal<string[]>([]);
+  private _repeatPassMatch = signal<boolean>(true);
+  readonly oldPasswordErrors = this._oldPasswordErrors.asReadonly();
+  readonly repeatPassMatch = this._repeatPassMatch.asReadonly();
+  readonly passwordErrors = this._passwordErrors..asReadonly();
+  readonly hasPasswordErrors = computed(() => this.passwordErrors().length != 0);
+  readonly hasOldPasswordErrors = computed(() => this.oldPasswordErrors().length != 0);
 
-  private _passwordChangeSuccess: WritableSignal<undefined | boolean> = signal(undefined);
+  private _passwordChangeSuccess = signal<undefined | boolean>(undefined);
   readonly passwordChangeSuccess = this._passwordChangeSuccess.asReadonly();
 
-  private _loading = signal(false);
+  private _loading = signal<boolean>(false);
   readonly loading = this._loading.asReadonly();
 
   ngOnInit(): void {
