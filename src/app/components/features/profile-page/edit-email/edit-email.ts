@@ -1,7 +1,7 @@
 import {Component, computed, inject, OnInit, output, Signal, signal, WritableSignal} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
-import {PasswordValidator, UpdateEmailErrors, UpdatePasswordErrors} from '../../../../core/Utility/Validation';
+import {PasswordValidator, UpdateEmailErrors, UpdatePasswordErrors} from '../../../../core/utility/Validation';
 import {ScaledText} from '../../../shared/scaled-text/scaled-text';
 import {UserService} from '../../../../core/services/user-service/user.service';
 import {LoadingCircle} from "../../../shared/loading-circle/loading-circle";

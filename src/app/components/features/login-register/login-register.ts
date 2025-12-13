@@ -18,7 +18,6 @@ import {UserService} from '../../../core/services/user-service/user.service';
 import {Router} from '@angular/router';
 import {ForgotPassword} from './reset-password/forgot-password/forgot-password';
 import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
-import {Document} from 'postcss';
 
 @Component({
   selector: 'app-login-register',

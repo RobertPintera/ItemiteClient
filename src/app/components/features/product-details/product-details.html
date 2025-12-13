@@ -93,7 +93,7 @@
                 <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
               }
 
-              <app-button (clickButton)="ClickNumber()"
+              <app-button (clickButton)="clickNumber()"
                           [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
                           : ( 'product_details.call' | translate )" severity="secondary">
               </app-button>

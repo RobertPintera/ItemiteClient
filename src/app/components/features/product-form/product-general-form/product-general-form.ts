@@ -16,7 +16,7 @@ import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {GeoMapAutocomplete} from '../../../shared/geo-map-autocomplete/geo-map-autocomplete';
 import {MediaManager} from '../../../shared/media-manager/media-manager';
 import {InputNumber} from '../../../shared/input-number/input-number';
-import {isEmptyValidator, localizationValidator} from '../../../../core/Utility/Validation';
+import {isEmptyValidator, localizationValidator} from '../../../../core/utility/Validation';
 import {ProductListingDTO} from '../../../../core/models/ProductListingDTO';
 import {PutProductListingDTO} from '../../../../core/models/PutProductListingDTO';
 import {Location} from '@angular/common';

@@ -1,5 +1,5 @@
 import {Component, computed, inject, OnInit, signal, Signal, WritableSignal} from '@angular/core';
-import {PasswordValidator, UpdatePasswordErrors} from '../../../../core/Utility/Validation';
+import {PasswordValidator, UpdatePasswordErrors} from '../../../../core/utility/Validation';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserService} from '../../../../core/services/user-service/user.service';
 import {ScaledText} from '../../../shared/scaled-text/scaled-text';
@@ -29,7 +29,7 @@ export class EditPassword implements OnInit {
   private _repeatPassMatch = signal<boolean>(true);
   readonly oldPasswordErrors = this._oldPasswordErrors.asReadonly();
   readonly repeatPassMatch = this._repeatPassMatch.asReadonly();
-  readonly passwordErrors = this._passwordErrors..asReadonly();
+  readonly passwordErrors = this._passwordErrors.asReadonly();
   readonly hasPasswordErrors = computed(() => this.passwordErrors().length != 0);
   readonly hasOldPasswordErrors = computed(() => this.oldPasswordErrors().length != 0);
 

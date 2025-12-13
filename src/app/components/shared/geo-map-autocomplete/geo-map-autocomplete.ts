@@ -3,11 +3,11 @@ import {GeocoderAutocomplete} from "../geocoder-autocomplete/geocoder-autocomple
 import {isPlatformBrowser} from '@angular/common';
 import {Localization} from '../../../core/models/Localization';
 import {Marker, Map} from 'leaflet';
-import {LatLonPayloadDTO} from '../../../core/models/LatLonPayloadDTO';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {Button} from '../button/button';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {LatLonPayloadDTO} from '../../../core/models/geoapify/LatLonPayloadDTO';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-empty-function */

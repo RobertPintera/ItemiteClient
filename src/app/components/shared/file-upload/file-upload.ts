@@ -52,8 +52,8 @@ export class FileUpload {
     !this.file()
   );
 
-  private _preview: WritableSignal<string | undefined> = signal(undefined);
-  readonly preview: Signal<string> = computed(() => this._preview() ?? "");
+  private _preview: WritableSignal<SafeUrl | undefined> = signal(undefined);
+  readonly preview: Signal<string> = computed(() => this._preview() as string ?? "");
 
   OnConfirmClicked() {
     if(this._preview()) {

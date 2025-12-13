@@ -13,11 +13,6 @@ import {CategoryTreeDTO} from '../../../../core/models/CategoryTreeDTO';
 import {OptionItem} from '../../../../core/models/OptionItem';
 import {SelectNode} from '../../../../core/models/SelectNode';
 import {Localization} from '../../../../core/models/Localization';
-import {
-  auctionDurationValidator,
-  isEmptyValidator,
-  localizationValidator,
-} from '../../../../core/Utility/Validation';
 import {ImageMedia} from '../../../../core/models/ImageMedia';
 import {AuctionListingDTO} from '../../../../core/models/AuctionListingDTO';
 import {PutAuctionListingDTO} from '../../../../core/models/PutAuctionListingDTO';
@@ -25,6 +20,7 @@ import {AuctionListingService} from '../../../../core/services/auction-listing-s
 import {PostAuctionListingDTO} from '../../../../core/models/PostAuctionListingDTO';
 import {Location} from '@angular/common';
 import {LISTING_TYPES} from '../../../../core/constants/constants';
+import {auctionDurationValidator, isEmptyValidator, localizationValidator} from '../../../../core/utility/Validation';
 
 @Component({
   selector: 'app-auction-form',
