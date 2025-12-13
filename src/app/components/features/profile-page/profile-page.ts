@@ -73,7 +73,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
   private _localization = signal<Localization | null> (null);
   // endregion
 
-  // region Utility layout handling
+  // region utility layout handling
   private _tempLocalization = signal<Localization | null> (null);
   private _dialogToTranslate = signal("");
   private _currentDialog: "" | "profileImage" | "backgroundImage"  = "";
