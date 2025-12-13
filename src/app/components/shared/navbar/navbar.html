@@ -1,11 +1,26 @@
 <nav>
-  <div class="flex overflow-x-auto whitespace-nowrap items-center p-2 h-16 bg-sidebar">
+  <div class="flex overflow-x-auto whitespace-nowrap items-center h-16 bg-sidebar px-2">
     @for(category of categories(); track category.id) {
-      <button (click)="goToCategory(category.id)" class="cursor-pointer focus:outline-none" >
-        <h4 class="inline-block px-4 border-r border-sidebar-border text-muted-foreground">
-          {{ 'categories.' + category.name | translate }}
-        </h4>
-      </button>
+      @if (isProductsPage()) {
+        <a
+          [href]="getHref(category.id)"
+          class="flex justify-center items-center cursor-pointer focus:outline-none hover:bg-card hover:shadow-2xl h-full duration-75"
+        >
+          <h4 class="inline-block px-4 border-r border-sidebar-border text-muted-foreground">
+            {{ 'categories.' + category.name | translate }}
+          </h4>
+        </a>
+      } @else {
+        <a
+          [routerLink]="['/products']"
+          [queryParams]="{ id: category.id }"
+          class="flex justify-center items-center cursor-pointer focus:outline-none hover:bg-card hover:shadow-2xl h-full duration-75"
+        >
+          <h4 class="inline-block px-4 border-r border-sidebar-border text-muted-foreground">
+            {{ 'categories.' + category.name | translate }}
+          </h4>
+        </a>
+      }
     }
   </div>
 </nav>

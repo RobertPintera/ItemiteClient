@@ -1,5 +1,5 @@
 <main class="flex flex-col w-full max-w-full p-4">
-  <div class="w-full flex flex-row flex-wrap  items-center gap-4 border-b-1 py-4">
+  <div class="w-full flex flex-row flex-wrap items-center gap-4 border-b-1 py-4">
     <div class="flex flex-row flex-wrap items-center gap-4">
       <p>{{"sort_directions.header" | translate}}:</p>
       <app-combo-box [items]="sortDirectionOptions" [selectedItem]="sortDirection()" (selectedItemChange)="useSortDirection($event)">
@@ -21,7 +21,7 @@
       </app-combo-box>
     </div>
   </div>
-  <div class="w-full flex justify-between items-center pt-4 xl:justify-end flex-wrap">
+  <div class="w-full flex justify-between items-center py-4 xl:justify-end flex-wrap gap-2">
     @if (!isXl()){
       <app-button label="filters" (clickButton)="openFilter()"/>
     }
@@ -38,7 +38,7 @@
       <h2>Can't find any article.</h2>
     </div>
   } @else {
-    <div class="flex flex-col gap-4 w-full">
+    <div class="flex flex-col w-full">
       @let data = listing();
 
       @if(data && data.items.length){
@@ -47,7 +47,7 @@
         }
       }
     </div>
-    <div class="w-full flex justify-end">
+    <div class="w-full flex justify-end py-4">
       <app-paginator [isBlocked]="isBlocked()" [pageNumber]="pageNumber()?? 1" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
     </div>
   }

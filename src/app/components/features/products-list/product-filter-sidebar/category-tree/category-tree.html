@@ -6,7 +6,7 @@
     <li class="flex-1 w-full" [style.padding-left.px]="level() * 20">
       <div class="flex pb-2 gap-2">
         <input type="checkbox" [checked]="isChecked(category.id)" (change)="toggleCategory(category.id)"/>
-        <p>{{ category.name }}</p>
+        <p>{{ `categories.${category.name}` | translate }}</p>
       </div>
       @if (category.subCategories.length) {
         <ng-container
@@ -31,7 +31,7 @@
       <li [style.padding-left.px]="level * 20">
         <div class="flex pb-2 gap-2">
           <input type="checkbox" [checked]="isChecked(category.id)" (change)="toggleCategory(category.id)"/>
-          <p>{{ category.name }}</p>
+          <p>{{ `categories.${category.name}` | translate }}</p>
         </div>
 
         @if (category.subcategories?.length) {

@@ -3,9 +3,9 @@ import { ProductListView } from './product-list-view/product-list-view';
 import { ProductFilterSidebar } from './product-filter-sidebar/product-filter-sidebar';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ListingFilter } from '../../../core/models/ListingFilter';
-import { ListingDTO } from '../../../core/models/ListingDTO';
+import { ListingResponseDTO } from '../../../core/models/ListingResponseDTO';
 import {Subject, debounceTime, switchMap, takeUntil, finalize, catchError, of} from 'rxjs';
-import { ListingService } from '../../../core/services/listing/listing.service';
+import { ListingService } from '../../../core/services/listing-service/listing.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ListingType, SortBy, SortDirection} from '../../../core/constants/constants';
 
@@ -22,15 +22,15 @@ export class ProductsList implements OnInit, OnDestroy {
   @HostBinding('class') hostClass = 'w-full';
   @ViewChild(ProductFilterSidebar) filterSidebarChild!: ProductFilterSidebar;
 
-  private breakpointObserver = inject(BreakpointObserver);
-  private listingService = inject(ListingService);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private _breakpointObserver = inject(BreakpointObserver);
+  private _listingService = inject(ListingService);
+  private _route = inject(ActivatedRoute);
+  private _router = inject(Router);
 
   readonly isMd = signal<boolean>(false);
   readonly isXl = signal<boolean>(false);
   readonly isFilterOpen = signal<boolean>(false);
-  readonly listing = signal<ListingDTO | null>(null);
+  readonly listing = signal<ListingResponseDTO | null>(null);
   readonly loading = signal<boolean>(true);
   readonly isBlocked = signal<boolean>(false);
 
@@ -51,10 +51,10 @@ export class ProductsList implements OnInit, OnDestroy {
   mainCategoryId : number | null = null;
 
   ngOnInit() {
-    this.breakpointObserver.observe([
+    this._breakpointObserver.observe([
       '(min-width: 768px)',
       '(min-width: 1280px)'
-    ]).subscribe(result => {
+    ]).pipe(takeUntil(this.destroy$)).subscribe(result => {
       this.isMd.set(result.breakpoints['(min-width: 768px)']);
       this.isXl.set(result.breakpoints['(min-width: 1280px)']);
     });
@@ -63,7 +63,7 @@ export class ProductsList implements OnInit, OnDestroy {
       debounceTime(1000),
       switchMap(filter => {
         this.loading.set(true);
-        return this.listingService.loadListing(filter).pipe(
+        return this._listingService.loadListing(filter).pipe(
           catchError(err => {
             console.error('Error loading listings:', err);
             return of(null);
@@ -81,7 +81,7 @@ export class ProductsList implements OnInit, OnDestroy {
       next: (data) => this.listing.set(data),
     });
 
-    this.route.queryParamMap.subscribe(params => {
+    this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const updated: Partial<ListingFilter> = {};
 
       const num = (name: string) => {
@@ -91,7 +91,6 @@ export class ProductsList implements OnInit, OnDestroy {
       const str = (name: string) => params.get(name);
 
       updated.pageNumber = num('pageNumber') ?? this.filter().pageNumber;
-      updated.pageSize = num('pageSize') ?? this.filter().pageSize;
       updated.priceFrom = num('priceFrom');
       updated.priceTo = num('priceTo');
       updated.longitude = num('longitude');
@@ -174,7 +173,7 @@ export class ProductsList implements OnInit, OnDestroy {
       query['localizationText'] = formatted;
     }
 
-    this.router.navigate([], {
+    this._router.navigate([], {
       queryParams: query
     });
 
@@ -195,7 +194,7 @@ export class ProductsList implements OnInit, OnDestroy {
       query['localizationText'] = formatted;
     }
 
-    this.router.navigate([], {
+    this._router.navigate([], {
       queryParams: query
     });
   }
@@ -218,7 +217,6 @@ export class ProductsList implements OnInit, OnDestroy {
     if (filter.sortBy) params['sortBy'] = filter.sortBy;
     if (filter.sortDirection) params['sortDirection'] = filter.sortDirection;
     if (filter.pageNumber != null) params['pageNumber'] = filter.pageNumber;
-    if (filter.pageSize != null) params['pageSize'] = filter.pageSize;
 
     return params;
   }

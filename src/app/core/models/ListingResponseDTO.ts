@@ -1,6 +1,6 @@
 import {ListingItemDTO} from './LitstingItemDTO';
 
-export interface ListingDTO {
+export interface ListingResponseDTO {
   items: ListingItemDTO[];
   totalPages: number;
   currentPage: number;

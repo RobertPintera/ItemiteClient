@@ -1,6 +1,7 @@
 {
   "authors": "Autorzy",
   "product_details": {
+    "home": "Strona główna",
     "send_message": "Wyślij wiadomość",
     "call": "Zadzwoń",
     "price": "Cena",
@@ -38,19 +39,37 @@
   },
   "categories": {
     "header": "Kategorie",
+
     "agriculture": "Rolnictwo",
+
     "electronics": "Elektronika",
+    "computer_accesories": "Akcesoria komputerowe",
+    "mouses": "Myszki",
+    "keyboards": "Klawiatury",
+    "computers": "Komputery",
+
     "motorization": "Motoryzacja",
+
     "fashion": "Moda",
+
     "sports_hobbies": "Sport i Hobby",
+
     "kids_baby": "Dzieci i Niemowlęta",
+
     "real_estate": "Nieruchomości",
+
     "home_garden": "Dom i Ogród",
+
     "pets": "Zwierzęta",
+
     "services_education": "Usługi i Edukacja",
+
     "industry": "Przemysł",
+
     "health_beauty": "Zdrowie i Uroda",
+
     "events": "Wydarzenia",
+
     "jobs": "Praca"
   },
   "dedicated_products": {
@@ -159,6 +178,21 @@
     "mail_min_len" : "E-mail nie może mieć mniej niż 3 znaki",
     "mail_max_len" : "E-mail nie może mieć więcej niż 100 znaków"
   },
+  "validator_errors_product_form": {
+    "field_empty": "Pole nie może być puste",
+    "field_required": "Pole jest wymagane",
+    "name_len": "Nazwa musi mieć od 2 do 30 znaków",
+    "description_len": "Opis musi mieć od 2 do 500 znaków",
+    "price_range": "Cena musi być pomiędzy 0 a 1000000",
+    "starting_bid_range": "Cena wywoławcza musi być pomiędzy 0 a 1000000",
+    "price_pattern": "Cena nie jest zgodna ze wzorcem liczby",
+    "stating_bid_pattern": "Cena wywoławcza nie jest zgodna ze wzorcem liczby",
+    "images_min": "Musi być co najmniej 1 obraz jako główne zdjęcie",
+    "localization_required": "Lokalizacja jest wymagana",
+    "date_ends_min_duration": "Aukcja musi trwać minimum 1 godzinę",
+    "date_ends_max_duration": "Aukcja nie może trwać dłużej niż 30 dni",
+    "date_ends_invalid": "Nieprawidłowy format daty"
+  },
   "external_auth_errors": {
     "no_claims": "Adres strony nie zawiera wymaganych parametrów. Możliwe, że otwarto niepełny link tej strony",
     "no_email": "Adres strony nie zawiera parametru dla e-mail. Możliwe, że otwarto niepełny link tej strony",
@@ -167,5 +201,49 @@
   },
   "api_errors": {
     "try_again": "Proszę spróbować ponownie"
+  },
+  "products_filter": {
+    "prices": "Ceny",
+    "listing_type": "Typ oferty",
+    "localization": "Lokalizacja",
+    "find_city": "Znajdź miasto",
+    "min_max_price_error": "Cena minimalna nie może być większa od ceny maksymalnej"
+  },
+  "edit": "Edytuj",
+  "create": "Stwórz",
+  "save": "Zapisz",
+  "delete": "Usuń",
+  "cancel": "Anuluj",
+  "user_products": {
+    "header": "Twoje produkty i aukcje"
+  },
+  "geo_map_autocomplete": {
+    "selected_city": "Wybrane miasto",
+    "find_city": "Znajdź miasto"
+  },
+  "media_manager": {
+    "edit_order": "Edytuj kolejność",
+    "no_images": "Nie ma zdjęć!"
+  },
+  "product_form": {
+    "name": "Nazwa",
+    "description": "Opis",
+    "price": "Cena",
+    "starting_bid": "Cena wywoławcza",
+    "date_ends": "Data zakończenia",
+    "negotiable": "Do negocjacji",
+    "main_category": "Kategoria główna",
+    "subcategory": "Podkategoria",
+    "localization": "Lokalizacja",
+    "images": "Zdjęcia",
+    "create_product": "Tworzenie produktu",
+    "edit_product": "Edycja produktu",
+    "create_auction": "Tworzenie aukcji",
+    "edit_auction": "Edycja aukcji",
+    "preview": "Podgląd",
+    "error_url_listing_type": "URL zawiera nieprawidłowy typ formularza."
+  },
+  "followed_products": {
+    "header": "Obserwowane produkty"
   }
 }

@@ -1,41 +1,35 @@
-import {Component, computed, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {TranslatePipe} from '@ngx-translate/core';
-import {AuctionProduct} from '../../../../core/models/AuctionProduct';
-import {AuctionProductCard} from '../cards/auction-product-card/auction-product-card';
+import {AuctionCard} from '../cards/auction-card/auction-card';
+import {ListingService} from '../../../../core/services/listing-service/listing.service';
+import {LISTING_TYPES} from '../../../../core/constants/constants';
+import {Carousel} from '../../../shared/carousel/carousel';
+import {ListingItemDTO} from '../../../../core/models/LitstingItemDTO';
 
 @Component({
   selector: 'app-auctions',
   imports: [
     TranslatePipe,
-    AuctionProductCard
+    AuctionCard,
+    Carousel
   ],
   templateUrl: './auctions.html',
   styleUrl: './auctions.css'
 })
-export class Auctions {
-  products = signal<AuctionProduct[]>([
-    {
-      id: 'p1',
-      name: 'Smartwatch Pro X200',
-      image: 'assets/laptop_chromebook_icon.svg',
-      biddersNumber: 5,
-      highestPrice: 899.99,
-      endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .split('T')[0],
-    },
-    {
-      id: 'p2',
-      name: 'Wireless Headphones Max',
-      image: 'assets/laptop_chromebook_icon.svg',
-      biddersNumber: 2,
-      highestPrice: 1299.0,
-      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .split('T')[0],
-    }
-  ]);
+export class Auctions implements OnInit {
+  private _listingService = inject(ListingService);
 
-  firstProduct = computed(() => this.products().at(0));
-  secondProduct = computed(() => this.products().at(1));
+  readonly auctions = signal<ListingItemDTO[]>([]);
+
+  readonly firstHalfAuctions = computed(() => this.auctions().slice(0, this.auctions().length / 2));
+  readonly secondHalfAuctions = computed(() => this.auctions().slice(this.auctions().length / 2));
+
+  ngOnInit() {
+    this._listingService.loadDedicatedListing(LISTING_TYPES.AUCTION).subscribe({
+      next: (data) => {
+        this.auctions.set(data);
+      }
+    });
+  }
+
 }

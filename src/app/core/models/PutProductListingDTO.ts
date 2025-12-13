@@ -2,7 +2,7 @@ export  interface PutProductListingDTO {
   name: string;
   description: string;
   locationLongitude: number;
-  locationLattitude: number;
+  locationLatitude: number;
   locationCountry: string;
   locationCity: string;
   locationState: string;
@@ -11,6 +11,6 @@ export  interface PutProductListingDTO {
   categoryId: number;
   existingPhotoIds: number[];
   existingPhotoOrders: number[];
-  newImages: string[];
+  newImages: File[];
   newImageOrders: number[];
 }

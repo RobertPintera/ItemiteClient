@@ -1,16 +1,17 @@
-<button class="combo-selected w-full" (click)="toggleDropdown()">
+<button type="button" class="combo-selected w-full" (click)="toggleDropdown()" [disabled]="isDisabled()">
   @if (templateRef){
     <ng-container [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="{ $implicit: selectedItem() }"></ng-container>
   } @else {
     <span>{{ selectedItem()?.value ?? ' ' }}</span>
   }
-  <span class="arrow">▼</span>
+  <span class="arrow">{{isOpen() ? '▼' : '►' }}</span>
 </button>
+
 @if(isOpen()){
-  <ul class="combo-dropdown w-full">
+  <ul class="combo-dropdown">
     @for (item of items(); track item.key){
       <li class="flex items-center h-full w-full">
-        <button (click)="chooseItem(item); $event.stopPropagation()" class="w-full h-full text-left p-2 ">
+        <button type="button" (click)="chooseItem(item); $event.stopPropagation()" class="w-full h-full text-left p-2 ">
           @if (templateRef){
             <ng-container [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="{ $implicit: item }"> </ng-container>
           } @else {

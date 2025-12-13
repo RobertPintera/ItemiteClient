@@ -22,7 +22,8 @@ import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 import {FileUpload} from '../../shared/file-upload/file-upload';
 import {DomSanitizer} from '@angular/platform-browser';
 import {UserService} from '../../../core/services/user-service/user.service';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
+import {Button} from '../../shared/button/button';
 
 @Component({
   selector: 'app-profile-page',
@@ -33,7 +34,9 @@ import {Router} from '@angular/router';
     ReactiveFormsModule,
     ScaledText,
     ConfirmDialog,
-    FileUpload
+    FileUpload,
+    Button,
+    RouterLink
   ],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.css'
@@ -107,7 +110,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
   });
   tempLocIsValid:Signal<boolean> = computed(() => {
     return this.ValidateLocalization(this._tempLocalization());
-  })
+  });
 
   phoneNumber = computed(() =>
     this._phone() === "" ? "----" : this._phone() );
@@ -312,7 +315,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
         this._localization()!.latitude,
         this._localization()!.longitude,
         this._localization()!.city
-      )
+      );
       return;
     }
     // If localization is not set
@@ -385,7 +388,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
       latitude: lat,
       longitude: lng,
       filter: "city"
-    }
+    };
     this._geoapify.ReverseGeocode(request).subscribe({
       next: (response) => {
         if(this.ValidateLocalization(response)) {
@@ -412,5 +415,9 @@ export class ProfilePage implements AfterViewInit, OnInit {
     if(success) {
       await this._router.navigateByUrl('');
     }
+  }
+
+  goToUserProducts(){
+    this._router.navigate(['/user-products']);
   }
 }

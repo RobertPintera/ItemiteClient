@@ -3,7 +3,7 @@ import {Image} from './Image';
 import {LocationDTO} from './LocationDTO';
 
 export interface ProductListingDTO {
-  id: string;
+  id: number;
   name: string;
   description: string;
   price: number;
@@ -15,7 +15,7 @@ export interface ProductListingDTO {
   isNegotiable: boolean;
   isFollowed: boolean | null;
   owner: {
-    id: string;
+    id: number;
     userName: string;
     email: string;
     location: LocationDTO;
