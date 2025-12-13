@@ -5,7 +5,6 @@ import {LoginRegister} from './components/features/login-register/login-register
 import {ProductsList} from './components/features/products-list/products-list';
 import {ProductDetails} from './components/features/product-details/product-details';
 import {ProfilePage} from './components/features/profile-page/profile-page';
-import {Chat} from './components/features/chat/chat/chat';
 import {Test} from './components/features/test/test';
 import {ConfirmEmail} from './components/features/login-register/confirm-email/confirm-email';
 import {ResetPassword} from './components/features/login-register/reset-password/reset-password';
@@ -13,8 +12,10 @@ import {ExternalLoginError} from './components/features/login-register/external-
 import {Me} from './components/features/login-register/me/me';
 import {ProductForm} from './components/features/product-form/product-form';
 import {NotFound} from './components/features/not-found/not-found';
+import {UserProducts} from './components/features/user-products/user-products';
+import {FollowedProducts} from './components/features/followed-products/followed-products';
+import {ConfirmNewEmail} from './components/features/profile-page/edit-email/confirm-new-email/confirm-new-email';
 import {ChatsMainWindow} from './components/features/chat/chats-main-window/chats-main-window';
-
 
 export const routes: Routes = [
   {
@@ -50,6 +51,14 @@ export const routes: Routes = [
         component: Test
       },
       {
+        path: 'user-products',
+        component: UserProducts
+      },
+      {
+        path: 'followed-products',
+        component: FollowedProducts
+      },
+      {
         path: 'chats',
         component: ChatsMainWindow
       }
@@ -58,6 +67,10 @@ export const routes: Routes = [
   {
     path: 'confirm-email',
     component: ConfirmEmail
+  },
+  {
+    path: 'change-email',
+    component: ConfirmNewEmail
   },
   {
     path: 'reset-password',

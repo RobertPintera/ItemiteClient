@@ -7,6 +7,7 @@ import {ErrorHandlerService} from '../error-handler-service/error-handler-servic
 import {User} from '../../models/User';
 import {clearTimeout} from 'node:timers';
 import {subscribe} from 'node:diagnostics_channel';
+import {Localization} from '../../models/Localization';
 
 @Injectable({
   providedIn: 'root'
@@ -174,7 +175,7 @@ export class UserService {
     }
   }
 
-  async ChangePassword(email: string, password: string, token: string): Promise<boolean> {
+  async ResetPassword(email: string, password: string, token: string): Promise<boolean> {
     const payload = {email: email, password: password, token: token};
     try {
       await lastValueFrom(
@@ -229,7 +230,19 @@ export class UserService {
       this.ClearUserInfo();
       return true;
     } catch (error: any) {
+      return false;
+    }
+  }
+
+  async LogoutAllDevices(): Promise<boolean> {
+    try {
+      // Not used but it's returned by the api
+      const message = await lastValueFrom(
+        this.http.get<string>(`${environment.itemiteApiUrl}/auth/logout-all-devices`, {timeout: 10000, withCredentials: true})
+      );
       this.ClearUserInfo();
+      return true;
+    } catch (error: any) {
       return false;
     }
   }
@@ -250,5 +263,154 @@ export class UserService {
       backgroundUrl: undefined
     })
   }
+
+  async ChangeUsername(newUsername: string): Promise<boolean> {
+    const payload = {newUsername: newUsername};
+    try {
+      await lastValueFrom(
+        this.http.put(`${environment.itemiteApiUrl}/user/settings/change-username`, payload, {timeout: 10000, withCredentials: true})
+      );
+      return true;
+    } catch(error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async ChangePhoneNumber(number: string) {
+    const payload = {phoneNumber: number};
+    try {
+      await lastValueFrom(
+        this.http.put(`${environment.itemiteApiUrl}/user/settings/change-phone-number`, payload, {timeout: 10000, withCredentials: true})
+      );
+      return true;
+    } catch(error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async ChangeLocation(newLocation: Localization) {
+    const payload = {
+      location: {
+        longitude: newLocation.longitude,
+        latitude: newLocation.latitude,
+        country: newLocation.country,
+        city: newLocation.city,
+        state: newLocation.state
+      }
+    };
+    try {
+      await lastValueFrom(
+        this.http.put(`${environment.itemiteApiUrl}/user/settings/change-location`, payload, {timeout: 10000, withCredentials: true})
+      );
+      return true;
+    } catch(error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async ChangeProfileImage(newImage: File) {
+    const payload = new FormData();
+    payload.append('file', newImage);
+
+    try {
+      await lastValueFrom(
+        this.http.post<string>(`${environment.itemiteApiUrl}/user/profile/picture`, payload, {timeout: 10000, withCredentials: true})
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async ChangePassword(oldPassword:string, newPassword:string) {
+    const payload = {oldPassword: oldPassword, newPassword: newPassword};
+    try {
+      await lastValueFrom(
+        this.http.post<string>(`${environment.itemiteApiUrl}/user/settings/change-password`, payload, {timeout: 10000, withCredentials: true})
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async ChangeBackgroundImage(newImage: File) {
+    const payload = new FormData();
+    payload.append('file', newImage);
+
+    try {
+      await lastValueFrom(
+        this.http.post<string>(`${environment.itemiteApiUrl}/user/profile/background`, payload, {timeout: 10000, withCredentials: true})
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async DeleteProfileImage() {
+    try {
+      await lastValueFrom(
+        this.http.delete(`${environment.itemiteApiUrl}/user/profile/picture`, {timeout: 10000, withCredentials: true})
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async DeleteBackgroundImage() {
+    try {
+      await lastValueFrom(
+        this.http.delete(`${environment.itemiteApiUrl}/user/profile/background`, {timeout: 10000, withCredentials: true})
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async ChangeEmail(newEmail:string, password:string) {
+    const payload = {newEmail: newEmail, password: password};
+    try {
+      await lastValueFrom(
+        this.http.put(`${environment.itemiteApiUrl}/user/settings/change-email`, payload, {timeout: 20000, withCredentials: true})
+      );
+      return true;
+    } catch(error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+  }
+
+  async ConfirmChangeEmail(token: string, currentEmail: string) {
+
+    const params = new HttpParams()
+      .set('currentEmail', currentEmail)
+      .set('token', token);
+
+    try {
+      await lastValueFrom(
+        this.http.get(
+          `${environment.itemiteApiUrl}/user/settings/confirm-email-change`,
+          {timeout: 10000, withCredentials: true, params: params}
+        )
+      );
+      return true;
+    } catch (error: any) {
+      this.errorHandlerService.SendErrorMessage(error);
+      return false;
+    }
+
+  }
+
 
 }

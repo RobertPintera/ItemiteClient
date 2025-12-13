@@ -28,8 +28,8 @@ import {FilterSidebar} from '../../../../core/models/FilterSidebar';
   styleUrl: './product-filter-sidebar.css'
 })
 export class ProductFilterSidebar implements OnInit {
-  private route = inject(ActivatedRoute);
-  private categoryService = inject(CategoryService);
+  private _categoryService = inject(CategoryService);
+  private _route = inject(ActivatedRoute);
 
   readonly filter = input.required<ListingFilter>();
   readonly localizationText = input.required<string | null>();
@@ -66,8 +66,8 @@ export class ProductFilterSidebar implements OnInit {
 
   listingTypesOptions: OptionItem[]  = [
     { key: 'none', value: '-'},
-    { key: 'auction', value: 'listing_types.auction' },
-    { key: 'product', value: 'listing_types.product' },
+    { key: 'Auction', value: 'listing_types.auction' },
+    { key: 'Product', value: 'listing_types.product' },
   ];
 
   distancesOptions: OptionItem[]  = [
@@ -92,7 +92,6 @@ export class ProductFilterSidebar implements OnInit {
     effect(() => {
       const filterSidebar = this.filterSidebar();
       const isXl = untracked(() => this.isXl());
-      console.log(filterSidebar);
       if(isXl) {
         this.lastFilterSidebar.set(structuredClone(filterSidebar));
       }
@@ -100,12 +99,12 @@ export class ProductFilterSidebar implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
+    this._route.queryParamMap.subscribe(params => {
       const id = params.get('id');
       const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
       if (validId === null) return;
 
-      this.categoryService.loadCategoryTree(validId).subscribe({
+      this._categoryService.loadCategoryTree(validId).subscribe({
         next: tree => this.categoryTree.set(tree),
         error: err => console.error(err)
       });
@@ -140,7 +139,6 @@ export class ProductFilterSidebar implements OnInit {
     const localizationText = this.localizationText();
     if(localizationText) {
       this.filterSidebar().localizationText = localizationText;
-      console.log(localizationText);
     }
 
     const latitude = this.filter().latitude;
@@ -207,7 +205,7 @@ export class ProductFilterSidebar implements OnInit {
   usePriceFrom(priceFrom: number | null) {
     const priceTo = this.filterSidebar().priceTo;
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
-      this.filterSidebar().priceError = 'Minimal price cannot be greater than maximal price.';
+      this.filterSidebar().priceError = 'products_filter.min_max_price_error';
       return;
     }
     this.filterSidebar().priceError = null;
@@ -220,7 +218,7 @@ export class ProductFilterSidebar implements OnInit {
   usePriceTo(priceTo: number | null) {
     const priceFrom = Number(this.filterSidebar().priceFrom);
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
-      this.filterSidebar().priceError = 'Minimal price cannot be greater than maximal price.';
+      this.filterSidebar().priceError = 'products_filter.min_max_price_error';
       return;
     }
     this.filterSidebar().priceError = null;
@@ -249,7 +247,7 @@ export class ProductFilterSidebar implements OnInit {
     const priceTo = sidebar.priceTo;
 
     if (priceFrom !== null && priceTo !== null && priceFrom > priceTo) {
-      this.filterSidebar().priceError = 'Minimal price cannot be greater than maximal price.';
+      this.filterSidebar().priceError = 'products_filter.min_max_price_error';
       return;
     }
 

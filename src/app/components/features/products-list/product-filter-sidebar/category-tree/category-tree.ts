@@ -1,13 +1,15 @@
-import {Component, input, model, output, signal} from '@angular/core';
+import {Component, input, model, output } from '@angular/core';
 import {NgClass, NgTemplateOutlet} from '@angular/common';
 import {CategoryTreeDTO} from '../../../../../core/models/CategoryTreeDTO';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-category-tree',
   templateUrl: './category-tree.html',
   imports: [
     NgClass,
-    NgTemplateOutlet
+    NgTemplateOutlet,
+    TranslatePipe
   ],
   styleUrl: './category-tree.css'
 })

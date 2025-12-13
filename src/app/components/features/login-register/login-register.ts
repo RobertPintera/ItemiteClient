@@ -39,6 +39,7 @@ export class LoginRegister implements OnInit {
   router = inject(Router);
   private _translate = inject(TranslateService);
   private _userService = inject(UserService);
+  private _document = inject(DOCUMENT);
 
   private _showRegisterForm: WritableSignal<boolean> = signal(false);
   private _showForgotPasswordForm: WritableSignal<boolean> = signal(false);
@@ -147,7 +148,9 @@ export class LoginRegister implements OnInit {
     this.loginForm = new FormGroup({
       email: new FormControl('', [
         Validators.required,
-        Validators.email
+        Validators.email,
+        Validators.minLength(3),
+        Validators.maxLength(100)
       ]),
       password: new FormControl('', [
         Validators.required,
@@ -231,8 +234,6 @@ export class LoginRegister implements OnInit {
       this._processing.set(false);
     }
   }
-
-  private _document = inject(DOCUMENT);
 
   async LoginByGoogle() {
     this._document.location.href = this._userService.LoginWithGoogle();

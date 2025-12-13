@@ -1,30 +1,35 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {TranslatePipe} from '@ngx-translate/core';
 import {CategoryService} from '../../../core/services/category-service/category.service';
-import {Router } from '@angular/router';
+import {NavigationEnd, Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   imports: [
     TranslatePipe,
+    RouterLink,
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
 export class Navbar {
-  private categoryService = inject(CategoryService);
-  private router = inject(Router);
+  private _categoryService = inject(CategoryService);
+  private _router = inject(Router);
 
-  readonly categories = this.categoryService.mainCategories;
+  readonly categories = this._categoryService.mainCategories;
+  readonly isProductsPage = signal<boolean>(this._router.url.startsWith('/products'));
 
-  goToCategory(categoryId: number) {
-    const url = this.router.createUrlTree(['/products'], { queryParams: { id: categoryId } }).toString();
-
-    if (this.router.url.startsWith('/products')) {
-      window.location.href = url;
-    } else {
-      this.router.navigate(['/products'], { queryParams: { id: categoryId } });
-    }
+  constructor() {
+    this._router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isProductsPage.set(event.urlAfterRedirects.startsWith('/products'));
+      }
+    });
   }
 
+  getHref(categoryId: number) {
+    return this._router
+      .createUrlTree(['/products'], { queryParams: { id: categoryId } })
+      .toString();
+  }
 }

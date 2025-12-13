@@ -204,10 +204,14 @@ body {
   h6 {
     @apply text-sm sm:text-base font-medium leading-snug;
   }
-  input {
+
+  input,
+  textarea {
     @apply border-2 border-border ring-ring rounded-xl bg-white;
   }
-  input:disabled{
+
+  input:disabled,
+  textarea:disabled {
     @apply border-2 border-ring ring-ring rounded-xl bg-white;
   }
 
@@ -240,6 +244,13 @@ body {
     border-radius: var(--radius-sm);
 
   }
-
+  .no-drag {
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+  }
 }
 

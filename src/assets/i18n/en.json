@@ -1,6 +1,7 @@
 {
   "authors": "Authors",
   "product_details": {
+    "home": "Home",
     "send_message": "Send message",
     "view_messages": "View messages",
     "call": "Call",
@@ -39,19 +40,37 @@
   },
   "categories": {
     "header": "Categories",
+
     "agriculture": "Agriculture",
+
     "electronics": "Electronics",
+    "computer_accesories": "Computer accesories",
+    "mouses": "Mouses",
+    "keyboards": "Keyboards",
+    "computers": "Computers",
+
     "motorization": "Motorization",
+
     "fashion": "Fashion",
+
     "sports_hobbies": "Sports & Hobbies",
+
     "kids_baby": "Kids & Baby",
+
     "real_estate": "Real Estate",
+
     "home_garden": "Home & Garden",
+
     "pets": "Pets",
+
     "services_education": "Services & Education",
+
     "industry": "Industry",
+
     "health_beauty": "Health & Beauty",
+
     "events": "Events",
+
     "jobs": "Jobs"
   },
   "dedicated_products": {
@@ -91,27 +110,32 @@
   },
   "user_info": {
     "details": "Details",
-    "Localization" : "Localization",
+    "localization" : "Localization",
     "security": "Security",
     "background_image": "Background image",
-    "profile_image": "Profile image"
+    "profile_image": "Profile image",
+    "phone": "Phone"
   },
   "user_edition": {
     "edit_password": "Edit password",
     "old_password": "Old password",
     "new_password": "New password",
     "repeat_new_password": "Confirm new password",
-    "password_changed": "Password changed, you can now log-in with new credentials",
+    "password_changed": "Password changed successfully",
 
     "delete_background_image": "Delete background image",
     "delete_profile_image": "Delete profile image",
     "edit_profile_image": "Edit profile image",
     "edit_background_image": "Edit background image",
 
+    "new_email": "New email",
     "edit_email": "Edit email",
+    "email_changed": "Email has been changed successfully",
+    "email_failure": "Error occurred when trying to change email. Please try again later.",
 
     "delete_account": "Delete account",
     "logout": "Logout",
+    "logout_all": "Logout from all devices",
 
     "ask_delete_profile_image": "This will permanently delete your profile image, do you want to proceed?",
     "ask_delete_background_image": "This will permanently delete your background image, do you want to proceed?"
@@ -133,7 +157,8 @@
     "return": "Return",
     "add": "Add",
     "type_here": "Type here...",
-    "editing": "Editing"
+    "editing": "Editing",
+    "close": "Close"
   },
   "file_upload": {
     "upload_file": "Upload file",
@@ -142,6 +167,9 @@
     "file_type": "File type",
     "file_size_too_big": "File size is too big",
     "max_file_size_is": "Max supported file is"
+  },
+  "geocoder": {
+    "enter_city_name": "Enter city name"
   },
   "validator_errors": {
     "field_empty" : "Field can't be empty",
@@ -163,6 +191,21 @@
     "mail_min_len" : "Mail must be at least 3 characters long",
     "mail_max_len" : "Mail cannot be more than 100 characters"
   },
+  "validator_errors_product_form": {
+    "field_empty": "Field can't be empty",
+    "field_required": "Field is required",
+    "name_len": "Name must be between 2 and 30 characters",
+    "description_len": "Description must be between 2 and 500 characters",
+    "price_range": "Price must be between 0 and 1000000",
+    "starting_bid_range": "Starting bid must be between 0 and 1000000",
+    "price_pattern": "Price doesn't match the number pattern.",
+    "stating_bid_pattern": "Starting bid doesn't match the number pattern.",
+    "images_min": "Images must contain 1 for being main image",
+    "localization_required": "Localization is required",
+    "date_ends_min_duration": "Auction must last at least 1 hour",
+    "date_ends_max_duration": "Auction cannot last longer than 30 days",
+    "date_ends_invalid": "Invalid date format"
+  },
   "external_auth_errors": {
     "no_claims": "URL doesn't contain needed parameters. Are you sure you entered the full link?",
     "no_email": "URL doesn't contain email parameter. Are you sure you entered the full link?",
@@ -182,5 +225,49 @@
     "messages": "Messages",
     "you_buy": "You buy",
     "you_sell": "You sell"
+  },
+  "products_filter": {
+    "prices": "Prices",
+    "listing_type": "Listing Type",
+    "localization": "Localization",
+    "find_city": "Find city",
+    "min_max_price_error": "Minimal price cannot be greater than maximal price"
+  },
+  "edit": "Edit",
+  "create": "Create",
+  "save": "Save",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "user_products": {
+    "header": "Your products and auctions"
+  },
+  "geo_map_autocomplete": {
+    "selected_city": "Selected city",
+    "find_city": "Find city"
+  },
+  "media_manager": {
+    "edit_order": "Edit order",
+    "no_images": "There are no images!"
+  },
+  "product_form": {
+    "name": "Name",
+    "description": "Description",
+    "price": "Price",
+    "starting_bid": "Starting bid",
+    "date_ends": "Date ends",
+    "negotiable": "Negotiable",
+    "main_category": "Main category",
+    "subcategory": "Subcategory",
+    "localization": "Localization",
+    "images": "Images",
+    "create_product": "Create product",
+    "edit_product": "Edit product",
+    "create_auction": "Create auction",
+    "edit_auction": "Edit auction",
+    "preview": "Preview",
+    "error_url_listing_type": "The URL contains an invalid form type."
+  },
+  "followed_products": {
+    "header": "Followed products"
   }
 }

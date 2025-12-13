@@ -1,0 +1,4 @@
+:host ::ng-deep .combo-container, :host ::ng-deep .cascade-container {
+  width: 100%;
+}
+

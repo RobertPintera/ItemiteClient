@@ -27,14 +27,13 @@ export class FileUpload {
 
   onConfirmClicked = output<File>();
   onCancelClicked = output<void>();
-  readonly acceptedFormats = input("image/png, image/jpeg")
+  readonly acceptedFormats = input("image/png, image/jpeg");
   readonly supportsPreview = input<boolean>(false);
   readonly maxSizeMB  = input<number>(5);
   readonly fileSizeExceeded = computed(() => {
-      if(!this.file()) return false;
-      return this._file()!.size*0.000001 > this.maxSizeMB();
-    }
-  );
+    if(!this.file()) return false;
+    return this._file()!.size*0.000001 > this.maxSizeMB();
+  });
 
   private _file : WritableSignal<File | undefined> = signal(undefined);
   readonly file: Signal<File | undefined> = this._file.asReadonly();
@@ -53,12 +52,8 @@ export class FileUpload {
     !this.file()
   );
 
-  private _preview: WritableSignal<SafeUrl | undefined> = signal(undefined);
-  readonly preview: Signal<string> = computed(() =>
-  {
-    if(!this._preview()) return "";
-    return this._preview()! as string;
-  });
+  private _preview: WritableSignal<string | undefined> = signal(undefined);
+  readonly preview: Signal<string> = computed(() => this._preview() ?? "");
 
   OnConfirmClicked() {
     if(this._preview()) {

@@ -1,14 +1,14 @@
 import {Component, input, model, OnInit, output, signal} from '@angular/core';
-import {ProductItem} from './product-item/product-item';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
-import {ListingDTO} from '../../../../core/models/ListingDTO';
+import {ListingResponseDTO} from '../../../../core/models/ListingResponseDTO';
 import {Loader} from '../../../shared/loader/loader';
 import {SORT_DIRECTION, SortBy, SortDirection, SORTS_BY} from '../../../../core/constants/constants';
 import {ListingFilter} from '../../../../core/models/ListingFilter';
 import {OptionItem} from '../../../../core/models/OptionItem';
+import {ProductItem} from '../../../shared/product-item/product-item';
 
 @Component({
   selector: 'app-product-list-view',
@@ -18,7 +18,8 @@ import {OptionItem} from '../../../../core/models/OptionItem';
     ComboBox,
     TranslatePipe,
     Button,
-    Loader
+    Loader,
+    ProductItem
   ],
   templateUrl: './product-list-view.html',
   styleUrl: './product-list-view.css'
@@ -30,7 +31,7 @@ export class ProductListView implements OnInit {
   readonly filter = input.required<ListingFilter>();
   readonly isBlocked = input.required<boolean>();
   readonly totalPages = input.required<number>();
-  readonly listing = input.required<ListingDTO | null>();
+  readonly listing = input.required<ListingResponseDTO | null>();
   readonly loading = input.required<boolean>();
 
   readonly isMd = input.required<boolean>();
@@ -44,15 +45,15 @@ export class ProductListView implements OnInit {
 
   sortDirectionOptions = [
     { key: 'none', value: '-'},
-    { key: 'ascending', value: 'sort_directions.ascending' },
-    { key: 'descending', value: 'sort_directions.descending' },
+    { key: 'Ascending', value: 'sort_directions.ascending' },
+    { key: 'Descending', value: 'sort_directions.descending' },
   ];
 
   sortByOptions = [
     { key: 'none', value: '-'},
-    { key: 'price', value: 'sort_by.price' },
-    { key: 'creationDate', value: 'sort_by.creation_date' },
-    { key: 'views', value: 'sort_by.views' },
+    { key: 'Price', value: 'sort_by.price' },
+    { key: 'CreationDate', value: 'sort_by.creation_date' },
+    { key: 'Views', value: 'sort_by.views' },
   ];
 
   ngOnInit() {
