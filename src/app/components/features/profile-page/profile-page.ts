@@ -21,10 +21,10 @@ import {FileUpload} from '../../shared/file-upload/file-upload';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {Router, RouterLink} from '@angular/router';
-import {Button} from '../../shared/button/button';
 import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
 import {EditEmail} from './edit-email/edit-email';
 import {EditPassword} from './edit-password/edit-password.component';
+import {Button} from '../../shared/button/button';
 
 @Component({
   selector: 'app-profile-page',
@@ -37,6 +37,7 @@ import {EditPassword} from './edit-password/edit-password.component';
     FileUpload,
     Button,
     RouterLink,
+    FileUpload,
     LoadingCircle,
     FormsModule,
     EditEmail,
@@ -173,6 +174,7 @@ export class ProfilePage implements AfterViewInit, OnInit {
       state: location.state,
     });
   }
+
 
   async OnLogoutClicked() {
     const success = await this._userService.Logout();
