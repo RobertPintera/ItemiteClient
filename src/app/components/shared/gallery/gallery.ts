@@ -12,13 +12,14 @@ import {
 } from '@angular/core';
 import {ReactiveFormsModule} from "@angular/forms";
 import {Image} from '../../../core/models/Image';
-import {NgTemplateOutlet} from '@angular/common';
+import {NgClass, NgTemplateOutlet} from '@angular/common';
 
 @Component({
   selector: 'app-gallery',
   imports: [
     ReactiveFormsModule,
     NgTemplateOutlet,
+    NgClass,
   ],
   templateUrl: './gallery.html',
   styleUrl: './gallery.css'

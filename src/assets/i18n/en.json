@@ -14,7 +14,11 @@
     "description": "Description",
     "localization": "Localization",
     "bid": "Bid",
-    "negotiable": "Negotiable"
+    "negotiable": "Negotiable",
+    "status":{
+      "active": "active",
+      "archived": "archived"
+    }
   },
   "paginator": {
     "preposition": "from"

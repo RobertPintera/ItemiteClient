@@ -14,7 +14,11 @@
     "description": "Opis",
     "localization": "Lokalizacja",
     "bid": "Licytuj",
-    "negotiable": "Do negocjacji"
+    "negotiable": "Do negocjacji",
+    "status":{
+      "active": "aktywny",
+      "archived": "zarchiwizowany"
+    }
   },
   "paginator": {
     "preposition": "z"

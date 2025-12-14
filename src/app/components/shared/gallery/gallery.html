@@ -19,8 +19,10 @@
         @for (item of images(); track item.imageOrder){
           <li class="h-auto px-4 flex-shrink-0" [style.width.px]="itemWidth()">
             <button (click)="selectImage(item)" class="w-full h-32 transition-opacity hover:opacity-100"
-                    [class.opacity-60]="selectedImage()?.imageId !== item.imageId"
-                    [class.opacity-100]="selectedImage()?.imageId === item.imageId">
+                    [ngClass]="{
+                    'opacity-60 cursor-pointer': selectedImage()?.imageId !== item.imageId,
+                    'opacity-100 cursor-default': selectedImage()?.imageId === item.imageId
+                  }">
               <ng-container *ngTemplateOutlet="templateRef; context: {$implicit: item}"/>
             </button>
           </li>

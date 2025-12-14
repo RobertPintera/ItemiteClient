@@ -9,7 +9,7 @@ import {AuctionListingDTO} from '../../../core/models/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
 import {AuctionListingService} from '../../../core/services/auction-listing-service/auction-listing.service';
 import {Gallery} from '../../shared/gallery/gallery';
-import {DatePipe, isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {DatePipe, isPlatformBrowser, isPlatformServer, NgClass} from '@angular/common';
 import {Map, Marker} from 'leaflet';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {LISTING_TYPES} from '../../../core/constants/constants';
@@ -26,6 +26,7 @@ import {FloatingChatContainer} from '../chat/floating-chat-container/floating-ch
     DatePipe,
     RouterLink,
     FloatingChatContainer,
+    NgClass,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
