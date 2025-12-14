@@ -8,7 +8,7 @@ export const GuestGuard: CanActivateFn = async (route, state) => {
   const router = inject(Router);
   const platformId = inject(PLATFORM_ID);
 
-  if(!isPlatformBrowser(platformId)) return true;
+  if(!isPlatformBrowser(platformId)) return router.createUrlTree(['/login']);
 
   return !authService.isUserLoggedIn() ? true : router.createUrlTree(['/login']);
 };
