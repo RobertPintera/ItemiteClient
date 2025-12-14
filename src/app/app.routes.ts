@@ -16,6 +16,7 @@ import {FollowedProducts} from './components/features/followed-products/followed
 import {ConfirmNewEmail} from './components/features/profile-page/edit-email/confirm-new-email/confirm-new-email';
 import {authGuard} from './core/guards/auth-guard/auth-guard';
 import {ChatsMainWindow} from './components/features/chat/chats-main-window/chats-main-window';
+import {guestGuard} from './core/guards/guest-guard/guest-guard';
 
 export const routes: Routes = [
   {
@@ -41,7 +42,8 @@ export const routes: Routes = [
       },
       {
         path: 'login',
-        component: LoginRegister
+        component: LoginRegister,
+        canActivate: [guestGuard]
       },
       {
         path: 'profile',
@@ -64,7 +66,8 @@ export const routes: Routes = [
       },
       {
         path: 'chats',
-        component: ChatsMainWindow
+        component: ChatsMainWindow,
+        canActivate: [authGuard],
       }
     ]
   },

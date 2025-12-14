@@ -9,7 +9,7 @@ import {AuctionListingDTO} from '../../../core/models/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
 import {AuctionListingService} from '../../../core/services/auction-listing-service/auction-listing.service';
 import {Gallery} from '../../shared/gallery/gallery';
-import {DatePipe, isPlatformBrowser} from '@angular/common';
+import {DatePipe, isPlatformBrowser, isPlatformServer} from '@angular/common';
 import {Map, Marker} from 'leaflet';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {LISTING_TYPES} from '../../../core/constants/constants';
@@ -99,41 +99,65 @@ export class ProductDetails implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._breakpointObserver.observe(['(min-width: 1024px)']).pipe(takeUntil(this.destroy$)).subscribe(result => {
-      this.isLg.set(result.breakpoints['(min-width: 1024px)']);
-    });
+    // This code will be used later
 
-    this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      const id = params.get('id');
-      const type = params.get('type');
+    // if(isPlatformServer(this._platformId)){
+    //   console.log("yes");
+    //   const id = this._route.snapshot.queryParamMap.get('id');
+    //   const type = this._route.snapshot.queryParamMap.get('type');
+    //
+    //   const validId = id && !isNaN(+id) ? +id : null;
+    //   if (!validId) return;
+    //
+    //   if (type === LISTING_TYPES.PRODUCT) {
+    //     this._productListingService.loadProductListing(validId).subscribe(product => {
+    //       this.article.set(product);
+    //     });
+    //   }
+    //   else {
+    //     this._auctionListingService.loadAuctionListing(validId).subscribe(auction => {
+    //       this.article.set(auction);
+    //     });
+    //   }
+    // }
 
-      const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
+    if(isPlatformBrowser(this._platformId)){
+      this._breakpointObserver.observe(['(min-width: 1024px)']).pipe(takeUntil(this.destroy$)).subscribe(result => {
+        this.isLg.set(result.breakpoints['(min-width: 1024px)']);
+      });
 
-      if (validId === null) return;
+      this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
+        const id = params.get('id');
+        const type = params.get('type');
 
-      if(type === 'Product'){
-        this._productListingService.loadProductListing(validId).subscribe({
-          next: product => {
-            this.article.set(product);
-            this.isFollowed.set(product.isFollowed ?? false);
-            this._listingService.addFollowedListing(product.id)
-          },
-          error: err => console.error(err)
-        });
-      } else if (type === 'Auction'){
-        this._auctionListingService.loadAuctionListing(validId).subscribe({
-          next: product => {
-            this.article.set(product);
-            this.isFollowed.set(product.isFollowed ?? false);
-          },
-          error: err => console.error(err)
-        });
-      }
-    });
+        const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
 
-    this._toggleFollowSubject
-      .pipe(debounceTime(300), takeUntil(this.destroy$))
-      .subscribe(() => this._handleToggle());
+        if (validId === null) return;
+
+        if(type === 'Product'){
+          this._productListingService.loadProductListing(validId).subscribe({
+            next: product => {
+              this.article.set(product);
+              this.isFollowed.set(product.isFollowed ?? false);
+              this._listingService.addFollowedListing(product.id)
+            },
+            error: err => console.error(err)
+          });
+        } else if (type === 'Auction'){
+          this._auctionListingService.loadAuctionListing(validId).subscribe({
+            next: product => {
+              this.article.set(product);
+              this.isFollowed.set(product.isFollowed ?? false);
+            },
+            error: err => console.error(err)
+          });
+        }
+      });
+
+      this._toggleFollowSubject
+        .pipe(debounceTime(300), takeUntil(this.destroy$))
+        .subscribe(() => this._handleToggle());
+    }
   }
 
   ngOnDestroy() {
