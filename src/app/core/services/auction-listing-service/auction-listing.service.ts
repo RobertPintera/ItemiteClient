@@ -15,8 +15,19 @@ export class AuctionListingService {
   private baseUrl = `${environment.itemiteApiUrl}/auctionlisting`;
 
   // API
-  private getAuctionListing(id: number): Observable<AuctionListingDTO> {
-    return this.http.get<AuctionListingDTO>(`${this.baseUrl}/${id}`);
+  private getAuctionListingPublic(id: number): Observable<AuctionListingDTO> {
+    return this.http.get<AuctionListingDTO>(`${this.baseUrl}/${id}`,
+      {
+        transferCache: true,
+        withCredentials: false
+      }
+    );
+  }
+
+  private getAuctionListingAuth(id: number): Observable<AuctionListingDTO> {
+    return this.http.get<AuctionListingDTO>(`${this.baseUrl}/${id}`, {
+      transferCache: true,
+    });
   }
 
   private postAuctionListingDTO(formData: FormData): Observable<PostAuctionListingResponseDTO> {
@@ -85,15 +96,27 @@ export class AuctionListingService {
     );
   }
 
-
-  loadAuctionListing(id: number){
-    return this.getAuctionListing(id).pipe(
+  loadAuctionListingPublic(id: number){
+    return this.getAuctionListingPublic(id).pipe(
       map(auction => {
         console.log(auction);
         return auction;
       }),
       catchError(err => {
-        console.error('Error loadProductListing:', err);
+        console.error('Error loadProductListingPublic:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadAuctionListingAuth(id: number){
+    return this.getAuctionListingAuth(id).pipe(
+      map(auction => {
+        console.log(auction);
+        return auction;
+      }),
+      catchError(err => {
+        console.error('Error loadProductListingAuth:', err);
         throw err;
       })
     );

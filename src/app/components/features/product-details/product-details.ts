@@ -101,25 +101,25 @@ export class ProductDetails implements OnInit, OnDestroy {
   ngOnInit() {
     // This code will be used later
 
-    // if(isPlatformServer(this._platformId)){
-    //   console.log("yes");
-    //   const id = this._route.snapshot.queryParamMap.get('id');
-    //   const type = this._route.snapshot.queryParamMap.get('type');
-    //
-    //   const validId = id && !isNaN(+id) ? +id : null;
-    //   if (!validId) return;
-    //
-    //   if (type === LISTING_TYPES.PRODUCT) {
-    //     this._productListingService.loadProductListing(validId).subscribe(product => {
-    //       this.article.set(product);
-    //     });
-    //   }
-    //   else {
-    //     this._auctionListingService.loadAuctionListing(validId).subscribe(auction => {
-    //       this.article.set(auction);
-    //     });
-    //   }
-    // }
+    if(isPlatformServer(this._platformId)){
+      console.log("yes");
+      const id = this._route.snapshot.queryParamMap.get('id');
+      const type = this._route.snapshot.queryParamMap.get('type');
+
+      const validId = id && !isNaN(+id) ? +id : null;
+      if (!validId) return;
+
+      if (type === LISTING_TYPES.PRODUCT) {
+        this._productListingService.loadProductListingPublic(validId).subscribe(product => {
+          this.article.set(product);
+        });
+      }
+      else {
+        this._auctionListingService.loadAuctionListingPublic(validId).subscribe(auction => {
+          this.article.set(auction);
+        });
+      }
+    }
 
     if(isPlatformBrowser(this._platformId)){
       this._breakpointObserver.observe(['(min-width: 1024px)']).pipe(takeUntil(this.destroy$)).subscribe(result => {
@@ -135,16 +135,16 @@ export class ProductDetails implements OnInit, OnDestroy {
         if (validId === null) return;
 
         if(type === 'Product'){
-          this._productListingService.loadProductListing(validId).subscribe({
+          this._productListingService.loadProudctListingAuth(validId).subscribe({
             next: product => {
               this.article.set(product);
               this.isFollowed.set(product.isFollowed ?? false);
-              this._listingService.addFollowedListing(product.id)
+              this._listingService.addFollowedListing(product.id);
             },
             error: err => console.error(err)
           });
         } else if (type === 'Auction'){
-          this._auctionListingService.loadAuctionListing(validId).subscribe({
+          this._auctionListingService.loadAuctionListingAuth(validId).subscribe({
             next: product => {
               this.article.set(product);
               this.isFollowed.set(product.isFollowed ?? false);

@@ -15,8 +15,19 @@ export class ProductListingService {
   private baseUrl = `${environment.itemiteApiUrl}/productlisting`;
 
   // API
-  private getProductListing(id: number): Observable<ProductListingDTO> {
-    return this.http.get<ProductListingDTO>(`${this.baseUrl}/${id}`);
+  private getProductListingPublic(id: number){
+    return this.http.get<ProductListingDTO>(`${this.baseUrl}/${id}`,
+      {
+        transferCache: true,
+        withCredentials: false
+      }
+    );
+  }
+
+  private getProductListingAuth(id: number): Observable<ProductListingDTO> {
+    return this.http.get<ProductListingDTO>(`${this.baseUrl}/${id}`, {
+      transferCache: true,
+    });
   }
 
   private postProductListing(formData: FormData): Observable<PostProductListingResponseDTO> {
@@ -85,13 +96,25 @@ export class ProductListingService {
     );
   }
 
-  loadProductListing(id: number){
-    return this.getProductListing(id).pipe(
+  loadProductListingPublic(id: number){
+    return this.getProductListingPublic(id).pipe(
       map(product => {
         return product;
       }),
       catchError(err => {
-        console.error('Error loadProductListing:', err);
+        console.error('Error loadProductListingPublic:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadProudctListingAuth(id: number){
+    return this.getProductListingAuth(id).pipe(
+      map(product => {
+        return product;
+      }),
+      catchError(err => {
+        console.error('Error loadProductListingAuth:', err);
         throw err;
       })
     );

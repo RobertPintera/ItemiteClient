@@ -64,8 +64,8 @@ export class ProductForm{
             return EMPTY;
           }
 
-          return formType === LISTING_TYPES.PRODUCT ? this._productListingService.loadProductListing(id)
-            : this._auctionListingService.loadAuctionListing(id);
+          return formType === LISTING_TYPES.PRODUCT ? this._productListingService.loadProudctListingAuth(id)
+            : this._auctionListingService.loadAuctionListingAuth(id);
         })
       )
       .subscribe({
