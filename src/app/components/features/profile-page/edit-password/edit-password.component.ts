@@ -1,10 +1,11 @@
 import {Component, computed, inject, OnInit, signal, Signal } from '@angular/core';
 import {PasswordValidator, UpdatePasswordErrors} from '../../../../core/utility/Validation';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {UserService} from '../../../../core/services/user-service/user.service';
+import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {ScaledText} from '../../../shared/scaled-text/scaled-text';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LoadingCircle} from "../../../shared/loading-circle/loading-circle";
+import {UserService} from '../../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-change-password',
@@ -18,7 +19,7 @@ import {LoadingCircle} from "../../../shared/loading-circle/loading-circle";
   styleUrl: './edit-password.component.css'
 })
 export class EditPassword implements OnInit {
-  private _userService: UserService = inject(UserService);
+  private _userService = inject(UserService);
   changePasswordForm: FormGroup;
 
   changePasswordFormHasErrors: Signal<boolean> = computed(() => {

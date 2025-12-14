@@ -3,7 +3,7 @@ import {Paginator} from '../../shared/paginator/paginator';
 import {Button} from '../../shared/button/button';
 import {Loader} from '../../shared/loader/loader';
 import {ListingResponseDTO} from '../../../core/models/ListingResponseDTO';
-import {UserService} from '../../../core/services/user-service/user.service';
+import {AuthService} from '../../../core/services/auth-service/auth.service';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {catchError, debounceTime, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
 import {PaginatedListingDTO} from '../../../core/models/PaginatedListingDTO';
@@ -13,6 +13,7 @@ import {Dialog} from '../../shared/dialog/dialog';
 import {LISTING_TYPES, ListingType} from '../../../core/constants/constants';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductItem} from '../../shared/product-item/product-item';
+import {UserService} from '../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-user-products',

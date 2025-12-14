@@ -1,10 +1,11 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../../../../../core/services/user-service/user.service';
+import {AuthService} from '../../../../../core/services/auth-service/auth.service';
 import {ExternalConfigsLayout} from '../../../../layouts/external-configs-layout/external-configs-layout';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LoadingCircle} from '../../../../shared/loading-circle/loading-circle';
 import {ErrorHandlerService} from '../../../../../core/services/error-handler-service/error-handler-service';
+import {UserService} from '../../../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-confirm-new-email',
@@ -19,8 +20,8 @@ import {ErrorHandlerService} from '../../../../../core/services/error-handler-se
 export class ConfirmNewEmail {
   private _errorHandler = inject(ErrorHandlerService);
   private _activatedRoute = inject(ActivatedRoute);
-  private _userService: UserService = inject(UserService);
-  private _router: Router = inject(Router);
+  private _userService = inject(UserService);
+  private _router = inject(Router);
 
   private _token = signal<string | undefined>(undefined);
   private _email = signal<string | undefined>(undefined);

@@ -1,7 +1,7 @@
 import {effect, inject, Injectable} from '@angular/core';
 import * as signalR from '@microsoft/signalR'
 import { environment } from '../../../../environments/environment.development';
-import {UserService} from '../user-service/user.service';
+import {AuthService} from '../auth-service/auth.service';
 import {MessageResponse} from '../../models/chat/MessageResponse';
 import {Observable, Subject} from 'rxjs';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
@@ -13,7 +13,7 @@ import {TranslateService} from '@ngx-translate/core';
 export class NotificationService {
   // todo maybe keep retrying to connect back to hub
 
-  private _userService = inject(UserService);
+  private _userService = inject(AuthService);
   private _hub: signalR.HubConnection;
 
   private _onMessageReceived = new Subject<MessageResponse>();

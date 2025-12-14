@@ -11,11 +11,12 @@ import {AuctionListingService} from '../../../core/services/auction-listing-serv
 import {Gallery} from '../../shared/gallery/gallery';
 import {DatePipe, isPlatformBrowser, isPlatformServer} from '@angular/common';
 import {Map, Marker} from 'leaflet';
-import {UserService} from '../../../core/services/user-service/user.service';
+import {AuthService} from '../../../core/services/auth-service/auth.service';
 import {LISTING_TYPES} from '../../../core/constants/constants';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
+import {UserService} from '../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-product-details',

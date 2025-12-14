@@ -14,7 +14,7 @@ import {
   UpdatePhoneErrors,
   UpdateUsernameErrors,
 } from '../../../core/utility/Validation';
-import {UserService} from '../../../core/services/user-service/user.service';
+import {AuthService} from '../../../core/services/auth-service/auth.service';
 import {Router} from '@angular/router';
 import {ForgotPassword} from './reset-password/forgot-password/forgot-password';
 import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
@@ -37,7 +37,7 @@ export class LoginRegister implements OnInit {
 
   router = inject(Router);
   private _translate = inject(TranslateService);
-  private _userService = inject(UserService);
+  private _userService = inject(AuthService);
   private _document = inject(DOCUMENT);
 
   private _showRegisterForm: WritableSignal<boolean> = signal(false);

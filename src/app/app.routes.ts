@@ -14,9 +14,9 @@ import {ProductForm} from './components/features/product-form/product-form';
 import {UserProducts} from './components/features/user-products/user-products';
 import {FollowedProducts} from './components/features/followed-products/followed-products';
 import {ConfirmNewEmail} from './components/features/profile-page/edit-email/confirm-new-email/confirm-new-email';
-import {authGuard} from './core/guards/auth-guard/auth-guard';
+import {AuthGuard} from './core/guards/auth-guard/auth-guard';
 import {ChatsMainWindow} from './components/features/chat/chats-main-window/chats-main-window';
-import {guestGuard} from './core/guards/guest-guard/guest-guard';
+import {GuestGuard} from './core/guards/guest-guard/guest-guard';
 
 export const routes: Routes = [
   {
@@ -29,26 +29,36 @@ export const routes: Routes = [
       },
       {
         path: 'products',
-        component: ProductsList
+        loadComponent: () =>
+          import('./components/features/products-list/products-list')
+            .then((m)=>m.ProductsList)
       },
       {
         path: 'product',
-        component: ProductDetails
+        loadComponent: () =>
+          import('./components/features/product-details/product-details')
+            .then((m) => m.ProductDetails)
       },
       {
         path: 'product-form',
-        component: ProductForm,
-        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./components/features/product-form/product-form')
+            .then(m => m.ProductForm),
+        canActivate: [AuthGuard],
       },
       {
         path: 'login',
-        component: LoginRegister,
-        canActivate: [guestGuard]
+        canActivate: [GuestGuard],
+        loadComponent: () =>
+          import('./components/features/login-register/login-register')
+            .then(m => m.LoginRegister),
       },
       {
         path: 'profile',
-        component: ProfilePage,
-        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./components/features/profile-page/profile-page')
+            .then(m => m.ProfilePage),
+        canActivate: [AuthGuard]
       },
       {
         path: 'dev',
@@ -56,44 +66,56 @@ export const routes: Routes = [
       },
       {
         path: 'user-products',
-        component: UserProducts,
-        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./components/features/user-products/user-products')
+            .then(m => m.UserProducts),
+        canActivate: [AuthGuard],
       },
       {
         path: 'followed-products',
-        component: FollowedProducts,
-        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./components/features/followed-products/followed-products')
+            .then(m => m.FollowedProducts),
+        canActivate: [AuthGuard],
       },
       {
         path: 'chats',
-        component: ChatsMainWindow,
-        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./components/features/chat/chats-main-window/chats-main-window')
+            .then(m => m.ChatsMainWindow),
+        canActivate: [AuthGuard],
       }
     ]
   },
   {
     path: 'confirm-email',
-    component: ConfirmEmail,
-    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./components/features/login-register/confirm-email/confirm-email')
+        .then(m => m.ConfirmEmail),
   },
   {
     path: 'change-email',
-    component: ConfirmNewEmail,
-    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./components/features/profile-page/edit-email/confirm-new-email/confirm-new-email')
+        .then(m=>m.ConfirmNewEmail),
+    canActivate: [AuthGuard],
   },
   {
     path: 'reset-password',
-    component: ResetPassword,
-    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./components/features/login-register/reset-password/reset-password')
+        .then(m => m.ResetPassword),
   },
   {
     path: 'external-login-error',
-    component: ExternalLoginError,
-    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./components/features/login-register/external-login-error/external-login-error')
+        .then(m => m.ExternalLoginError),
   },
   {
     path: 'me',
-    component: Me,
-    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./components/features/login-register/me/me')
+        .then((m) => m.Me),
   }
 ];

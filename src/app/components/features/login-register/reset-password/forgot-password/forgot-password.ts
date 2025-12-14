@@ -3,8 +3,9 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {ScaledText} from "../../../../shared/scaled-text/scaled-text";
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {UpdateEmailErrors, UpdateErrorTranslations} from '../../../../../core/utility/Validation';
-import {UserService} from '../../../../../core/services/user-service/user.service';
+import {AuthService} from '../../../../../core/services/auth-service/auth.service';
 import {LoadingCircle} from '../../../../shared/loading-circle/loading-circle';
+import {UserService} from '../../../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-forgot-password',

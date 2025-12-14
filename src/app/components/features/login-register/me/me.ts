@@ -1,5 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {Router} from '@angular/router';
+import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {UserService} from '../../../../core/services/user-service/user.service';
 
 @Component({
@@ -11,8 +12,8 @@ import {UserService} from '../../../../core/services/user-service/user.service';
 export class Me {
   // This component is used to fetch user data after external logging.
 
-  private _userService: UserService = inject(UserService);
-  private _router: Router = inject(Router);
+  private _userService = inject(UserService);
+  private _router= inject(Router);
   constructor() {
     this.GetUserData();
   }
