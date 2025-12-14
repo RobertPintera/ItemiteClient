@@ -26,7 +26,7 @@ export class AuctionListingService {
 
   private getAuctionListingAuth(id: number): Observable<AuctionListingDTO> {
     return this.http.get<AuctionListingDTO>(`${this.baseUrl}/${id}`, {
-      transferCache: true,
+      transferCache: false,
     });
   }
 

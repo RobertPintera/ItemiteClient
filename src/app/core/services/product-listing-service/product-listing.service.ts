@@ -26,7 +26,7 @@ export class ProductListingService {
 
   private getProductListingAuth(id: number): Observable<ProductListingDTO> {
     return this.http.get<ProductListingDTO>(`${this.baseUrl}/${id}`, {
-      transferCache: true,
+      transferCache: false,
     });
   }
 

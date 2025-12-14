@@ -50,6 +50,9 @@ export class ProductDetails implements OnInit, OnDestroy {
 
   private _showChat = signal(false);
   readonly showChat = this._showChat.asReadonly();
+
+  readonly isUserLogged = computed(() => this._userService.isUserLoggedIn());
+
   readonly isAuthorLogged = computed(() => {
     if(!this._userService.isUserLoggedIn()) return false;
     return this._userService.userBasicInfo().id === this.article()?.owner.id;
