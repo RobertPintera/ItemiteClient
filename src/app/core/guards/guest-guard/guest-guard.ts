@@ -10,5 +10,5 @@ export const GuestGuard: CanActivateFn = async (route, state) => {
 
   if(!isPlatformBrowser(platformId)) return true;
 
-  return !authService.isUserLoggedIn() ? true : router.createUrlTree(['/login']);
+  return !authService.isUserLoggedIn() ? true : router.createUrlTree(['']);
 };
