@@ -14,9 +14,9 @@ import {ProductForm} from './components/features/product-form/product-form';
 import {UserProducts} from './components/features/user-products/user-products';
 import {FollowedProducts} from './components/features/followed-products/followed-products';
 import {ConfirmNewEmail} from './components/features/profile-page/edit-email/confirm-new-email/confirm-new-email';
-import {AuthGuard} from './core/guards/auth-guard/auth-guard';
 import {ChatsMainWindow} from './components/features/chat/chats-main-window/chats-main-window';
 import {GuestGuard} from './core/guards/guest-guard/guest-guard';
+import {AuthGuard} from './core/guards/auth-guard/auth-guard';
 
 export const routes: Routes = [
   {

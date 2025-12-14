@@ -18,7 +18,8 @@
     "status":{
       "active": "aktywny",
       "archived": "zarchiwizowany"
-    }
+    },
+    "bids_history": "Historia licytacji"
   },
   "paginator": {
     "preposition": "z"

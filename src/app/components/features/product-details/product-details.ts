@@ -11,12 +11,12 @@ import {AuctionListingService} from '../../../core/services/auction-listing-serv
 import {Gallery} from '../../shared/gallery/gallery';
 import {DatePipe, isPlatformBrowser, isPlatformServer, NgClass} from '@angular/common';
 import {Map, Marker} from 'leaflet';
-import {AuthService} from '../../../core/services/auth-service/auth.service';
 import {LISTING_TYPES} from '../../../core/constants/constants';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
 import {UserService} from '../../../core/services/user-service/user.service';
+import {BidHistory} from './bid-history/bid-history';
 
 @Component({
   selector: 'app-product-details',
@@ -28,6 +28,7 @@ import {UserService} from '../../../core/services/user-service/user.service';
     RouterLink,
     FloatingChatContainer,
     NgClass,
+    BidHistory,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
@@ -66,6 +67,7 @@ export class ProductDetails implements OnInit, OnDestroy {
   readonly isFollowLoading = signal<boolean>(false);
   readonly isClickPhoneNumber = signal<boolean>(false);
   readonly isOwner = signal<boolean>(false);
+  readonly isOpenBidHistory = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -104,10 +106,7 @@ export class ProductDetails implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // This code will be used later
-
     if(isPlatformServer(this._platformId)){
-      console.log("yes");
       const id = this._route.snapshot.queryParamMap.get('id');
       const type = this._route.snapshot.queryParamMap.get('type');
 
@@ -217,6 +216,10 @@ export class ProductDetails implements OnInit, OnDestroy {
 
   toggleFollowed() {
     this._toggleFollowSubject.next();
+  }
+
+  openBidHistory() {
+    this.isOpenBidHistory.set(true);
   }
 
   private _handleToggle() {

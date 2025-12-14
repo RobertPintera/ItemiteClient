@@ -71,7 +71,6 @@ export class FollowedProducts implements OnInit, OnDestroy {
       takeUntil(this._destroy$)
     ).subscribe({
       next: (data) => {
-        console.log(data);
         this.listings.set(data);
       },
     });

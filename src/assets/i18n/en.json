@@ -18,7 +18,8 @@
     "status":{
       "active": "active",
       "archived": "archived"
-    }
+    },
+    "bids_history": "Bids history"
   },
   "paginator": {
     "preposition": "from"

@@ -6,6 +6,8 @@ import {AuctionListingDTO} from '../../models/AuctionListingDTO';
 import {PostAuctionListingDTO} from '../../models/PostAuctionListingDTO';
 import {PutAuctionListingDTO} from '../../models/PutAuctionListingDTO';
 import {PostAuctionListingResponseDTO} from '../../models/PostAuctionListingResponseDTO';
+import {Bid} from '../../models/auction-listing/Bid';
+import {PostBidAuctionListingResponseDTO} from '../../models/auction-listing/PostBidAuctionListingResponseDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +38,16 @@ export class AuctionListingService {
 
   private putAuctionListing(id: number, formData: FormData) {
     return this.http.put(`${this.baseUrl}/${id}`, formData);
+  }
+
+  private postBidAuctionListing(id: number, price: number): Observable<PostBidAuctionListingResponseDTO> {
+    return this.http.post<PostBidAuctionListingResponseDTO>(`${this.baseUrl}/${id}/bid`, {
+      price: price
+    });
+  }
+
+  private getBidHistoryAuctionListing(id: number): Observable<Bid[]> {
+    return this.http.get<Bid[]>(`${this.baseUrl}/${id}/bid`);
   }
 
   // Logic
@@ -99,7 +111,6 @@ export class AuctionListingService {
   loadAuctionListingPublic(id: number){
     return this.getAuctionListingPublic(id).pipe(
       map(auction => {
-        console.log(auction);
         return auction;
       }),
       catchError(err => {
@@ -112,11 +123,31 @@ export class AuctionListingService {
   loadAuctionListingAuth(id: number){
     return this.getAuctionListingAuth(id).pipe(
       map(auction => {
-        console.log(auction);
         return auction;
       }),
       catchError(err => {
         console.error('Error loadProductListingAuth:', err);
+        throw err;
+      })
+    );
+  }
+
+  bidAuctionListing(id: number, price: number){
+    return this.postBidAuctionListing(id,price).pipe(
+      catchError(err => {
+        console.error('Error getBidHistoryAuctionListing:', err);
+        throw err;
+      })
+    );
+  }
+
+  showBidHistoryAuctionListing(id: number){
+    return this.getBidHistoryAuctionListing(id).pipe(
+      map(bids => {
+        return bids;
+      }),
+      catchError(err => {
+        console.error('Error getBidHistoryAuctionListing:', err);
         throw err;
       })
     );

@@ -75,6 +75,7 @@
                   <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 } @else {
                   <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
+
                 }
                 <app-button (clickButton)="clickNumber()"
                             [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
@@ -93,9 +94,10 @@
                   <app-button label="{{'product_details.bid' | translate}}"/>
                   <app-button (clickButton)="OnMessageClicked()" label="{{'product_details.send_message' | translate}}" severity="secondary"/>
                 }
+                <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>
                 <app-button (clickButton)="clickNumber()"
                             [label]="isClickPhoneNumber() ? (auction.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" severity="primary">
+                          : ( 'product_details.call' | translate )" severity="secondary">
                 </app-button>
               }
             </div>
@@ -136,9 +138,10 @@
                 <app-button label="{{'product_details.bid' | translate}}"/>
                 <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               }
+              <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>
               <app-button (clickButton)="clickNumber()"
                           [label]="isClickPhoneNumber() ? (auction.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" severity="primary">
+                          : ( 'product_details.call' | translate )" severity="secondary">
               </app-button>
             }
           }
@@ -149,3 +152,6 @@
     }
   </div>
 </div>
+@if (article(); as article){
+  <app-bid-history [id]="article.id" [(isOpen)]="isOpenBidHistory"/>
+}

@@ -3,7 +3,7 @@ import {inject, PLATFORM_ID} from '@angular/core';
 import {UserService} from '../../services/user-service/user.service';
 import {isPlatformBrowser} from '@angular/common';
 
-export const authGuard: CanActivateFn = async (route, state) => {
+export const AuthGuard: CanActivateFn = async (route, state) => {
   const platformId = inject(PLATFORM_ID);
   const userService = inject(UserService);
   const router = inject(Router);
