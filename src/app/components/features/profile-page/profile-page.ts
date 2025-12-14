@@ -5,7 +5,7 @@ import {
   inject, OnInit,
   PLATFORM_ID, Signal, SecurityContext,
   signal,
-  WritableSignal
+  WritableSignal, effect
 } from '@angular/core';
 import {GeocoderAutocomplete} from '../../shared/geocoder-autocomplete/geocoder-autocomplete';
 import {Map, Marker} from 'leaflet';
@@ -19,12 +19,13 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 import {FileUpload} from '../../shared/file-upload/file-upload';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {UserService} from '../../../core/services/user-service/user.service';
+import {AuthService} from '../../../core/services/auth-service/auth.service';
 import {Router, RouterLink} from '@angular/router';
 import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
 import {EditEmail} from './edit-email/edit-email';
 import {EditPassword} from './edit-password/edit-password.component';
 import {Button} from '../../shared/button/button';
+import {UserService} from '../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -46,12 +47,13 @@ import {Button} from '../../shared/button/button';
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.css'
 })
-export class ProfilePage implements AfterViewInit, OnInit {
+export class ProfilePage implements OnInit {
 
   // region Injectables
   private _geoapify: GeoapifyService = inject(GeoapifyService);
   private _sanitizer: DomSanitizer = inject(DomSanitizer);
   private _userService: UserService = inject(UserService);
+  private _authService: AuthService = inject(AuthService);
   private _router: Router = inject(Router);
   // endregion
 
@@ -142,7 +144,16 @@ export class ProfilePage implements AfterViewInit, OnInit {
   // endregion
 
   async ngOnInit() {
+    if(!isPlatformBrowser(this._platformId)) return;
     await this.LoadUserInfo();
+  }
+
+  constructor() {
+    effect(() => {
+      if(!this.loading() && this._map === undefined) {
+        this.InitMap(50.2970546, 18.6926949, "Gliwice");
+      }
+    });
   }
 
   async LoadUserInfo() {
@@ -177,14 +188,14 @@ export class ProfilePage implements AfterViewInit, OnInit {
 
 
   async OnLogoutClicked() {
-    const success = await this._userService.Logout();
+    const success = await this._authService.Logout();
     if(success) {
       await this._router.navigateByUrl('');
     }
   }
 
   async LogoutAllDevices() {
-    const success = await this._userService.LogoutAllDevices();
+    const success = await this._authService.LogoutAllDevices();
     if(!success) return;
     this._router.navigateByUrl('');
   }
@@ -467,9 +478,6 @@ export class ProfilePage implements AfterViewInit, OnInit {
     });
   }
 
-  async ngAfterViewInit() {
-    await this.InitMap(50.2970546, 18.6926949, "Gliwice");
-  }
 
   goToUserProducts(){
     this._router.navigate(['/user-products']);

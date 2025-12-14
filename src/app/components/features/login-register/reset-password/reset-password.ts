@@ -7,9 +7,10 @@ import {
   PasswordValidator,
   UpdatePasswordErrors,
 } from '../../../../core/utility/Validation';
-import {UserService} from '../../../../core/services/user-service/user.service';
+import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoadingCircle} from '../../../shared/loading-circle/loading-circle';
+import {UserService} from '../../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-reset-password',

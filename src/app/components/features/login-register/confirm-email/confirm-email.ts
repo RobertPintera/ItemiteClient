@@ -2,8 +2,9 @@ import {Component, computed, inject, signal, WritableSignal} from '@angular/core
 import {TranslatePipe} from '@ngx-translate/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../../../../core/services/user-service/user.service';
+import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {ExternalConfigsLayout} from '../../../layouts/external-configs-layout/external-configs-layout';
+import {UserService} from '../../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-confirm-email',

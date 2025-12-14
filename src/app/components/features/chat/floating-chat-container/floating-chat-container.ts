@@ -1,9 +1,10 @@
 import {Component, computed, ElementRef, inject, input, output, signal, Signal, ViewChild} from '@angular/core';
 import {Chat} from '../chat/chat';
 import {ChatMemberInfo} from '../../../../core/models/chat/ChatMemberInfo';
-import {UserService} from '../../../../core/services/user-service/user.service';
+import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {User} from "../../../../core/models/User";
 import {CdkDrag, CdkDragHandle} from "@angular/cdk/drag-drop";
+import {UserService} from '../../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-floating-chat-container',

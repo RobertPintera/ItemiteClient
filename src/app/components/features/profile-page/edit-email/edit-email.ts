@@ -3,8 +3,9 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {TranslatePipe} from '@ngx-translate/core';
 import {PasswordValidator, UpdateEmailErrors, UpdatePasswordErrors} from '../../../../core/utility/Validation';
 import {ScaledText} from '../../../shared/scaled-text/scaled-text';
-import {UserService} from '../../../../core/services/user-service/user.service';
+import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {LoadingCircle} from "../../../shared/loading-circle/loading-circle";
+import {UserService} from '../../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-edit-email',
@@ -29,8 +30,8 @@ export class EditEmail implements OnInit {
   private _passwordErrors: WritableSignal<string[]> = signal([]);
   readonly passwordErrors: Signal<string[]> = this._passwordErrors.asReadonly();
   readonly emailErrors: Signal<string[]> = this._emailErrors.asReadonly();
-  hasPasswordErrors: Signal<boolean> = computed(() => this.passwordErrors().length != 0);
-  hasEmailErrors: Signal<boolean> = computed(() => this.emailErrors().length != 0);
+  readonly hasPasswordErrors: Signal<boolean> = computed(() => this.passwordErrors().length != 0);
+  readonly hasEmailErrors: Signal<boolean> = computed(() => this.emailErrors().length != 0);
 
   private _loading = signal(false);
   readonly loading = this._loading.asReadonly();

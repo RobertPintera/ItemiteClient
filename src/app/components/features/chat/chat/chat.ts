@@ -12,7 +12,7 @@ import {
 import {MessageResponse} from '../../../../core/models/chat/MessageResponse';
 import {PhotoResponseDTO} from '../../../../core/models/PhotoResponseDTO';
 import {Message} from './message/message';
-import {UserService} from '../../../../core/services/user-service/user.service';
+import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {ChatMemberInfo} from '../../../../core/models/chat/ChatMemberInfo';
 import {FileUpload} from "../../../shared/file-upload/file-upload";
 import {LoadingCircle} from '../../../shared/loading-circle/loading-circle';
@@ -24,6 +24,7 @@ import {MessageService} from '../../../../core/services/message-service/message.
 import {ErrorHandlerService} from '../../../../core/services/error-handler-service/error-handler-service';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotificationService} from '../../../../core/services/notification-service/notification.service';
+import {UserService} from '../../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-chat',
