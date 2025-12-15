@@ -51,8 +51,6 @@ export class NotificationService {
     effect(() => {
       if(this._userService.isUserLoggedIn()) {
         this.Connect();
-        // todo tech notification count via api
-        this._notificationCount.set(3);
       }
       else {
         this.Disconnect();
@@ -76,6 +74,7 @@ export class NotificationService {
 
   private async Disconnect() {
     if (this._hub.state === signalR.HubConnectionState.Disconnected) return;
+    this.UnregisterMessageEvents();
     await this._hub.stop();
   }
 
@@ -86,7 +85,7 @@ export class NotificationService {
 
     this._hub.onreconnected(connectionId => {
       console.log('SignalR for notification service reconnected:', connectionId);
-      // optional: refresh state from API
+      this.FetchUnreadCount();
     });
 
     this._hub.onclose(error => {
@@ -96,12 +95,14 @@ export class NotificationService {
 
   private RegisterMessageEvents() {
     this._hub.on("MessageReceived", (message: MessageResponse) => {
-      console.log("Received message: " + message)
+      console.log("Received message")
+      console.log(message);
       this._onMessageReceived.next(message);
     });
 
     this._hub.on("MessageUpdated", (message: MessageResponse) => {
-      console.log("Edited message: " + message);
+      console.log("Edited message");
+      console.log(message);
       this._onMessageUpdated.next(message);
     });
 
@@ -111,17 +112,16 @@ export class NotificationService {
     }
 
     this._hub.on("MessageDeleted", (message: MessageDeletedResponse) => {
-      console.log("Deleted message: " + message);
+      console.log("Deleted message");
+      console.log(message);
       this._onMessageDeleted.next(message.messageId);
     })
   }
 
   private async FetchUnreadCount() {
-
     interface notificationCountResponseDTO {
       unreadNotificationsCount: number
     }
-
     try {
       await lastValueFrom(
         this._http.get<notificationCountResponseDTO>(`${environment.itemiteApiUrl}/notification/unread-count`,
@@ -134,6 +134,8 @@ export class NotificationService {
       return false;
     }
   }
+
+
 
   private UnregisterMessageEvents() {
     this._hub.off("MessageReceived");
