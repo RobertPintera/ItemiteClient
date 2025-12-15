@@ -269,5 +269,11 @@
   },
   "followed_products": {
     "header": "Followed products"
+  },
+  "on_profile_menu": {
+    "profile": "My profile",
+    "notifications": "Notifications",
+    "my_products": "My products",
+    "chats": "Chats"
   }
 }
