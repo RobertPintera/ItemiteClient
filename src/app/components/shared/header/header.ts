@@ -69,8 +69,13 @@ export class Header {
     this.selectedLanguage.set(language);
   }
 
-  async SwitchShowProfileMenu() {
+  async SwitchShowProfileMenu(state: boolean | null = null) {
     // dont overlap animations
+    if(state !== null) {
+      this._showProfileMenu.set(state);
+      return;
+    }
+
     if(this.playHideAnim()) return;
 
     if(this._showProfileMenu()) {
