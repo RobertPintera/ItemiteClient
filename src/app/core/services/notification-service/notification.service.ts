@@ -1,4 +1,4 @@
-import {effect, inject, Injectable} from '@angular/core';
+import {effect, inject, Injectable, signal} from '@angular/core';
 import * as signalR from '@microsoft/signalR'
 import { environment } from '../../../../environments/environment.development';
 import {AuthService} from '../auth-service/auth.service';
@@ -24,6 +24,9 @@ export class NotificationService {
   get onMessageDeleted() { return this._onMessageDeleted.asObservable(); }
   get onMessageUpdated() { return this._onMessageUpdated.asObservable(); }
 
+  private _notificationCount = signal(3);
+  readonly notificationCount = this._notificationCount.asReadonly();
+
   constructor() {
     this._hub = new signalR.HubConnectionBuilder()
       .withUrl(`${environment.itemiteHubs}/notifications`)
@@ -32,9 +35,12 @@ export class NotificationService {
     effect(() => {
       if(this._userService.isUserLoggedIn()) {
         this.Connect();
+        // todo tech notification count via api
+        this._notificationCount.set(3);
       }
       else {
         this.Disconnect();
+        this._notificationCount.set(0);
       }
     });
   }
