@@ -1,26 +1,17 @@
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {
   computed,
   effect,
   inject,
   Injectable,
-  makeStateKey,
-  OnInit,
   PLATFORM_ID,
-  Signal,
   signal,
-  TransferState
 } from '@angular/core';
 import {UserBasicInfo} from '../../models/UserBasicInfo';
-import {filter, interval, lastValueFrom, map, Observable, of, race, take, takeWhile, timer} from 'rxjs';
+import {filter, interval, lastValueFrom, race, take, timer} from 'rxjs';
 import {environment} from '../../../../environments/environment.development';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 import {User} from '../../models/User';
-import {clearTimeout} from 'node:timers';
-import {subscribe} from 'node:diagnostics_channel';
-import {Localization} from '../../models/Localization';
-import {UserService} from '../user-service/user.service';
-import {LocalStorageService} from '../localstorage-service/localstorage.service';
 import {isPlatformBrowser} from '@angular/common';
 
 @Injectable({
@@ -31,7 +22,6 @@ export class AuthService {
 
   private http: HttpClient = inject(HttpClient);
   private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
-  private transferState = inject(TransferState);
 
   private _isUserLoggedIn = signal<boolean | undefined>(undefined);
   readonly isUserLoggedIn = computed(() => this._isUserLoggedIn() ?? false);
@@ -61,6 +51,13 @@ export class AuthService {
         this.ClearUserInfo();
       }
     });
+
+    this.errorHandlerService.onLoggedOutDetected.subscribe(() =>
+      {
+        this.ClearUserInfo();
+        this._isUserLoggedIn.set(false);
+      }
+    );
   }
 
   async ResolveAuth(): Promise<boolean> {

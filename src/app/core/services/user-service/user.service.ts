@@ -95,6 +95,7 @@ export class UserService {
       // User is no longer logged-in
       if(error.status == 401) {
         this.ClearUserInfo();
+        this.errorHandlerService.InvokeLoggedOutEvent();
       }
       return false;
     }
