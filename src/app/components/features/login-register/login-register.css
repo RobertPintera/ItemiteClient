@@ -6,13 +6,11 @@
   display: none;
 }
 
-/* Basic reset styles for scaling */
 .scaleIn {
   animation-name: scaleIn;
   animation-duration: 0.5s;
 }
 
-/* Keyframe animation for the scale transition */
 @keyframes scaleIn {
   0% {
     transform: scaleY(0);
