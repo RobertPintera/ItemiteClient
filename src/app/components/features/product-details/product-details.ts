@@ -16,7 +16,8 @@ import {ListingService} from '../../../core/services/listing-service/listing.ser
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
 import {UserService} from '../../../core/services/user-service/user.service';
-import {BidHistory} from './bid-history/bid-history';
+import {BidHistoryDialog} from './bid-history-dialog/bid-history-dialog';
+import {BidDialog} from './bid-dialog/bid-dialog';
 
 @Component({
   selector: 'app-product-details',
@@ -28,7 +29,8 @@ import {BidHistory} from './bid-history/bid-history';
     RouterLink,
     FloatingChatContainer,
     NgClass,
-    BidHistory,
+    BidHistoryDialog,
+    BidDialog,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
@@ -67,7 +69,9 @@ export class ProductDetails implements OnInit, OnDestroy {
   readonly isFollowLoading = signal<boolean>(false);
   readonly isClickPhoneNumber = signal<boolean>(false);
   readonly isOwner = signal<boolean>(false);
+
   readonly isOpenBidHistory = signal<boolean>(false);
+  readonly isOpenBidDialog = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -220,6 +224,31 @@ export class ProductDetails implements OnInit, OnDestroy {
 
   openBidHistory() {
     this.isOpenBidHistory.set(true);
+  }
+
+  openBid(){
+    if (!this._userService.isUserLoggedIn()) {
+      this._router.navigate(['login'], {
+        queryParams: {
+          returnUrl: this._router.url
+        }
+      });
+      return;
+    }
+    this.isOpenBidDialog.set(true);
+  }
+
+  updateAuction() {
+    const id = this.auction?.id;
+    if(!id) return;
+
+    this._auctionListingService.loadAuctionListingAuth(id).subscribe({
+      next: product => {
+        this.article.set(product);
+        this.isFollowed.set(product.isFollowed ?? false);
+      },
+      error: err => console.error(err)
+    });
   }
 
   private _handleToggle() {

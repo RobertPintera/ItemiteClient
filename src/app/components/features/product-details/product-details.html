@@ -91,7 +91,7 @@
                   <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
                   <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 } @else {
-                  <app-button label="{{'product_details.bid' | translate}}"/>
+                  <app-button label="{{'product_details.bid' | translate}}" (clickButton)="openBid()"/>
                   <app-button (clickButton)="OnMessageClicked()" label="{{'product_details.send_message' | translate}}" severity="secondary"/>
                 }
                 <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>
@@ -135,7 +135,7 @@
                 <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" />
                 <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               } @else {
-                <app-button label="{{'product_details.bid' | translate}}"/>
+                <app-button label="{{'product_details.bid' | translate}}" (clickButton)="openBid()"/>
                 <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               }
               <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>
@@ -152,6 +152,7 @@
     }
   </div>
 </div>
-@if (article(); as article){
-  <app-bid-history [id]="article.id" [(isOpen)]="isOpenBidHistory"/>
+@if (auction){
+  <app-bid-dialog-history [id]="auction.id" [(isOpen)]="isOpenBidHistory"/>
+  <app-bid-dialog [auctionId]="auction.id" [currentBid]="auction.currentBid ?? auction.startingBid" [(isOpen)]="isOpenBidDialog" (bidAction)="updateAuction()"/>
 }

@@ -1,19 +1,19 @@
-import {Component, inject, input, model, OnInit, signal} from '@angular/core';
+import {Component, effect, inject, input, model, OnInit, signal} from '@angular/core';
 import {Bid} from '../../../../core/models/auction-listing/Bid';
 import {AuctionListingService} from '../../../../core/services/auction-listing-service/auction-listing.service';
 import {Dialog} from '../../../shared/dialog/dialog';
 import {DatePipe} from '@angular/common';
 
 @Component({
-  selector: 'app-bid-history',
+  selector: 'app-bid-dialog-history',
   imports: [
     Dialog,
     DatePipe
   ],
-  templateUrl: './bid-history.html',
-  styleUrl: './bid-history.css',
+  templateUrl: './bid-history-dialog.html',
+  styleUrl: './bid-history-dialog.css',
 })
-export class BidHistory implements OnInit {
+export class BidHistoryDialog implements OnInit {
   private _auctionListingService = inject(AuctionListingService);
 
   readonly isOpen = model.required<boolean>();
@@ -24,6 +24,16 @@ export class BidHistory implements OnInit {
     this._auctionListingService
       .showBidHistoryAuctionListing(this.id())
       .subscribe(bids => this.bids.set(bids));
+  }
+
+  constructor() {
+    effect(() => {
+      if (!this.isOpen()) return;
+
+      this._auctionListingService
+        .showBidHistoryAuctionListing(this.id())
+        .subscribe(bids => this.bids.set(bids));
+    });
   }
 
   closeDialog(){

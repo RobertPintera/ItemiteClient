@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BidHistory } from './bid-history';
+import { BidHistoryDialog } from './bid-history-dialog';
 
-describe('BidHistory', () => {
-  let component: BidHistory;
-  let fixture: ComponentFixture<BidHistory>;
+describe('BidHistoryDialog', () => {
+  let component: BidHistoryDialog;
+  let fixture: ComponentFixture<BidHistoryDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BidHistory]
+      imports: [BidHistoryDialog]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BidHistory);
+    fixture = TestBed.createComponent(BidHistoryDialog);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
