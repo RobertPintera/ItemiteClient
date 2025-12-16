@@ -376,6 +376,7 @@
   },
   "media_manager": {
     "edit_order": "Edit order",
+    "edit_images": "Edit images",
     "no_images": "There are no images!"
   },
   "product_form": {

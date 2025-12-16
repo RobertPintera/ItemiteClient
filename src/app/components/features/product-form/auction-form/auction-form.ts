@@ -182,7 +182,9 @@ export class AuctionForm {
         locationState: this.form.value.localization?.state ?? '',
         startingBid: this.form.value.startingBid ?? 0,
         categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
-        dateEnds: this.form.value.dateEnds ? this.form.value.dateEnds + "Z" : '',
+        dateEnds: this.form.value.dateEnds
+          ? this.toUtcISOString(this.form.value.dateEnds)
+          : '',
         existingPhotoIds: existingPhotoIds,
         existingPhotoOrders: existingPhotoOrders,
         newImages: newImages,
@@ -192,7 +194,7 @@ export class AuctionForm {
       console.log(this.form.value.dateEnds);
 
       this._auctionListingService.updateAuctionListing(auction.id ,payload).subscribe({
-        next: updatedAuction => {
+        next: _ => {
           this.isSubmitting.set(false);
           void this._router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
         },
@@ -224,7 +226,9 @@ export class AuctionForm {
         locationCity: this.form.value.localization?.city ?? '',
         locationState: this.form.value.localization?.state ?? '',
         startingBid: this.form.value.startingBid ?? 0,
-        dateEnds: this.form.value.dateEnds ?? '',
+        dateEnds: this.form.value.dateEnds
+          ? this.toUtcISOString(this.form.value.dateEnds)
+          : '',
         categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
         images: imageFiles,
         imageOrders: imageOrders,
@@ -315,5 +319,23 @@ export class AuctionForm {
     };
 
     this.form.get('subcategory')?.setValue(subOption);
+  }
+
+  private toUtcISOString(date: string): string {
+    const local = date.length === 10
+      ? new Date(date + 'T00:00:00')
+      : new Date(date);
+
+    return new Date(
+      Date.UTC(
+        local.getFullYear(),
+        local.getMonth(),
+        local.getDate(),
+        local.getHours(),
+        local.getMinutes(),
+        0,
+        0
+      )
+    ).toISOString();
   }
 }
