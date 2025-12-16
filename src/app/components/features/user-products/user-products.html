@@ -32,7 +32,7 @@
 </div>
 
 @if (isOpenDialog()){
-  <app-dialog (closed)="closeDialog()">
+  <app-dialog (closed)="closeDialog()" [header]="'user_products.select_offer' | translate">
     <div class="flex flex-col justify-center h-full w-full gap-4">
       <div class="px-16 flex flex-row gap-4">
         <app-button [label]="'listing_types.product' | translate" (clickButton)="goToProductForm(LISTING_TYPES.PRODUCT)"/>
