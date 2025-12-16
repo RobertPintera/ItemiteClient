@@ -277,5 +277,11 @@
   },
   "followed_products": {
     "header": "Obserwowane produkty"
+  },
+  "on_profile_menu": {
+    "profile": "Mój profil",
+    "notifications": "Powiadomienia",
+    "my_products": "Moje ogłoszenia",
+    "chats": "Rozmowy"
   }
 }

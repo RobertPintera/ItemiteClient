@@ -1,6 +1,8 @@
 import {Injectable, Signal, signal} from '@angular/core';
 import {ErrorHandler} from '../../utility/ErrorHandler';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Subject} from 'rxjs';
+import {MessageResponse} from '../../models/chat/MessageResponse';
 
 @Injectable(
   {
@@ -18,6 +20,13 @@ export class ErrorHandlerService {
   // These persist
   readonly lastErrorMessage: Signal<string> = this._lastErrorMessage.asReadonly();
   readonly lastErrorCode : Signal<string> = this._lastErrorCode.asReadonly();
+
+  private _onLoggedErrorCodeDetected = new Subject<void>();
+  get onLoggedOutDetected() { return this._onLoggedErrorCodeDetected.asObservable(); }
+
+  InvokeLoggedOutEvent() {
+    this._onLoggedErrorCodeDetected.next();
+  }
 
   async SendRawErrorMessage(error: string, displayTime: number = 5000) {
     this._errorMessage.set(error);
