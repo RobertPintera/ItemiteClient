@@ -127,7 +127,7 @@
               </app-button>
             } @else if(auction) {
               <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
-              <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
+              <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd HH:mm' }}</p>
               <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
               <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
               <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
