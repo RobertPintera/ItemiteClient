@@ -84,7 +84,21 @@ export const routes: Routes = [
           import('./components/features/chat/chats-main-window/chats-main-window')
             .then(m => m.ChatsMainWindow),
         canActivate: [AuthGuard],
-      }
+      },
+      {
+        path: 'purchases',
+        loadComponent: () =>
+          import('./components/features/purchases/purchases')
+            .then(m => m.Purchases),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'sales',
+        loadComponent: () =>
+          import('./components/features/sales/sales')
+            .then(m => m.Sales),
+        canActivate: [AuthGuard],
+      },
     ]
   },
   {

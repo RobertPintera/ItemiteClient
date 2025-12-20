@@ -292,8 +292,13 @@
     "phone": "Phone",
     "your_offers": "Your offers",
 
+    "your_articles": "Your articles",
+    "your_product_and_auctions": "Products & auctions",
+    "your_followed_products": "Followed products",
     "billing_payments": "Billing & payments",
-    "your_account": "Your stripe account"
+    "your_account": "Stripe account",
+    "your_purchases": "Purchases",
+    "your_sales": "Sales"
   },
   "user_edition": {
     "edit_password": "Edit password",
@@ -419,6 +424,7 @@
   "cancel": "Cancel",
   "user_products": {
     "header": "Your products and auctions",
+    "no_products": "Can't find any article. Create your first product!",
     "select_offer": "Select offer"
   },
   "geo_map_autocomplete": {
@@ -449,7 +455,8 @@
     "error_url_listing_type": "The URL contains an invalid form type."
   },
   "followed_products": {
-    "header": "Followed products"
+    "header": "Followed products",
+    "no_products": "Can't find any article. Follow your first product!"
   },
   "on_profile_menu": {
     "profile": "My profile",

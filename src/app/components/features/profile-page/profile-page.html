@@ -188,14 +188,7 @@
     </div>
 
     <!-- Owned Articles -->
-
-    <div class="flex flex-col mt-4 gap-2">
-      <p class="text-2xl md:text-3xl lg:text-4xl">Your articles</p>
-      <div class="flex flex-wrap gap-2 w-full pl-4">
-        <app-button label="Your products and autions" (clickButton)="goToUserProducts()"/>
-        <app-button routerLink="/followed-products" label="Followed products" severity="secondary"/>
-      </div>
-    </div>
+    <app-own-products/>
 
     <!-- Stripe -->
     <app-billing-and-payments/>

@@ -290,8 +290,13 @@
     "profile_image": "Zdjęcie profilowe",
     "phone": "Telefon",
 
+    "your_articles": "Twoje artykuły",
+    "your_product_and_auctions": "Produkty i aukcje",
+    "your_followed_products": "Obserwowane produkty",
     "billing_payments": "Rozliczenia i Płatności",
-    "your_account": "Twoje konto Stripe"
+    "your_account": "Konto Stripe",
+    "your_purchases": "Zakupy",
+    "your_sales": "Sprzedaże"
   },
   "user_edition": {
     "edit_password": "Edytuj hasło",
@@ -412,6 +417,7 @@
   },
   "user_products": {
     "header": "Twoje produkty i aukcje",
+    "no_products": "Nie można znaleźć żadnego artykułu. Stwórz twój pierwszy produkt!",
     "select_offer": "Wybierz ofertę"
   },
   "geo_map_autocomplete": {
@@ -442,7 +448,8 @@
     "error_url_listing_type": "URL zawiera nieprawidłowy typ formularza."
   },
   "followed_products": {
-    "header": "Obserwowane produkty"
+    "header": "Obserwowane produkty",
+    "no_products": "Nie można znaleźć żadnego artykułu. Zaobserwuj twój pierwszy produkt!"
   },
   "on_profile_menu": {
     "profile": "Mój profil",
