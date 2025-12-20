@@ -8,6 +8,7 @@ import {PutAuctionListingDTO} from '../../models/PutAuctionListingDTO';
 import {PostAuctionListingResponseDTO} from '../../models/PostAuctionListingResponseDTO';
 import {Bid} from '../../models/auction-listing/Bid';
 import {PostBidAuctionListingResponseDTO} from '../../models/auction-listing/PostBidAuctionListingResponseDTO';
+import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ import {PostBidAuctionListingResponseDTO} from '../../models/auction-listing/Pos
 export class AuctionListingService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/auctionlisting`;
+  private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
 
   // API
   private getAuctionListingPublic(id: number): Observable<AuctionListingDTO> {
@@ -71,6 +73,7 @@ export class AuctionListingService {
 
     return this.postAuctionListingDTO(formData).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error createAuctionListing:',err);
         throw err;
       })
@@ -102,6 +105,7 @@ export class AuctionListingService {
 
     return this.putAuctionListing(id, formData).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error updateAuctionListing:', err);
         throw err;
       })
@@ -114,6 +118,7 @@ export class AuctionListingService {
         return auction;
       }),
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadProductListingPublic:', err);
         throw err;
       })
@@ -126,6 +131,7 @@ export class AuctionListingService {
         return auction;
       }),
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadProductListingAuth:', err);
         throw err;
       })
@@ -135,6 +141,7 @@ export class AuctionListingService {
   bidAuctionListing(id: number, price: number){
     return this.postBidAuctionListing(id,price).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error getBidHistoryAuctionListing:', err);
         throw err;
       })
@@ -147,6 +154,7 @@ export class AuctionListingService {
         return bids;
       }),
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error getBidHistoryAuctionListing:', err);
         throw err;
       })

@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, signal} from '@angular/core';
+import {Component, effect, inject, input, model, signal} from '@angular/core';
 import {Button} from "../../../shared/button/button";
 import {CascadeSelect} from "../../../shared/cascade-select/cascade-select";
 import {ComboBox} from "../../../shared/combo-box/combo-box";
@@ -45,6 +45,7 @@ export class AuctionForm {
   private router = inject(Router);
   private location = inject(Location);
 
+  readonly loading = model.required<boolean>();
   readonly auction = input<AuctionListingDTO | null>(null);
 
   readonly categories = signal<CategoryTreeDTO | null>(null);
@@ -91,7 +92,7 @@ export class AuctionForm {
       Validators.required,
       isEmptyValidator,
       Validators.minLength(2),
-      Validators.maxLength(500)
+      Validators.maxLength(2500)
     ])
   });
 

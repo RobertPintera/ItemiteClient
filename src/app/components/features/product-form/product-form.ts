@@ -11,13 +11,15 @@ import {ProductListingDTO} from '../../../core/models/ProductListingDTO';
 import {AuctionListingDTO} from '../../../core/models/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
 import {EMPTY, map, switchMap} from 'rxjs';
+import {LoadingDialog} from '../../shared/loading-dialog/loading-dialog';
 
 @Component({
   selector: 'app-product-form',
   imports: [
     ProductGeneralForm,
     AuctionForm,
-    TranslatePipe
+    TranslatePipe,
+    LoadingDialog
   ],
   templateUrl: './product-form.html',
   styleUrl: './product-form.css'
@@ -30,6 +32,7 @@ export class ProductForm{
 
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
   readonly formType = signal<ListingType | null>(null);
+  readonly loading = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -64,7 +67,8 @@ export class ProductForm{
             return EMPTY;
           }
 
-          return formType === LISTING_TYPES.PRODUCT ? this.productListingService.loadProudctListingAuth(id)
+          return formType === LISTING_TYPES.PRODUCT
+            ? this.productListingService.loadProudctListingAuth(id)
             : this.auctionListingService.loadAuctionListingAuth(id);
         })
       )
@@ -72,7 +76,6 @@ export class ProductForm{
         next: listing => {
           this.article.set(listing);
         },
-        error: err => console.error(err)
       });
   }
 

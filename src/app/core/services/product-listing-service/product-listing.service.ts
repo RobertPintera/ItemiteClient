@@ -6,6 +6,7 @@ import {ProductListingDTO} from '../../models/ProductListingDTO';
 import {PutProductListingDTO} from '../../models/PutProductListingDTO';
 import {PostProductListingDTO} from '../../models/PostProductListingDTO';
 import {PostProductListingResponseDTO} from '../../models/PostProductListingResponseDTO';
+import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import {PostProductListingResponseDTO} from '../../models/PostProductListingResp
 export class ProductListingService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/productlisting`;
+  private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
 
   // API
   private getProductListingPublic(id: number){
@@ -59,6 +61,7 @@ export class ProductListingService {
 
     return this.postProductListing(formData).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error createProductListing:', err);
         throw err;
       })
@@ -90,6 +93,7 @@ export class ProductListingService {
 
     return this.putProductListing(id, formData).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error updateProductListing:', err);
         throw err;
       })
@@ -102,6 +106,7 @@ export class ProductListingService {
         return product;
       }),
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadProductListingPublic:', err);
         throw err;
       })
@@ -114,6 +119,7 @@ export class ProductListingService {
         return product;
       }),
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadProductListingAuth:', err);
         throw err;
       })

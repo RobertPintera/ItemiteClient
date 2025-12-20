@@ -330,6 +330,7 @@
   "controls": {
     "edit": "Edytuj",
     "save": "Zapisz",
+    "create": "Stwórz",
     "delete": "Usuń",
     "cancel": "Anuluj",
     "confirm": "Potwierdź",
@@ -377,7 +378,7 @@
     "field_empty": "Pole nie może być puste",
     "field_required": "Pole jest wymagane",
     "name_len": "Nazwa musi mieć od 2 do 30 znaków",
-    "description_len": "Opis musi mieć od 2 do 500 znaków",
+    "description_len": "Opis musi mieć od 2 do 2500 znaków",
     "price_range": "Cena musi być pomiędzy 0 a 1000000",
     "starting_bid_range": "Cena wywoławcza musi być pomiędzy 0 a 1000000",
     "price_pattern": "Cena nie jest zgodna ze wzorcem liczby",

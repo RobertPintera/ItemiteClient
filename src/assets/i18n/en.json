@@ -332,6 +332,7 @@
   "controls": {
     "edit": "Edit",
     "save": "Save",
+    "create": "Create",
     "delete": "Delete",
     "cancel": "Cancel",
     "confirm": "Confirm",
@@ -379,7 +380,7 @@
     "field_empty": "Field can't be empty",
     "field_required": "Field is required",
     "name_len": "Name must be between 2 and 30 characters",
-    "description_len": "Description must be between 2 and 500 characters",
+    "description_len": "Description must be between 2 and 2500 characters",
     "price_range": "Price must be between 0 and 1000000",
     "starting_bid_range": "Starting bid must be between 0 and 1000000",
     "price_pattern": "Price doesn't match the number pattern.",
