@@ -6,3 +6,7 @@
     <app-button [label]="'user_info.your_sales' | translate" routerLink="/sales"/>
   </div>
 </div>
+
+@if(loading()){
+  <app-loading-dialog/>
+}
