@@ -2,8 +2,11 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, Observable} from 'rxjs';
-import {PostStripeConnectStartDTO} from '../../models/payments/PostStripeConnectStartDTO';
+import {PostStripeConnectStartResponseDTO} from '../../models/payments/PostStripeConnectStartResponseDTO';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
+import {PaginatedListingDTO} from '../../models/PaginatedListingDTO';
+import {PostPurchaseProductDTO} from '../../models/payments/PostPurchaseProductDTO';
+import {PostDisputeDTO} from '../../models/payments/PostDisputeDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +17,8 @@ export class PaymentService {
   private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
 
   // API
-  private postStripeConnectStart(): Observable<PostStripeConnectStartDTO>{
-    return this.http.post<PostStripeConnectStartDTO>(`${this.baseUrl}/stripe/connect/start`, {});
+  private postStripeConnectStart(): Observable<PostStripeConnectStartResponseDTO>{
+    return this.http.post<PostStripeConnectStartResponseDTO>(`${this.baseUrl}/stripe/connect/start`, {});
   }
 
   private getStripeConnectRefreshOnboardingLink() {
@@ -34,11 +37,11 @@ export class PaymentService {
     return this.http.get(`${this.baseUrl}/my-sales`, { params });
   }
 
-  private postPaymentConfirmDelivery(listingId: number ,params: HttpParams) {
-    return this.http.put(`${this.baseUrl}/confirm-delivery/${listingId}`, { params });
+  private postConfirmDelivery(listingId: number) {
+    return this.http.put(`${this.baseUrl}/confirm-delivery/${listingId}`, {});
   }
 
-  private postPaymentDispute(paymentId: number,params: HttpParams) {
+  private postDispute(paymentId: number,params: HttpParams) {
     return this.http.put(`${this.baseUrl}/dispute/${paymentId}`, params);
   }
 
@@ -48,6 +51,75 @@ export class PaymentService {
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
         console.error('Error createProductListing:', err);
+        throw err;
+      })
+    );
+  }
+
+  purchaseProduct(productListingId: number, data: PostPurchaseProductDTO) {
+    const params = new HttpParams()
+      .set('paymentMethodId', data.paymentMethodId);
+
+    return this.postPurchaseProduct(productListingId, params).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error purchaseProduct:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadPurchases(filter: PaginatedListingDTO){
+    const params = new HttpParams()
+      .set('pageSize', filter.pageSize)
+      .set('pageNumber', filter.pageNumber);
+
+    return this.getMyPurchases(params).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadPurchases:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadSales(filter: PaginatedListingDTO){
+    const params = new HttpParams()
+      .set('pageSize', filter.pageSize)
+      .set('pageNumber', filter.pageNumber);
+
+    return this.getMySales(params).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadSales:', err);
+        throw err;
+      })
+    );
+  }
+
+  confirmDelivery(listingId: number) {
+    return this.postConfirmDelivery(listingId).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadSales:', err);
+        throw err;
+      })
+    );
+  }
+
+  dispute(listingId: number, data: PostDisputeDTO) {
+    let params = new HttpParams()
+      .set('Reason', data.reason)
+      .set('Description', data.description);
+
+    data.photos.forEach(id => {
+      params = params.append('photos', id.toString());
+    });
+
+    return this.postDispute(listingId, params).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadSales:', err);
         throw err;
       })
     );
