@@ -289,7 +289,11 @@
     "security": "Security",
     "background_image": "Background image",
     "profile_image": "Profile image",
-    "phone": "Phone"
+    "phone": "Phone",
+    "your_offers": "Your offers",
+
+    "billing_payments": "Billing & payments",
+    "your_account": "Your stripe account"
   },
   "user_edition": {
     "edit_password": "Edit password",

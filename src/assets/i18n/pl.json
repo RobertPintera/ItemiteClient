@@ -288,7 +288,10 @@
     "security": "Bezpieczeństwo",
     "background_image": "Obraz w tle",
     "profile_image": "Zdjęcie profilowe",
-    "phone": "Telefon"
+    "phone": "Telefon",
+
+    "billing_payments": "Rozliczenia i Płatności",
+    "your_account": "Twoje konto Stripe"
   },
   "user_edition": {
     "edit_password": "Edytuj hasło",
