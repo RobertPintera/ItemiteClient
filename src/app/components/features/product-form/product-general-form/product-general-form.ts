@@ -38,11 +38,11 @@ import {Location} from '@angular/common';
   styleUrl: './product-general-form.css'
 })
 export class ProductGeneralForm {
-  private _productListingService = inject(ProductListingService);
-  private _categoryService = inject(CategoryService);
-  private _formBuilder = inject(FormBuilder);
-  private _router = inject(Router);
-  private _location = inject(Location);
+  private productListingService = inject(ProductListingService);
+  private categoryService = inject(CategoryService);
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private location = inject(Location);
 
   readonly product = input<ProductListingDTO | null>(null);
 
@@ -54,7 +54,7 @@ export class ProductGeneralForm {
   readonly isSubmitting = signal<boolean>(false);
   readonly submitError = signal<string | null>(null);
 
-  readonly mainCategories = this._categoryService.mainCategories();
+  readonly mainCategories = this.categoryService.mainCategories();
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
     key: cat.id.toString(),
@@ -62,7 +62,7 @@ export class ProductGeneralForm {
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
-  readonly form = this._formBuilder.group({
+  readonly form = this.formBuilder.group({
     name: new FormControl<string>('', [
       Validators.required,
       isEmptyValidator,
@@ -105,7 +105,7 @@ export class ProductGeneralForm {
 
     this.selectedMainCategory.set(option);
     const id = Number(option.key);
-    this._categoryService.loadCategoryTree(id).subscribe({
+    this.categoryService.loadCategoryTree(id).subscribe({
       next: tree => {
         this.categories.set(tree);
 
@@ -132,7 +132,7 @@ export class ProductGeneralForm {
   }
 
   cancel(){
-    this._location.back();
+    this.location.back();
   }
 
   submit() {
@@ -186,10 +186,10 @@ export class ProductGeneralForm {
         newImageOrders: newImageOrders
       };
 
-      this._productListingService.updateProductListing(product.id ,payload).subscribe({
-        next: updatedProduct => {
+      this.productListingService.updateProductListing(product.id ,payload).subscribe({
+        next: () => {
           this.isSubmitting.set(false);
-          void this._router.navigate(['/product'], { queryParams: { id: product.id, type: "Product" } });
+          void this.router.navigate(['/product'], { queryParams: { id: product.id, type: "Product" } });
         },
         error: err => {
           this.isSubmitting.set(false);
@@ -225,10 +225,10 @@ export class ProductGeneralForm {
         imageOrders: imageOrders,
       };
 
-      this._productListingService.createProductListing(payload).subscribe({
+      this.productListingService.createProductListing(payload).subscribe({
         next: createdProduct => {
           this.isSubmitting.set(false);
-          void this._router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
+          void this.router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
         },
         error: err => {
           this.isSubmitting.set(false);

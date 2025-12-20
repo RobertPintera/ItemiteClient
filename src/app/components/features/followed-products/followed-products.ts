@@ -23,10 +23,10 @@ import {LISTING_TYPES} from '../../../core/constants/constants';
   styleUrl: './followed-products.css'
 })
 export class FollowedProducts implements OnInit, OnDestroy {
-  private _breakpointObserver = inject(BreakpointObserver);
-  private _listingService = inject(ListingService);
-  private _route = inject(ActivatedRoute);
-  private _router = inject(Router);
+  private breakpointObserver = inject(BreakpointObserver);
+  private listingService = inject(ListingService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   readonly isMd = signal<boolean>(false);
   readonly loading = signal<boolean>(true);
@@ -44,7 +44,7 @@ export class FollowedProducts implements OnInit, OnDestroy {
   private _destroy$ = new Subject<void>();
 
   ngOnInit() {
-    this._breakpointObserver.observe([
+    this.breakpointObserver.observe([
       '(min-width: 768px)',
     ]).subscribe(result => {
       this.isMd.set(result.breakpoints['(min-width: 768px)']);
@@ -55,7 +55,7 @@ export class FollowedProducts implements OnInit, OnDestroy {
       debounceTime(1000),
       switchMap(filter => {
         this.loading.set(true);
-        return this._listingService.loadFollowedListing(filter).pipe(
+        return this.listingService.loadFollowedListing(filter).pipe(
           catchError(err => {
             console.error('Error loading listings:', err);
             return of(null);
@@ -75,7 +75,7 @@ export class FollowedProducts implements OnInit, OnDestroy {
       },
     });
 
-    this._route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe(params => {
       const updated: Partial<PaginatedListingDTO> = {};
 
       const num = (name: string) => {
@@ -101,7 +101,7 @@ export class FollowedProducts implements OnInit, OnDestroy {
   usePaginator(pageNumber: number): void {
     this.filter().pageNumber = pageNumber;
 
-    this._router.navigate([], {
+    this.router.navigate([], {
       queryParams: {
         pageNumber: pageNumber,
       },

@@ -18,7 +18,7 @@ import {ListingItemDTO} from '../../../../core/models/LitstingItemDTO';
   styleUrl: './newest-products.css'
 })
 export class NewestProducts implements OnInit {
-  private _listingService = inject(ListingService);
+  private listingService = inject(ListingService);
 
   readonly listing = signal<ListingResponseDTO | null>(null);
 
@@ -28,7 +28,7 @@ export class NewestProducts implements OnInit {
   readonly secondHalfProducts = computed(() => this.products().slice(this.products().length / 2));
 
   ngOnInit() {
-    this._listingService.loadListing({pageSize: 10, listingType: LISTING_TYPES.PRODUCT, sortBy: SORTS_BY.CREATION_DATE, sortDirection: SORT_DIRECTION.ASCENDING}).
+    this.listingService.loadListing({pageSize: 10, listingType: LISTING_TYPES.PRODUCT, sortBy: SORTS_BY.CREATION_DATE, sortDirection: SORT_DIRECTION.ASCENDING}).
       subscribe({
         next: (data) => {
           this.listing.set(data);

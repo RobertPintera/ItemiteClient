@@ -39,11 +39,11 @@ import {auctionDurationValidator, isEmptyValidator, localizationValidator} from 
   styleUrl: './auction-form.css'
 })
 export class AuctionForm {
-  private _auctionListingService = inject(AuctionListingService);
-  private _categoryService = inject(CategoryService);
-  private _formBuilder = inject(FormBuilder);
-  private _router = inject(Router);
-  private _location = inject(Location);
+  private auctionListingService = inject(AuctionListingService);
+  private categoryService = inject(CategoryService);
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private location = inject(Location);
 
   readonly auction = input<AuctionListingDTO | null>(null);
 
@@ -55,7 +55,7 @@ export class AuctionForm {
   readonly isSubmitting = signal<boolean>(false);
   readonly submitError = signal<string | null>(null);
 
-  readonly mainCategories = this._categoryService.mainCategories();
+  readonly mainCategories = this.categoryService.mainCategories();
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
     key: cat.id.toString(),
@@ -63,7 +63,7 @@ export class AuctionForm {
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
-  readonly form = this._formBuilder.group({
+  readonly form = this.formBuilder.group({
     name: new FormControl<string>('', [
       Validators.required,
       isEmptyValidator,
@@ -109,7 +109,7 @@ export class AuctionForm {
 
     this.selectedMainCategory.set(option);
     const id = Number(option.key);
-    this._categoryService.loadCategoryTree(id).subscribe({
+    this.categoryService.loadCategoryTree(id).subscribe({
       next: tree => {
         this.categories.set(tree);
 
@@ -136,7 +136,7 @@ export class AuctionForm {
   }
 
   cancel(){
-    this._location.back();
+    this.location.back();
   }
 
   submit() {
@@ -193,10 +193,10 @@ export class AuctionForm {
 
       console.log(this.form.value.dateEnds);
 
-      this._auctionListingService.updateAuctionListing(auction.id ,payload).subscribe({
-        next: _ => {
+      this.auctionListingService.updateAuctionListing(auction.id ,payload).subscribe({
+        next: () => {
           this.isSubmitting.set(false);
-          void this._router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
+          void this.router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
         },
         error: err => {
           this.isSubmitting.set(false);
@@ -234,10 +234,10 @@ export class AuctionForm {
         imageOrders: imageOrders,
       };
 
-      this._auctionListingService.createAuctionListing(payload).subscribe({
+      this.auctionListingService.createAuctionListing(payload).subscribe({
         next: createdAuction => {
           this.isSubmitting.set(false);
-          void this._router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type:  LISTING_TYPES.AUCTION } });
+          void this.router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type:  LISTING_TYPES.AUCTION } });
         },
         error: err => {
           this.isSubmitting.set(false);

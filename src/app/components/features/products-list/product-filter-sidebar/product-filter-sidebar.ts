@@ -28,8 +28,8 @@ import {FilterSidebar} from '../../../../core/models/FilterSidebar';
   styleUrl: './product-filter-sidebar.css'
 })
 export class ProductFilterSidebar implements OnInit {
-  private _categoryService = inject(CategoryService);
-  private _route = inject(ActivatedRoute);
+  private categoryService = inject(CategoryService);
+  private route = inject(ActivatedRoute);
 
   readonly filter = input.required<ListingFilter>();
   readonly localizationText = input.required<string | null>();
@@ -99,12 +99,12 @@ export class ProductFilterSidebar implements OnInit {
   }
 
   ngOnInit() {
-    this._route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe(params => {
       const id = params.get('id');
       const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
       if (validId === null) return;
 
-      this._categoryService.loadCategoryTree(validId).subscribe({
+      this.categoryService.loadCategoryTree(validId).subscribe({
         next: tree => this.categoryTree.set(tree),
         error: err => console.error(err)
       });

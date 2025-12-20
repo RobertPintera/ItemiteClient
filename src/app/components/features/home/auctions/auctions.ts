@@ -17,7 +17,7 @@ import {ListingItemDTO} from '../../../../core/models/LitstingItemDTO';
   styleUrl: './auctions.css'
 })
 export class Auctions implements OnInit {
-  private _listingService = inject(ListingService);
+  private listingService = inject(ListingService);
 
   readonly auctions = signal<ListingItemDTO[]>([]);
 
@@ -25,7 +25,7 @@ export class Auctions implements OnInit {
   readonly secondHalfAuctions = computed(() => this.auctions().slice(this.auctions().length / 2));
 
   ngOnInit() {
-    this._listingService.loadDedicatedListing(LISTING_TYPES.AUCTION).subscribe({
+    this.listingService.loadDedicatedListing(LISTING_TYPES.AUCTION).subscribe({
       next: (data) => {
         this.auctions.set(data);
       }

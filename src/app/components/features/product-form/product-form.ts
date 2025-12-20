@@ -23,10 +23,10 @@ import {EMPTY, map, switchMap} from 'rxjs';
   styleUrl: './product-form.css'
 })
 export class ProductForm{
-  private _route = inject(ActivatedRoute);
-  private _destroyRef = inject(DestroyRef);
-  private _auctionListingService = inject(AuctionListingService);
-  private _productListingService = inject(ProductListingService);
+  private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
+  private auctionListingService = inject(AuctionListingService);
+  private productListingService = inject(ProductListingService);
 
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
   readonly formType = signal<ListingType | null>(null);
@@ -42,9 +42,9 @@ export class ProductForm{
   }
 
   constructor() {
-    this._route.queryParamMap
+    this.route.queryParamMap
       .pipe(
-        takeUntilDestroyed(this._destroyRef),
+        takeUntilDestroyed(this.destroyRef),
         map(params => {
           const type = params.get('type');
           const id = params.get('id');
@@ -64,8 +64,8 @@ export class ProductForm{
             return EMPTY;
           }
 
-          return formType === LISTING_TYPES.PRODUCT ? this._productListingService.loadProudctListingAuth(id)
-            : this._auctionListingService.loadAuctionListingAuth(id);
+          return formType === LISTING_TYPES.PRODUCT ? this.productListingService.loadProudctListingAuth(id)
+            : this.auctionListingService.loadAuctionListingAuth(id);
         })
       )
       .subscribe({

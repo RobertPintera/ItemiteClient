@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, OnDestroy, OnInit, PLATFORM_ID, signal, WritableSignal} from '@angular/core';
+import {Component, computed, effect, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import {Button} from '../../shared/button/button';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -36,31 +36,31 @@ import {BidDialog} from './bid-dialog/bid-dialog';
   styleUrl: './product-details.css'
 })
 export class ProductDetails implements OnInit, OnDestroy {
-  private _breakpointObserver = inject(BreakpointObserver);
-  private _productListingService = inject(ProductListingService);
-  private _auctionListingService = inject(AuctionListingService);
-  private _userService = inject(UserService);
-  private _listingService = inject(ListingService);
-  private _route = inject(ActivatedRoute);
-  private _platformId = inject(PLATFORM_ID);
-  private _router = inject(Router);
+  private breakpointObserver = inject(BreakpointObserver);
+  private productListingService = inject(ProductListingService);
+  private auctionListingService = inject(AuctionListingService);
+  private userService = inject(UserService);
+  private listingService = inject(ListingService);
+  private route = inject(ActivatedRoute);
+  private platformId = inject(PLATFORM_ID);
+  private router = inject(Router);
 
-  private _toggleFollowSubject = new Subject<void>();
+  private toggleFollowSubject = new Subject<void>();
   private destroy$ = new Subject<void>();
 
-  private _mapInitialized = false;
-  private _map?: Map ;
-  private readonly _mapEl = 'map';
-  private _currentMarker : WritableSignal<Marker | undefined> = signal(undefined);
+  private mapInitialized = false;
+  private map?: Map ;
+  private readonly mapEl = 'map';
+  private currentMarker = signal<Marker | undefined>(undefined);
 
   private _showChat = signal(false);
   readonly showChat = this._showChat.asReadonly();
 
-  readonly isUserLogged = computed(() => this._userService.isUserLoggedIn());
+  readonly isUserLogged = computed(() => this.userService.isUserLoggedIn());
 
   readonly isAuthorLogged = computed(() => {
-    if(!this._userService.isUserLoggedIn()) return false;
-    return this._userService.userBasicInfo().id === this.article()?.owner.id;
+    if(!this.userService.isUserLoggedIn()) return false;
+    return this.userService.userBasicInfo().id === this.article()?.owner.id;
   });
 
   readonly isLg = signal<boolean>(false);
@@ -86,8 +86,8 @@ export class ProductDetails implements OnInit, OnDestroy {
   OnMessageClicked(): void {
     // User not logged in
     //  => send message leads to logging page
-    if(!this._userService.isUserLoggedIn()){
-      this._router.navigate(['login']);
+    if(!this.userService.isUserLoggedIn()){
+      this.router.navigate(['login']);
       return;
     }
 
@@ -95,7 +95,7 @@ export class ProductDetails implements OnInit, OnDestroy {
     //  => show chat list of specific listing
     if(this.isAuthorLogged()) {
       const productId = this.article()?.id;
-      this._router.navigate(['chats'], { queryParams: { productId }});
+      this.router.navigate(['chats'], { queryParams: { productId }});
       return;
     }
 
@@ -110,31 +110,31 @@ export class ProductDetails implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if(isPlatformServer(this._platformId)){
-      const id = this._route.snapshot.queryParamMap.get('id');
-      const type = this._route.snapshot.queryParamMap.get('type');
+    if(isPlatformServer(this.platformId)){
+      const id = this.route.snapshot.queryParamMap.get('id');
+      const type = this.route.snapshot.queryParamMap.get('type');
 
       const validId = id && !isNaN(+id) ? +id : null;
       if (!validId) return;
 
       if (type === LISTING_TYPES.PRODUCT) {
-        this._productListingService.loadProductListingPublic(validId).subscribe(product => {
+        this.productListingService.loadProductListingPublic(validId).subscribe(product => {
           this.article.set(product);
         });
       }
       else {
-        this._auctionListingService.loadAuctionListingPublic(validId).subscribe(auction => {
+        this.auctionListingService.loadAuctionListingPublic(validId).subscribe(auction => {
           this.article.set(auction);
         });
       }
     }
 
-    if(isPlatformBrowser(this._platformId)){
-      this._breakpointObserver.observe(['(min-width: 1024px)']).pipe(takeUntil(this.destroy$)).subscribe(result => {
+    if(isPlatformBrowser(this.platformId)){
+      this.breakpointObserver.observe(['(min-width: 1024px)']).pipe(takeUntil(this.destroy$)).subscribe(result => {
         this.isLg.set(result.breakpoints['(min-width: 1024px)']);
       });
 
-      this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
         const id = params.get('id');
         const type = params.get('type');
 
@@ -143,16 +143,16 @@ export class ProductDetails implements OnInit, OnDestroy {
         if (validId === null) return;
 
         if(type === 'Product'){
-          this._productListingService.loadProudctListingAuth(validId).subscribe({
+          this.productListingService.loadProudctListingAuth(validId).subscribe({
             next: product => {
               this.article.set(product);
               this.isFollowed.set(product.isFollowed ?? false);
-              this._listingService.addFollowedListing(product.id);
+              this.listingService.addFollowedListing(product.id);
             },
             error: err => console.error(err)
           });
         } else if (type === 'Auction'){
-          this._auctionListingService.loadAuctionListingAuth(validId).subscribe({
+          this.auctionListingService.loadAuctionListingAuth(validId).subscribe({
             next: product => {
               this.article.set(product);
               this.isFollowed.set(product.isFollowed ?? false);
@@ -162,7 +162,7 @@ export class ProductDetails implements OnInit, OnDestroy {
         }
       });
 
-      this._toggleFollowSubject
+      this.toggleFollowSubject
         .pipe(debounceTime(300), takeUntil(this.destroy$))
         .subscribe(() => this._handleToggle());
     }
@@ -176,14 +176,14 @@ export class ProductDetails implements OnInit, OnDestroy {
   constructor() {
     effect(async () => {
       const a = this.article();
-      if (!this._mapInitialized && a?.location?.latitude != null && a?.location?.longitude != null && a?.location?.city) {
+      if (!this.mapInitialized && a?.location?.latitude != null && a?.location?.longitude != null && a?.location?.city) {
         await this.initMap(a.location.latitude, a.location.longitude, a.location.city);
-        this._mapInitialized = true;
+        this.mapInitialized = true;
       }
     });
 
     effect(() => {
-      const user = this._userService.userBasicInfo();
+      const user = this.userService.userBasicInfo();
       const article = this.article();
 
       if(user.id === article?.owner.id){
@@ -193,24 +193,24 @@ export class ProductDetails implements OnInit, OnDestroy {
   }
 
   async initMap(lat:number, lng:number, city:string) {
-    if (isPlatformBrowser(this._platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       const { map, tileLayer, marker, Icon } = await import('leaflet');
 
       Icon.Default.prototype.options.iconRetinaUrl = 'marker-icon.png';
       Icon.Default.prototype.options.shadowUrl = 'marker-icon.png';
       Icon.Default.prototype.options.shadowSize = [25, 41];
 
-      this._map = map(this._mapEl).setView([lat,lng], 13);
+      this.map = map(this.mapEl).setView([lat,lng], 13);
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(this._map);
-      this._currentMarker.set(marker([lat, lng]).addTo(this._map).bindPopup(city).openPopup());
+      }).addTo(this.map);
+      this.currentMarker.set(marker([lat, lng]).addTo(this.map).bindPopup(city).openPopup());
 
-      this._map.dragging.disable();
-      this._map.scrollWheelZoom.disable();
-      this._map.doubleClickZoom.disable();
-      this._map.boxZoom.disable();
-      this._map?.setZoomAround(this._currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949], 10);
+      this.map.dragging.disable();
+      this.map.scrollWheelZoom.disable();
+      this.map.doubleClickZoom.disable();
+      this.map.boxZoom.disable();
+      this.map?.setZoomAround(this.currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949], 10);
     }
   }
 
@@ -219,7 +219,7 @@ export class ProductDetails implements OnInit, OnDestroy {
   }
 
   toggleFollowed() {
-    this._toggleFollowSubject.next();
+    this.toggleFollowSubject.next();
   }
 
   openBidHistory() {
@@ -227,10 +227,10 @@ export class ProductDetails implements OnInit, OnDestroy {
   }
 
   openBid(){
-    if (!this._userService.isUserLoggedIn()) {
-      this._router.navigate(['login'], {
+    if (!this.userService.isUserLoggedIn()) {
+      this.router.navigate(['login'], {
         queryParams: {
-          returnUrl: this._router.url
+          returnUrl: this.router.url
         }
       });
       return;
@@ -242,7 +242,7 @@ export class ProductDetails implements OnInit, OnDestroy {
     const id = this.auction?.id;
     if(!id) return;
 
-    this._auctionListingService.loadAuctionListingAuth(id).subscribe({
+    this.auctionListingService.loadAuctionListingAuth(id).subscribe({
       next: product => {
         this.article.set(product);
         this.isFollowed.set(product.isFollowed ?? false);
@@ -261,16 +261,16 @@ export class ProductDetails implements OnInit, OnDestroy {
     const currentlyFollowed = this.isFollowed();
 
     if(!currentlyFollowed){
-      this._listingService.addFollowedListing(id).subscribe({
-        next: _ => {
+      this.listingService.addFollowedListing(id).subscribe({
+        next: () => {
           this.isFollowed.set(true);
           this.isFollowLoading.set(false);
         },
         error: err => console.error(err)
       });
     } else{
-      this._listingService.deleteFollowedListing(id).subscribe({
-        next: _ => {
+      this.listingService.deleteFollowedListing(id).subscribe({
+        next: () => {
           this.isFollowed.set(false);
           this.isFollowLoading.set(false);
         },
