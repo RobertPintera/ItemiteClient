@@ -1,0 +1,7 @@
+<div class="h-[calc(100dvh-32*var(--spacing))]">
+@if (isValid()) {
+    <app-chat
+      class="min-h-full"
+      [chatMembers]="chatMembers()" [listingId]="listingId()" />
+}
+</div>
