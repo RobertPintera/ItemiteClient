@@ -275,5 +275,12 @@
     "notifications": "Notifications",
     "my_products": "My products",
     "chats": "Chats"
+  },
+  "notifications": {
+    "Auction": "Auction",
+    "Product": "Product",
+    "ChatPage": "Chats",
+    "User": "User",
+    "delete_all": "Delete all"
   }
 }
