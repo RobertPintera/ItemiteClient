@@ -189,6 +189,7 @@ export class AuctionForm {
         newImageOrders: newImageOrders
       };
 
+      console.log(payload.dateEnds);
       console.log(this.form.value.dateEnds);
 
       this.auctionListingService.updateAuctionListing(auction.id ,payload).pipe(
@@ -310,20 +311,6 @@ export class AuctionForm {
   }
 
   private toUtcISOString(date: string): string {
-    const local = date.length === 10
-      ? new Date(date + 'T00:00:00')
-      : new Date(date);
-
-    return new Date(
-      Date.UTC(
-        local.getFullYear(),
-        local.getMonth(),
-        local.getDate(),
-        local.getHours(),
-        local.getMinutes(),
-        0,
-        0
-      )
-    ).toISOString();
+    return new Date(date).toISOString();
   }
 }
