@@ -33,9 +33,10 @@ export class IndividualPricingDialog {
   readonly loading = signal<boolean>(false);
 
   readonly form = this.formBuilder.nonNullable.group({
-    userId: [0, [
+    userId: new FormControl<number>(0, [
       Validators.required,
-    ]],
+      Validators.pattern(/^\d+$/)
+    ]),
     price: new FormControl<number>(0,[
       Validators.required,
       Validators.min(0.01),
@@ -55,7 +56,8 @@ export class IndividualPricingDialog {
     const userId = this.form.value.userId;
     const price = this.form.value.price;
 
-    if (!userId || !price) return;
+    if (userId === null || userId === undefined) return;
+    if (price === null || price === undefined) return;
 
     const payload : PostUserPriceDTO = {
       price: price,
@@ -64,10 +66,10 @@ export class IndividualPricingDialog {
     this.productService.addUserIndividualPrice(this.listingId(), userId, payload).pipe(
       finalize(() => {
         this.loading.set(false);
-        this.isOpen.set(false);
       })
     ).subscribe(() => {
       this.form.reset();
+      this.isOpen.set(false);
     });
   }
 }

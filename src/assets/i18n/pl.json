@@ -23,6 +23,12 @@
     "individual_pricing": "Indiwidualna wycena",
     "user_id": "Identyfikator użytkownika"
   },
+  "validator_errors_product_details": {
+    "field_required": "Pole jest wymagane",
+    "price_pattern": "Cena nie jest zgodna ze wzorcem liczby",
+    "price_range": "Cena musi być pomiędzy 0 a 1000000",
+    "user_id_pattern": "Identyfikator użytkownika nie jest zgodny ze wzorcem liczby"
+  },
   "paginator": {
     "preposition": "z"
   },

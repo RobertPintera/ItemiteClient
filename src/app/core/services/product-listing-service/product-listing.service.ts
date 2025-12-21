@@ -42,7 +42,12 @@ export class ProductListingService {
   }
 
   private postUserPrice(listingId: number, userId: number, params: HttpParams) {
-    return this.http.post(`${this.baseUrl}/${listingId}/user-price/${userId}`, params);
+    return this.http.post(`${this.baseUrl}/${listingId}/user-price/${userId}`, params,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
   }
 
   private deleteUserPrice(listingId: number, userId: number) {

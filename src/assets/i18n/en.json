@@ -23,6 +23,12 @@
     "individual_pricing": "Individual pricing",
     "user_id": "User Id"
   },
+  "validator_errors_product_details": {
+    "field_required": "Field is required",
+    "price_pattern": "Price doesn't match the number pattern.",
+    "price_range": "Price must be between 0 and 1000000",
+    "user_id_pattern": "User Id doesn't match the number pattern."
+  },
   "paginator": {
     "preposition": "from"
   },
