@@ -17,6 +17,7 @@ import {ConfirmNewEmail} from './components/features/profile-page/edit-email/con
 import {AuthGuard} from './core/guards/auth-guard/auth-guard';
 import {ChatsMainWindow} from './components/features/chat/chats-main-window/chats-main-window';
 import {GuestGuard} from './core/guards/guest-guard/guest-guard';
+import {FullscreenChatPage} from './components/features/chat/fullscreen-chat-page/fullscreen-chat-page';
 
 export const routes: Routes = [
   {
@@ -83,6 +84,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/features/chat/chats-main-window/chats-main-window')
             .then(m => m.ChatsMainWindow),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'chat',
+        loadComponent: () =>
+          import('./components/features/chat/fullscreen-chat-page/fullscreen-chat-page')
+            .then(m => m.FullscreenChatPage),
         canActivate: [AuthGuard],
       }
     ]
