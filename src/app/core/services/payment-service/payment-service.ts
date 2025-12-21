@@ -7,6 +7,8 @@ import {ErrorHandlerService} from '../error-handler-service/error-handler-servic
 import {PaginatedListingDTO} from '../../models/PaginatedListingDTO';
 import {PostPurchaseProductDTO} from '../../models/payments/PostPurchaseProductDTO';
 import {PostDisputeDTO} from '../../models/payments/PostDisputeDTO';
+import {GetPurchasesDTO} from '../../models/payments/GetPurchasesDTO';
+import {GetPurchasesResponseDTO} from '../../models/payments/GetPurchasesResponseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -29,8 +31,8 @@ export class PaymentService {
     return this.http.post(`${this.baseUrl}/purchase-product/${productListingId}`, { params });
   }
 
-  private getMyPurchases(params: HttpParams) {
-    return this.http.get(`${this.baseUrl}/my-purchases`, { params });
+  private getMyPurchases(params: HttpParams): Observable<GetPurchasesResponseDTO> {
+    return this.http.get<GetPurchasesResponseDTO>(`${this.baseUrl}/my-purchases`, { params });
   }
 
   private getMySales(params: HttpParams) {
@@ -69,7 +71,7 @@ export class PaymentService {
     );
   }
 
-  loadPurchases(filter: PaginatedListingDTO){
+  loadPurchases(filter: GetPurchasesDTO){
     const params = new HttpParams()
       .set('pageSize', filter.pageSize)
       .set('pageNumber', filter.pageNumber);

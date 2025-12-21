@@ -6,29 +6,29 @@
       <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
     }
   </div>
-    @if(loading()){
-      <div class="flex justify-center py-16 w-full">
-        <app-loader/>
-      </div>
-    } @else if (totalPages() === 0){
-      <div class="flex justify-center py-16 w-full">
-        <h2>{{'user_products.no_products' | translate}}</h2>
-      </div>
-    }
-    @else {
-      <div class="flex flex-col w-full">
-        @let data = listings();
+  @if(loading()){
+    <div class="flex justify-center py-16 w-full">
+      <app-loader/>
+    </div>
+  } @else if (totalPages() === 0){
+    <div class="flex justify-center py-16 w-full">
+      <h2>{{'user_products.no_products' | translate}}</h2>
+    </div>
+  }
+  @else {
+    <div class="flex flex-col w-full">
+      @let data = listings();
 
-        @if(data && data.items.length){
-          @for (product of data.items; track product.id){
-            <app-product-item [product]="product" [isMd]="isMd()"/>
-          }
+      @if(data && data.items.length){
+        @for (product of data.items; track product.id){
+          <app-product-item [product]="product" [isMd]="isMd()"/>
         }
-      </div>
-      <div class="w-full flex py-4 justify-end">
-        <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
-      </div>
-    }
+      }
+    </div>
+    <div class="w-full flex py-4 justify-end">
+      <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
+    </div>
+  }
 </div>
 
 @if (isOpenDialog()){

@@ -4,7 +4,7 @@ import {Button} from '../../shared/button/button';
 import {Loader} from '../../shared/loader/loader';
 import {ListingResponseDTO} from '../../../core/models/ListingResponseDTO';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
-import {catchError, debounceTime, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
+import {debounceTime, finalize,Subject, switchMap, takeUntil} from 'rxjs';
 import {PaginatedListingDTO} from '../../../core/models/PaginatedListingDTO';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BreakpointObserver} from '@angular/cdk/layout';
@@ -47,8 +47,8 @@ export class UserProducts implements OnInit, OnDestroy {
   });
   readonly isBlocked = signal<boolean>(false);
 
-  private _filterPageSubject = new Subject<PaginatedListingDTO>();
-  private _destroy$ = new Subject<void>();
+  private filterPageSubject = new Subject<PaginatedListingDTO>();
+  private destroy$ = new Subject<void>();
 
   ngOnInit() {
     this.breakpointObserver.observe([
@@ -58,15 +58,11 @@ export class UserProducts implements OnInit, OnDestroy {
     });
 
 
-    this._filterPageSubject.pipe(
+    this.filterPageSubject.pipe(
       debounceTime(1000),
       switchMap(filter => {
         this.loading.set(true);
         return this.listingService.loadUserListings(this.userService.userBasicInfo().id, filter).pipe(
-          catchError(err => {
-            console.error('Error loading listings:', err);
-            return of(null);
-          }),
           finalize(() => {
             setTimeout(() => {
               this.isBlocked.set(false);
@@ -75,7 +71,7 @@ export class UserProducts implements OnInit, OnDestroy {
           })
         );
       }),
-      takeUntil(this._destroy$)
+      takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
         this.listings.set(data);
@@ -101,8 +97,8 @@ export class UserProducts implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._destroy$.next();
-    this._destroy$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   usePaginator(pageNumber: number): void {
@@ -134,7 +130,7 @@ export class UserProducts implements OnInit, OnDestroy {
 
   private applyFilter(filter: PaginatedListingDTO) {
     this.isBlocked.set(true);
-    this._filterPageSubject.next(filter);
+    this.filterPageSubject.next(filter);
   }
 
   protected readonly LISTING_TYPES = LISTING_TYPES;
