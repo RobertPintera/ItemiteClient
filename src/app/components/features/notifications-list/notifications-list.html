@@ -1,0 +1,110 @@
+<div
+  class="opacityIn customPosition origin-top fixed w-300 sm:w-xs max-w-2/3 h-dvh z-99 flex flex-row
+  bg-linear-to-r from-transparent to-secondary/80 backdrop-blur-md"
+>
+  <div class="h-full">
+    <div class="h-32 w-full flex flex-col justify-center items-center shadow-inner ">
+      <p class="text-xl text-secondary-foreground"> {{"on_profile_menu.notifications" | translate}} </p>
+    </div>
+    <div class="relative scroll-hidden w-full grow flex-1 transition-all duration-200 overflow-y-auto flex-col">
+      @if (hasItemsOnPage()) {
+        <div class="w-full flex flex-row items-center mt-3 mb-3">
+          <div class="h-px bg-accent flex-1"></div>
+          <button (click)="DeleteAll()"
+                  class="hover:cursor-pointer hover:ring-2 hover:ring-white
+            flex p-2 flex-row items-center justify-center bg-accent rounded-md text-accent-foreground"
+          >
+            {{"notifications.delete_all" | translate}}
+          </button>
+          <div class="h-px bg-accent flex-1"></div>
+        </div>
+      }
+      @if (totalPages() > 1) {
+        <div class="w-full flex flex-row items-center mt-4">
+          <button [disabled]="currentPage() <= 1"
+                  (click)="LoadPreviousPage()"
+                  class="enabled:hover:cursor-pointer enabled:hover:text-primary
+        flex-1 text-center flex items-center justify-center disabled:text-background text-foreground "
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
+              <path fill-rule="evenodd" d="M7.28 7.72a.75.75 0 0 1 0 1.06l-2.47 2.47H21a.75.75 0 0 1 0 1.5H4.81l2.47 2.47a.75.75 0 1 1-1.06 1.06l-3.75-3.75a.75.75 0 0 1 0-1.06l3.75-3.75a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          @if((totalItemsCount() !== 0)) {
+            <p class="text-secondary-foreground font-bold"> {{currentPage()}}/{{totalPages()}} </p>
+            <button [disabled]="currentPage() >= totalPages()"
+                    (click)="LoadNextPage()"
+                    class="enabled:hover:cursor-pointer enabled:hover:text-primary
+        flex-1 text-center flex items-center justify-center disabled:text-background text-foreground"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
+                <path fill-rule="evenodd" d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          }
+        </div>
+      }
+      @if (loading()) {
+        <div class="w-full items-center justify-center flex">
+          <app-loading-circle />
+        </div>
+      } @else {
+        @for(notif of notifications(); track notif.notificationId) {
+          <div class="p-2">
+            <app-notification-card
+              [notificationId]="notif.notificationId"
+              [message]="notif.message"
+              [notificationImageUrl]="notif.notificationImageUrl"
+              [resourceType]="notif.resourceType"
+              [notificationSent]="notif.notificationSent"
+              [readAt]="notif.readAt"
+              (onClicked)="HandleNotificationClick($event)"
+              (onDeleted)="DeleteNotification($event)"
+            />
+          </div>
+
+        }
+        @if(notifications().length > 4 && totalPages() > 1) {
+          <div class="w-full flex flex-row items-center mt-4">
+            <button [disabled]="currentPage() <= 1"
+                    (click)="LoadPreviousPage()"
+                    class="enabled:hover:cursor-pointer enabled:hover:text-primary
+        flex-1 text-center flex items-center justify-center disabled:text-background text-foreground "
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
+                <path fill-rule="evenodd" d="M7.28 7.72a.75.75 0 0 1 0 1.06l-2.47 2.47H21a.75.75 0 0 1 0 1.5H4.81l2.47 2.47a.75.75 0 1 1-1.06 1.06l-3.75-3.75a.75.75 0 0 1 0-1.06l3.75-3.75a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <p class="text-secondary-foreground font-bold"> {{currentPage()}}/{{totalPages()}} </p>
+            <button [disabled]="currentPage() >= totalPages()"
+                    (click)="LoadNextPage()"
+                    class="enabled:hover:cursor-pointer enabled:hover:text-primary
+                    flex-1 text-center flex items-center justify-center disabled:text-background text-foreground"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
+                <path fill-rule="evenodd" d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+
+          </div>
+        }
+        <div class="mt-4 w-full h-1"></div>
+      }
+    </div>
+  </div>
+  <div class="h-full">
+    <button (click)="OnCloseClicked()" 
+            class="relative h-full flex-col w-8 hover:bg-secondary hover:cursor-pointer transition-all duration-100 text-xl text-secondary-foreground bg-secondary/50 flex items-center justify-around p-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+        <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+      </svg>
+
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+        <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+      </svg>
+
+    </button>
+  </div>
+</div>
