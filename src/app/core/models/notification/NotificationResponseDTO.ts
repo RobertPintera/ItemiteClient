@@ -1,7 +1,7 @@
 import {Notification} from './Notification';
 
 export interface NotificationResponseDTO {
-  items: Notification,
+  items: Notification[],
   totalPages: number,
   currentPage: number,
   itemsFrom: number,
