@@ -1,29 +1,27 @@
 import {Component, inject, input, model, signal} from '@angular/core';
-import {Dialog} from "../../../shared/dialog/dialog";
-import {Button} from '../../../shared/button/button';
-import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {InputNumber} from '../../../shared/input-number/input-number';
-import {TranslatePipe} from '@ngx-translate/core';
-import {LoadingDialog} from '../../../shared/loading-dialog/loading-dialog';
 import {ProductListingService} from '../../../../core/services/product-listing-service/product-listing.service';
-import {PostUserPriceDTO} from '../../../../core/models/product-listings/PostUserPriceDTO';
+import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {finalize} from 'rxjs';
+import {Button} from '../../../shared/button/button';
+import {Dialog} from '../../../shared/dialog/dialog';
+import {InputNumber} from '../../../shared/input-number/input-number';
+import {LoadingDialog} from '../../../shared/loading-dialog/loading-dialog';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-individual-pricing-dialog',
+  selector: 'app-delete-individual-pricing-dialog',
   imports: [
-    Dialog,
     Button,
-    FormsModule,
+    Dialog,
     InputNumber,
+    LoadingDialog,
     ReactiveFormsModule,
-    TranslatePipe,
-    LoadingDialog
+    TranslatePipe
   ],
-  templateUrl: './individual-pricing-dialog.html',
-  styleUrl: './individual-pricing-dialog.css',
+  templateUrl: './delete-individual-pricing-dialog.html',
+  styleUrl: './delete-individual-pricing-dialog.css',
 })
-export class IndividualPricingDialog {
+export class DeleteIndividualPricingDialog {
   private productService = inject(ProductListingService);
   private formBuilder = inject(FormBuilder);
 
@@ -36,20 +34,13 @@ export class IndividualPricingDialog {
     userId: new FormControl<number>(0, [
       Validators.required,
       Validators.pattern(/^\d+$/)
-    ]),
-    price: new FormControl<number>(0,[
-      Validators.required,
-      Validators.min(0.01),
-      Validators.max(1000000),
-      Validators.pattern(/^\d+(\.\d{1,2})?$/)
-    ]),
+    ])
   });
 
   closeDialog(){
     this.isOpen.set(false);
     this.form.reset({
       userId: 0,
-      price: 0
     });
   }
 
@@ -60,23 +51,16 @@ export class IndividualPricingDialog {
     }
 
     const userId = this.form.value.userId;
-    const price = this.form.value.price;
 
     if (userId === null || userId === undefined) return;
-    if (price === null || price === undefined) return;
 
-    const payload : PostUserPriceDTO = {
-      price: price,
-    };
-
-    this.productService.addUserIndividualPrice(this.listingId(), userId, payload).pipe(
+    this.productService.deleteUserIndividualPrice(this.listingId(), userId).pipe(
       finalize(() => {
         this.loading.set(false);
       })
     ).subscribe(() => {
       this.form.reset({
         userId: 0,
-        price: 0
       });
       this.isOpen.set(false);
     });

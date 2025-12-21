@@ -21,6 +21,7 @@
     },
     "bids_history": "Bids history",
     "individual_pricing": "Individual pricing",
+    "delete_individual_pricing": "Delete individual pricing",
     "user_id": "User Id"
   },
   "validator_errors_product_details": {

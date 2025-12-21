@@ -83,6 +83,7 @@
                 </app-button>
                 @if (isAuthorLogged()){
                   <app-button label="{{'product_details.individual_pricing' | translate}}" (clickButton)="openIndividualPricing()"  severity="secondary"/>
+                  <app-button label="{{'product_details.delete_individual_pricing' | translate}}" (clickButton)="openDeleteIndividualPricing()" severity="danger"/>
                 }
               } @else if(auction) {
                 <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
@@ -130,6 +131,7 @@
               </app-button>
               @if (isAuthorLogged()){
                 <app-button label="{{'product_details.individual_pricing' | translate}}" (clickButton)="openIndividualPricing()"  severity="secondary"/>
+                <app-button label="{{'product_details.delete_individual_pricing' | translate}}" (clickButton)="openDeleteIndividualPricing()" severity="danger"/>
               }
             } @else if(auction) {
               <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
@@ -163,5 +165,6 @@
   <app-bid-dialog [auctionId]="auction.id" [currentBid]="auction.currentBid ?? auction.startingBid" [(isOpen)]="isOpenBidDialog" (bidAction)="updateAuction()"/>
 } @else if (product) {
   <app-individual-pricing-dialog [listingId]="product.id" [(isOpen)]="isOpenIndividualPricingDialog"/>
+  <app-delete-individual-pricing-dialog [listingId]="product.id" [(isOpen)]="isOpenDeleteIndividualPricingDialog"/>
 }
 

@@ -19,6 +19,7 @@ import {UserService} from '../../../core/services/user-service/user.service';
 import {BidHistoryDialog} from './bid-history-dialog/bid-history-dialog';
 import {BidDialog} from './bid-dialog/bid-dialog';
 import {IndividualPricingDialog} from './individual-pricing-dialog/individual-pricing-dialog';
+import {DeleteIndividualPricingDialog} from './delete-individual-pricing-dialog/delete-individual-pricing-dialog';
 
 @Component({
   selector: 'app-product-details',
@@ -33,6 +34,7 @@ import {IndividualPricingDialog} from './individual-pricing-dialog/individual-pr
     BidHistoryDialog,
     BidDialog,
     IndividualPricingDialog,
+    DeleteIndividualPricingDialog,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
@@ -75,6 +77,7 @@ export class ProductDetails implements OnInit, OnDestroy {
   readonly isOpenBidHistory = signal<boolean>(false);
   readonly isOpenBidDialog = signal<boolean>(false);
   readonly isOpenIndividualPricingDialog = signal<boolean>(false);
+  readonly isOpenDeleteIndividualPricingDialog = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -227,6 +230,10 @@ export class ProductDetails implements OnInit, OnDestroy {
 
   openBidHistory() {
     this.isOpenBidHistory.set(true);
+  }
+
+  openDeleteIndividualPricing() {
+    this.isOpenDeleteIndividualPricingDialog.set(true);
   }
 
   openBid(){
