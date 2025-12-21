@@ -1,1 +1,82 @@
-<p>purchase-item works!</p>
+<div class="flex flex-col w-full max-w-full bg-card text-card-foreground shadow-xl p-4 gap-2">
+  <div class="flex flex-row justify-between gap-2">
+    <h3>{{purchase().paymentId}} - Payment</h3>
+    <p class="text-xl sm:text-2xl">Status: {{ purchase().status }}</p>
+  </div>
+  <div class="flex flex-row justify-between w-full text-lg sm:text-xl gap-2">
+    <h4>{{ purchase().listing.name }}</h4>
+    <p>Price: {{ purchase().totalAmount }} {{ purchase().currency }}</p>
+  </div>
+  <div class="flex flex-col md:flex-row flex-1 h-full w-full border-y-2 border-border py-2">
+    <div class="h-64 aspect-square">
+      <img [src]=" purchase().listing.mainImageUrl ?? 'assets/laptop_chromebook_icon.svg'" [alt]=" purchase().listing.name" class="size-full object-contain" height="1" width="1">
+    </div>
+    <div class="flex flex-col md:flex-row w-full gap-4">
+      <div class="flex flex-col w-full justify-between gap-4 p-0 md:p-8 md:pt-12">
+        <div class="flex flex-row flex-wrap gap-3">
+          @for (category of purchase().listing.categories; track category.id){
+            <div class="border-2 border-border px-4 py-2 rounded-2xl bg-background text-foreground">
+              <p class="text-base md:text-xl">{{ `categories.${category.name}` | translate }}</p>
+            </div>
+          }
+        </div>
+        <div class="flex flex-col gap-2">
+          <p class="text-base md:text-xl">{{ 'product_details.localization' | translate }}: {{  purchase().listing.location.country }}, {{ purchase().listing.location.city}}, {{ purchase().listing.location.state}}</p>
+          <p class="text-base md:text-xl">{{ 'product_details.date_of_issue' | translate }}: {{  purchase().listing.dateCreated | date:'yyyy-MM-dd' }}</p>
+        </div>
+      </div>
+      <div class="flex-none flex flex-col items-start md:items-end md:py-4">
+        @if( purchase().listing.listingType === LISTING_TYPES.PRODUCT){
+          <p class="text-xl sm:text-2xl">{{ 'product_details.price' | translate }}: {{  purchase().listing.price }} $</p>
+          <p class="text-base md:text-lg">{{  purchase().listing.isNegotiable ? ('product_details.negotiable' | translate) : "" }}</p>
+        }
+        @else if( purchase().listing.listingType === LISTING_TYPES.AUCTION){
+          <p class="text-xl sm:text-2xl">{{ 'product_details.current_bid' | translate }}: {{  purchase().listing.currentBid ??  purchase().listing.startingBid}}$</p>
+          <p class="text-base md:text-lg">{{ 'product_details.starting_bid' | translate }}: {{  purchase().listing.startingBid }}</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-row justify-between gap-4">
+    <div class="flex flex-col flex-1">
+      <h4>Buyer</h4>
+      <div class="flex flex-row items-center gap-2">
+        <div class="size-10 rounded-full overflow-hidden bg-muted">
+          <img
+            [src]="purchase().buyer.profilePhotoUrl"
+            [alt]="purchase().buyer.userName"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex flex-col">
+          <p>{{ purchase().buyer.userName }}</p>
+          <p>{{ purchase().buyer.email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col flex-1">
+      <h4>Seller</h4>
+      <div class="flex flex-row items-center gap-2">
+        <div class="size-10 rounded-full overflow-hidden bg-muted">
+          <img
+            [src]="purchase().seller.profilePhotoUrl"
+            [alt]="purchase().seller.userName"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex flex-col">
+          <p>{{ purchase().seller.userName }}</p>
+          <p>{{ purchase().seller.email }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-between gap-2 mt-2">
+    <app-button label="Show product" severity="secondary"/>
+    <div class="flex flex-row gap-2">
+      <app-button label="Dispute" severity="danger"/>
+      <app-button label="Confirm Delivery" severity="primary"/>
+    </div>
+  </div>
+</div>

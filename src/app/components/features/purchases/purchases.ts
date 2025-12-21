@@ -8,9 +8,8 @@ import {GetPurchasesResponseDTO} from '../../../core/models/payments/GetPurchase
 import {debounceTime, finalize, Subject, switchMap, takeUntil} from 'rxjs';
 import {PaymentService} from '../../../core/services/payment-service/payment-service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Button} from '../../shared/button/button';
-import {DatePipe} from '@angular/common';
 import {LISTING_TYPES} from '../../../core/constants/constants';
+import {PurchaseItem} from './purchase-item/purchase-item';
 
 @Component({
   selector: 'app-purchases',
@@ -18,8 +17,7 @@ import {LISTING_TYPES} from '../../../core/constants/constants';
     TranslatePipe,
     Loader,
     Paginator,
-    Button,
-    DatePipe
+    PurchaseItem
   ],
   templateUrl: './purchases.html',
   styleUrl: './purchases.css',
