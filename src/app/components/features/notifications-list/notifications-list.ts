@@ -132,7 +132,7 @@ export class NotificationsList implements AfterViewInit {
   }
 
   private RecalculatePages(newNotif: Notification) {
-    if(this.currentPage() <= 1 && this.totalPages() <= 1) {
+    if(this.currentPage() <= 1) {
       this._notifications.update((notifications) =>
         [newNotif,...notifications]
       );
