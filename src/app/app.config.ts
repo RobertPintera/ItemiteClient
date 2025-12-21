@@ -1,6 +1,5 @@
 import {
-  APP_INITIALIZER,
-  ApplicationConfig, inject, provideAppInitializer,
+  ApplicationConfig, provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection
 } from '@angular/core';
@@ -13,7 +12,6 @@ import {provideTranslateService} from '@ngx-translate/core';
 import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
 import {tokenInterceptor} from './core/interceptors/token-interceptor/token-interceptor';
 import {AuthInitializer} from './core/utility/AuthInitializer';
-import {AuthService} from './core/services/auth-service/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
