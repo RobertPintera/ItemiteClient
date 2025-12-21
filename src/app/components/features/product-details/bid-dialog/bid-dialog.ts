@@ -5,7 +5,6 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
 import {AuctionListingService} from '../../../../core/services/auction-listing-service/auction-listing.service';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-bid-dialog',
@@ -21,8 +20,8 @@ import {Router} from '@angular/router';
   styleUrl: './bid-dialog.css',
 })
 export class BidDialog {
-  private _auctionService = inject(AuctionListingService);
-  private _formBuilder = inject(FormBuilder);
+  private auctionService = inject(AuctionListingService);
+  private formBuilder = inject(FormBuilder);
 
   readonly isOpen = model.required<boolean>();
   readonly currentBid = input.required<number>();
@@ -30,7 +29,7 @@ export class BidDialog {
 
   readonly bidAction = output<void>();
 
-  readonly form = this._formBuilder.nonNullable.group({
+  readonly form = this.formBuilder.nonNullable.group({
     bid: [0, [
       Validators.required,
       Validators.min(0)
@@ -47,7 +46,7 @@ export class BidDialog {
 
     const bid = this.form.value.bid;
 
-    this._auctionService.bidAuctionListing(this.auctionId(), bid ?? 0)
+    this.auctionService.bidAuctionListing(this.auctionId(), bid ?? 0)
       .subscribe({
         next: () => {
           this.form.reset();

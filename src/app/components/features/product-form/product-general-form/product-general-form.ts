@@ -53,8 +53,6 @@ export class ProductGeneralForm {
   readonly selectedMainCategory = signal<OptionItem>({key: '', value: ''});
   readonly selectedSubCategory = signal<OptionItem>({key: '', value: ''});
 
-  readonly submitError = signal<string | null>(null);
-
   readonly mainCategories = this.categoryService.mainCategories();
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
@@ -143,7 +141,6 @@ export class ProductGeneralForm {
     }
 
     this.loading.set(true);
-    this.submitError.set(null);
 
     const images: ImageMedia[] = this.form.value.images ?? [];
 

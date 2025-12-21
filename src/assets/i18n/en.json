@@ -19,7 +19,9 @@
       "active": "active",
       "archived": "archived"
     },
-    "bids_history": "Bids history"
+    "bids_history": "Bids history",
+    "individual_pricing": "Individual pricing",
+    "user_id": "User Id"
   },
   "paginator": {
     "preposition": "from"

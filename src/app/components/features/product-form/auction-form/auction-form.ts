@@ -21,6 +21,7 @@ import {PostAuctionListingDTO} from '../../../../core/models/PostAuctionListingD
 import {Location} from '@angular/common';
 import {LISTING_TYPES} from '../../../../core/constants/constants';
 import {auctionDurationValidator, isEmptyValidator, localizationValidator} from '../../../../core/utility/Validation';
+import {finalize} from 'rxjs';
 
 @Component({
   selector: 'app-auction-form',
@@ -52,9 +53,6 @@ export class AuctionForm {
 
   readonly selectedMainCategory = signal<OptionItem>({key: '', value: ''});
   readonly selectedSubCategory = signal<OptionItem>({key: '', value: ''});
-
-  readonly isSubmitting = signal<boolean>(false);
-  readonly submitError = signal<string | null>(null);
 
   readonly mainCategories = this.categoryService.mainCategories();
 
@@ -146,8 +144,7 @@ export class AuctionForm {
       return;
     }
 
-    this.isSubmitting.set(true);
-    this.submitError.set(null);
+    this.loading.set(true);
 
     const images: ImageMedia[] = this.form.value.images ?? [];
 
@@ -194,15 +191,10 @@ export class AuctionForm {
 
       console.log(this.form.value.dateEnds);
 
-      this.auctionListingService.updateAuctionListing(auction.id ,payload).subscribe({
-        next: () => {
-          this.isSubmitting.set(false);
-          void this.router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
-        },
-        error: err => {
-          this.isSubmitting.set(false);
-          this.submitError.set(err?.message || 'Something went wrong');
-        }
+      this.auctionListingService.updateAuctionListing(auction.id ,payload).pipe(
+        finalize(() => this.loading.set(false))
+      ).subscribe(() => {
+        void this.router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
       });
     }
     else{
@@ -235,15 +227,10 @@ export class AuctionForm {
         imageOrders: imageOrders,
       };
 
-      this.auctionListingService.createAuctionListing(payload).subscribe({
-        next: createdAuction => {
-          this.isSubmitting.set(false);
-          void this.router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type:  LISTING_TYPES.AUCTION } });
-        },
-        error: err => {
-          this.isSubmitting.set(false);
-          this.submitError.set(err?.message || 'Something went wrong');
-        }
+      this.auctionListingService.createAuctionListing(payload).pipe(
+        finalize(() => this.loading.set(false))
+      ).subscribe(createdAuction => {
+        void this.router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type:  LISTING_TYPES.AUCTION } });
       });
     }
   }

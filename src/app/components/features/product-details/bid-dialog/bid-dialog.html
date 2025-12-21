@@ -1,6 +1,5 @@
 @if(isOpen()){
   <app-dialog header="Bid" (closed)="closeDialog()">
-
     <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2">
       <label for="bid" class="text-xl font-semibold">{{'product_details.current_bid' | translate}}: {{currentBid()}}</label>
       <app-input-number id="bid" [max]="100000000" formControlName="bid" required/>

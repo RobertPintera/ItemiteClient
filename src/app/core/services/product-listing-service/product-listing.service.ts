@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, map, Observable} from 'rxjs';
 import {ProductListingDTO} from '../../models/ProductListingDTO';
@@ -7,6 +7,7 @@ import {PutProductListingDTO} from '../../models/PutProductListingDTO';
 import {PostProductListingDTO} from '../../models/PostProductListingDTO';
 import {PostProductListingResponseDTO} from '../../models/PostProductListingResponseDTO';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
+import {PostUserPriceDTO} from '../../models/product-listings/PostUserPriceDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,14 @@ export class ProductListingService {
 
   private putProductListing(id: number, formData: FormData) {
     return this.http.put(`${this.baseUrl}/${id}`, formData);
+  }
+
+  private postUserPrice(listingId: number, userId: number, params: HttpParams) {
+    return this.http.post(`${this.baseUrl}/${listingId}/user-price/${userId}`, params);
+  }
+
+  private deleteUserPrice(listingId: number, userId: number) {
+    return this.http.delete(`${this.baseUrl}/${listingId}/user-price/${userId}`);
   }
 
   // Logic
@@ -121,6 +130,29 @@ export class ProductListingService {
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadProductListingAuth:', err);
+        throw err;
+      })
+    );
+  }
+
+  addUserIndividualPrice(listingId: number, userId: number, data: PostUserPriceDTO) {
+    const params = new HttpParams()
+      .set('price', data.price);
+
+    return this.postUserPrice(listingId, userId, params).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error addUserIndividualPrice:', err);
+        throw err;
+      })
+    );
+  }
+
+  deleteUserIndividualPrice(listingId: number, userId: number){
+    return this.deleteUserPrice(listingId, userId).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error addUserIndividualPrice:', err);
         throw err;
       })
     );

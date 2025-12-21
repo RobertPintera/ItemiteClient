@@ -18,6 +18,7 @@ import {FloatingChatContainer} from '../chat/floating-chat-container/floating-ch
 import {UserService} from '../../../core/services/user-service/user.service';
 import {BidHistoryDialog} from './bid-history-dialog/bid-history-dialog';
 import {BidDialog} from './bid-dialog/bid-dialog';
+import {IndividualPricingDialog} from './individual-pricing-dialog/individual-pricing-dialog';
 
 @Component({
   selector: 'app-product-details',
@@ -31,6 +32,7 @@ import {BidDialog} from './bid-dialog/bid-dialog';
     NgClass,
     BidHistoryDialog,
     BidDialog,
+    IndividualPricingDialog,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
@@ -72,6 +74,7 @@ export class ProductDetails implements OnInit, OnDestroy {
 
   readonly isOpenBidHistory = signal<boolean>(false);
   readonly isOpenBidDialog = signal<boolean>(false);
+  readonly isOpenIndividualPricingDialog = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -236,6 +239,10 @@ export class ProductDetails implements OnInit, OnDestroy {
       return;
     }
     this.isOpenBidDialog.set(true);
+  }
+
+  openIndividualPricing() {
+    this.isOpenIndividualPricingDialog.set(true);
   }
 
   updateAuction() {

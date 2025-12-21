@@ -19,7 +19,9 @@
       "active": "aktywny",
       "archived": "zarchiwizowany"
     },
-    "bids_history": "Historia licytacji"
+    "bids_history": "Historia licytacji",
+    "individual_pricing": "Indiwidualna wycena",
+    "user_id": "Identyfikator użytkownika"
   },
   "paginator": {
     "preposition": "z"
