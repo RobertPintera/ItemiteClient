@@ -20,6 +20,8 @@ import {finalize} from 'rxjs';
 export class BillingAndPayments {
   private paymentService = inject(PaymentService);
 
+  readonly onboardingStatus = this.paymentService.onboardingStatus;
+
   readonly loading = signal<boolean>(false);
 
   goToStripeAccount() {

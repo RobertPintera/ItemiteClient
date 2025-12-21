@@ -308,7 +308,8 @@
     "billing_payments": "Billing & payments",
     "your_account": "Stripe account",
     "your_purchases": "Purchases",
-    "your_sales": "Sales"
+    "your_sales": "Sales",
+    "no_account": "You should set up a Stripe account to create offers"
   },
   "user_edition": {
     "edit_password": "Edit password",

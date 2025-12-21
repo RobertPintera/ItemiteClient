@@ -306,7 +306,8 @@
     "billing_payments": "Rozliczenia i Płatności",
     "your_account": "Konto Stripe",
     "your_purchases": "Zakupy",
-    "your_sales": "Sprzedaże"
+    "your_sales": "Sprzedaże",
+    "no_account": "Należy skonfigurować konto Stripe, aby tworzyć oferty."
   },
   "user_edition": {
     "edit_password": "Edytuj hasło",

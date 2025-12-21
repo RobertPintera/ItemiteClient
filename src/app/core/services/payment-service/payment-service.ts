@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {effect, inject, Injectable, PLATFORM_ID, signal} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, Observable} from 'rxjs';
@@ -9,6 +9,9 @@ import {PostPurchaseProductDTO} from '../../models/payments/PostPurchaseProductD
 import {PostDisputeDTO} from '../../models/payments/PostDisputeDTO';
 import {GetPurchasesDTO} from '../../models/payments/GetPurchasesDTO';
 import {GetPurchasesResponseDTO} from '../../models/payments/GetPurchasesResponseDTO';
+import {GetOnboardingStatusResponseDTO} from '../../models/payments/GetOnboardingStatusResponseDTO';
+import {isPlatformBrowser} from '@angular/common';
+import {AuthService} from '../auth-service/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +20,25 @@ export class PaymentService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/payment`;
   private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
+  private platformId = inject(PLATFORM_ID);
+  private authService = inject(AuthService);
+
+  private readonly _onboardingStatus = signal<boolean>(false);
+
+  readonly onboardingStatus = this._onboardingStatus.asReadonly();
+
+  constructor() {
+    if(!isPlatformBrowser(this.platformId)) return;
+
+    effect(() => {
+      const isLogged = this.authService.isUserLoggedIn();
+      if(!isLogged) {
+        this._onboardingStatus.set(true);
+      }
+    });
+
+    this.loadOnboardingStatus().subscribe(onboardingStatus => this._onboardingStatus.set(onboardingStatus.isOnboarded));
+  }
 
   // API
   private postStripeConnectStart(): Observable<PostStripeConnectStartResponseDTO>{
@@ -25,6 +47,10 @@ export class PaymentService {
 
   private getStripeConnectRefreshOnboardingLink() {
     return this.http.get(`${this.baseUrl}/stripe/connect/refresh-onboarding-link`);
+  }
+
+  private getOnboardingStatus(): Observable<GetOnboardingStatusResponseDTO>{
+    return this.http.get<GetOnboardingStatusResponseDTO>(`${this.baseUrl}/stripe/onboarding-status`);
   }
 
   private postPurchaseProduct(productListingId: number, params: HttpParams){
@@ -53,6 +79,16 @@ export class PaymentService {
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
         console.error('Error createProductListing:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadOnboardingStatus(): Observable<GetOnboardingStatusResponseDTO> {
+    return this.getOnboardingStatus().pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadOnboardingStatus:', err);
         throw err;
       })
     );

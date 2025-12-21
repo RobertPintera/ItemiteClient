@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {Button} from "../../../shared/button/button";
 import {RouterLink} from "@angular/router";
 import {TranslatePipe} from '@ngx-translate/core';
+import {PaymentService} from '../../../../core/services/payment-service/payment-service';
 
 @Component({
   selector: 'app-own-products',
@@ -14,5 +15,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   styleUrl: './own-products.css',
 })
 export class OwnProducts {
+  private paymentService = inject(PaymentService);
 
+  readonly onboardingStatus = this.paymentService.onboardingStatus;
 }
