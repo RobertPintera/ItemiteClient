@@ -105,13 +105,18 @@ export class ProductDetails implements OnInit, OnDestroy {
       return;
     }
 
-    this.SwitchChatVisibility();
+    this.switchChatVisibility();
   }
 
-  DisableChatVisibility(): void {
+  onPurchaseClicked(): void {
+
+  }
+
+  disableChatVisibility(): void {
     this._showChat.set(false);
   }
-  SwitchChatVisibility(): void {
+
+  switchChatVisibility(): void {
     this._showChat.set(!this._showChat());
   }
 
@@ -170,7 +175,7 @@ export class ProductDetails implements OnInit, OnDestroy {
 
       this.toggleFollowSubject
         .pipe(debounceTime(300), takeUntil(this.destroy$))
-        .subscribe(() => this._handleToggle());
+        .subscribe(() => this.handleToggle());
     }
   }
 
@@ -265,7 +270,7 @@ export class ProductDetails implements OnInit, OnDestroy {
     });
   }
 
-  private _handleToggle() {
+  private handleToggle() {
     if (this.isFollowLoading()) return;
 
     const id = this.article()?.id;

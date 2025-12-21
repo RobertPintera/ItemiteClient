@@ -2,11 +2,11 @@
   @if (auction) {
     <app-floating-chat-container
       [class.hidden]="!showChat()"
-      (onExitClicked)="DisableChatVisibility()" [listingId]="auction.id" [productOwner]="auction.owner"/>
+      (onExitClicked)="disableChatVisibility()" [listingId]="auction.id" [productOwner]="auction.owner"/>
   } @else if (product) {
     <app-floating-chat-container
       [class.hidden]="!showChat()"
-      (onExitClicked)="DisableChatVisibility()" [listingId]="product.id" [productOwner]="product.owner"/>
+      (onExitClicked)="disableChatVisibility()" [listingId]="product.id" [productOwner]="product.owner"/>
   }
   <div class="flex flex-col w-full max-w-[1500px] py-4 px-8">
     <div class="flex flex-wrap w-full justify-between">
@@ -74,12 +74,12 @@
                   <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                   <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 } @else {
-                  <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
-
+                  <app-button label="{{'product_details.buy' | translate}}" (clickButton)="onPurchaseClicked()"/>
+                  <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 }
                 <app-button (clickButton)="clickNumber()"
                             [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" [severity]="isAuthorLogged() ? 'primary' : 'secondary'">
+                          : ( 'product_details.call' | translate )" severity="primary">
                 </app-button>
                 @if (isAuthorLogged()){
                   <app-button label="{{'product_details.individual_pricing' | translate}}" (clickButton)="openIndividualPricing()"  severity="secondary"/>
@@ -122,7 +122,8 @@
                 <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                 <app-button label="{{ 'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               } @else {
-                <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="openIndividualPricing()"/>
+                <app-button label="{{'product_details.buy' | translate}}" (clickButton)="onPurchaseClicked()"/>
+                <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
               }
 
               <app-button (clickButton)="clickNumber()"
