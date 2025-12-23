@@ -99,6 +99,13 @@ export const routes: Routes = [
             .then(m => m.Sales),
         canActivate: [AuthGuard],
       },
+      {
+        path: 'checkout',
+        loadComponent: () =>
+          import('./components/features/checkout/checkout')
+            .then(m => m.Checkout),
+        // canActivate: [AuthGuard],
+      }
     ]
   },
   {

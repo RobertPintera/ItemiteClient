@@ -5,13 +5,13 @@ import {catchError, Observable} from 'rxjs';
 import {PostStripeConnectStartResponseDTO} from '../../models/payments/PostStripeConnectStartResponseDTO';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 import {PaginatedListingDTO} from '../../models/PaginatedListingDTO';
-import {PostPurchaseProductDTO} from '../../models/payments/PostPurchaseProductDTO';
 import {PostDisputeDTO} from '../../models/payments/PostDisputeDTO';
 import {GetPurchasesDTO} from '../../models/payments/GetPurchasesDTO';
 import {GetPurchasesResponseDTO} from '../../models/payments/GetPurchasesResponseDTO';
 import {GetOnboardingStatusResponseDTO} from '../../models/payments/GetOnboardingStatusResponseDTO';
 import {isPlatformBrowser} from '@angular/common';
 import {AuthService} from '../auth-service/auth.service';
+import {PostPurchaseProductDTO} from '../../models/payments/PostPurchaseProductDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -45,16 +45,12 @@ export class PaymentService {
     return this.http.post<PostStripeConnectStartResponseDTO>(`${this.baseUrl}/stripe/connect/start`, {});
   }
 
-  private getStripeConnectRefreshOnboardingLink() {
-    return this.http.get(`${this.baseUrl}/stripe/connect/refresh-onboarding-link`);
-  }
-
   private getOnboardingStatus(): Observable<GetOnboardingStatusResponseDTO>{
     return this.http.get<GetOnboardingStatusResponseDTO>(`${this.baseUrl}/stripe/onboarding-status`);
   }
 
-  private postPurchaseProduct(productListingId: number, params: HttpParams){
-    return this.http.post(`${this.baseUrl}/purchase-product/${productListingId}`, { params });
+  private postPurchaseProduct(productListingId: number, body: PostPurchaseProductDTO){
+    return this.http.post(`${this.baseUrl}/purchase-product/${productListingId}`, body);
   }
 
   private getMyPurchases(params: HttpParams): Observable<GetPurchasesResponseDTO> {
@@ -94,11 +90,12 @@ export class PaymentService {
     );
   }
 
-  purchaseProduct(productListingId: number, data: PostPurchaseProductDTO) {
-    const params = new HttpParams()
-      .set('paymentMethodId', data.paymentMethodId);
+  purchaseProduct(productListingId: number, methodPaymentId: string) {
+    const body: PostPurchaseProductDTO = {
+      paymentMethodId: methodPaymentId
+    };
 
-    return this.postPurchaseProduct(productListingId, params).pipe(
+    return this.postPurchaseProduct(productListingId, body).pipe(
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
         console.error('Error purchaseProduct:', err);
