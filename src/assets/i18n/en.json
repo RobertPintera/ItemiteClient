@@ -475,5 +475,32 @@
     "notifications": "Notifications",
     "my_products": "My products",
     "chats": "Chats"
+  },
+  "purchases": {
+    "header": "Purchases",
+    "no_purchases": "Can't find any purchases."
+  },
+  "checkout": {
+    "header": "Checkout",
+    "your_purchase": "Your purchase",
+    "back": "Back",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "email": "Email",
+    "phone_number": "Phone number",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
+    "postal_code": "Postal code",
+    "card_number": "Card number",
+    "expiration_date": "Expiration date",
+    "card_verification_code": "Card verification code",
+    "cancel": "Cancel",
+    "pay": "Pay",
+    "payment": "Payment"
+  },
+  "checkout_success": {
+    "header": "Purchase successful",
+    "back_to_home": "Back to home"
   }
 }

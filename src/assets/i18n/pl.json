@@ -468,5 +468,32 @@
     "notifications": "Powiadomienia",
     "my_products": "Moje ogłoszenia",
     "chats": "Rozmowy"
+  },
+  "purchases": {
+    "header": "Zakupy",
+    "no_purchases": "Nie można znaleźć żadnego zakupu."
+  },
+  "checkout": {
+    "header": "Koszyk",
+    "your_purchase": "Twój zakup",
+    "back": "Powrót",
+    "first_name": "Imię",
+    "last_name": "Nazwisko",
+    "email": "Email",
+    "phone_number": "Numer telefonu",
+    "address": "Adres rozliczeniowy",
+    "city": "Miasto",
+    "country": "Państwo",
+    "postal_code": "Kod pocztowy",
+    "card_number": "Numer karty",
+    "expiration_date": "Data ważności",
+    "card_verification_code": "Kod weryfikacyjny karty",
+    "cancel": "Anuluj",
+    "pay": "Zapłać",
+    "payment": "Płatność"
+  },
+  "checkout_success": {
+    "header": "Zakup zakończony sukcesem",
+    "back_to_home": "Powrót do strony głównej"
   }
 }

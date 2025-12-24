@@ -55,9 +55,9 @@ export class ProductGeneralForm {
 
   readonly mainCategories = this.categoryService.mainCategories();
 
-  readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
-    key: cat.id.toString(),
-    value: "categories." + cat.name
+  readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(category => ({
+    key: category.id.toString(),
+    value: "categories." + category.name
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 

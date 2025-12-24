@@ -129,9 +129,6 @@ export class ProductListingService {
 
   loadProudctListingAuth(id: number){
     return this.getProductListingAuth(id).pipe(
-      map(product => {
-        return product;
-      }),
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadProductListingAuth:', err);
