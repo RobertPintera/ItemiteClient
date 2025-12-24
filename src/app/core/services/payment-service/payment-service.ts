@@ -12,6 +12,7 @@ import {GetOnboardingStatusResponseDTO} from '../../models/payments/GetOnboardin
 import {isPlatformBrowser} from '@angular/common';
 import {AuthService} from '../auth-service/auth.service';
 import {PostPurchaseProductDTO} from '../../models/payments/PostPurchaseProductDTO';
+import {GetSalesResponseDTO} from '../../models/payments/GetSalesResponseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -57,8 +58,8 @@ export class PaymentService {
     return this.http.get<GetPurchasesResponseDTO>(`${this.baseUrl}/my-purchases`, { params });
   }
 
-  private getMySales(params: HttpParams) {
-    return this.http.get(`${this.baseUrl}/my-sales`, { params });
+  private getMySales(params: HttpParams): Observable<GetSalesResponseDTO> {
+    return this.http.get<GetSalesResponseDTO>(`${this.baseUrl}/my-sales`, { params });
   }
 
   private postConfirmDelivery(listingId: number) {

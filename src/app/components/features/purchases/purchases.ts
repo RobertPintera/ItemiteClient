@@ -38,7 +38,7 @@ export class Purchases implements OnInit, OnDestroy {
   });
   readonly isBlocked = signal<boolean>(false);
 
-  private filterPageSubject = new Subject<PaginatedListingDTO>();
+  private filterPageSubject = new Subject<GetPurchasesDTO>();
   private destroy$ = new Subject<void>();
 
   ngOnInit() {
