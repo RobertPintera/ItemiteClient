@@ -5,10 +5,37 @@
            class="text-muted-foreground hover:text-muted-foreground/60focus:text-muted-foreground/60
            duration-75">{{ 'checkout.back' | translate }}</a>
       </div>
-      <div class="flex flex-row w-full gap-4">
+    <h1>{{ 'checkout.header' | translate }}</h1>
+      <div class="flex flex-col-reverse lg:flex-row w-full gap-4">
         <div class="flex flex-col flex-1 gap-2">
-          <h1>{{ 'checkout.header' | translate }}</h1>
+          <h2>{{ 'checkout.bid' | translate }}</h2>
           <form ngxStripeCardGroup [formGroup]="form" (ngSubmit)="pay()" [elementsOptions]="elementsOptions" class="flex flex-col gap-2">
+            @if (auction && form.controls.bidAmount){
+              <div class="flex flex-col gap-2 w-full">
+                <label for="bidAmount" class="text-xl font-semibold">{{ 'checkout.bid_amount' | translate }}</label>
+                <app-input-number id="bidAmount" formControlName="bidAmount" [min]="0" [max]="999999.99" [step]="0.01"/>
+
+                @if (form.controls.bidAmount.invalid && (form.controls.bidAmount.touched || form.controls.bidAmount.dirty)) {
+                  <div>
+                    <ul class="text-destructive text-sm list-disc pl-4">
+                      @if (form.controls.bidAmount.hasError('required')) {
+                        <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                      }
+                      @if(form.controls.bidAmount.hasError('min')){
+                        <li>{{ 'validator_errors_checkout.bid_min' | translate }}</li>
+                      }
+                      @if(form.controls.bidAmount.hasError('max')){
+                        <li>{{ 'validator_errors_checkout.bid_max' | translate }}</li>
+                      }
+                      @if(form.controls.bidAmount.hasError('pattern')){
+                        <li>{{ 'validator_errors_checkout.bid_pattern' | translate }}</li>
+                      }
+                    </ul>
+                  </div>
+                }
+              </div>
+            }
+            <h2>{{ 'checkout.billing_information' | translate }}</h2>
             <!-- First name -->
             <div class="flex flex-col gap-2 w-full">
               <label for="firstName" class="text-xl font-semibold">{{ 'checkout.first_name' | translate }}</label>
@@ -17,10 +44,16 @@
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.firstName.hasError('required')){
-                      <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
                     }
                     @if(form.controls.firstName.hasError('empty')){
-                      <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                    }
+                    @if(form.controls.firstName.hasError('minlength')){
+                      <li>{{ 'validator_errors_checkout.first_name_min_len' | translate }}</li>
+                    }
+                    @if(form.controls.firstName.hasError('maxlength')){
+                      <li>{{ 'validator_errors_checkout.first_name_max_len' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -34,10 +67,16 @@
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.lastName.hasError('required')){
-                      <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
                     }
                     @if(form.controls.lastName.hasError('empty')){
-                      <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                    }
+                    @if(form.controls.lastName.hasError('minlength')){
+                      <li>{{ 'validator_errors_checkout.last_name_min_len' | translate }}</li>
+                    }
+                    @if(form.controls.lastName.hasError('maxlength')){
+                      <li>{{ 'validator_errors_checkout.last_name_max_len' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -51,10 +90,13 @@
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.email.hasError('required')){
-                      <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
                     }
                     @if(form.controls.email.hasError('empty')){
-                      <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                    }
+                    @if(form.controls.email.hasError('email')){
+                      <li>{{ 'validator_errors_checkout.email_pattern' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -68,10 +110,13 @@
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.phoneNumber.hasError('required')){
-                      <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
                     }
                     @if(form.controls.phoneNumber.hasError('empty')){
-                      <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                    }
+                    @if(form.controls.phoneNumber.hasError('pattern')){
+                      <li>{{ 'validator_errors_checkout.phone_number_pattern' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -91,10 +136,7 @@
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.country.hasError('required')){
-                      <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
-                    }
-                    @if(form.controls.country.hasError('empty')){
-                      <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -108,10 +150,10 @@
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.city.hasError('required')){
-                      <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
                     }
                     @if(form.controls.city.hasError('empty')){
-                      <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -126,10 +168,10 @@
                   <div>
                     <ul class="text-destructive text-sm list-disc pl-4">
                       @if(form.controls.address.hasError('required')){
-                        <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+                        <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
                       }
                       @if(form.controls.address.hasError('empty')){
-                        <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+                        <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
                       }
                     </ul>
                   </div>
@@ -143,17 +185,17 @@
                   <div>
                     <ul class="text-destructive text-sm list-disc pl-4">
                       @if(form.controls.postalCode.hasError('required')){
-                        <li>{{ 'validator_errors_product_form.field_required' | translate }}</li>
+                        <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
                       }
-                      @if(form.controls.postalCode.hasError('empty')){
-                        <li>{{ 'validator_errors_product_form.field_empty' | translate }}</li>
+                      @if(form.controls.postalCode.hasError('invalidPostalCode')){
+                        <li>{{ 'validator_errors_checkout.postal_code_match' | translate }}</li>
                       }
                     </ul>
                   </div>
                 }
               </div>
             </div>
-            <h3>{{ 'checkout.payment' | translate }}</h3>
+            <h2>{{ 'checkout.payment' | translate }}</h2>
             <!-- Card number -->
             <div class="flex flex-col gap-2">
               <label for="cardNumber" class="text-xl font-semibold">{{ 'checkout.card_number' | translate }}</label>
@@ -201,9 +243,9 @@
               </div>
               <p>Vendor: {{article()?.owner?.userName}}</p>
               @if(product){
-                <p class="text-lg">Price: {{product.price}}</p>
+                <p class="text-lg">Price: {{product.price}} pln</p>
               } @else if (auction){
-                <p class="text-lg">Bid: {{auction.currentBid}}</p>
+                <p class="text-lg">Bid: {{auction.currentBid ?? auction.startingBid}} pln</p>
               }
             </div>
           </div>

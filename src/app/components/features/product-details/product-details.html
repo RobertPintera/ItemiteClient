@@ -64,6 +64,7 @@
               </div>
             }
           </div>
+          <!-- Mobile size -->
           @if (!isLg()) {
             <div class="flex flex-col gap-2 text-xl mb-2">
               @if(product){
@@ -74,7 +75,7 @@
                   <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                   <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 } @else {
-                  <app-button label="{{'product_details.buy' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }" (clickButton)="onPurchaseClicked()"/>
+                  <app-button label="{{'product_details.buy' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                   <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 }
                 <app-button (clickButton)="clickNumber()"
@@ -95,7 +96,7 @@
                   <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
                   <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 } @else {
-                  <app-button label="{{'product_details.bid' | translate}}" (clickButton)="openBid()"/>
+                  <app-button label="{{'product_details.bid' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
                   <app-button (clickButton)="OnMessageClicked()" label="{{'product_details.send_message' | translate}}" severity="secondary"/>
                 }
                 <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>
@@ -113,6 +114,7 @@
         </div>
         <div class="hidden lg:block self-stretch min-w-0.5 bg-muted-foreground z-10"></div>
         <div class="text-xl mt-2 flex flex-col gap-2 lg:w-2/6 lg:p-4 lg:mt-0">
+          <!-- Desktop size -->
           @if (isLg()){
             @if(product){
               <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
@@ -122,7 +124,7 @@
                 <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                 <app-button label="{{ 'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               } @else {
-                <app-button label="{{'product_details.buy' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"  (clickButton)="onPurchaseClicked()"/>
+                <app-button label="{{'product_details.buy' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                 <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               }
 
@@ -144,7 +146,7 @@
                 <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" />
                 <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               } @else {
-                <app-button label="{{'product_details.bid' | translate}}" (clickButton)="openBid()"/>
+                <app-button label="{{'product_details.bid' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
                 <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               }
               <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>
@@ -163,7 +165,6 @@
 </div>
 @if (auction) {
   <app-bid-dialog-history [id]="auction.id" [(isOpen)]="isOpenBidHistory"/>
-  <app-bid-dialog [auctionId]="auction.id" [currentBid]="auction.currentBid ?? auction.startingBid" [(isOpen)]="isOpenBidDialog" (bidAction)="updateAuction()"/>
 } @else if (product) {
   <app-individual-pricing-dialog [listingId]="product.id" [(isOpen)]="isOpenIndividualPricingDialog"/>
   <app-delete-individual-pricing-dialog [listingId]="product.id" [(isOpen)]="isOpenDeleteIndividualPricingDialog"/>

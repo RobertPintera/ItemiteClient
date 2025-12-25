@@ -9,6 +9,7 @@ import {PostAuctionListingResponseDTO} from '../../models/PostAuctionListingResp
 import {Bid} from '../../models/auction-listing/Bid';
 import {PostBidAuctionListingResponseDTO} from '../../models/auction-listing/PostBidAuctionListingResponseDTO';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
+import {PostBidAuctionListingDTO} from '../../models/auction-listing/PostBidAuctionListingDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -42,10 +43,8 @@ export class AuctionListingService {
     return this.http.put(`${this.baseUrl}/${id}`, formData);
   }
 
-  private postBidAuctionListing(id: number, price: number): Observable<PostBidAuctionListingResponseDTO> {
-    return this.http.post<PostBidAuctionListingResponseDTO>(`${this.baseUrl}/${id}/bid`, {
-      price: price
-    });
+  private postBidAuctionListing(id: number, body: PostBidAuctionListingDTO): Observable<PostBidAuctionListingResponseDTO> {
+    return this.http.post<PostBidAuctionListingResponseDTO>(`${this.baseUrl}/${id}/bid`, body);
   }
 
   private getBidHistoryAuctionListing(id: number): Observable<Bid[]> {
@@ -138,8 +137,8 @@ export class AuctionListingService {
     );
   }
 
-  bidAuctionListing(id: number, price: number){
-    return this.postBidAuctionListing(id,price).pipe(
+  bidAuctionListing(id: number, data: PostBidAuctionListingDTO){
+    return this.postBidAuctionListing(id, data).pipe(
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
         console.error('Error getBidHistoryAuctionListing:', err);

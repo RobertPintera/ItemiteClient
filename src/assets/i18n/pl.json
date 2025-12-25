@@ -25,12 +25,6 @@
     "user_id": "Identyfikator użytkownika",
     "buy": "Kup"
   },
-  "validator_errors_product_details": {
-    "field_required": "Pole jest wymagane",
-    "price_pattern": "Cena nie jest zgodna ze wzorcem liczby",
-    "price_range": "Cena musi być pomiędzy 0 a 1000000",
-    "user_id_pattern": "Identyfikator użytkownika nie jest zgodny ze wzorcem liczby"
-  },
   "paginator": {
     "preposition": "z"
   },
@@ -490,7 +484,24 @@
     "card_verification_code": "Kod weryfikacyjny karty",
     "cancel": "Anuluj",
     "pay": "Zapłać",
-    "payment": "Płatność"
+    "payment": "Płatność",
+    "bid": "Oferta",
+    "bid_amount": "Wartość oferty",
+    "billing_information": "Informacje rozliczeniowe"
+  },
+  "validator_errors_checkout": {
+    "field_required": "Pole jest wymagane.",
+    "field_empty" : "Pole nie może być puste",
+    "bid_min": "Wartość oferty musi być większa od obecnej kwoty aukcji.",
+    "bid_max": "Wartość ofety musi być mniejsza od 999 999.99.",
+    "bid_pattern": "Wartość oferty nie pasuje do wzorca liczby",
+    "first_name_min_len" : "Imię musi mieć przynajmniej z 2 znaki",
+    "first_name_max_len" : "Imię nie może mieć więcej niż z 30 znaków",
+    "last_name_min_len" : "Nazwisko musi mieć przynajmniej z 2 znaki",
+    "last_name_max_len" : "Nazwisko nie może mieć więcej niż z 30 znaków",
+    "email_pattern": "Email nie pasuje do wzorca",
+    "phone_number_pattern": "Number telefonu nie pasuje do wzorca.",
+    "postal_code_match": "Kod pocztowy jest nieważny dla wybranego kraju."
   },
   "checkout_success": {
     "header": "Zakup zakończony sukcesem",

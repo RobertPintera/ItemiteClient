@@ -17,7 +17,6 @@ import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {BidHistoryDialog} from './bid-history-dialog/bid-history-dialog';
-import {BidDialog} from './bid-dialog/bid-dialog';
 import {IndividualPricingDialog} from './individual-pricing-dialog/individual-pricing-dialog';
 import {DeleteIndividualPricingDialog} from './delete-individual-pricing-dialog/delete-individual-pricing-dialog';
 
@@ -32,7 +31,6 @@ import {DeleteIndividualPricingDialog} from './delete-individual-pricing-dialog/
     FloatingChatContainer,
     NgClass,
     BidHistoryDialog,
-    BidDialog,
     IndividualPricingDialog,
     DeleteIndividualPricingDialog,
   ],
@@ -108,9 +106,6 @@ export class ProductDetails implements OnInit, OnDestroy {
     this.switchChatVisibility();
   }
 
-  onPurchaseClicked(): void {
-
-  }
 
   disableChatVisibility(): void {
     this._showChat.set(false);
@@ -241,17 +236,6 @@ export class ProductDetails implements OnInit, OnDestroy {
     this.isOpenDeleteIndividualPricingDialog.set(true);
   }
 
-  openBid(){
-    if (!this.userService.isUserLoggedIn()) {
-      this.router.navigate(['login'], {
-        queryParams: {
-          returnUrl: this.router.url
-        }
-      });
-      return;
-    }
-    this.isOpenBidDialog.set(true);
-  }
 
   openIndividualPricing() {
     this.isOpenIndividualPricingDialog.set(true);

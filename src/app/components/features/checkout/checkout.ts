@@ -20,6 +20,10 @@ import {ErrorHandlerService} from '../../../core/services/error-handler-service/
 import {ComboBox} from '../../shared/combo-box/combo-box';
 import {OptionItem} from '../../../core/models/OptionItem';
 import {countries} from '../../../core/constants/countries';
+import {InputNumber} from '../../shared/input-number/input-number';
+import {CheckoutForm} from '../../../core/models/CheckoutForm';
+import {PostBidAuctionListingDTO} from '../../../core/models/auction-listing/PostBidAuctionListingDTO';
+import {isEmptyValidator, postalCodeValidator} from '../../../core/utility/Validation';
 
 @Component({
   selector: 'app-checkout',
@@ -33,7 +37,8 @@ import {countries} from '../../../core/constants/countries';
     StripeCardExpiryComponent,
     StripeCardCvcComponent,
     LoadingDialog,
-    ComboBox
+    ComboBox,
+    InputNumber
   ],
   templateUrl: './checkout.html',
   styleUrl: './checkout.css',
@@ -55,15 +60,30 @@ export class Checkout implements OnInit, OnDestroy {
     value: country.name
   }));
 
-  readonly form = this.formBuilder.group({
-    firstName: new FormControl<string>('', Validators.required),
-    lastName: new FormControl<string>('', Validators.required),
+  readonly form = this.formBuilder.group<CheckoutForm>({
+    firstName: new FormControl<string>('', [
+      Validators.required,
+      isEmptyValidator,
+      Validators.minLength(2),
+      Validators.maxLength(30)]),
+    lastName: new FormControl<string>('', [
+      Validators.required,
+      isEmptyValidator,
+      Validators.minLength(2),
+      Validators.maxLength(30)
+    ]),
     email: new FormControl<string>('', [Validators.required, Validators.email]),
-    phoneNumber: new FormControl<string>('', [Validators.required]),
-    address: new FormControl<string>('', Validators.required),
-    city: new FormControl<string>('', Validators.required),
+    phoneNumber: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(/^(\+?[1-9]\d{0,2}[-.\s]?)?(\d{1,4}[-.\s]?){1,5}\d{1,4}$/),
+      Validators.maxLength(20)]),
+    address: new FormControl<string>('', [Validators.required, isEmptyValidator]),
+    city: new FormControl<string>('', [Validators.required, isEmptyValidator]),
     country: new FormControl<OptionItem | null>(null, Validators.required),
-    postalCode: new FormControl<string>('', Validators.required),
+    postalCode: new FormControl<string>(''),
+
+    //Only for auctions
+    bidAmount: new FormControl<number | null>(null),
   });
 
   // Stripe card
@@ -127,7 +147,31 @@ export class Checkout implements OnInit, OnDestroy {
       if(type === 'Product')
         this.productListingService.loadProudctListingAuth(validId).subscribe(product => this.article.set(product));
       else if (type === 'Auction')
-        this.auctionListingService.loadAuctionListingAuth(validId).subscribe(auction => this.article.set(auction));
+        this.auctionListingService.loadAuctionListingAuth(validId).subscribe(auction => {
+          this.article.set(auction);
+          const minBid = auction.currentBid ?? auction.startingBid;
+
+          const bidControl = this.form.controls.bidAmount;
+          if (bidControl) {
+            bidControl.setValue(minBid);
+            bidControl.setValidators([
+              Validators.required,
+              Validators.min(minBid),
+              Validators.max(999999.99),
+              Validators.pattern(/^\d+(\.\d{1,2})?$/)
+            ]);
+            bidControl.updateValueAndValidity();
+          }
+        });
+    });
+
+    this.form.controls.country.valueChanges.subscribe(() => {
+      const postalControl = this.form.controls.postalCode;
+      postalControl.setValidators([
+        Validators.required,
+        postalCodeValidator(this.form.controls.country)
+      ]);
+      postalControl.updateValueAndValidity();
     });
   }
 
@@ -171,11 +215,21 @@ export class Checkout implements OnInit, OnDestroy {
         const productListingId = this.article()?.id;
         if (!productListingId) return;
 
-        this.paymentService.purchaseProduct(productListingId, paymentMethodId).pipe(finalize(() => this.loading.set(false))).subscribe(() => {
-          this.router.navigate(['/checkout-success']);
-        });
+        if (this.product) {
+          this.paymentService.purchaseProduct(productListingId, paymentMethodId).pipe(finalize(() => this.loading.set(false))).subscribe(() => {
+            this.router.navigate(['/checkout-success']);
+          });
+        } else if (this.auction) {
+          const payload: PostBidAuctionListingDTO = {
+            price: formValues.bidAmount ?? 0,
+            paymentMethodId: paymentMethodId,
+          };
+
+          this.auctionListingService.bidAuctionListing(productListingId, payload).pipe(finalize(() => this.loading.set(false))).subscribe(() => {
+            this.router.navigate(['/checkout-success']);
+          });
+        }
       }
     });
-
   }
 }
