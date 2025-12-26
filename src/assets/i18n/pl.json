@@ -465,7 +465,11 @@
   },
   "purchases": {
     "header": "Zakupy",
-    "no_purchases": "Nie można znaleźć żadnego zakupu."
+    "no_purchases": "Nie można znaleźć żadnego zakupu.",
+    "show_product": "Pokaż produkty",
+    "dispute": "Spór",
+    "confirm_delivery": "Potwierdzenie dostawy",
+    "confirm_delivery_content": "Czy jesteś pewien co do potwierdzenia dostawy? Ta czynność jest nieodwracalna!"
   },
   "checkout": {
     "header": "Koszyk",

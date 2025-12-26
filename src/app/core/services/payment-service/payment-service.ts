@@ -63,11 +63,11 @@ export class PaymentService {
   }
 
   private postConfirmDelivery(listingId: number) {
-    return this.http.put(`${this.baseUrl}/confirm-delivery/${listingId}`, {});
+    return this.http.post(`${this.baseUrl}/confirm-delivery/${listingId}`, {});
   }
 
   private postDispute(paymentId: number,params: HttpParams) {
-    return this.http.put(`${this.baseUrl}/dispute/${paymentId}`, params);
+    return this.http.post(`${this.baseUrl}/dispute/${paymentId}`, params);
   }
 
   // Logic

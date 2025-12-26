@@ -1,5 +1,5 @@
 export interface ListingItemDTO {
-  id: string;
+  id: number;
   name: string;
   location: {
     longitude: number;

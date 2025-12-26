@@ -98,6 +98,10 @@ export class Purchases implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  refreshFilter(){
+    this.applyFilter(this.filter());
+  }
+
   private applyFilter(filter: PaginatedListingDTO) {
     this.isBlocked.set(true);
     this.filterPageSubject.next(filter);

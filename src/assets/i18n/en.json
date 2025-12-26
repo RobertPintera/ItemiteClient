@@ -472,7 +472,11 @@
   },
   "purchases": {
     "header": "Purchases",
-    "no_purchases": "Can't find any purchases."
+    "no_purchases": "Can't find any purchases.",
+    "show_product": "Show product",
+    "dispute": "Dispute",
+    "confirm_delivery": "Confirm delivery",
+    "confirm_delivery_content": "Are you sure about the delivery confirmation? This action cannot be undone."
   },
   "checkout": {
     "header": "Checkout",
