@@ -9,6 +9,7 @@ import {ConfirmDialog} from '../../../shared/confirm-dialog/confirm-dialog';
 import {PaymentService} from '../../../../core/services/payment-service/payment-service';
 import {LoadingDialog} from '../../../shared/loading-dialog/loading-dialog';
 import {finalize} from 'rxjs';
+import {DisputeDialog} from './dispute-dialog/dispute-dialog';
 
 @Component({
   selector: 'app-purchase-item',
@@ -18,7 +19,8 @@ import {finalize} from 'rxjs';
     TranslatePipe,
     RouterLink,
     ConfirmDialog,
-    LoadingDialog
+    LoadingDialog,
+    DisputeDialog
   ],
   templateUrl: './purchase-item.html',
   styleUrl: './purchase-item.css',
@@ -31,6 +33,7 @@ export class PurchaseItem {
 
   readonly loading = signal<boolean>(false);
   readonly isOpenConfirmDeliveryDialog = signal<boolean>(false);
+  readonly isOpenDisputeDialog = signal<boolean>(false);
 
   openConfirmDeliveryDialog() {
     this.isOpenConfirmDeliveryDialog.set(true);
@@ -40,14 +43,17 @@ export class PurchaseItem {
     this.isOpenConfirmDeliveryDialog.set(false);
   }
 
+  openDisputeDialog() {
+    this.isOpenDisputeDialog.set(true);
+  }
+
   confirmDelivery() {
     const listingId = this.purchase().listing.id;
     if(listingId === null || listingId === undefined) return;
 
     this.loading.set(true);
 
-
-    this.paymentService.confirmDelivery(listingId).pipe(finalize(() => this.loading.set(true)))
+    this.paymentService.confirmDelivery(listingId).pipe(finalize(() => this.loading.set(false)))
       .subscribe(() => this.confirmDeliverySuccess.emit());
   }
 

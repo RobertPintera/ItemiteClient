@@ -75,7 +75,7 @@
   <div class="flex justify-between gap-2 mt-2">
     <app-button [label]="'purchases.show_product' | translate" severity="secondary" routerLink="/product" [queryParams]="{ id: purchase().listing.id, type: purchase().listing.listingType }"/>
     <div class="flex flex-row gap-2">
-      <app-button [label]="'purchases.dispute' | translate" severity="danger"/>
+      <app-button [label]="'purchases.dispute.header' | translate" severity="danger" (clickButton)="openDisputeDialog()"/>
       <app-button [label]="'purchases.confirm_delivery' | translate" severity="primary" (clickButton)="openConfirmDeliveryDialog()"/>
     </div>
   </div>
@@ -86,3 +86,4 @@
 @if(loading()){
   <app-loading-dialog/>
 }
+<app-dispute-dialog [(isOpen)]="isOpenDisputeDialog" [paymentId]="purchase().paymentId"/>

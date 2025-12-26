@@ -66,8 +66,8 @@ export class PaymentService {
     return this.http.post(`${this.baseUrl}/confirm-delivery/${listingId}`, {});
   }
 
-  private postDispute(paymentId: number,params: HttpParams) {
-    return this.http.post(`${this.baseUrl}/dispute/${paymentId}`, params);
+  private postDispute(paymentId: number, formData: FormData) {
+    return this.http.post(`${this.baseUrl}/dispute/${paymentId}`, formData);
   }
 
   // Logic
@@ -137,25 +137,29 @@ export class PaymentService {
     return this.postConfirmDelivery(listingId).pipe(
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
-        console.error('Error loadSales:', err);
+        console.error('Error confirmDelivery:', err);
         throw err;
       })
     );
   }
 
-  dispute(listingId: number, data: PostDisputeDTO) {
-    let params = new HttpParams()
-      .set('Reason', data.reason)
-      .set('Description', data.description);
+  dispute(paymentId: number, data: PostDisputeDTO) {
+    const formData = new FormData();
 
-    data.photos.forEach(id => {
-      params = params.append('photos', id.toString());
+    formData.append('Reason', data.reason);
+    formData.append('Description', data.description);
+
+    data.photos.forEach((file) => {
+      formData.append('photos', file);
     });
 
-    return this.postDispute(listingId, params).pipe(
+    console.log(paymentId);
+    console.log(formData);
+
+    return this.postDispute(paymentId, formData).pipe(
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
-        console.error('Error loadSales:', err);
+        console.error('Error dispute:', err);
         throw err;
       })
     );

@@ -467,7 +467,18 @@
     "header": "Zakupy",
     "no_purchases": "Nie można znaleźć żadnego zakupu.",
     "show_product": "Pokaż produkty",
-    "dispute": "Spór",
+    "dispute": {
+      "header": "Spór",
+      "description": "Opis",
+      "reason": {
+        "header": "Powód",
+        "item_not_received":"Towar nie otrzymano",
+        "item_not_as_described": "Towar nie jest zgodny z opisem",
+        "item_damaged": "Towar został uszkodzony",
+        "other": "Inne"
+      },
+      "photos": "Zdjęcia"
+    },
     "confirm_delivery": "Potwierdzenie dostawy",
     "confirm_delivery_content": "Czy jesteś pewien co do potwierdzenia dostawy? Ta czynność jest nieodwracalna!"
   },
@@ -506,6 +517,11 @@
     "email_pattern": "Email nie pasuje do wzorca",
     "phone_number_pattern": "Number telefonu nie pasuje do wzorca.",
     "postal_code_match": "Kod pocztowy jest nieważny dla wybranego kraju."
+  },
+  "validator_errors_dispute": {
+    "field_required": "Pole jest wymagane.",
+    "field_empty" : "Pole nie może być puste.",
+    "description_max": "Opis nie może mieć więcej niż z 500 znaków"
   },
   "checkout_success": {
     "header": "Zakup zakończony sukcesem",

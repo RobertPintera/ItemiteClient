@@ -474,7 +474,18 @@
     "header": "Purchases",
     "no_purchases": "Can't find any purchases.",
     "show_product": "Show product",
-    "dispute": "Dispute",
+    "dispute": {
+      "header": "Dispute",
+      "description": "Description",
+      "reason": {
+        "header": "Reason",
+        "item_not_received":"Item not received",
+        "item_not_as_described": "Item not as described",
+        "item_damaged": "Item damaged",
+        "other": "Other"
+      },
+      "photos": "Photos"
+    },
     "confirm_delivery": "Confirm delivery",
     "confirm_delivery_content": "Are you sure about the delivery confirmation? This action cannot be undone."
   },
@@ -513,6 +524,11 @@
     "email_pattern": "Email doesn't match the pattern.",
     "phone_number_pattern": "Phone number doesn't match the pattern.",
     "postal_code_match": "Postal code is invalid to selected country."
+  },
+  "validator_errors_dispute": {
+    "field_required": "Field is required",
+    "field_empty" : "Field can't be empty",
+    "description_max": "Description cannot be more than 500 characters"
   },
   "checkout_success": {
     "header": "Purchase successful",
