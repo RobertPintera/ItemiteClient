@@ -6,6 +6,7 @@ import {ErrorNotification} from '../../shared/error-notification/error-notificat
 import {Footer} from '../../shared/footer/footer';
 import {CategoryService} from '../../../core/services/category-service/category.service';
 import {NotificationService} from '../../../core/services/notification-service/notification.service';
+import {NotificationsList} from '../../features/notifications-list/notifications-list';
 
 @Component({
   selector: 'app-main-layout',
@@ -14,7 +15,8 @@ import {NotificationService} from '../../../core/services/notification-service/n
     Navbar,
     RouterOutlet,
     ErrorNotification,
-    Footer
+    Footer,
+    NotificationsList
   ],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css'
@@ -22,6 +24,8 @@ import {NotificationService} from '../../../core/services/notification-service/n
 export class MainLayout implements OnInit {
   private categoryService = inject(CategoryService);
   private notificationService = inject(NotificationService);
+
+  showNotificationsList = this.notificationService.showNotificationList;
 
   ngOnInit() {
     this.categoryService.loadMainCategories().subscribe({

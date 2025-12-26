@@ -270,5 +270,12 @@
     "notifications": "Powiadomienia",
     "my_products": "Moje ogłoszenia",
     "chats": "Rozmowy"
+  },
+  "notifications": {
+    "Auction": "Aukcja",
+    "Product": "Produkt",
+    "ChatPage": "Rozmowy",
+    "User": "Użytkownik",
+    "delete_all": "Usuń wszystkie"
   }
 }

@@ -32,6 +32,7 @@ export class OnProfileMenu {
 
   OnNotificationsClicked() {
     this.OnMenuItemClicked();
+    this._notificationService.SwitchNotificationVisibility();
   }
 
   async OnLogoutClicked() {

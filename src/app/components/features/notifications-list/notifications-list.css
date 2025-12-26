@@ -1,0 +1,11 @@
+@media (1920px >= width) or (width >= 2570px) {
+  .customPosition {
+    right: 0;
+  }
+}
+
+@media (1920px < width < 2570px) {
+  .customPosition {
+    left: calc(50% + 960px - var(--spacing) * 80);
+  }
+}
