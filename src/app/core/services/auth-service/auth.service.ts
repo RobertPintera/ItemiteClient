@@ -68,9 +68,14 @@ export class AuthService {
     }
 
     try {
-      await lastValueFrom(
+      const response = await lastValueFrom(
         this.http.get<User>(`${environment.itemiteApiUrl}/user/me`, {withCredentials: true})
       );
+      this._userBasicInfo.set({
+        id: response.id,
+        username: response.userName,
+        email: response.email
+      });
       this._isUserLoggedIn.set(true);
       return true;
     } catch (error: any) {

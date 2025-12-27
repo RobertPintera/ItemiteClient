@@ -556,5 +556,12 @@
     "buyer": "Kupujący",
     "seller": "Sprzedający",
     "platform_fee_amount": "Opłata platformy"
+  },
+  "notifications": {
+    "Auction": "Aukcja",
+    "Product": "Produkt",
+    "ChatPage": "Rozmowy",
+    "User": "Użytkownik",
+    "delete_all": "Usuń wszystkie"
   }
 }

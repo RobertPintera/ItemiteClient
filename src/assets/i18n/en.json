@@ -563,5 +563,12 @@
     "buyer": "Buyer",
     "seller": "Seller",
     "platform_fee_amount": "Platform fee amount"
+  },
+  "notifications": {
+    "Auction": "Auction",
+    "Product": "Product",
+    "ChatPage": "Chats",
+    "User": "User",
+    "delete_all": "Delete all"
   }
 }

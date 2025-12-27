@@ -1,4 +1,8 @@
 <app-error-notification />
+@if (showNotificationsList()) {
+  <app-notifications-list />
+}
+
 <div id="content"
      class="max-w-[1920px] shadow-[0_0_100vw_rgba(255,255,255,0.5)]
      dark:shadow-[0_0_100vw_rgba(10,10,10,0.5)]

@@ -99,6 +99,13 @@ export const routes: Routes = [
           import('./components/features/payment-success/payment-success')
             .then(m => m.PaymentSuccess),
         canActivate: [AuthGuard],
+      },
+      {
+        path: 'chat',
+        loadComponent: () =>
+          import('./components/features/chat/fullscreen-chat-page/fullscreen-chat-page')
+            .then(m => m.FullscreenChatPage),
+        canActivate: [AuthGuard],
       }
     ]
   },
