@@ -2,7 +2,7 @@ import {Component, inject, input, output, signal} from '@angular/core';
 import {Button} from "../../../shared/button/button";
 import {DatePipe} from "@angular/common";
 import {TranslatePipe} from "@ngx-translate/core";
-import {LISTING_TYPES} from '../../../../core/constants/constants';
+import {DEFAULT_PROFILE_IMAGE, LISTING_TYPES, PAYMENT_STATUS} from '../../../../core/constants/constants';
 import {PurchaseItemDTO} from '../../../../core/models/payments/PurchaseItemDTO';
 import {RouterLink} from '@angular/router';
 import {ConfirmDialog} from '../../../shared/confirm-dialog/confirm-dialog';
@@ -58,4 +58,6 @@ export class PurchaseItem {
   }
 
   protected readonly LISTING_TYPES = LISTING_TYPES;
+  protected readonly DEFAULT_PROFILE_IMAGE = DEFAULT_PROFILE_IMAGE;
+  protected readonly PAYMENT_STATUS = PAYMENT_STATUS;
 }
