@@ -18,7 +18,7 @@
 
       @if(data && data.items.length){
         @for (purchase of data.items; track purchase.paymentId){
-          <app-purchase-item [purchase]="purchase" (confirmDeliverySuccess)="refreshFilter()"/>
+          <app-purchase-item [purchase]="purchase" (successAction)="refreshFilter()"/>
         }
       }
     </div>

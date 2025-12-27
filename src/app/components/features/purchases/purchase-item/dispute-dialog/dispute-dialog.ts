@@ -1,4 +1,4 @@
-import {Component, inject, input, model, signal} from '@angular/core';
+import {Component, inject, input, model, output, signal} from '@angular/core';
 import {LoadingDialog} from '../../../../shared/loading-dialog/loading-dialog';
 import {Button} from '../../../../shared/button/button';
 import {Dialog} from '../../../../shared/dialog/dialog';
@@ -34,6 +34,8 @@ export class DisputeDialog {
 
   readonly isOpen = model.required<boolean>();
   readonly paymentId = input.required<number>();
+
+  readonly disputeSuccess = output<void>();
 
   readonly loading = signal<boolean>(false);
 
@@ -92,6 +94,7 @@ export class DisputeDialog {
         description: "",
         photos: []
       });
+      this.disputeSuccess.emit();
       this.isOpen.set(false);
     });
   }
