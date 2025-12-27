@@ -40,11 +40,11 @@ import {finalize} from 'rxjs';
   styleUrl: './auction-form.css'
 })
 export class AuctionForm {
-  private auctionListingService = inject(AuctionListingService);
-  private categoryService = inject(CategoryService);
-  private formBuilder = inject(FormBuilder);
-  private router = inject(Router);
-  private location = inject(Location);
+  private _auctionListingService = inject(AuctionListingService);
+  private _categoryService = inject(CategoryService);
+  private _formBuilder = inject(FormBuilder);
+  private _router = inject(Router);
+  private _location = inject(Location);
 
   readonly loading = model.required<boolean>();
   readonly auction = input<AuctionListingDTO | null>(null);
@@ -54,7 +54,7 @@ export class AuctionForm {
   readonly selectedMainCategory = signal<OptionItem>({key: '', value: ''});
   readonly selectedSubCategory = signal<OptionItem>({key: '', value: ''});
 
-  readonly mainCategories = this.categoryService.mainCategories();
+  readonly mainCategories = this._categoryService.mainCategories();
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
     key: cat.id.toString(),
@@ -62,7 +62,7 @@ export class AuctionForm {
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
-  readonly form = this.formBuilder.group({
+  readonly form = this._formBuilder.group({
     name: new FormControl<string>('', [
       Validators.required,
       isEmptyValidator,
@@ -108,7 +108,7 @@ export class AuctionForm {
 
     this.selectedMainCategory.set(option);
     const id = Number(option.key);
-    this.categoryService.loadCategoryTree(id).subscribe({
+    this._categoryService.loadCategoryTree(id).subscribe({
       next: tree => {
         this.categories.set(tree);
 
@@ -135,7 +135,7 @@ export class AuctionForm {
   }
 
   cancel(){
-    this.location.back();
+    this._location.back();
   }
 
   submit() {
@@ -192,10 +192,10 @@ export class AuctionForm {
       console.log(payload.dateEnds);
       console.log(this.form.value.dateEnds);
 
-      this.auctionListingService.updateAuctionListing(auction.id ,payload).pipe(
+      this._auctionListingService.updateAuctionListing(auction.id ,payload).pipe(
         finalize(() => this.loading.set(false))
       ).subscribe(() => {
-        void this.router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
+        void this._router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
       });
     }
     else{
@@ -228,10 +228,10 @@ export class AuctionForm {
         imageOrders: imageOrders,
       };
 
-      this.auctionListingService.createAuctionListing(payload).pipe(
+      this._auctionListingService.createAuctionListing(payload).pipe(
         finalize(() => this.loading.set(false))
       ).subscribe(createdAuction => {
-        void this.router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type:  LISTING_TYPES.AUCTION } });
+        void this._router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type:  LISTING_TYPES.AUCTION } });
       });
     }
   }

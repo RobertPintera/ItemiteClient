@@ -15,7 +15,7 @@ import {PaymentService} from '../../../../core/services/payment-service/payment-
   styleUrl: './own-products.css',
 })
 export class OwnProducts {
-  private paymentService = inject(PaymentService);
+  private _paymentService = inject(PaymentService);
 
-  readonly onboardingStatus = this.paymentService.onboardingStatus;
+  readonly onboardingStatus = this._paymentService.onboardingStatus;
 }

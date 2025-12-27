@@ -22,15 +22,15 @@ import {TranslatePipe} from '@ngx-translate/core';
   styleUrl: './delete-individual-pricing-dialog.css',
 })
 export class DeleteIndividualPricingDialog {
-  private productService = inject(ProductListingService);
-  private formBuilder = inject(FormBuilder);
+  private _productService = inject(ProductListingService);
+  private _formBuilder = inject(FormBuilder);
 
   readonly isOpen = model.required<boolean>();
   readonly listingId = input.required<number>();
 
   readonly loading = signal<boolean>(false);
 
-  readonly form = this.formBuilder.group({
+  readonly form = this._formBuilder.group({
     userId: new FormControl<number>(0, [
       Validators.required,
       Validators.pattern(/^\d+$/)
@@ -54,7 +54,7 @@ export class DeleteIndividualPricingDialog {
 
     if (userId === null || userId === undefined) return;
 
-    this.productService.deleteUserIndividualPrice(this.listingId(), userId).pipe(
+    this._productService.deleteUserIndividualPrice(this.listingId(), userId).pipe(
       finalize(() => {
         this.loading.set(false);
       })

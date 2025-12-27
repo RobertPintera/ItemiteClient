@@ -28,11 +28,11 @@ import {UserService} from '../../../core/services/user-service/user.service';
   styleUrl: './user-products.css'
 })
 export class UserProducts implements OnInit, OnDestroy {
-  private breakpointObserver = inject(BreakpointObserver);
-  private userService = inject(UserService);
-  private listingService = inject(ListingService);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private _breakpointObserver = inject(BreakpointObserver);
+  private _userService = inject(UserService);
+  private _listingService = inject(ListingService);
+  private _route = inject(ActivatedRoute);
+  private _router = inject(Router);
 
   readonly isMd = signal<boolean>(false);
   readonly isOpenDialog = signal<boolean>(false);
@@ -51,7 +51,7 @@ export class UserProducts implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   ngOnInit() {
-    this.breakpointObserver.observe([
+    this._breakpointObserver.observe([
       '(min-width: 768px)',
     ]).subscribe(result => {
       this.isMd.set(result.breakpoints['(min-width: 768px)']);
@@ -62,7 +62,7 @@ export class UserProducts implements OnInit, OnDestroy {
       debounceTime(1000),
       switchMap(filter => {
         this.loading.set(true);
-        return this.listingService.loadUserListings(this.userService.userBasicInfo().id, filter).pipe(
+        return this._listingService.loadUserListings(this._userService.userBasicInfo().id, filter).pipe(
           finalize(() => {
             setTimeout(() => {
               this.isBlocked.set(false);
@@ -78,7 +78,7 @@ export class UserProducts implements OnInit, OnDestroy {
       },
     });
 
-    this.route.queryParamMap.subscribe(params => {
+    this._route.queryParamMap.subscribe(params => {
       const updated: Partial<PaginatedListingDTO> = {};
 
       const num = (name: string) => {
@@ -104,7 +104,7 @@ export class UserProducts implements OnInit, OnDestroy {
   usePaginator(pageNumber: number): void {
     this.filter().pageNumber = pageNumber;
 
-    this.router.navigate([], {
+    this._router.navigate([], {
       queryParams: {
         pageNumber: pageNumber,
       },
@@ -123,7 +123,7 @@ export class UserProducts implements OnInit, OnDestroy {
   }
 
   goToProductForm(listingType?: ListingType) {
-    this.router.navigate(['/product-form'], {
+    this._router.navigate(['/product-form'], {
       queryParams: { type: listingType }
     });
   }

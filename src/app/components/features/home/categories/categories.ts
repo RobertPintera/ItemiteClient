@@ -14,6 +14,7 @@ import {CategoryService} from '../../../../core/services/category-service/catego
   styleUrl: './categories.css'
 })
 export class Categories {
-  private categoryService = inject(CategoryService);
-  categories = this.categoryService.mainCategories;
+  private _categoryService = inject(CategoryService);
+
+  readonly categories = this._categoryService.mainCategories;
 }

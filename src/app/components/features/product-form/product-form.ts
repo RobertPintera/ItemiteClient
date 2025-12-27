@@ -25,10 +25,10 @@ import {LoadingDialog} from '../../shared/loading-dialog/loading-dialog';
   styleUrl: './product-form.css'
 })
 export class ProductForm{
-  private route = inject(ActivatedRoute);
-  private destroyRef = inject(DestroyRef);
-  private auctionListingService = inject(AuctionListingService);
-  private productListingService = inject(ProductListingService);
+  private _route = inject(ActivatedRoute);
+  private _destroyRef = inject(DestroyRef);
+  private _auctionListingService = inject(AuctionListingService);
+  private _productListingService = inject(ProductListingService);
 
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
   readonly formType = signal<ListingType | null>(null);
@@ -45,9 +45,9 @@ export class ProductForm{
   }
 
   constructor() {
-    this.route.queryParamMap
+    this._route.queryParamMap
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
+        takeUntilDestroyed(this._destroyRef),
         map(params => {
           const type = params.get('type');
           const id = params.get('id');
@@ -68,8 +68,8 @@ export class ProductForm{
           }
 
           return formType === LISTING_TYPES.PRODUCT
-            ? this.productListingService.loadProudctListingAuth(id)
-            : this.auctionListingService.loadAuctionListingAuth(id);
+            ? this._productListingService.loadProudctListingAuth(id)
+            : this._auctionListingService.loadAuctionListingAuth(id);
         })
       )
       .subscribe({

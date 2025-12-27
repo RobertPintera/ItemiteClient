@@ -23,9 +23,9 @@ import {PurchaseItem} from './purchase-item/purchase-item';
   styleUrl: './purchases.css',
 })
 export class Purchases implements OnInit, OnDestroy {
-  private paymentsService = inject(PaymentService);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private _paymentsService = inject(PaymentService);
+  private _route = inject(ActivatedRoute);
+  private _router = inject(Router);
 
   readonly loading = signal<boolean>(true);
   readonly purchases = signal<GetPurchasesResponseDTO | null>(null);
@@ -46,7 +46,7 @@ export class Purchases implements OnInit, OnDestroy {
       debounceTime(1000),
       switchMap(filter => {
         this.loading.set(true);
-        return this.paymentsService.loadPurchases(filter).pipe(
+        return this._paymentsService.loadPurchases(filter).pipe(
           finalize(() => {
             setTimeout(() => {
               this.isBlocked.set(false);
@@ -62,7 +62,7 @@ export class Purchases implements OnInit, OnDestroy {
       },
     });
 
-    this.route.queryParamMap.subscribe(params => {
+    this._route.queryParamMap.subscribe(params => {
       const updated: Partial<PaginatedListingDTO> = {};
 
       const num = (name: string) => {
@@ -83,7 +83,7 @@ export class Purchases implements OnInit, OnDestroy {
   usePaginator(pageNumber: number): void {
     this.filter().pageNumber = pageNumber;
 
-    this.router.navigate([], {
+    this._router.navigate([], {
       queryParams: {
         pageNumber: pageNumber,
       },

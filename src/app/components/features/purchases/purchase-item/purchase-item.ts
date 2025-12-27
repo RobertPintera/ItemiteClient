@@ -26,7 +26,7 @@ import {DisputeDialog} from './dispute-dialog/dispute-dialog';
   styleUrl: './purchase-item.css',
 })
 export class PurchaseItem {
-  private paymentService = inject(PaymentService);
+  private _paymentService = inject(PaymentService);
 
   readonly purchase = input.required<PurchaseItemDTO>();
   readonly confirmDeliverySuccess = output<void>();
@@ -53,7 +53,7 @@ export class PurchaseItem {
 
     this.loading.set(true);
 
-    this.paymentService.confirmDelivery(listingId).pipe(finalize(() => this.loading.set(false)))
+    this._paymentService.confirmDelivery(listingId).pipe(finalize(() => this.loading.set(false)))
       .subscribe(() => this.confirmDeliverySuccess.emit());
   }
 

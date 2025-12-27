@@ -17,10 +17,10 @@ import {toSignal} from '@angular/core/rxjs-interop';
   styleUrl: './dedicated-products.css'
 })
 export class DedicatedProducts{
-  private listingService = inject(ListingService);
+  private _listingService = inject(ListingService);
 
   readonly products = toSignal(
-    this.listingService.loadDedicatedListing(LISTING_TYPES.PRODUCT),
+    this._listingService.loadDedicatedListing(LISTING_TYPES.PRODUCT),
     { initialValue: [] }
   );
 }

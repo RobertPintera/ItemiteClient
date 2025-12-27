@@ -29,15 +29,15 @@ import {MediaManager} from '../../../../shared/media-manager/media-manager';
   styleUrl: './dispute-dialog.css',
 })
 export class DisputeDialog {
-  private paymentService = inject(PaymentService);
-  private formBuilder = inject(FormBuilder);
+  private _paymentService = inject(PaymentService);
+  private _formBuilder = inject(FormBuilder);
 
   readonly isOpen = model.required<boolean>();
   readonly paymentId = input.required<number>();
 
   readonly loading = signal<boolean>(false);
 
-  readonly form = this.formBuilder.group({
+  readonly form = this._formBuilder.group({
     reason: new FormControl<OptionItem | null>(null, Validators.required),
     description: new FormControl<string>("",[
       Validators.required,
@@ -82,7 +82,7 @@ export class DisputeDialog {
       photos: photos
     };
 
-    this.paymentService.dispute(this.paymentId(), payload).pipe(
+    this._paymentService.dispute(this.paymentId(), payload).pipe(
       finalize(() => {
         this.loading.set(false);
       })

@@ -46,13 +46,13 @@ import {isEmptyValidator, postalCodeValidator} from '../../../core/utility/Valid
 export class Payment implements OnInit, OnDestroy {
   @ViewChild(StripeCardNumberComponent) card?: StripeCardNumberComponent;
 
-  private productListingService = inject(ProductListingService);
-  private auctionListingService = inject(AuctionListingService);
-  private errorHandlerService = inject(ErrorHandlerService);
-  private paymentService = inject(PaymentService);
-  private route = inject(ActivatedRoute);
-  private formBuilder = inject(FormBuilder);
-  private router = inject(Router);
+  private _productListingService = inject(ProductListingService);
+  private _auctionListingService = inject(AuctionListingService);
+  private _errorHandlerService = inject(ErrorHandlerService);
+  private _paymentService = inject(PaymentService);
+  private _route = inject(ActivatedRoute);
+  private _formBuilder = inject(FormBuilder);
+  private _router = inject(Router);
   protected stripeService = inject(StripeService);
 
   readonly countriesOptions = countries.map(country => ({
@@ -60,7 +60,7 @@ export class Payment implements OnInit, OnDestroy {
     value: country.name
   }));
 
-  readonly form = this.formBuilder.group<PaymentForm>({
+  readonly form = this._formBuilder.group<PaymentForm>({
     firstName: new FormControl<string>('', [
       Validators.required,
       isEmptyValidator,
@@ -137,7 +137,7 @@ export class Payment implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   ngOnInit() {
-    this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
+    this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('id');
       const type = params.get('type');
       const validId = id !== null && !isNaN(Number(id)) ? Number(id) : null;
@@ -145,9 +145,9 @@ export class Payment implements OnInit, OnDestroy {
       if (validId === null) return;
 
       if(type === 'Product')
-        this.productListingService.loadProudctListingAuth(validId).subscribe(product => this.article.set(product));
+        this._productListingService.loadProudctListingAuth(validId).subscribe(product => this.article.set(product));
       else if (type === 'Auction')
-        this.auctionListingService.loadAuctionListingAuth(validId).subscribe(auction => {
+        this._auctionListingService.loadAuctionListingAuth(validId).subscribe(auction => {
           this.article.set(auction);
           const minBid = auction.currentBid ?? auction.startingBid;
 
@@ -208,7 +208,7 @@ export class Payment implements OnInit, OnDestroy {
       }
     }).subscribe(result => {
       if (result.error) {
-        this.errorHandlerService.SendRawErrorMessage(result.error.message ?? 'Error');
+        this._errorHandlerService.SendRawErrorMessage(result.error.message ?? 'Error');
         this.loading.set(false);
       } else if (result.paymentMethod) {
         const paymentMethodId = result.paymentMethod.id;
@@ -216,8 +216,8 @@ export class Payment implements OnInit, OnDestroy {
         if (!productListingId) return;
 
         if (this.product) {
-          this.paymentService.purchaseProduct(productListingId, paymentMethodId).pipe(finalize(() => this.loading.set(false))).subscribe(() => {
-            this.router.navigate(['/payment-success']);
+          this._paymentService.purchaseProduct(productListingId, paymentMethodId).pipe(finalize(() => this.loading.set(false))).subscribe(() => {
+            this._router.navigate(['/payment-success']);
           });
         } else if (this.auction) {
           const payload: PostBidAuctionListingDTO = {
@@ -225,8 +225,8 @@ export class Payment implements OnInit, OnDestroy {
             paymentMethodId: paymentMethodId,
           };
 
-          this.auctionListingService.bidAuctionListing(productListingId, payload).pipe(finalize(() => this.loading.set(false))).subscribe(() => {
-            this.router.navigate(['/payment-success']);
+          this._auctionListingService.bidAuctionListing(productListingId, payload).pipe(finalize(() => this.loading.set(false))).subscribe(() => {
+            this._router.navigate(['/payment-success']);
           });
         }
       }

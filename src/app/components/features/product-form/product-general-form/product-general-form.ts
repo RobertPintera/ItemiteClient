@@ -39,11 +39,11 @@ import {finalize} from 'rxjs';
   styleUrl: './product-general-form.css'
 })
 export class ProductGeneralForm {
-  private productListingService = inject(ProductListingService);
-  private categoryService = inject(CategoryService);
-  private formBuilder = inject(FormBuilder);
-  private router = inject(Router);
-  private location = inject(Location);
+  private _productListingService = inject(ProductListingService);
+  private _categoryService = inject(CategoryService);
+  private _formBuilder = inject(FormBuilder);
+  private _router = inject(Router);
+  private _location = inject(Location);
 
   readonly loading = model.required<boolean>();
   readonly product = input<ProductListingDTO | null>(null);
@@ -53,7 +53,7 @@ export class ProductGeneralForm {
   readonly selectedMainCategory = signal<OptionItem>({key: '', value: ''});
   readonly selectedSubCategory = signal<OptionItem>({key: '', value: ''});
 
-  readonly mainCategories = this.categoryService.mainCategories();
+  readonly mainCategories = this._categoryService.mainCategories();
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(category => ({
     key: category.id.toString(),
@@ -61,7 +61,7 @@ export class ProductGeneralForm {
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
-  readonly form = this.formBuilder.group({
+  readonly form = this._formBuilder.group({
     name: new FormControl<string>('', [
       Validators.required,
       isEmptyValidator,
@@ -104,7 +104,7 @@ export class ProductGeneralForm {
 
     this.selectedMainCategory.set(option);
     const id = Number(option.key);
-    this.categoryService.loadCategoryTree(id).subscribe({
+    this._categoryService.loadCategoryTree(id).subscribe({
       next: tree => {
         this.categories.set(tree);
 
@@ -131,7 +131,7 @@ export class ProductGeneralForm {
   }
 
   cancel(){
-    this.location.back();
+    this._location.back();
   }
 
   submit() {
@@ -184,10 +184,10 @@ export class ProductGeneralForm {
         newImageOrders: newImageOrders
       };
 
-      this.productListingService.updateProductListing(product.id ,payload).pipe(
+      this._productListingService.updateProductListing(product.id ,payload).pipe(
         finalize(() => this.loading.set(false))
       ).subscribe(() => {
-        void this.router.navigate(['/product'], { queryParams: { id: product.id, type: "Product" } });
+        void this._router.navigate(['/product'], { queryParams: { id: product.id, type: "Product" } });
       });
     }
     else{
@@ -218,10 +218,10 @@ export class ProductGeneralForm {
         imageOrders: imageOrders,
       };
 
-      this.productListingService.createProductListing(payload).pipe(
+      this._productListingService.createProductListing(payload).pipe(
         finalize(() => this.loading.set(false))
       ).subscribe(createdProduct => {
-        void this.router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
+        void this._router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
       });
     }
   }

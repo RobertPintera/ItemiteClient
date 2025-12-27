@@ -18,15 +18,15 @@ import {finalize} from 'rxjs';
   styleUrl: './billing-and-payments.css',
 })
 export class BillingAndPayments {
-  private paymentService = inject(PaymentService);
+  private _paymentService = inject(PaymentService);
 
-  readonly onboardingStatus = this.paymentService.onboardingStatus;
+  readonly onboardingStatus = this._paymentService.onboardingStatus;
 
   readonly loading = signal<boolean>(false);
 
   goToStripeAccount() {
     this.loading.set(true);
-    this.paymentService.connectStripeStart()
+    this._paymentService.connectStripeStart()
       .pipe(
         finalize(() => this.loading.set(false))
       )

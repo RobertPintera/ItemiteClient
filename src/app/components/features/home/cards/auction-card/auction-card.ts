@@ -15,7 +15,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   styleUrl: './auction-card.css'
 })
 export class AuctionCard implements OnInit {
-  private breakpointObserver = inject(BreakpointObserver);
+  private _breakpointObserver = inject(BreakpointObserver);
 
   readonly auction = input<ListingItemDTO>();
   readonly isRow = signal<boolean>(false);
@@ -23,7 +23,7 @@ export class AuctionCard implements OnInit {
   ngOnInit() {
     if (typeof window === 'undefined') return;
 
-    this.breakpointObserver
+    this._breakpointObserver
       .observe([Breakpoints.Small, Breakpoints.Large, Breakpoints.XLarge])
       .pipe(
         map(result => {
