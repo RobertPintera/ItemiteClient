@@ -87,18 +87,18 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'checkout',
+        path: 'payment',
         loadComponent: () =>
-          import('./components/features/checkout/checkout')
-            .then(m => m.Checkout),
-        // canActivate: [AuthGuard],
+          import('./components/features/payment/payment')
+            .then(m => m.Payment),
+        canActivate: [AuthGuard],
       },
       {
-        path: 'checkout-success',
+        path: 'payment-success',
         loadComponent: () =>
-          import('./components/features/checkout-success/checkout-success')
-            .then(m => m.CheckoutSuccess),
-        // canActivate: [AuthGuard],
+          import('./components/features/payment-success/payment-success')
+            .then(m => m.PaymentSuccess),
+        canActivate: [AuthGuard],
       }
     ]
   },

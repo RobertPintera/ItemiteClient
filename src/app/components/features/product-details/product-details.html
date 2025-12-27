@@ -75,7 +75,7 @@
                   <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                   <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 } @else {
-                  <app-button label="{{'product_details.buy' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
+                  <app-button label="{{'product_details.buy' | translate}}" routerLink="/payment" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                   <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 }
                 <app-button (clickButton)="clickNumber()"
@@ -96,7 +96,7 @@
                   <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
                   <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
                 } @else {
-                  <app-button label="{{'product_details.bid' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
+                  <app-button label="{{'product_details.bid' | translate}}" routerLink="/payment" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
                   <app-button (clickButton)="OnMessageClicked()" label="{{'product_details.send_message' | translate}}" severity="secondary"/>
                 }
                 <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>
@@ -124,7 +124,7 @@
                 <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                 <app-button label="{{ 'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               } @else {
-                <app-button label="{{'product_details.buy' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
+                <app-button label="{{'product_details.buy' | translate}}" routerLink="/payment" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
                 <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               }
 
@@ -146,7 +146,7 @@
                 <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" />
                 <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               } @else {
-                <app-button label="{{'product_details.bid' | translate}}" routerLink="/checkout" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
+                <app-button label="{{'product_details.bid' | translate}}" routerLink="/payment" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
                 <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
               }
               <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>

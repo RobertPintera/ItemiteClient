@@ -4,15 +4,15 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';
 
 @Component({
-  selector: 'app-checkout-success',
+  selector: 'app-payment-success',
   imports: [
     Button,
     TranslatePipe,
     RouterLink
   ],
-  templateUrl: './checkout-success.html',
-  styleUrl: './checkout-success.css',
+  templateUrl: './payment-success.html',
+  styleUrl: './payment-success.css',
 })
-export class CheckoutSuccess {
+export class PaymentSuccess {
 
 }

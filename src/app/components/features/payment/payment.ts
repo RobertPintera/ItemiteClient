@@ -21,12 +21,12 @@ import {ComboBox} from '../../shared/combo-box/combo-box';
 import {OptionItem} from '../../../core/models/OptionItem';
 import {countries} from '../../../core/constants/countries';
 import {InputNumber} from '../../shared/input-number/input-number';
-import {CheckoutForm} from '../../../core/models/CheckoutForm';
+import {PaymentForm} from '../../../core/models/PaymentForm';
 import {PostBidAuctionListingDTO} from '../../../core/models/auction-listing/PostBidAuctionListingDTO';
 import {isEmptyValidator, postalCodeValidator} from '../../../core/utility/Validation';
 
 @Component({
-  selector: 'app-checkout',
+  selector: 'app-payment',
   imports: [
     RouterLink,
     TranslatePipe,
@@ -40,10 +40,10 @@ import {isEmptyValidator, postalCodeValidator} from '../../../core/utility/Valid
     ComboBox,
     InputNumber
   ],
-  templateUrl: './checkout.html',
-  styleUrl: './checkout.css',
+  templateUrl: './payment.html',
+  styleUrl: './payment.css',
 })
-export class Checkout implements OnInit, OnDestroy {
+export class Payment implements OnInit, OnDestroy {
   @ViewChild(StripeCardNumberComponent) card?: StripeCardNumberComponent;
 
   private productListingService = inject(ProductListingService);
@@ -60,7 +60,7 @@ export class Checkout implements OnInit, OnDestroy {
     value: country.name
   }));
 
-  readonly form = this.formBuilder.group<CheckoutForm>({
+  readonly form = this.formBuilder.group<PaymentForm>({
     firstName: new FormControl<string>('', [
       Validators.required,
       isEmptyValidator,
@@ -217,7 +217,7 @@ export class Checkout implements OnInit, OnDestroy {
 
         if (this.product) {
           this.paymentService.purchaseProduct(productListingId, paymentMethodId).pipe(finalize(() => this.loading.set(false))).subscribe(() => {
-            this.router.navigate(['/checkout-success']);
+            this.router.navigate(['/payment-success']);
           });
         } else if (this.auction) {
           const payload: PostBidAuctionListingDTO = {
@@ -226,7 +226,7 @@ export class Checkout implements OnInit, OnDestroy {
           };
 
           this.auctionListingService.bidAuctionListing(productListingId, payload).pipe(finalize(() => this.loading.set(false))).subscribe(() => {
-            this.router.navigate(['/checkout-success']);
+            this.router.navigate(['/payment-success']);
           });
         }
       }

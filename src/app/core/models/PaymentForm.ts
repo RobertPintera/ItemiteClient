@@ -1,7 +1,7 @@
 import {FormControl} from '@angular/forms';
 import {OptionItem} from './OptionItem';
 
-export interface CheckoutForm {
+export interface PaymentForm {
   firstName: FormControl<string | null>;
   lastName: FormControl<string | null>;
   email: FormControl<string | null>;

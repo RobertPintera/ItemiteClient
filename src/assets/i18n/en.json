@@ -489,8 +489,8 @@
     "confirm_delivery": "Confirm delivery",
     "confirm_delivery_content": "Are you sure about the delivery confirmation? This action cannot be undone."
   },
-  "checkout": {
-    "header": "Checkout",
+  "payment": {
+    "header": "Payment",
     "your_purchase": "Your purchase",
     "back": "Back",
     "first_name": "First name",
@@ -506,12 +506,12 @@
     "card_verification_code": "Card verification code",
     "cancel": "Cancel",
     "pay": "Pay",
-    "payment": "Payment",
+    "payment_card_details": "Payment card details",
     "bid": "Bid",
     "bid_amount": "Bid amount",
     "billing_information": "Billing information"
   },
-  "validator_errors_checkout": {
+  "validator_errors_payment": {
     "field_required": "Field is required",
     "field_empty" : "Field can't be empty",
     "bid_min": "Bid must be greater than current bid.",
@@ -530,7 +530,7 @@
     "field_empty" : "Field can't be empty",
     "description_max": "Description cannot be more than 500 characters"
   },
-  "checkout_success": {
+  "payment_success": {
     "header": "Purchase successful",
     "back_to_home": "Back to home"
   }

@@ -3,57 +3,57 @@
       <div class="flex flex-wrap w-full justify-between">
         <a routerLink="/product" [queryParams]="{ id: article()?.id ?? null  }"
            class="text-muted-foreground hover:text-muted-foreground/60focus:text-muted-foreground/60
-           duration-75">{{ 'checkout.back' | translate }}</a>
+           duration-75">{{ 'payment.back' | translate }}</a>
       </div>
-    <h1>{{ 'checkout.header' | translate }}</h1>
+    <h1>{{ 'payment.header' | translate }}</h1>
       <div class="flex flex-col-reverse lg:flex-row w-full gap-4">
         <div class="flex flex-col flex-1 gap-2">
-          <h2>{{ 'checkout.bid' | translate }}</h2>
+          <h2>{{ 'payment.bid' | translate }}</h2>
           <form ngxStripeCardGroup [formGroup]="form" (ngSubmit)="pay()" [elementsOptions]="elementsOptions" class="flex flex-col gap-2">
             @if (auction && form.controls.bidAmount){
               <div class="flex flex-col gap-2 w-full">
-                <label for="bidAmount" class="text-xl font-semibold">{{ 'checkout.bid_amount' | translate }}</label>
+                <label for="bidAmount" class="text-xl font-semibold">{{ 'payment.bid_amount' | translate }}</label>
                 <app-input-number id="bidAmount" formControlName="bidAmount" [min]="0" [max]="999999.99" [step]="0.01"/>
 
                 @if (form.controls.bidAmount.invalid && (form.controls.bidAmount.touched || form.controls.bidAmount.dirty)) {
                   <div>
                     <ul class="text-destructive text-sm list-disc pl-4">
                       @if (form.controls.bidAmount.hasError('required')) {
-                        <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                        <li>{{ 'validator_errors_payment.field_required' | translate }}</li>
                       }
                       @if(form.controls.bidAmount.hasError('min')){
-                        <li>{{ 'validator_errors_checkout.bid_min' | translate }}</li>
+                        <li>{{ 'validator_errors_payment.bid_min' | translate }}</li>
                       }
                       @if(form.controls.bidAmount.hasError('max')){
-                        <li>{{ 'validator_errors_checkout.bid_max' | translate }}</li>
+                        <li>{{ 'validator_errors_payment.bid_max' | translate }}</li>
                       }
                       @if(form.controls.bidAmount.hasError('pattern')){
-                        <li>{{ 'validator_errors_checkout.bid_pattern' | translate }}</li>
+                        <li>{{ 'validator_errors_payment.bid_pattern' | translate }}</li>
                       }
                     </ul>
                   </div>
                 }
               </div>
             }
-            <h2>{{ 'checkout.billing_information' | translate }}</h2>
+            <h2>{{ 'payment.billing_information' | translate }}</h2>
             <!-- First name -->
             <div class="flex flex-col gap-2 w-full">
-              <label for="firstName" class="text-xl font-semibold">{{ 'checkout.first_name' | translate }}</label>
+              <label for="firstName" class="text-xl font-semibold">{{ 'payment.first_name' | translate }}</label>
               <input id="firstName" formControlName="firstName" type="text" class="border rounded px-3 py-2" required/>
               @if (form.controls.firstName.invalid && (form.controls.firstName.touched || form.controls.firstName.dirty)){
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.firstName.hasError('required')){
-                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_required' | translate }}</li>
                     }
                     @if(form.controls.firstName.hasError('empty')){
-                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_empty' | translate }}</li>
                     }
                     @if(form.controls.firstName.hasError('minlength')){
-                      <li>{{ 'validator_errors_checkout.first_name_min_len' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.first_name_min_len' | translate }}</li>
                     }
                     @if(form.controls.firstName.hasError('maxlength')){
-                      <li>{{ 'validator_errors_checkout.first_name_max_len' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.first_name_max_len' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -61,22 +61,22 @@
             </div>
             <!-- Last name -->
             <div class="flex flex-col gap-2 w-full">
-              <label for="lastName" class="text-xl font-semibold">{{ 'checkout.last_name' | translate }}</label>
+              <label for="lastName" class="text-xl font-semibold">{{ 'payment.last_name' | translate }}</label>
               <input id="lastName" formControlName="lastName" type="text" class="border rounded px-3 py-2" required/>
               @if (form.controls.lastName.invalid && (form.controls.lastName.touched || form.controls.lastName.dirty)){
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.lastName.hasError('required')){
-                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_required' | translate }}</li>
                     }
                     @if(form.controls.lastName.hasError('empty')){
-                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_empty' | translate }}</li>
                     }
                     @if(form.controls.lastName.hasError('minlength')){
-                      <li>{{ 'validator_errors_checkout.last_name_min_len' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.last_name_min_len' | translate }}</li>
                     }
                     @if(form.controls.lastName.hasError('maxlength')){
-                      <li>{{ 'validator_errors_checkout.last_name_max_len' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.last_name_max_len' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -84,19 +84,19 @@
             </div>
             <!-- Email -->
             <div class="flex flex-col gap-2 w-full">
-              <label for="email" class="text-xl font-semibold">{{ 'checkout.email' | translate }}</label>
+              <label for="email" class="text-xl font-semibold">{{ 'payment.email' | translate }}</label>
               <input id="email" formControlName="email" type="email" class="border rounded px-3 py-2" required/>
               @if (form.controls.email.invalid && (form.controls.email.touched || form.controls.email.dirty)){
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.email.hasError('required')){
-                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_required' | translate }}</li>
                     }
                     @if(form.controls.email.hasError('empty')){
-                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_empty' | translate }}</li>
                     }
                     @if(form.controls.email.hasError('email')){
-                      <li>{{ 'validator_errors_checkout.email_pattern' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.email_pattern' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -104,19 +104,19 @@
             </div>
             <!-- Phone number -->
             <div class="flex flex-col gap-2 w-full">
-              <label for="phone" class="text-xl font-semibold">{{ 'checkout.phone_number' | translate }}</label>
+              <label for="phone" class="text-xl font-semibold">{{ 'payment.phone_number' | translate }}</label>
               <input id="phone" formControlName="phoneNumber" type="email" class="border rounded px-3 py-2" required/>
               @if (form.controls.phoneNumber.invalid && (form.controls.phoneNumber.touched || form.controls.phoneNumber.dirty)){
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.phoneNumber.hasError('required')){
-                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_required' | translate }}</li>
                     }
                     @if(form.controls.phoneNumber.hasError('empty')){
-                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_empty' | translate }}</li>
                     }
                     @if(form.controls.phoneNumber.hasError('pattern')){
-                      <li>{{ 'validator_errors_checkout.phone_number_pattern' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.phone_number_pattern' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -124,7 +124,7 @@
             </div>
             <!-- Country -->
             <div class="flex flex-col gap-2 w-full">
-              <label for="country" class="text-xl font-semibold">{{ 'checkout.country' | translate }}</label>
+              <label for="country" class="text-xl font-semibold">{{ 'payment.country' | translate }}</label>
               <app-combo-box formControlName="country" [items]="countriesOptions" class="w-full">
                 <ng-template let-item>
                   <span>
@@ -136,7 +136,7 @@
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.country.hasError('required')){
-                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_required' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -144,16 +144,16 @@
             </div>
             <!-- City -->
             <div class="flex flex-col gap-2 w-full">
-              <label for="city" class="text-xl font-semibold">{{ 'checkout.city' | translate }}</label>
+              <label for="city" class="text-xl font-semibold">{{ 'payment.city' | translate }}</label>
               <input id="city" formControlName="city" type="text" class="border rounded px-3 py-2" required/>
               @if (form.controls.city.invalid && (form.controls.city.touched || form.controls.city.dirty)){
                 <div>
                   <ul class="text-destructive text-sm list-disc pl-4">
                     @if(form.controls.city.hasError('required')){
-                      <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_required' | translate }}</li>
                     }
                     @if(form.controls.city.hasError('empty')){
-                      <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                      <li>{{ 'validator_errors_payment.field_empty' | translate }}</li>
                     }
                   </ul>
                 </div>
@@ -162,16 +162,16 @@
             <div class="flex gap-4">
               <!-- Address -->
               <div class="flex flex-col gap-2 w-full">
-                <label for="address" class="text-xl font-semibold">{{ 'checkout.address' | translate }}</label>
+                <label for="address" class="text-xl font-semibold">{{ 'payment.address' | translate }}</label>
                 <input id="address" formControlName="address" type="text" class="border rounded px-3 py-2" required/>
                 @if (form.controls.address.invalid && (form.controls.address.touched || form.controls.address.dirty)){
                   <div>
                     <ul class="text-destructive text-sm list-disc pl-4">
                       @if(form.controls.address.hasError('required')){
-                        <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                        <li>{{ 'validator_errors_payment.field_required' | translate }}</li>
                       }
                       @if(form.controls.address.hasError('empty')){
-                        <li>{{ 'validator_errors_checkout.field_empty' | translate }}</li>
+                        <li>{{ 'validator_errors_payment.field_empty' | translate }}</li>
                       }
                     </ul>
                   </div>
@@ -179,26 +179,26 @@
               </div>
               <!-- Postal code -->
               <div class="flex flex-col gap-2 w-full">
-                <label for="postalCode" class="text-xl font-semibold">{{ 'checkout.postal_code' | translate }}</label>
+                <label for="postalCode" class="text-xl font-semibold">{{ 'payment.postal_code' | translate }}</label>
                 <input id="postalCode" formControlName="postalCode" type="text" class="border rounded px-3 py-2" required/>
                 @if (form.controls.postalCode.invalid && (form.controls.postalCode.touched || form.controls.postalCode.dirty)){
                   <div>
                     <ul class="text-destructive text-sm list-disc pl-4">
                       @if(form.controls.postalCode.hasError('required')){
-                        <li>{{ 'validator_errors_checkout.field_required' | translate }}</li>
+                        <li>{{ 'validator_errors_payment.field_required' | translate }}</li>
                       }
                       @if(form.controls.postalCode.hasError('invalidPostalCode')){
-                        <li>{{ 'validator_errors_checkout.postal_code_match' | translate }}</li>
+                        <li>{{ 'validator_errors_payment.postal_code_match' | translate }}</li>
                       }
                     </ul>
                   </div>
                 }
               </div>
             </div>
-            <h2>{{ 'checkout.payment' | translate }}</h2>
+            <h2>{{ 'payment.payment_card_details' | translate }}</h2>
             <!-- Card number -->
             <div class="flex flex-col gap-2">
-              <label for="cardNumber" class="text-xl font-semibold">{{ 'checkout.card_number' | translate }}</label>
+              <label for="cardNumber" class="text-xl font-semibold">{{ 'payment.card_number' | translate }}</label>
               <div class="stripe-input">
                 <ngx-stripe-card-number [options]="cardNumberOptions"/>
               </div>
@@ -206,28 +206,28 @@
             <div class="flex gap-4">
               <!-- Expiration date -->
               <div class="flex flex-1 flex-col gap-2">
-                <label for="expirationDate" class="text-xl font-semibold">{{ 'checkout.expiration_date' | translate }}</label>
+                <label for="expirationDate" class="text-xl font-semibold">{{ 'payment.expiration_date' | translate }}</label>
                 <div class="stripe-input">
                   <ngx-stripe-card-expiry [options]="cardOptions" />
                 </div>
               </div>
               <!-- Card verification code -->
               <div class="flex flex-1 flex-col gap-2">
-                <label for="cardVerificationCode" class="text-xl font-semibold">{{ 'checkout.card_verification_code' | translate }}</label>
+                <label for="cardVerificationCode" class="text-xl font-semibold">{{ 'payment.card_verification_code' | translate }}</label>
                 <div class="stripe-input">
                   <ngx-stripe-card-cvc [options]="cardOptions" />
                 </div>
               </div>
             </div>
             <div class="flex flex-row gap-2 justify-between">
-              <app-button type="button" [label]="'checkout.cancel' | translate" severity="accent" variant="outlined"/>
-              <app-button type="submit" [label]="'checkout.pay' | translate"/>
+              <app-button type="button" [label]="'payment.cancel' | translate" severity="accent" variant="outlined"/>
+              <app-button type="submit" [label]="'payment.pay' | translate"/>
             </div>
           </form>
 
         </div>
         <div class="flex flex-col flex-1 gap-2 mt-2">
-          <h2>{{ 'checkout.your_purchase' | translate }}</h2>
+          <h2>{{ 'payment.your_purchase' | translate }}</h2>
           <div class="flex flex-row w-full gap-2 bg-card border-border border-2 rounded-2xl shadow-2xl p-4">
             <div class="relative flex justify-center size-48 p-4">
               <img [src]="article()?.mainImageUrl" [alt]="article()?.name" class="object-contain h-full">

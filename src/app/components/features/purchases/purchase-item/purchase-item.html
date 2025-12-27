@@ -7,12 +7,12 @@
     <h4>{{ purchase().listing.name }}</h4>
     <p>Price: {{ purchase().totalAmount }} {{ purchase().currency }}</p>
   </div>
-  <div class="flex flex-col md:flex-row flex-1 h-full w-full border-y-2 border-border py-2">
+  <div class="flex flex-col md:flex-row flex-1 h-full w-full border-y-2 gap-2 border-border py-2">
     <div class="h-64 aspect-square">
       <img [src]="purchase().listing.mainImageUrl ?? DEFAULT_PROFILE_IMAGE" [alt]=" purchase().listing.name" class="size-full object-contain" height="1" width="1">
     </div>
-    <div class="flex flex-col md:flex-row w-full gap-4">
-      <div class="flex flex-col w-full justify-between gap-4 p-0 md:p-8 md:pt-12">
+    <div class="flex flex-col-reverse md:flex-row w-full gap-4">
+      <div class="flex flex-1 flex-col w-full justify-between min-w-0 gap-4 p-0 md:p-8 md:pt-12">
         <div class="flex flex-row flex-wrap gap-3">
           @for (category of purchase().listing.categories; track category.id){
             <div class="border-2 border-border px-4 py-2 rounded-2xl bg-background text-foreground">

@@ -482,8 +482,8 @@
     "confirm_delivery": "Potwierdzenie dostawy",
     "confirm_delivery_content": "Czy jesteś pewien co do potwierdzenia dostawy? Ta czynność jest nieodwracalna!"
   },
-  "checkout": {
-    "header": "Koszyk",
+  "payment": {
+    "header": "Płatność",
     "your_purchase": "Twój zakup",
     "back": "Powrót",
     "first_name": "Imię",
@@ -499,12 +499,12 @@
     "card_verification_code": "Kod weryfikacyjny karty",
     "cancel": "Anuluj",
     "pay": "Zapłać",
-    "payment": "Płatność",
+    "payment_card_details": "Dane karty płatniczej",
     "bid": "Oferta",
     "bid_amount": "Wartość oferty",
     "billing_information": "Informacje rozliczeniowe"
   },
-  "validator_errors_checkout": {
+  "validator_errors_payment": {
     "field_required": "Pole jest wymagane.",
     "field_empty" : "Pole nie może być puste",
     "bid_min": "Wartość oferty musi być większa od obecnej kwoty aukcji.",
@@ -523,7 +523,7 @@
     "field_empty" : "Pole nie może być puste.",
     "description_max": "Opis nie może mieć więcej niż z 500 znaków"
   },
-  "checkout_success": {
+  "payment_success": {
     "header": "Zakup zakończony sukcesem",
     "back_to_home": "Powrót do strony głównej"
   }
