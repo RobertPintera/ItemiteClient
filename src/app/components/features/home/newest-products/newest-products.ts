@@ -24,8 +24,17 @@ export class NewestProducts implements OnInit {
 
   readonly products = signal<ListingItemDTO[]>([]);
 
-  readonly firstHalfProducts = computed(() => this.products().slice(0, this.products().length / 2));
-  readonly secondHalfProducts = computed(() => this.products().slice(this.products().length / 2));
+  readonly firstHalfProducts = computed(() => {
+    const items = this.products();
+    const half = Math.ceil(items.length / 2);
+    return items.slice(0, half);
+  });
+
+  readonly secondHalfProducts = computed(() => {
+    const items = this.products();
+    const half = Math.ceil(items.length / 2);
+    return items.slice(half);
+  });
 
   ngOnInit() {
     this._listingService.loadListing({pageSize: 10, listingType: LISTING_TYPES.PRODUCT, sortBy: SORTS_BY.CREATION_DATE, sortDirection: SORT_DIRECTION.ASCENDING}).

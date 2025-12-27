@@ -21,8 +21,17 @@ export class Auctions implements OnInit {
 
   readonly auctions = signal<ListingItemDTO[]>([]);
 
-  readonly firstHalfAuctions = computed(() => this.auctions().slice(0, this.auctions().length / 2));
-  readonly secondHalfAuctions = computed(() => this.auctions().slice(this.auctions().length / 2));
+  readonly firstHalfAuctions = computed(() => {
+    const items = this.auctions();
+    const half = Math.ceil(items.length / 2);
+    return items.slice(0, half);
+  });
+
+  readonly secondHalfAuctions = computed(() => {
+    const items = this.auctions();
+    const half = Math.ceil(items.length / 2);
+    return items.slice(half);
+  });
 
   ngOnInit() {
     this._listingService.loadDedicatedListing(LISTING_TYPES.AUCTION).subscribe({
