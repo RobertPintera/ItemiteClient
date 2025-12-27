@@ -11,6 +11,7 @@ import {LoadingDialog} from '../../../shared/loading-dialog/loading-dialog';
 import {finalize} from 'rxjs';
 import {DisputeDialog} from './dispute-dialog/dispute-dialog';
 import {imageError} from '../../../../core/utility/global-utility';
+import {UnderscorePipe} from '../../../../core/pipes/underscore-pipe/underscore-pipe';
 
 @Component({
   selector: 'app-purchase-item',
@@ -21,7 +22,8 @@ import {imageError} from '../../../../core/utility/global-utility';
     RouterLink,
     ConfirmDialog,
     LoadingDialog,
-    DisputeDialog
+    DisputeDialog,
+    UnderscorePipe
   ],
   templateUrl: './purchase-item.html',
   styleUrl: './purchase-item.css',

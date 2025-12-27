@@ -463,25 +463,6 @@
     "my_products": "Moje ogłoszenia",
     "chats": "Rozmowy"
   },
-  "purchases": {
-    "header": "Zakupy",
-    "no_purchases": "Nie można znaleźć żadnego zakupu.",
-    "show_product": "Pokaż produkty",
-    "dispute": {
-      "header": "Spór",
-      "description": "Opis",
-      "reason": {
-        "header": "Powód",
-        "item_not_received":"Towar nie otrzymano",
-        "item_not_as_described": "Towar nie jest zgodny z opisem",
-        "item_damaged": "Towar został uszkodzony",
-        "other": "Inne"
-      },
-      "photos": "Zdjęcia"
-    },
-    "confirm_delivery": "Potwierdzenie dostawy",
-    "confirm_delivery_content": "Czy jesteś pewien co do potwierdzenia dostawy? Ta czynność jest nieodwracalna!"
-  },
   "payment": {
     "header": "Płatność",
     "your_purchase": "Twój zakup",
@@ -526,5 +507,54 @@
   "payment_success": {
     "header": "Zakup zakończony sukcesem",
     "back_to_home": "Powrót do strony głównej"
+  },
+  "purchases": {
+    "header": "Zakupy",
+    "purchase": "Zakup",
+    "no_purchases": "Nie można znaleźć żadnego zakupu.",
+    "show_product": "Pokaż produkt",
+    "dispute": {
+      "header": "Spór",
+      "description": "Opis",
+      "reason": {
+        "header": "Powód",
+        "item_not_received":"Towar nie otrzymano",
+        "item_not_as_described": "Towar nie jest zgodny z opisem",
+        "item_damaged": "Towar został uszkodzony",
+        "other": "Inne"
+      },
+      "photos": "Zdjęcia"
+    },
+    "confirm_delivery": "Potwierdzenie dostawy",
+    "confirm_delivery_content": "Czy jesteś pewien co do potwierdzenia dostawy? Ta czynność jest nieodwracalna!"
+  },
+  "sales": {
+    "header": "Sprzedaże",
+    "sale": "Sprzedaż",
+    "no_sales": "Nie można znaleźć żadnej sprzedaży.",
+    "show_product": "Pokaż produkt"
+  },
+  "transactions": {
+    "status": {
+      "header": "Status",
+      "authorized": "Autoryzowano",
+      "pending_capture": "Oczekuje na pobranie",
+      "outbid": "Przebite",
+      "pending": "Oczekuje",
+      "pending_review": "Oczekuje na weryfikację",
+      "transferred": "Przekazano",
+      "refund_scheduled": "Zwrot zaplanowany",
+      "partial_refund_scheduled": "Częściowy zwrot zaplanowany",
+      "refunded": "Zwrócono",
+      "partially_refunded": "Częściowo zwrócono",
+      "disputed": "Sporny",
+      "failed": "Nie powiodło się"
+    },
+    "paid": "Zapłacono",
+    "sold": "Sprzedano",
+    "bid": "Oferta",
+    "buyer": "Kupujący",
+    "seller": "Sprzedający",
+    "platform_fee_amount": "Opłata platformy"
   }
 }

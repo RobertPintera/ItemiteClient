@@ -1,11 +1,13 @@
-<div class="flex flex-col w-full max-w-full bg-card text-card-foreground shadow-xl p-4 gap-2 border-b-2 border-border">
+<div class="flex bg-card text-card-foreground flex-col w-full border-2 gap-2 border-transparent border-b-border shadow-xl p-4
+    hover:border-border hover:rounded-xl hover:z-10 hover:scale-[1.02]
+    duration-150">
   <div class="flex flex-row justify-between gap-2">
-    <h3>{{purchase().paymentId}} - Payment</h3>
-    <p class="text-xl sm:text-2xl">Status: {{ purchase().status }}</p>
+    <h3>{{purchase().paymentId}} - {{ 'purchases.purchase' | translate }}</h3>
+    <p class="text-xl sm:text-2xl">{{ 'transactions.status.header' | translate }}: {{ ('transactions.status.' + (purchase().status | underscore)) | translate }}</p>
   </div>
   <div class="flex flex-row justify-between w-full text-lg sm:text-xl gap-2">
     <h4>{{ purchase().listing.name }}</h4>
-    <p>Price: {{ purchase().totalAmount }} {{ purchase().currency }}</p>
+    <p>{{ purchase().listing.listingType === LISTING_TYPES.AUCTION ? ('transactions.bid' | translate) : ('transactions.paid' | translate)}}: {{ purchase().totalAmount }} {{ purchase().currency }}</p>
   </div>
   <div class="flex flex-col md:flex-row flex-1 h-full w-full border-y-2 gap-2 border-border py-2">
     <div class="h-64 aspect-square">
@@ -40,7 +42,7 @@
 
   <div class="flex flex-row justify-between gap-4">
     <div class="flex flex-col flex-1">
-      <h4>Buyer</h4>
+      <h4>{{ 'transactions.buyer' | translate }}</h4>
       <div class="flex flex-row items-center gap-2">
         <div class="size-10 rounded-full overflow-hidden bg-muted">
           <img
@@ -57,7 +59,7 @@
       </div>
     </div>
     <div class="flex flex-col flex-1">
-      <h4>Seller</h4>
+      <h4>{{ 'transactions.seller'  | translate }}</h4>
       <div class="flex flex-row items-center gap-2">
         <div class="size-10 rounded-full overflow-hidden bg-muted">
           <img

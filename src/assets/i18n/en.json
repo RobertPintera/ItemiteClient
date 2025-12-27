@@ -470,25 +470,6 @@
     "my_products": "My products",
     "chats": "Chats"
   },
-  "purchases": {
-    "header": "Purchases",
-    "no_purchases": "Can't find any purchases.",
-    "show_product": "Show product",
-    "dispute": {
-      "header": "Dispute",
-      "description": "Description",
-      "reason": {
-        "header": "Reason",
-        "item_not_received":"Item not received",
-        "item_not_as_described": "Item not as described",
-        "item_damaged": "Item damaged",
-        "other": "Other"
-      },
-      "photos": "Photos"
-    },
-    "confirm_delivery": "Confirm delivery",
-    "confirm_delivery_content": "Are you sure about the delivery confirmation? This action cannot be undone."
-  },
   "payment": {
     "header": "Payment",
     "your_purchase": "Your purchase",
@@ -533,5 +514,54 @@
   "payment_success": {
     "header": "Purchase successful",
     "back_to_home": "Back to home"
+  },
+  "purchases": {
+    "header": "Purchases",
+    "purchase": "Purchase",
+    "no_purchases": "Can't find any purchases.",
+    "show_product": "Show product",
+    "dispute": {
+      "header": "Dispute",
+      "description": "Description",
+      "reason": {
+        "header": "Reason",
+        "item_not_received":"Item not received",
+        "item_not_as_described": "Item not as described",
+        "item_damaged": "Item damaged",
+        "other": "Other"
+      },
+      "photos": "Photos"
+    },
+    "confirm_delivery": "Confirm delivery",
+    "confirm_delivery_content": "Are you sure about the delivery confirmation? This action cannot be undone."
+  },
+  "sales": {
+    "header": "Sales",
+    "sale": "Sale",
+    "no_sales": "Can't find any sales.",
+    "show_product": "Pokaż produkt"
+  },
+  "transactions": {
+    "status": {
+      "header": "Status",
+      "authorized": "Authorized",
+      "pending_capture": "Pending capture",
+      "outbid": "Outbid",
+      "pending": "Pending",
+      "pending_review": "Pending review",
+      "transferred": "Transferred",
+      "refund_scheduled": "Refund scheduled",
+      "partial_refund_scheduled": "Partial refund scheduled",
+      "refunded": "Refunded",
+      "partially_refunded": "Partially refunded",
+      "disputed": "Disputed",
+      "failed": "Failed"
+    },
+    "paid": "Paid",
+    "sold": "Sold",
+    "bid": "Bid",
+    "buyer": "Buyer",
+    "seller": "Seller",
+    "platform_fee_amount": "Platform fee amount"
   }
 }
