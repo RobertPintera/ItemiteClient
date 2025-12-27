@@ -11,7 +11,7 @@ import {AuctionListingService} from '../../../core/services/auction-listing-serv
 import {Gallery} from '../../shared/gallery/gallery';
 import {DatePipe, isPlatformBrowser, isPlatformServer, NgClass} from '@angular/common';
 import {Map, Marker} from 'leaflet';
-import {LISTING_TYPES} from '../../../core/constants/constants';
+import {ButtonSeverity, LISTING_TYPES} from '../../../core/constants/constants';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
@@ -19,6 +19,19 @@ import {UserService} from '../../../core/services/user-service/user.service';
 import {BidHistoryDialog} from './bid-history-dialog/bid-history-dialog';
 import {IndividualPricingDialog} from './individual-pricing-dialog/individual-pricing-dialog';
 import {DeleteIndividualPricingDialog} from './delete-individual-pricing-dialog/delete-individual-pricing-dialog';
+
+interface ButtonSettings {
+  label: string;
+  onClick?: () => void;
+  routerLink?: string[];
+  queryParams?: Record<string, string | number | boolean>;
+  severity?: ButtonSeverity;
+}
+
+interface ButtonOrder {
+  id: string;
+  settings: ButtonSettings;
+}
 
 @Component({
   selector: 'app-product-details',
@@ -236,22 +249,56 @@ export class ProductDetails implements OnInit, OnDestroy {
     this.isOpenDeleteIndividualPricingDialog.set(true);
   }
 
-
   openIndividualPricing() {
     this.isOpenIndividualPricingDialog.set(true);
   }
 
-  updateAuction() {
-    const id = this.auction?.id;
-    if(!id) return;
+  getVisibleButtons(): ButtonOrder[] {
+    const buttonsSettings: ButtonSettings[] = [];
 
-    this._auctionListingService.loadAuctionListingAuth(id).subscribe({
-      next: product => {
-        this.article.set(product);
-        this.isFollowed.set(product.isFollowed ?? false);
+    const isArchived = this.article()?.isArchived;
+
+    // For products
+    if(this.product){
+      if (this.isAuthorLogged()){
+        if (!isArchived)
+          buttonsSettings.push({label: 'controls.edit', routerLink: ['/product-form'], queryParams: { id: this.product.id, type: LISTING_TYPES.PRODUCT }});
+        buttonsSettings.push({label: 'product_details.view_messages', onClick: () => this.OnMessageClicked()});
+      }
+      else {
+        if (!isArchived)
+          buttonsSettings.push({label: 'product_details.buy', routerLink: ['/payment'], queryParams: { id: this.product.id, type: LISTING_TYPES.PRODUCT }});
+        buttonsSettings.push({label: 'product_details.send_message', onClick: () => this.OnMessageClicked()});
+      }
+      buttonsSettings.push({ label: this.isClickPhoneNumber() ? this.product.owner.phoneNumber ?? 'product_details.call' : 'product_details.call', onClick: () => this.clickNumber()});
+      if (this.isAuthorLogged() && !isArchived){
+        buttonsSettings.push({label: 'product_details.individual_pricing', onClick: () => this.openIndividualPricing()});
+        buttonsSettings.push({label: 'product_details.delete_individual_pricing', onClick: () => this.openDeleteIndividualPricing(), severity: 'danger'});
+      }
+    }
+    // For auctions
+    else if (this.auction){
+      if (this.isAuthorLogged()){
+        if (!isArchived)
+          buttonsSettings.push({label: 'controls.edit', routerLink: ['/product-form'], queryParams: { id: this.auction.id, type: LISTING_TYPES.AUCTION }});
+        buttonsSettings.push({label: 'product_details.view_messages', onClick: () => this.OnMessageClicked()});
+      }
+      else {
+        if (!isArchived)
+          buttonsSettings.push({label: 'product_details.bid', routerLink: ['/payment'], queryParams: { id: this.auction.id, type: LISTING_TYPES.PRODUCT }});
+        buttonsSettings.push({label: 'product_details.send_message', onClick: () => this.OnMessageClicked()});
+      }
+      buttonsSettings.push({label: this.isClickPhoneNumber() ? this.auction.owner.phoneNumber ?? 'product_details.call' : 'product_details.call', onClick: () => this.clickNumber(),});
+      buttonsSettings.push({label: 'product_details.bids_history', onClick: () => this.openBidHistory()});
+    }
+
+    return buttonsSettings.map((btn, index) => ({
+      id: `${index + 1}`,
+      settings: {
+        ...btn,
+        severity: btn.severity ?? (index % 2 === 0 ? 'primary' : 'secondary'),
       },
-      error: err => console.error(err)
-    });
+    }));
   }
 
   private handleToggle() {

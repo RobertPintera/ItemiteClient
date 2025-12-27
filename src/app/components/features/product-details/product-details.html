@@ -30,17 +30,19 @@
         <h4>Not found article</h4>
       </div>
     } @else {
+      @let isArchived = article()?.isArchived;
+
       <div class="flex flex-col lg:flex-row w-full">
         <div class="flex flex-col w-full lg:w-4/6 lg:pr-4 gap-2">
           <h1>{{ article()?.name }}</h1>
           <div class="flex flex-wrap w-full justify-between gap-2">
             <div class="flex items-center gap-2">
-              <p class="text-xl">Status: {{article()?.isArchived ? ('product_details.status.archived' | translate) : ('product_details.status.active' | translate)}}</p>
+              <p class="text-xl">Status: {{isArchived ? ('product_details.status.archived' | translate) : ('product_details.status.active' | translate)}}</p>
               <div
                 class="size-4 border-2 rounded-full"
                 [ngClass]="{
-                  'bg-amber-400 border-amber-600': article()?.isArchived,
-                  'bg-green-400 border-green-600': !article()?.isArchived
+                  'bg-amber-400 border-amber-600': isArchived,
+                  'bg-green-400 border-green-600': !isArchived
                 }">
               </div>
             </div>
@@ -71,38 +73,20 @@
                 <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
                 <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
                 <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
-                @if (isAuthorLogged()){
-                  <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
-                  <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-                } @else {
-                  <app-button label="{{'product_details.buy' | translate}}" routerLink="/payment" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
-                  <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-                }
-                <app-button (clickButton)="clickNumber()"
-                            [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" severity="primary">
-                </app-button>
-                @if (isAuthorLogged()){
-                  <app-button label="{{'product_details.individual_pricing' | translate}}" (clickButton)="openIndividualPricing()"  severity="secondary"/>
-                  <app-button label="{{'product_details.delete_individual_pricing' | translate}}" (clickButton)="openDeleteIndividualPricing()" severity="danger"/>
-                }
               } @else if(auction) {
                 <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
                 <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
                 <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
                 <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
                 <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
-                @if (isAuthorLogged()){
-                  <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
-                  <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-                } @else {
-                  <app-button label="{{'product_details.bid' | translate}}" routerLink="/payment" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
-                  <app-button (clickButton)="OnMessageClicked()" label="{{'product_details.send_message' | translate}}" severity="secondary"/>
-                }
-                <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>
-                <app-button (clickButton)="clickNumber()"
-                            [label]="isClickPhoneNumber() ? (auction.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" severity="secondary">
+              }
+              @for (button of getVisibleButtons(); track button.id){
+                <app-button
+                  [label]="button.settings.label | translate"
+                  [severity]="button.settings.severity ?? 'primary'"
+                  (clickButton)="button.settings.onClick ? button.settings.onClick() : null"
+                  [routerLink]="button.settings.routerLink"
+                  [queryParams]="button.settings.queryParams">
                 </app-button>
               }
             </div>
@@ -120,39 +104,20 @@
               <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
               <p>{{'product_details.price' | translate}}: {{ product.price }}$ {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
               <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
-              @if (isAuthorLogged()) {
-                <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
-                <app-button label="{{ 'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-              } @else {
-                <app-button label="{{'product_details.buy' | translate}}" routerLink="/payment" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
-                <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-              }
-
-              <app-button (clickButton)="clickNumber()"
-                          [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" severity="primary">
-              </app-button>
-              @if (isAuthorLogged()){
-                <app-button label="{{'product_details.individual_pricing' | translate}}" (clickButton)="openIndividualPricing()"  severity="secondary"/>
-                <app-button label="{{'product_details.delete_individual_pricing' | translate}}" (clickButton)="openDeleteIndividualPricing()" severity="danger"/>
-              }
             } @else if(auction) {
               <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
               <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd HH:mm' }}</p>
               <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
               <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
               <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
-              @if (isAuthorLogged()){
-                <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" />
-                <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-              } @else {
-                <app-button label="{{'product_details.bid' | translate}}" routerLink="/payment" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
-                <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-              }
-              <app-button label="{{'product_details.bids_history' | translate}}" severity="primary" (clickButton)="openBidHistory()"/>
-              <app-button (clickButton)="clickNumber()"
-                          [label]="isClickPhoneNumber() ? (auction.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" severity="secondary">
+            }
+            @for (button of getVisibleButtons(); track button.id){
+              <app-button
+                [label]="button.settings.label | translate"
+                [severity]="button.settings.severity ?? 'primary'"
+                (clickButton)="button.settings.onClick ? button.settings.onClick() : null"
+                [routerLink]="button.settings.routerLink"
+                [queryParams]="button.settings.queryParams">
               </app-button>
             }
           }
