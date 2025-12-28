@@ -86,7 +86,6 @@ export class ProductDetails implements OnInit, OnDestroy {
   readonly isOwner = signal<boolean>(false);
 
   readonly isOpenBidHistory = signal<boolean>(false);
-  readonly isOpenBidDialog = signal<boolean>(false);
   readonly isOpenIndividualPricingDialog = signal<boolean>(false);
   readonly isOpenDeleteIndividualPricingDialog = signal<boolean>(false);
 
