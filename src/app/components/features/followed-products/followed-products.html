@@ -6,7 +6,7 @@
     </div>
   } @else if (totalPages() === 0){
     <div class="flex justify-center py-16 w-full">
-      <h2>Can't find any article. Follow your first product!</h2>
+      <h2>{{ 'followed_products.no_products' | translate }}</h2>
     </div>
   }
   @else {

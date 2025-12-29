@@ -1,6 +1,6 @@
 <div class="flex flex-col xl:flex-row min-h-screen justify-center px-4">
-  <div class="w-full xl:w-94 p-0 z-110 xl:z-10 fixed top-0 left-0 h-full bg-black/50 transition-all duration-150
-  sm:top-0 sm:p-4 xl:block xl:sticky xl:top-30 xl:bg-transparent xl:transition-none" [class.hidden]="!isFilterOpen()"
+  <div class="w-full xl:w-94 p-0 z-110 xl:z-10 fixed top-0 left-0 h-full overflow-y-auto bg-black/50 transition-all duration-150
+  sm:top-0 sm:p-4 xl:block xl:sticky xl:top-30 xl:h-[calc(100vh-7.5rem)] xl:bg-transparent xl:transition-none" [class.hidden]="!isFilterOpen()"
        tabindex="0" (click)="closeOverlay()" (keydown.escape)="closeOverlay()">
     <app-product-filter-sidebar #filterSidebarChild class="w-full"
                                 [filter]="filter()" [localizationText]="localizationText()"

@@ -17,6 +17,8 @@ export class Button {
   readonly clickButton = output<void>();
 
   onClick() {
+    if(this.disabled()) return;
+
     this.clickButton.emit();
   }
 

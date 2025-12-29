@@ -1,0 +1,22 @@
+@if(isOpen()){
+  <app-dialog [header]="''" (closed)="closeDialog()">
+    <div class="flex flex-col w-[100vw] max-w-full sm:max-w-120 gap-4">
+      @for (bid of bids(); track bid.id) {
+        <div class="flex flex-col w-full border-border border-b-2 border-t-2 text-xl">
+          <div class="flex justify-between">
+            <div>
+              <p>{{bid.bidder.userName}}</p>
+            </div>
+            <div>
+              <p>{{bid.bidPrice}}</p>
+            </div>
+          </div>
+          <div>
+            <p>{{bid.bidDate | date:'yyyy-MM-dd'}}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </app-dialog>
+}
+

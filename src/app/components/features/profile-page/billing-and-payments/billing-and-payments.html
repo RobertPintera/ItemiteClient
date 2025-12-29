@@ -1,0 +1,17 @@
+<div class="flex flex-col mt-4 gap-2">
+  <p class="text-2xl md:text-3xl lg:text-4xl">{{ 'user_info.billing_payments' | translate}}</p>
+  <div class="flex flex-col gap-2 pl-4">
+    @if(!onboardingStatus()){
+      <p class="text-destructive">{{ 'user_info.no_account' | translate}}</p>
+    }
+    <div class="flex flex-wrap gap-2 w-full">
+      <app-button [label]="'user_info.your_account' | translate" (clickButton)="goToStripeAccount()" [disabled]="onboardingStatus()"/>
+      <app-button [label]="'user_info.your_purchases' | translate" routerLink="/purchases" severity="secondary"/>
+      <app-button [label]="'user_info.your_sales' | translate" routerLink="/sales"/>
+    </div>
+  </div>
+</div>
+
+@if(loading()){
+  <app-loading-dialog/>
+}

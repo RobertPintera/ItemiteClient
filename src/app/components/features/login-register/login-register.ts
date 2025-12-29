@@ -35,7 +35,7 @@ export class LoginRegister implements OnInit {
   //  --> login_register.mail_used
   // TODO API integration & Google login
 
-  router = inject(Router);
+  private router = inject(Router);
   private _translate = inject(TranslateService);
   private _userService = inject(AuthService);
   private _document = inject(DOCUMENT);
@@ -73,11 +73,11 @@ export class LoginRegister implements OnInit {
         this.hasPasswordErrors() ||
         this.hasUsernameErrors() ||
         !this.repeatPassMatch() ||
-        this.processing() // Block when already processing
+        this.processing(); // Block when already processing
     } else {
       return this.hasEmailErrors() ||
         this.hasPasswordErrors() ||
-        this.processing() // Block when already processing
+        this.processing(); // Block when already processing
     }
   });
 
@@ -204,7 +204,7 @@ export class LoginRegister implements OnInit {
         this.registerForm.value.password,
         this.registerForm.value.phoneNumber === "" || this.registerForm.value.phoneNumber === undefined ?
           undefined : this.registerForm.value.phoneNumber
-        );
+      );
 
       if(!success) {this._processing.set(false); return;}
 

@@ -122,7 +122,7 @@
   <div class="flex flex-col gap-2 w-full">
     <label for="description" class="text-xl font-semibold">{{ 'product_form.description' | translate }}</label>
     <textarea id="description" name="description" formControlName="description" rows="5" class="border rounded px-3 py-2"></textarea>
-    @if (form.controls.description.invalid && (form.controls.localization.touched || form.controls.localization.dirty)) {
+    @if (form.controls.description.invalid && (form.controls.description.touched || form.controls.description.dirty)) {
       <div>
         <ul class="text-destructive text-sm list-disc pl-4">
           @if(form.controls.description.hasError('required')) {

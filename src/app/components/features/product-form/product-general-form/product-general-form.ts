@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, signal} from '@angular/core';
+import {Component, effect, inject, input, model, signal} from '@angular/core';
 import {ProductListingService} from '../../../../core/services/product-listing-service/product-listing.service';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -20,6 +20,7 @@ import {isEmptyValidator, localizationValidator} from '../../../../core/utility/
 import {ProductListingDTO} from '../../../../core/models/ProductListingDTO';
 import {PutProductListingDTO} from '../../../../core/models/PutProductListingDTO';
 import {Location} from '@angular/common';
+import {finalize} from 'rxjs';
 
 @Component({
   selector: 'app-product-general-form',
@@ -44,6 +45,7 @@ export class ProductGeneralForm {
   private _router = inject(Router);
   private _location = inject(Location);
 
+  readonly loading = model.required<boolean>();
   readonly product = input<ProductListingDTO | null>(null);
 
   readonly categories = signal<CategoryTreeDTO | null>(null);
@@ -51,14 +53,11 @@ export class ProductGeneralForm {
   readonly selectedMainCategory = signal<OptionItem>({key: '', value: ''});
   readonly selectedSubCategory = signal<OptionItem>({key: '', value: ''});
 
-  readonly isSubmitting = signal<boolean>(false);
-  readonly submitError = signal<string | null>(null);
-
   readonly mainCategories = this._categoryService.mainCategories();
 
-  readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
-    key: cat.id.toString(),
-    value: "categories." + cat.name
+  readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(category => ({
+    key: category.id.toString(),
+    value: "categories." + category.name
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
@@ -87,7 +86,7 @@ export class ProductGeneralForm {
       Validators.required,
       isEmptyValidator,
       Validators.minLength(2),
-      Validators.maxLength(500)
+      Validators.maxLength(2500)
     ])
   });
 
@@ -141,8 +140,7 @@ export class ProductGeneralForm {
       return;
     }
 
-    this.isSubmitting.set(true);
-    this.submitError.set(null);
+    this.loading.set(true);
 
     const images: ImageMedia[] = this.form.value.images ?? [];
 
@@ -186,15 +184,10 @@ export class ProductGeneralForm {
         newImageOrders: newImageOrders
       };
 
-      this._productListingService.updateProductListing(product.id ,payload).subscribe({
-        next: updatedProduct => {
-          this.isSubmitting.set(false);
-          void this._router.navigate(['/product'], { queryParams: { id: product.id, type: "Product" } });
-        },
-        error: err => {
-          this.isSubmitting.set(false);
-          this.submitError.set(err?.message || 'Something went wrong');
-        }
+      this._productListingService.updateProductListing(product.id ,payload).pipe(
+        finalize(() => this.loading.set(false))
+      ).subscribe(() => {
+        void this._router.navigate(['/product'], { queryParams: { id: product.id, type: "Product" } });
       });
     }
     else{
@@ -225,15 +218,10 @@ export class ProductGeneralForm {
         imageOrders: imageOrders,
       };
 
-      this._productListingService.createProductListing(payload).subscribe({
-        next: createdProduct => {
-          this.isSubmitting.set(false);
-          void this._router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
-        },
-        error: err => {
-          this.isSubmitting.set(false);
-          this.submitError.set(err?.message || 'Something went wrong');
-        }
+      this._productListingService.createProductListing(payload).pipe(
+        finalize(() => this.loading.set(false))
+      ).subscribe(createdProduct => {
+        void this._router.navigate(['/product'], { queryParams: { id: createdProduct.createdProductListingId, type: "Product" } });
       });
     }
   }

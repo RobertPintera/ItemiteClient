@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, OnDestroy, OnInit, PLATFORM_ID, signal, WritableSignal} from '@angular/core';
+import {Component, computed, effect, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import {Button} from '../../shared/button/button';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -9,14 +9,29 @@ import {AuctionListingDTO} from '../../../core/models/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
 import {AuctionListingService} from '../../../core/services/auction-listing-service/auction-listing.service';
 import {Gallery} from '../../shared/gallery/gallery';
-import {DatePipe, isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {DatePipe, isPlatformBrowser, isPlatformServer, NgClass} from '@angular/common';
 import {Map, Marker} from 'leaflet';
-import {AuthService} from '../../../core/services/auth-service/auth.service';
-import {LISTING_TYPES} from '../../../core/constants/constants';
+import {ButtonSeverity, LISTING_TYPES} from '../../../core/constants/constants';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
 import {UserService} from '../../../core/services/user-service/user.service';
+import {BidHistoryDialog} from './bid-history-dialog/bid-history-dialog';
+import {IndividualPricingDialog} from './individual-pricing-dialog/individual-pricing-dialog';
+import {DeleteIndividualPricingDialog} from './delete-individual-pricing-dialog/delete-individual-pricing-dialog';
+
+interface ButtonSettings {
+  label: string;
+  onClick?: () => void;
+  routerLink?: string[];
+  queryParams?: Record<string, string | number | boolean>;
+  severity?: ButtonSeverity;
+}
+
+interface ButtonOrder {
+  id: string;
+  settings: ButtonSettings;
+}
 
 @Component({
   selector: 'app-product-details',
@@ -27,6 +42,10 @@ import {UserService} from '../../../core/services/user-service/user.service';
     DatePipe,
     RouterLink,
     FloatingChatContainer,
+    NgClass,
+    BidHistoryDialog,
+    IndividualPricingDialog,
+    DeleteIndividualPricingDialog,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
@@ -42,15 +61,18 @@ export class ProductDetails implements OnInit, OnDestroy {
   private _router = inject(Router);
 
   private _toggleFollowSubject = new Subject<void>();
-  private destroy$ = new Subject<void>();
+  private _destroy$ = new Subject<void>();
 
   private _mapInitialized = false;
   private _map?: Map ;
-  private readonly _mapEl = 'map';
-  private _currentMarker : WritableSignal<Marker | undefined> = signal(undefined);
+  private readonly _mapElement = 'map';
+  private currentMarker = signal<Marker | undefined>(undefined);
 
   private _showChat = signal(false);
   readonly showChat = this._showChat.asReadonly();
+
+  readonly isUserLogged = computed(() => this._userService.isUserLoggedIn());
+
   readonly isAuthorLogged = computed(() => {
     if(!this._userService.isUserLoggedIn()) return false;
     return this._userService.userBasicInfo().id === this.article()?.owner.id;
@@ -62,6 +84,10 @@ export class ProductDetails implements OnInit, OnDestroy {
   readonly isFollowLoading = signal<boolean>(false);
   readonly isClickPhoneNumber = signal<boolean>(false);
   readonly isOwner = signal<boolean>(false);
+
+  readonly isOpenBidHistory = signal<boolean>(false);
+  readonly isOpenIndividualPricingDialog = signal<boolean>(false);
+  readonly isOpenDeleteIndividualPricingDialog = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -89,45 +115,44 @@ export class ProductDetails implements OnInit, OnDestroy {
       return;
     }
 
-    this.SwitchChatVisibility();
+    this.switchChatVisibility();
   }
 
-  DisableChatVisibility(): void {
+
+  disableChatVisibility(): void {
     this._showChat.set(false);
   }
-  SwitchChatVisibility(): void {
+
+  switchChatVisibility(): void {
     this._showChat.set(!this._showChat());
   }
 
   ngOnInit() {
-    // This code will be used later
+    if(isPlatformServer(this._platformId)){
+      const id = this._route.snapshot.queryParamMap.get('id');
+      const type = this._route.snapshot.queryParamMap.get('type');
 
-    // if(isPlatformServer(this._platformId)){
-    //   console.log("yes");
-    //   const id = this._route.snapshot.queryParamMap.get('id');
-    //   const type = this._route.snapshot.queryParamMap.get('type');
-    //
-    //   const validId = id && !isNaN(+id) ? +id : null;
-    //   if (!validId) return;
-    //
-    //   if (type === LISTING_TYPES.PRODUCT) {
-    //     this._productListingService.loadProductListing(validId).subscribe(product => {
-    //       this.article.set(product);
-    //     });
-    //   }
-    //   else {
-    //     this._auctionListingService.loadAuctionListing(validId).subscribe(auction => {
-    //       this.article.set(auction);
-    //     });
-    //   }
-    // }
+      const validId = id && !isNaN(+id) ? +id : null;
+      if (!validId) return;
+
+      if (type === LISTING_TYPES.PRODUCT) {
+        this._productListingService.loadProductListingPublic(validId).subscribe(product => {
+          this.article.set(product);
+        });
+      }
+      else {
+        this._auctionListingService.loadAuctionListingPublic(validId).subscribe(auction => {
+          this.article.set(auction);
+        });
+      }
+    }
 
     if(isPlatformBrowser(this._platformId)){
-      this._breakpointObserver.observe(['(min-width: 1024px)']).pipe(takeUntil(this.destroy$)).subscribe(result => {
+      this._breakpointObserver.observe(['(min-width: 1024px)']).pipe(takeUntil(this._destroy$)).subscribe(result => {
         this.isLg.set(result.breakpoints['(min-width: 1024px)']);
       });
 
-      this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      this._route.queryParamMap.pipe(takeUntil(this._destroy$)).subscribe(params => {
         const id = params.get('id');
         const type = params.get('type');
 
@@ -136,16 +161,16 @@ export class ProductDetails implements OnInit, OnDestroy {
         if (validId === null) return;
 
         if(type === 'Product'){
-          this._productListingService.loadProductListing(validId).subscribe({
+          this._productListingService.loadProudctListingAuth(validId).subscribe({
             next: product => {
               this.article.set(product);
               this.isFollowed.set(product.isFollowed ?? false);
-              this._listingService.addFollowedListing(product.id)
+              this._listingService.addFollowedListing(product.id);
             },
             error: err => console.error(err)
           });
         } else if (type === 'Auction'){
-          this._auctionListingService.loadAuctionListing(validId).subscribe({
+          this._auctionListingService.loadAuctionListingAuth(validId).subscribe({
             next: product => {
               this.article.set(product);
               this.isFollowed.set(product.isFollowed ?? false);
@@ -156,14 +181,14 @@ export class ProductDetails implements OnInit, OnDestroy {
       });
 
       this._toggleFollowSubject
-        .pipe(debounceTime(300), takeUntil(this.destroy$))
-        .subscribe(() => this._handleToggle());
+        .pipe(debounceTime(300), takeUntil(this._destroy$))
+        .subscribe(() => this.handleToggle());
     }
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   constructor() {
@@ -193,17 +218,17 @@ export class ProductDetails implements OnInit, OnDestroy {
       Icon.Default.prototype.options.shadowUrl = 'marker-icon.png';
       Icon.Default.prototype.options.shadowSize = [25, 41];
 
-      this._map = map(this._mapEl).setView([lat,lng], 13);
+      this._map = map(this._mapElement).setView([lat,lng], 13);
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(this._map);
-      this._currentMarker.set(marker([lat, lng]).addTo(this._map).bindPopup(city).openPopup());
+      this.currentMarker.set(marker([lat, lng]).addTo(this._map).bindPopup(city).openPopup());
 
       this._map.dragging.disable();
       this._map.scrollWheelZoom.disable();
       this._map.doubleClickZoom.disable();
       this._map.boxZoom.disable();
-      this._map?.setZoomAround(this._currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949], 10);
+      this._map?.setZoomAround(this.currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949], 10);
     }
   }
 
@@ -215,7 +240,67 @@ export class ProductDetails implements OnInit, OnDestroy {
     this._toggleFollowSubject.next();
   }
 
-  private _handleToggle() {
+  openBidHistory() {
+    this.isOpenBidHistory.set(true);
+  }
+
+  openDeleteIndividualPricing() {
+    this.isOpenDeleteIndividualPricingDialog.set(true);
+  }
+
+  openIndividualPricing() {
+    this.isOpenIndividualPricingDialog.set(true);
+  }
+
+  getVisibleButtons(): ButtonOrder[] {
+    const buttonsSettings: ButtonSettings[] = [];
+
+    const isArchived = this.article()?.isArchived;
+
+    // For products
+    if(this.product){
+      if (this.isAuthorLogged()){
+        if (!isArchived)
+          buttonsSettings.push({label: 'controls.edit', routerLink: ['/product-form'], queryParams: { id: this.product.id, type: LISTING_TYPES.PRODUCT }});
+        buttonsSettings.push({label: 'product_details.view_messages', onClick: () => this.OnMessageClicked()});
+      }
+      else {
+        if (!isArchived)
+          buttonsSettings.push({label: 'product_details.buy', routerLink: ['/payment'], queryParams: { id: this.product.id, type: LISTING_TYPES.PRODUCT }});
+        buttonsSettings.push({label: 'product_details.send_message', onClick: () => this.OnMessageClicked()});
+      }
+      buttonsSettings.push({ label: this.isClickPhoneNumber() ? this.product.owner.phoneNumber ?? 'product_details.call' : 'product_details.call', onClick: () => this.clickNumber()});
+      if (this.isAuthorLogged() && !isArchived){
+        buttonsSettings.push({label: 'product_details.individual_pricing', onClick: () => this.openIndividualPricing()});
+        buttonsSettings.push({label: 'product_details.delete_individual_pricing', onClick: () => this.openDeleteIndividualPricing(), severity: 'danger'});
+      }
+    }
+    // For auctions
+    else if (this.auction){
+      if (this.isAuthorLogged()){
+        if (!isArchived)
+          buttonsSettings.push({label: 'controls.edit', routerLink: ['/product-form'], queryParams: { id: this.auction.id, type: LISTING_TYPES.AUCTION }});
+        buttonsSettings.push({label: 'product_details.view_messages', onClick: () => this.OnMessageClicked()});
+      }
+      else {
+        if (!isArchived)
+          buttonsSettings.push({label: 'product_details.bid', routerLink: ['/payment'], queryParams: { id: this.auction.id, type: LISTING_TYPES.PRODUCT }});
+        buttonsSettings.push({label: 'product_details.send_message', onClick: () => this.OnMessageClicked()});
+      }
+      buttonsSettings.push({label: this.isClickPhoneNumber() ? this.auction.owner.phoneNumber ?? 'product_details.call' : 'product_details.call', onClick: () => this.clickNumber(),});
+      buttonsSettings.push({label: 'product_details.bids_history', onClick: () => this.openBidHistory()});
+    }
+
+    return buttonsSettings.map((btn, index) => ({
+      id: `${index + 1}`,
+      settings: {
+        ...btn,
+        severity: btn.severity ?? (index % 2 === 0 ? 'primary' : 'secondary'),
+      },
+    }));
+  }
+
+  private handleToggle() {
     if (this.isFollowLoading()) return;
 
     const id = this.article()?.id;
@@ -226,7 +311,7 @@ export class ProductDetails implements OnInit, OnDestroy {
 
     if(!currentlyFollowed){
       this._listingService.addFollowedListing(id).subscribe({
-        next: _ => {
+        next: () => {
           this.isFollowed.set(true);
           this.isFollowLoading.set(false);
         },
@@ -234,7 +319,7 @@ export class ProductDetails implements OnInit, OnDestroy {
       });
     } else{
       this._listingService.deleteFollowedListing(id).subscribe({
-        next: _ => {
+        next: () => {
           this.isFollowed.set(false);
           this.isFollowLoading.set(false);
         },

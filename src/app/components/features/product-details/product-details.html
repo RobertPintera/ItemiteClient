@@ -2,11 +2,11 @@
   @if (auction) {
     <app-floating-chat-container
       [class.hidden]="!showChat()"
-      (onExitClicked)="DisableChatVisibility()" [listingId]="auction.id" [productOwner]="auction.owner"/>
+      (onExitClicked)="disableChatVisibility()" [listingId]="auction.id" [productOwner]="auction.owner"/>
   } @else if (product) {
     <app-floating-chat-container
       [class.hidden]="!showChat()"
-      (onExitClicked)="DisableChatVisibility()" [listingId]="product.id" [productOwner]="product.owner"/>
+      (onExitClicked)="disableChatVisibility()" [listingId]="product.id" [productOwner]="product.owner"/>
   }
   <div class="flex flex-col w-full max-w-[1500px] py-4 px-8">
     <div class="flex flex-wrap w-full justify-between">
@@ -15,22 +15,49 @@
          hover:text-muted-foreground/60
          focus:text-muted-foreground/60
          duration-75">{{ 'product_details.home' | translate }} / {{ `categories.${article()?.categories?.[0]?.name}` | translate }}</a>
-      <button class="cursor-pointer" (click)="toggleFollowed()">
-        @if (isFollowed()){
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000" class="h-10 w-auto"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/></svg>
-        } @else {
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="h-10 w-auto"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/></svg>
-        }
-      </button>
+      @if (isUserLogged() && !isAuthorLogged()){
+        <button class="cursor-pointer" (click)="toggleFollowed()">
+          @if (isFollowed()){
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="h-10 w-auto"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/></svg>
+          } @else {
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="h-10 w-auto"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/></svg>
+          }
+        </button>
+      }
     </div>
     @if (!article()){
       <div class="flex w-full justify-center">
         <h4>Not found article</h4>
       </div>
     } @else {
+      @let isArchived = article()?.isArchived;
+
       <div class="flex flex-col lg:flex-row w-full">
-        <div class="flex flex-col w-full lg:w-4/6">
+        <div class="flex flex-col w-full lg:w-4/6 lg:pr-4 gap-2">
           <h1>{{ article()?.name }}</h1>
+          <div class="flex flex-wrap w-full justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <p class="text-xl">Status: {{isArchived ? ('product_details.status.archived' | translate) : ('product_details.status.active' | translate)}}</p>
+              <div
+                class="size-4 border-2 rounded-full"
+                [ngClass]="{
+                  'bg-amber-400 border-amber-600': isArchived,
+                  'bg-green-400 border-green-600': !isArchived
+                }">
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="h-8 w-auto"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
+                <p class="text-xl">{{article()?.views}}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="h-8 w-auto"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/></svg>
+                <p class="text-xl">{{article()?.followers}}</p>
+              </div>
+            </div>
+          </div>
+
           <app-gallery [images]="article()?.images ?? []" [visibleSSm]="2" [visibleSm]="3" [visibleMd]="4" [visibleLg]="5" [visibleXl]="6"/>
           <div class="flex flex-row flex-wrap gap-3 mb-4">
             @for (category of article()?.categories; track category.id){
@@ -39,38 +66,27 @@
               </div>
             }
           </div>
+          <!-- Mobile size -->
           @if (!isLg()) {
             <div class="flex flex-col gap-2 text-xl mb-2">
               @if(product){
                 <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
                 <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
                 <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
-                @if (isAuthorLogged()){
-                  <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()"/>
-                  <app-button label="{{'edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }" severity="secondary"/>
-                } @else {
-                  <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
-                }
-                <app-button (clickButton)="clickNumber()"
-                            [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" [severity]="isAuthorLogged() ? 'primary' : 'secondary'">
-                </app-button>
               } @else if(auction) {
                 <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
                 <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
                 <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
                 <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
                 <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
-                @if (isAuthorLogged()){
-                  <app-button label="{{'controls.edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }"/>
-                  <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-                } @else {
-                  <app-button label="{{'product_details.bid' | translate}}"/>
-                  <app-button (clickButton)="OnMessageClicked()" label="{{'product_details.send_message' | translate}}" severity="secondary"/>
-                }
-                <app-button (clickButton)="clickNumber()"
-                            [label]="isClickPhoneNumber() ? (auction.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" severity="primary">
+              }
+              @for (button of getVisibleButtons(); track button.id){
+                <app-button
+                  [label]="button.settings.label | translate"
+                  [severity]="button.settings.severity ?? 'primary'"
+                  (clickButton)="button.settings.onClick ? button.settings.onClick() : null"
+                  [routerLink]="button.settings.routerLink"
+                  [queryParams]="button.settings.queryParams">
                 </app-button>
               }
             </div>
@@ -82,38 +98,26 @@
         </div>
         <div class="hidden lg:block self-stretch min-w-0.5 bg-muted-foreground z-10"></div>
         <div class="text-xl mt-2 flex flex-col gap-2 lg:w-2/6 lg:p-4 lg:mt-0">
+          <!-- Desktop size -->
           @if (isLg()){
             @if(product){
               <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
               <p>{{'product_details.price' | translate}}: {{ product.price }}$ {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
               <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
-              @if (isAuthorLogged()) {
-                <app-button label="{{'edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.PRODUCT }"/>
-                <app-button label="{{ 'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-              } @else {
-                <app-button label="{{ 'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()"/>
-              }
-
-              <app-button (clickButton)="clickNumber()"
-                          [label]="isClickPhoneNumber() ? (product.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" [severity]="isAuthorLogged() ? 'primary' : 'secondary'">
-              </app-button>
             } @else if(auction) {
               <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
-              <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
+              <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd HH:mm' }}</p>
               <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
               <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
               <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
-              @if (isAuthorLogged()){
-                <app-button label="{{'edit' | translate}}" routerLink="/product-form" [queryParams]="{ id: article()?.id, type: LISTING_TYPES.AUCTION }" />
-                <app-button label="{{'product_details.view_messages' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-              } @else {
-                <app-button label="{{'product_details.bid' | translate}}"/>
-                <app-button label="{{'product_details.send_message' | translate}}" (clickButton)="OnMessageClicked()" severity="secondary"/>
-              }
-              <app-button (clickButton)="clickNumber()"
-                          [label]="isClickPhoneNumber() ? (auction.owner.phoneNumber || ( 'product_details.call' | translate ))
-                          : ( 'product_details.call' | translate )" severity="primary">
+            }
+            @for (button of getVisibleButtons(); track button.id){
+              <app-button
+                [label]="button.settings.label | translate"
+                [severity]="button.settings.severity ?? 'primary'"
+                (clickButton)="button.settings.onClick ? button.settings.onClick() : null"
+                [routerLink]="button.settings.routerLink"
+                [queryParams]="button.settings.queryParams">
               </app-button>
             }
           }
@@ -124,3 +128,10 @@
     }
   </div>
 </div>
+@if (auction) {
+  <app-bid-dialog-history [id]="auction.id" [(isOpen)]="isOpenBidHistory"/>
+} @else if (product) {
+  <app-individual-pricing-dialog [listingId]="product.id" [(isOpen)]="isOpenIndividualPricingDialog"/>
+  <app-delete-individual-pricing-dialog [listingId]="product.id" [(isOpen)]="isOpenDeleteIndividualPricingDialog"/>
+}
+

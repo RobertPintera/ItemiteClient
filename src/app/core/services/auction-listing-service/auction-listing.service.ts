@@ -6,6 +6,10 @@ import {AuctionListingDTO} from '../../models/AuctionListingDTO';
 import {PostAuctionListingDTO} from '../../models/PostAuctionListingDTO';
 import {PutAuctionListingDTO} from '../../models/PutAuctionListingDTO';
 import {PostAuctionListingResponseDTO} from '../../models/PostAuctionListingResponseDTO';
+import {Bid} from '../../models/auction-listing/Bid';
+import {PostBidAuctionListingResponseDTO} from '../../models/auction-listing/PostBidAuctionListingResponseDTO';
+import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
+import {PostBidAuctionListingDTO} from '../../models/auction-listing/PostBidAuctionListingDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +17,22 @@ import {PostAuctionListingResponseDTO} from '../../models/PostAuctionListingResp
 export class AuctionListingService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/auctionlisting`;
+  private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
 
   // API
-  private getAuctionListing(id: number): Observable<AuctionListingDTO> {
-    return this.http.get<AuctionListingDTO>(`${this.baseUrl}/${id}`);
+  private getAuctionListingPublic(id: number): Observable<AuctionListingDTO> {
+    return this.http.get<AuctionListingDTO>(`${this.baseUrl}/${id}`,
+      {
+        transferCache: true,
+        withCredentials: false
+      }
+    );
+  }
+
+  private getAuctionListingAuth(id: number): Observable<AuctionListingDTO> {
+    return this.http.get<AuctionListingDTO>(`${this.baseUrl}/${id}`, {
+      transferCache: false,
+    });
   }
 
   private postAuctionListingDTO(formData: FormData): Observable<PostAuctionListingResponseDTO> {
@@ -25,6 +41,14 @@ export class AuctionListingService {
 
   private putAuctionListing(id: number, formData: FormData) {
     return this.http.put(`${this.baseUrl}/${id}`, formData);
+  }
+
+  private postBidAuctionListing(id: number, body: PostBidAuctionListingDTO): Observable<PostBidAuctionListingResponseDTO> {
+    return this.http.post<PostBidAuctionListingResponseDTO>(`${this.baseUrl}/${id}/bid`, body);
+  }
+
+  private getBidHistoryAuctionListing(id: number): Observable<Bid[]> {
+    return this.http.get<Bid[]>(`${this.baseUrl}/${id}/bid`);
   }
 
   // Logic
@@ -48,6 +72,7 @@ export class AuctionListingService {
 
     return this.postAuctionListingDTO(formData).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error createAuctionListing:',err);
         throw err;
       })
@@ -79,21 +104,57 @@ export class AuctionListingService {
 
     return this.putAuctionListing(id, formData).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error updateAuctionListing:', err);
         throw err;
       })
     );
   }
 
-
-  loadAuctionListing(id: number){
-    return this.getAuctionListing(id).pipe(
+  loadAuctionListingPublic(id: number){
+    return this.getAuctionListingPublic(id).pipe(
       map(auction => {
-        console.log(auction);
         return auction;
       }),
       catchError(err => {
-        console.error('Error loadProductListing:', err);
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadProductListingPublic:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadAuctionListingAuth(id: number){
+    return this.getAuctionListingAuth(id).pipe(
+      map(auction => {
+        return auction;
+      }),
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadProductListingAuth:', err);
+        throw err;
+      })
+    );
+  }
+
+  bidAuctionListing(id: number, data: PostBidAuctionListingDTO){
+    return this.postBidAuctionListing(id, data).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error getBidHistoryAuctionListing:', err);
+        throw err;
+      })
+    );
+  }
+
+  showBidHistoryAuctionListing(id: number){
+    return this.getBidHistoryAuctionListing(id).pipe(
+      map(bids => {
+        return bids;
+      }),
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error getBidHistoryAuctionListing:', err);
         throw err;
       })
     );

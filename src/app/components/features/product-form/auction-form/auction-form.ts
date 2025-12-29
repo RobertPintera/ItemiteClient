@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, signal} from '@angular/core';
+import {Component, effect, inject, input, model, signal} from '@angular/core';
 import {Button} from "../../../shared/button/button";
 import {CascadeSelect} from "../../../shared/cascade-select/cascade-select";
 import {ComboBox} from "../../../shared/combo-box/combo-box";
@@ -21,6 +21,7 @@ import {PostAuctionListingDTO} from '../../../../core/models/PostAuctionListingD
 import {Location} from '@angular/common';
 import {LISTING_TYPES} from '../../../../core/constants/constants';
 import {auctionDurationValidator, isEmptyValidator, localizationValidator} from '../../../../core/utility/Validation';
+import {finalize} from 'rxjs';
 
 @Component({
   selector: 'app-auction-form',
@@ -45,15 +46,13 @@ export class AuctionForm {
   private _router = inject(Router);
   private _location = inject(Location);
 
+  readonly loading = model.required<boolean>();
   readonly auction = input<AuctionListingDTO | null>(null);
 
   readonly categories = signal<CategoryTreeDTO | null>(null);
 
   readonly selectedMainCategory = signal<OptionItem>({key: '', value: ''});
   readonly selectedSubCategory = signal<OptionItem>({key: '', value: ''});
-
-  readonly isSubmitting = signal<boolean>(false);
-  readonly submitError = signal<string | null>(null);
 
   readonly mainCategories = this._categoryService.mainCategories();
 
@@ -91,7 +90,7 @@ export class AuctionForm {
       Validators.required,
       isEmptyValidator,
       Validators.minLength(2),
-      Validators.maxLength(500)
+      Validators.maxLength(2500)
     ])
   });
 
@@ -145,8 +144,7 @@ export class AuctionForm {
       return;
     }
 
-    this.isSubmitting.set(true);
-    this.submitError.set(null);
+    this.loading.set(true);
 
     const images: ImageMedia[] = this.form.value.images ?? [];
 
@@ -182,24 +180,22 @@ export class AuctionForm {
         locationState: this.form.value.localization?.state ?? '',
         startingBid: this.form.value.startingBid ?? 0,
         categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
-        dateEnds: this.form.value.dateEnds ? this.form.value.dateEnds + "Z" : '',
+        dateEnds: this.form.value.dateEnds
+          ? this.toUtcISOString(this.form.value.dateEnds)
+          : '',
         existingPhotoIds: existingPhotoIds,
         existingPhotoOrders: existingPhotoOrders,
         newImages: newImages,
         newImageOrders: newImageOrders
       };
 
+      console.log(payload.dateEnds);
       console.log(this.form.value.dateEnds);
 
-      this._auctionListingService.updateAuctionListing(auction.id ,payload).subscribe({
-        next: updatedAuction => {
-          this.isSubmitting.set(false);
-          void this._router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
-        },
-        error: err => {
-          this.isSubmitting.set(false);
-          this.submitError.set(err?.message || 'Something went wrong');
-        }
+      this._auctionListingService.updateAuctionListing(auction.id ,payload).pipe(
+        finalize(() => this.loading.set(false))
+      ).subscribe(() => {
+        void this._router.navigate(['/product'], { queryParams: { id: auction.id, type: LISTING_TYPES.AUCTION } });
       });
     }
     else{
@@ -224,21 +220,18 @@ export class AuctionForm {
         locationCity: this.form.value.localization?.city ?? '',
         locationState: this.form.value.localization?.state ?? '',
         startingBid: this.form.value.startingBid ?? 0,
-        dateEnds: this.form.value.dateEnds ?? '',
+        dateEnds: this.form.value.dateEnds
+          ? this.toUtcISOString(this.form.value.dateEnds)
+          : '',
         categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
         images: imageFiles,
         imageOrders: imageOrders,
       };
 
-      this._auctionListingService.createAuctionListing(payload).subscribe({
-        next: createdAuction => {
-          this.isSubmitting.set(false);
-          void this._router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type:  LISTING_TYPES.AUCTION } });
-        },
-        error: err => {
-          this.isSubmitting.set(false);
-          this.submitError.set(err?.message || 'Something went wrong');
-        }
+      this._auctionListingService.createAuctionListing(payload).pipe(
+        finalize(() => this.loading.set(false))
+      ).subscribe(createdAuction => {
+        void this._router.navigate(['/product'], { queryParams: { id: createdAuction.createdAuctionListingId, type:  LISTING_TYPES.AUCTION } });
       });
     }
   }
@@ -315,5 +308,9 @@ export class AuctionForm {
     };
 
     this.form.get('subcategory')?.setValue(subOption);
+  }
+
+  private toUtcISOString(date: string): string {
+    return new Date(date).toISOString();
   }
 }

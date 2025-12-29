@@ -4,6 +4,7 @@ import {environment} from '../../../../environments/environment';
 import {catchError, map, Observable} from 'rxjs';
 import {CategoryDTO} from '../../models/CategoryDTO';
 import {CategoryTreeDTO} from '../../models/CategoryTreeDTO';
+import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ import {CategoryTreeDTO} from '../../models/CategoryTreeDTO';
 export class CategoryService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/categories`;
+  private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
+
   private _mainCategories = signal<CategoryDTO[]>([]);
   readonly mainCategories = this._mainCategories.asReadonly();
 
@@ -41,6 +44,7 @@ export class CategoryService {
         return categories;
       }),
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadMainCategories:', err);
         throw err;
       })
@@ -53,6 +57,7 @@ export class CategoryService {
         return tree;
       }),
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadCategoryTree:', err);
         throw err;
       })

@@ -13,9 +13,9 @@ import {Router} from '@angular/router';
 export class NotFound {
   @HostBinding('class') hostClass = 'block';
 
-  private router = inject(Router);
+  private _router = inject(Router);
 
   goHome() {
-    this.router.navigate(['/']);
+    this._router.navigate(['/']);
   }
 }

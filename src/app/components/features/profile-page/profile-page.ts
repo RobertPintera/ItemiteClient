@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   computed,
   inject, OnInit,
@@ -26,6 +25,8 @@ import {EditEmail} from './edit-email/edit-email';
 import {EditPassword} from './edit-password/edit-password.component';
 import {Button} from '../../shared/button/button';
 import {UserService} from '../../../core/services/user-service/user.service';
+import {BillingAndPayments} from './billing-and-payments/billing-and-payments';
+import {OwnProducts} from './own-products/own-products';
 
 @Component({
   selector: 'app-profile-page',
@@ -36,13 +37,13 @@ import {UserService} from '../../../core/services/user-service/user.service';
     ReactiveFormsModule,
     ConfirmDialog,
     FileUpload,
-    Button,
-    RouterLink,
     FileUpload,
     LoadingCircle,
     FormsModule,
     EditEmail,
-    EditPassword
+    EditPassword,
+    BillingAndPayments,
+    OwnProducts
   ],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.css'
@@ -476,10 +477,5 @@ export class ProfilePage implements OnInit {
         console.error('Error fetching autocomplete suggestions:', err);
       }
     });
-  }
-
-
-  goToUserProducts(){
-    this._router.navigate(['/user-products']);
   }
 }

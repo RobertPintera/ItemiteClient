@@ -22,9 +22,10 @@ export class InputNumber {
 
   readonly value = model<number | null>(null);
 
-  readonly min = input<number>(0);
-  readonly max = input<number>(100);
+  readonly min = input<number | null>(0);
+  readonly max = input<number | null>(100);
   readonly step = input<number>(1);
+  readonly decimalPlaces = input<number>(2);
   readonly placeholder = input<string>('');
 
   readonly valueChange = output<number | null>();
@@ -64,9 +65,23 @@ export class InputNumber {
       return;
     }
 
-    if ((key === '.' && /[.,]/.test(value)) || (key === ',' && /[.,]/.test(value))) {
-      event.preventDefault();
-      return;
+    if (key === '.' || key === ',') {
+      if (/[.,]/.test(value)) {
+        event.preventDefault();
+        return;
+      }
+    }
+
+    const separatorIndex = value.indexOf('.') !== -1
+      ? value.indexOf('.')
+      : value.indexOf(',');
+
+    if (separatorIndex !== -1) {
+      const decimals = value.length - separatorIndex - 1;
+      if (decimals >= this.decimalPlaces()) {
+        event.preventDefault();
+        return;
+      }
     }
   }
 
@@ -118,10 +133,18 @@ export class InputNumber {
       this.onTouched();
       return;
     }
-    numericValue = Math.min(Math.max(numericValue, this.min()), this.max());
+    const min = this.min();
+    const max = this.max();
+
+    if (min !== null) {
+      numericValue = Math.max(numericValue, min);
+    }
+    if (max !== null) {
+      numericValue = Math.min(numericValue, max);
+    }
 
     this.value.set(numericValue);
-    input.value = numericValue.toFixed(2);
+    input.value = numericValue.toFixed(this.decimalPlaces());
     this.onChange(numericValue);
     this.onTouched();
     this.valueChange.emit(numericValue);
@@ -160,22 +183,35 @@ export class InputNumber {
   // -------------------
 
   private incrementValue() {
-    let val = this.value() ?? 0;
-    val = this.roundToStep(val + this.step());
-    val = Math.min(val, this.max());
-    this.setValue(val);
+    let value = this.value() ?? 0;
+    value = this.roundToStep(value + this.step());
+
+    const max = this.max();
+    if (max !== null) {
+      value = Math.min(value, max);
+    }
+
+    this.setValue(value);
   }
 
   private decrementValue() {
-    let val = this.value() ?? 0;
-    val = this.roundToStep(val - this.step());
-    val = Math.max(val, this.min());
-    this.setValue(val);
+    let value = this.value() ?? 0;
+    value = this.roundToStep(value - this.step());
+
+    const min = this.min();
+    if (min !== null) {
+      value = Math.max(value, min);
+    }
+
+    this.setValue(value);
   }
 
   private roundToStep(value: number): number {
-    const stepDecimals = this.step().toString().split('.')[1]?.length ?? 0;
-    const factor = Math.pow(10, stepDecimals);
+    const precision = Math.max(
+      this.decimalPlaces(),
+      this.step().toString().split('.')[1]?.length ?? 0
+    );
+    const factor = Math.pow(10, precision);
     return Math.round(value * factor) / factor;
   }
 

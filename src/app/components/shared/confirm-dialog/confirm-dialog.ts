@@ -1,10 +1,12 @@
 import {Component, input, output} from '@angular/core';
 import {TranslatePipe} from '@ngx-translate/core';
+import {Button} from '../button/button';
 
 @Component({
   selector: 'app-confirm-dialog',
   imports: [
-    TranslatePipe
+    TranslatePipe,
+    Button
   ],
   templateUrl: './confirm-dialog.html',
   styleUrl: './confirm-dialog.css'

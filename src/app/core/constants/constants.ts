@@ -1,3 +1,5 @@
+export const DEFAULT_PROFILE_IMAGE = 'assets/images/default_profile_pic.png';
+
 export const BUTTON_SEVERITY = {
   PRIMARY: 'primary',
   SECONDARY: 'secondary',
@@ -45,3 +47,20 @@ export const NOTIFICATION_TYPE = {
 } as const;
 
 export type NotificationType = typeof NOTIFICATION_TYPE[keyof typeof NOTIFICATION_TYPE];
+
+export const PAYMENT_STATUS = {
+  AUTHORIZED: 'Authorized',
+  PENDING_CAPTURE: 'Pending capture',
+  OUTBID: "Outbid",
+  PENDING: "Pending",
+  PENDING_REVIEW: "Pending review",
+  TRANSFERRED: "Transferred",
+  REFUND_SCHEDULED: "Refund scheduled",
+  PARTIAL_REFUND_SCHEDULED: "Partial refund scheduled",
+  REFUNDED: "Refunded",
+  PARTIALLY_REFUNDED: "Partially refunded",
+  DISPUTED: "Disputed",
+  FAILED: "Failed",
+} as const;
+
+export type PaymentStatus = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];

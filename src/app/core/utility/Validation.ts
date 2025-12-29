@@ -2,6 +2,7 @@ import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn} from '@angula
 import {TranslateService} from '@ngx-translate/core';
 import {errorTranslations} from '../constants/ErrorTranslations';
 import {Localization} from '../models/Localization';
+import {postalCodeRegexes} from '../constants/postalCodesRegex';
 export function PasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const password = control.value;
@@ -234,6 +235,24 @@ export function auctionDurationValidator(minHours = 1, maxDays = 30): ValidatorF
 
     if (endDate > maxEndTime) {
       errors['maxDuration'] = true;
+    }
+
+    return Object.keys(errors).length ? errors : null;
+  };
+}
+
+export function postalCodeValidator(countryControl: AbstractControl): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null;
+
+    const countryCode = countryControl.value?.key as string;
+    const regex = postalCodeRegexes[countryCode] ?? /.*/;
+
+    const value = control.value.trim();
+    const errors: ValidationErrors = {};
+
+    if (!regex.test(value)) {
+      errors['invalidPostalCode'] = true;
     }
 
     return Object.keys(errors).length ? errors : null;

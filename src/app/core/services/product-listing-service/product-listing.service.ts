@@ -1,11 +1,13 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, map, Observable} from 'rxjs';
 import {ProductListingDTO} from '../../models/ProductListingDTO';
 import {PutProductListingDTO} from '../../models/PutProductListingDTO';
 import {PostProductListingDTO} from '../../models/PostProductListingDTO';
 import {PostProductListingResponseDTO} from '../../models/PostProductListingResponseDTO';
+import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
+import {PostUserPriceDTO} from '../../models/product-listings/PostUserPriceDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +15,22 @@ import {PostProductListingResponseDTO} from '../../models/PostProductListingResp
 export class ProductListingService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/productlisting`;
+  private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
 
   // API
-  private getProductListing(id: number): Observable<ProductListingDTO> {
-    return this.http.get<ProductListingDTO>(`${this.baseUrl}/${id}`);
+  private getProductListingPublic(id: number){
+    return this.http.get<ProductListingDTO>(`${this.baseUrl}/${id}`,
+      {
+        transferCache: true,
+        withCredentials: false
+      }
+    );
+  }
+
+  private getProductListingAuth(id: number): Observable<ProductListingDTO> {
+    return this.http.get<ProductListingDTO>(`${this.baseUrl}/${id}`, {
+      transferCache: false,
+    });
   }
 
   private postProductListing(formData: FormData): Observable<PostProductListingResponseDTO> {
@@ -25,6 +39,19 @@ export class ProductListingService {
 
   private putProductListing(id: number, formData: FormData) {
     return this.http.put(`${this.baseUrl}/${id}`, formData);
+  }
+
+  private postUserPrice(listingId: number, userId: number, params: HttpParams) {
+    return this.http.post(`${this.baseUrl}/${listingId}/user-price/${userId}`, params,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  }
+
+  private deleteUserPrice(listingId: number, userId: number) {
+    return this.http.delete(`${this.baseUrl}/${listingId}/user-price/${userId}`);
   }
 
   // Logic
@@ -48,6 +75,7 @@ export class ProductListingService {
 
     return this.postProductListing(formData).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error createProductListing:', err);
         throw err;
       })
@@ -79,19 +107,54 @@ export class ProductListingService {
 
     return this.putProductListing(id, formData).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error updateProductListing:', err);
         throw err;
       })
     );
   }
 
-  loadProductListing(id: number){
-    return this.getProductListing(id).pipe(
+  loadProductListingPublic(id: number){
+    return this.getProductListingPublic(id).pipe(
       map(product => {
         return product;
       }),
       catchError(err => {
-        console.error('Error loadProductListing:', err);
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadProductListingPublic:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadProudctListingAuth(id: number){
+    return this.getProductListingAuth(id).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadProductListingAuth:', err);
+        throw err;
+      })
+    );
+  }
+
+  addUserIndividualPrice(listingId: number, userId: number, data: PostUserPriceDTO) {
+    const params = new HttpParams()
+      .set('price', data.price);
+
+    return this.postUserPrice(listingId, userId, params).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error addUserIndividualPrice:', err);
+        throw err;
+      })
+    );
+  }
+
+  deleteUserIndividualPrice(listingId: number, userId: number){
+    return this.deleteUserPrice(listingId, userId).pipe(
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error addUserIndividualPrice:', err);
         throw err;
       })
     );

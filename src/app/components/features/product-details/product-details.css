@@ -1,9 +1,15 @@
-@import "../../../../styles.css";
-
 :host ::ng-deep .button-container{
-  @apply w-full;
+  width: 100%;
 }
 
-:host ::ng-deep .carousel-button-icon{
-  @apply h-4 w-4 sm:h-6 sm:w-6;
+:host ::ng-deep .carousel-button-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (min-width: 640px) {
+  :host ::ng-deep .carousel-button-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 }

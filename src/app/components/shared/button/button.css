@@ -2,7 +2,18 @@
 
 @layer components {
   .button-container {
-    @apply transition-colors px-4 py-2 rounded-lg cursor-pointer;
+    @apply transition-colors px-4 py-2 rounded-lg;
+  }
+
+  .button-primary-filled,
+  .button-primary-outlined,
+  .button-secondary-filled,
+  .button-secondary-outlined,
+  .button-accent-filled,
+  .button-accent-outlined,
+  .button-danger-filled,
+  .button-danger-outlined {
+    @apply cursor-pointer;
   }
 
   .button-primary-filled {
@@ -38,10 +49,10 @@
   }
 
   .button-disabled-filled {
-    @apply bg-ring/20 text-accent-foreground;
+    @apply bg-ring/20 text-accent-foreground cursor-default pointer-events-none;
   }
 
   .button-disabled-outlined {
-    @apply bg-ring/20 border-2 border-ring ring-ring;
+    @apply bg-ring/20 border-2 border-ring ring-ring cursor-default pointer-events-none;
   }
 }

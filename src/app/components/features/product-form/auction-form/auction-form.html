@@ -20,7 +20,7 @@
       </div>
     }
   </div>
-  <!-- Starting Bid -->
+  <!-- Starting BidDialog -->
   <div class="flex flex-col gap-2 w-full">
     <label for="startingBid" class="text-xl font-semibold">{{ 'product_form.starting_bid' | translate }}</label>
     <app-input-number id="startingBid" formControlName="startingBid" [min]="0" [max]="1000000" [step]="0.01"/>

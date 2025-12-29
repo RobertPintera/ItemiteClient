@@ -1,0 +1,96 @@
+<div class="flex bg-card text-card-foreground flex-col w-full border-2 gap-2 border-transparent border-b-border shadow-xl p-4
+    hover:border-border hover:rounded-xl hover:z-10 hover:scale-[1.02]
+    duration-150">
+  <div class="flex flex-row justify-between gap-2">
+    <h3>{{purchase().paymentId}} - {{ 'purchases.purchase' | translate }}</h3>
+    <p class="text-xl sm:text-2xl">{{ 'transactions.status.header' | translate }}: {{ ('transactions.status.' + (purchase().status | underscore)) | translate }}</p>
+  </div>
+  <div class="flex flex-row justify-between w-full text-lg sm:text-xl gap-2">
+    <h4>{{ purchase().listing.name }}</h4>
+    <p>{{ purchase().listing.listingType === LISTING_TYPES.AUCTION ? ('transactions.bid' | translate) : ('transactions.paid' | translate)}}: {{ purchase().totalAmount }} {{ purchase().currency }}</p>
+  </div>
+  <div class="flex flex-col md:flex-row flex-1 h-full w-full border-y-2 gap-2 border-border py-2">
+    <div class="h-64 aspect-square">
+      <img [src]="purchase().listing.mainImageUrl" (error)="imageError($event)" [alt]=" purchase().listing.name" class="size-full object-contain" height="1" width="1">
+    </div>
+    <div class="flex flex-col-reverse md:flex-row w-full gap-4">
+      <div class="flex flex-1 flex-col w-full justify-between min-w-0 gap-4 p-0 md:p-8 md:pt-12">
+        <div class="flex flex-row flex-wrap gap-3">
+          @for (category of purchase().listing.categories; track category.id){
+            <div class="border-2 border-border px-4 py-2 rounded-2xl bg-background text-foreground">
+              <p class="text-base md:text-xl">{{ `categories.${category.name}` | translate }}</p>
+            </div>
+          }
+        </div>
+        <div class="flex flex-col gap-2">
+          <p class="text-base md:text-xl">{{ 'product_details.localization' | translate }}: {{  purchase().listing.location.country }}, {{ purchase().listing.location.city}}, {{ purchase().listing.location.state}}</p>
+          <p class="text-base md:text-xl">{{ 'product_details.date_of_issue' | translate }}: {{  purchase().listing.dateCreated | date:'yyyy-MM-dd' }}</p>
+        </div>
+      </div>
+      <div class="flex-none flex flex-col items-start md:items-end md:py-4">
+        @if( purchase().listing.listingType === LISTING_TYPES.PRODUCT){
+          <p class="text-xl sm:text-2xl">{{ 'product_details.price' | translate }}: {{  purchase().listing.price }} $</p>
+          <p class="text-base md:text-lg">{{  purchase().listing.isNegotiable ? ('product_details.negotiable' | translate) : "" }}</p>
+        }
+        @else if( purchase().listing.listingType === LISTING_TYPES.AUCTION){
+          <p class="text-xl sm:text-2xl">{{ 'product_details.current_bid' | translate }}: {{  purchase().listing.currentBid ??  purchase().listing.startingBid}} {{ purchase().currency }}</p>
+          <p class="text-base md:text-lg">{{ 'product_details.starting_bid' | translate }}: {{  purchase().listing.startingBid }} {{ purchase().currency }}</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-row justify-between gap-4">
+    <div class="flex flex-col flex-1">
+      <h4>{{ 'transactions.buyer' | translate }}</h4>
+      <div class="flex flex-row items-center gap-2">
+        <div class="size-10 rounded-full overflow-hidden bg-muted">
+          <img
+            [src]="purchase().buyer.profilePhotoUrl"
+            (error)="imageError($event)"
+            [alt]="purchase().buyer.userName"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex flex-col">
+          <p>{{ purchase().buyer.userName }}</p>
+          <p>{{ purchase().buyer.email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col flex-1">
+      <h4>{{ 'transactions.seller'  | translate }}</h4>
+      <div class="flex flex-row items-center gap-2">
+        <div class="size-10 rounded-full overflow-hidden bg-muted">
+          <img
+            [src]="purchase().seller.profilePhotoUrl"
+            (error)="imageError($event)"
+            [alt]="purchase().seller.userName"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex flex-col">
+          <p>{{ purchase().seller.userName }}</p>
+          <p>{{ purchase().seller.email }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-between gap-2 mt-2">
+    <app-button [label]="'purchases.show_product' | translate" severity="secondary" routerLink="/product" [queryParams]="{ id: purchase().listing.id, type: purchase().listing.listingType }"/>
+
+    @if(purchase().status === PAYMENT_STATUS.PENDING){
+      <div class="flex flex-row gap-2">
+        <app-button [label]="'purchases.dispute.header' | translate" severity="danger" (clickButton)="openDisputeDialog()"/>
+        <app-button [label]="'purchases.confirm_delivery' | translate" severity="primary" (clickButton)="openConfirmDeliveryDialog()"/>
+      </div>
+    }
+  </div>
+</div>
+@if(isOpenConfirmDeliveryDialog()) {
+  <app-confirm-dialog (onCancelClicked)="closeConfirmDeliveryDialog()" (onConfirmClicked)="confirmDelivery()" [prompt]="'purchases.confirm_delivery_content' | translate"/>
+}
+@if(loading()){
+  <app-loading-dialog/>
+}
+<app-dispute-dialog [(isOpen)]="isOpenDisputeDialog" [paymentId]="purchase().paymentId" (disputeSuccess)="dispute()"/>

@@ -12,6 +12,8 @@ import {provideTranslateService} from '@ngx-translate/core';
 import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
 import {tokenInterceptor} from './core/interceptors/token-interceptor/token-interceptor';
 import {AuthInitializer} from './core/utility/AuthInitializer';
+import {provideNgxStripe} from 'ngx-stripe';
+import {environment} from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +22,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, withComponentInputBinding()), provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(),withInterceptors([tokenInterceptor])),
+    provideNgxStripe(environment.stripePublicKey),
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: '/assets/i18n/',

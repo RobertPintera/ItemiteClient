@@ -1,0 +1,66 @@
+@if(isOpen()){
+  @if(loading()){
+    <app-loading-dialog/>
+  } @else {
+    <app-dialog [header]="'purchases.dispute.header' | translate" (closed)="closeDialog()">
+      <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2 w-[100vw] max-w-full sm:max-w-md">
+        <div class="flex flex-col gap-2 w-full">
+          <label for="reason" class="text-xl font-semibold">{{ 'purchases.dispute.reason.header' | translate }}</label>
+          <app-combo-box formControlName="reason" [items]="reasonOptions">
+            <ng-template let-item>
+              <span>
+                {{item?.value | translate}}
+              </span>
+            </ng-template>
+          </app-combo-box>
+          @if (form.controls.reason.invalid && (form.controls.reason.touched || form.controls.reason.dirty)) {
+            <div>
+              <ul class="text-destructive text-sm list-disc pl-4">
+                @if(form.controls.reason.hasError('required')) {
+                  <li>{{ 'validator_errors_dispute.field_required' | translate }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <label for="description" class="text-xl font-semibold">{{ 'purchases.dispute.description' | translate }}</label>
+          <textarea id="description" name="description" formControlName="description" rows="5" class="border rounded px-3 py-2"></textarea>
+          @if (form.controls.description.invalid && (form.controls.description.touched || form.controls.description.dirty)) {
+            <div>
+              <ul class="text-destructive text-sm list-disc pl-4">
+                @if(form.controls.description.hasError('required')) {
+                  <li>{{ 'validator_errors_dispute.field_required' | translate }}</li>
+                }
+                @if(form.controls.description.hasError('empty')){
+                  <li>{{ 'validator_errors_dispute.field_empty' | translate }}</li>
+                }
+                @if(form.controls.description.hasError('maxlength')){
+                  <li>{{ 'validator_errors_dispute.description_max' | translate }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <label for="photos" class="text-xl font-semibold">{{ 'purchases.dispute.photos' | translate }}</label>
+          <app-media-manager formControlName="photos" [maxImages]="6"/>
+          @if (form.controls.photos.invalid && (form.controls.photos.touched || form.controls.photos.dirty)) {
+            <div>
+              <ul class="text-destructive text-sm list-disc pl-4">
+                @if(form.controls.photos.hasError('required')) {
+                  <li>{{ 'validator_errors_dispute.field_required' | translate }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+
+        <div class="flex flex-row justify-between gap-2">
+          <app-button type="button" [label]="'controls.cancel' | translate" severity="accent" variant="outlined" (clickButton)="closeDialog()"/>
+          <app-button type="submit" [label]="'controls.save' | translate"/>
+        </div>
+      </form>
+    </app-dialog>
+  }
+}

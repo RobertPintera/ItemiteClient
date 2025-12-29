@@ -1,5 +1,5 @@
 export interface ListingItemDTO {
-  id: string;
+  id: number;
   name: string;
   location: {
     longitude: number;
@@ -14,8 +14,8 @@ export interface ListingItemDTO {
   isFeatured: boolean;
   isArchived: boolean;
   listingType: string;
-  price: number;
+  price: number | null;
   isNegotiable: boolean;
-  startingBid: number;
-  currentBid: number;
+  startingBid: number | null;
+  currentBid: number | null;
 }

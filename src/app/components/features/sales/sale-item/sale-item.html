@@ -1,0 +1,85 @@
+<div class="flex bg-card text-card-foreground flex-col w-full border-2 gap-2 border-transparent border-b-border shadow-xl p-4
+    hover:border-border hover:rounded-xl hover:z-10 hover:scale-[1.02]
+    duration-150">
+  <div class="flex flex-row justify-between gap-2">
+    <h3>{{sale().paymentId}} - {{ 'sales.sale' | translate }}</h3>
+    <p class="text-xl sm:text-2xl">{{ 'transactions.status.header' | translate }}: {{ ('transactions.status.' + (sale().status | underscore)) | translate }}</p>
+  </div>
+  <div class="flex flex-row justify-between w-full text-lg sm:text-xl gap-2">
+    <h4>{{ sale().listing.name }}</h4>
+    <div class="flex flex-col text-right">
+      <p>{{ 'transactions.sold' | translate }}: {{ sale().totalAmount }} {{ sale().currency }}</p>
+      <p class="text-sm">{{ 'transactions.platform_fee_amount' | translate }}: {{ sale().platformFeeAmount }} {{ sale().currency }}</p>
+    </div>
+  </div>
+  <div class="flex flex-col md:flex-row flex-1 h-full w-full border-y-2 gap-2 border-border py-2">
+    <div class="h-64 aspect-square">
+      <img [src]=" sale().listing.mainImageUrl" (error)="imageError($event)" [alt]=" sale().listing.name" class="size-full object-contain" height="1" width="1">
+    </div>
+    <div class="flex flex-col md:flex-row w-full gap-4">
+      <div class="flex flex-col w-full justify-between gap-4 p-0 md:p-8 md:pt-12">
+        <div class="flex flex-row flex-wrap gap-3">
+          @for (category of sale().listing.categories; track category.id){
+            <div class="border-2 border-border px-4 py-2 rounded-2xl bg-background text-foreground">
+              <p class="text-base md:text-xl">{{ `categories.${category.name}` | translate }}</p>
+            </div>
+          }
+        </div>
+        <div class="flex flex-col gap-2">
+          <p class="text-base md:text-xl">{{ 'product_details.localization' | translate }}: {{  sale().listing.location.country }}, {{ sale().listing.location.city}}, {{ sale().listing.location.state}}</p>
+          <p class="text-base md:text-xl">{{ 'product_details.date_of_issue' | translate }}: {{  sale().listing.dateCreated | date:'yyyy-MM-dd' }}</p>
+        </div>
+      </div>
+      <div class="flex-none flex flex-col items-start md:items-end md:py-4">
+        @if(sale().listing.listingType === LISTING_TYPES.PRODUCT){
+          <p class="text-xl sm:text-2xl">{{ 'product_details.price' | translate }}: {{  sale().listing.price }} $</p>
+          <p class="text-base md:text-lg">{{  sale().listing.isNegotiable ? ('product_details.negotiable' | translate) : "" }}</p>
+        }
+        @else if(sale().listing.listingType === LISTING_TYPES.AUCTION){
+          <p class="text-xl sm:text-2xl">{{ 'product_details.current_bid' | translate }}: {{  sale().listing.currentBid ??  sale().listing.startingBid}}$</p>
+          <p class="text-base md:text-lg">{{ 'product_details.starting_bid' | translate }}: {{  sale().listing.startingBid }}</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-row justify-between gap-4">
+    <div class="flex flex-col flex-1">
+      <h4>{{ 'transactions.buyer' | translate }}</h4>
+      <div class="flex flex-row items-center gap-2">
+        <div class="size-10 rounded-full overflow-hidden bg-muted">
+          <img
+            [src]="sale().buyer.profilePhotoUrl"
+            (error)="imageError($event)"
+            [alt]="sale().buyer.userName"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex flex-col">
+          <p>{{ sale().buyer.userName }}</p>
+          <p>{{ sale().buyer.email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col flex-1">
+      <h4>{{ 'transactions.seller'  | translate }}</h4>
+      <div class="flex flex-row items-center gap-2">
+        <div class="size-10 rounded-full overflow-hidden bg-muted">
+          <img
+            [src]="sale().seller.profilePhotoUrl"
+            (error)="imageError($event)"
+            [alt]="sale().seller.userName"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex flex-col">
+          <p>{{ sale().seller.userName }}</p>
+          <p>{{ sale().seller.email }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-between gap-2 mt-2">
+    <app-button [label]="'sales.show_product' | translate" severity="secondary" routerLink="/product" [queryParams]="{ id: sale().listing.id, type: sale().listing.listingType }"/>
+  </div>
+</div>
