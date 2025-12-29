@@ -36,3 +36,12 @@ export const SORT_DIRECTION = {
 } as const;
 
 export type SortDirection = (typeof SORT_DIRECTION)[keyof typeof SORT_DIRECTION];
+
+export const NOTIFICATION_TYPE = {
+  AUCTION: 'Auction',
+  PRODUCT: 'Product',
+  USER: 'User',
+  CHAT_PAGE: 'ChatPage'
+} as const;
+
+export type NotificationType = typeof NOTIFICATION_TYPE[keyof typeof NOTIFICATION_TYPE];

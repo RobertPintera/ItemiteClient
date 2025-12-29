@@ -1,6 +1,7 @@
 import {Component, input, output} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
+import {NotificationType} from '../../../../core/constants/constants';
 
 @Component({
   selector: 'app-notification-card',
@@ -13,9 +14,9 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class NotificationCard {
   readonly notificationId = input<number>(0);
-  readonly message = input<string>("Receiver Notification");
+  readonly message = input<string>("Received Notification");
   readonly notificationImageUrl = input<string | undefined>();
-  readonly resourceType = input<"Auction" | "Product" | "User" | "ChatPage">("Product");
+  readonly resourceType = input<NotificationType>("Product");
   readonly notificationSent = input<string>("now");
   readonly readAt = input<string | null>(null);
 
