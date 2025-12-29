@@ -1,4 +1,4 @@
-import {PhotoResponseDTO} from '../PhotoResponseDTO';
+import {PhotoResponseDTO} from '../graphics/PhotoResponseDTO';
 
 export interface MessageResponse {
   messageId: number,

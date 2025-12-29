@@ -1,6 +1,6 @@
 import {Component, inject, input, OnInit, signal} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {ListingItemDTO} from '../../../../../core/models/LitstingItemDTO';
+import {ListingItemDTO} from '../../../../../core/models/listing-general/LitstingItemDTO';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {map} from 'rxjs';
 import {TranslatePipe} from '@ngx-translate/core';

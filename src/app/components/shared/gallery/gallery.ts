@@ -11,7 +11,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {ReactiveFormsModule} from "@angular/forms";
-import {Image} from '../../../core/models/Image';
+import {Image} from '../../../core/models/graphics/Image';
 import {NgClass, NgTemplateOutlet} from '@angular/common';
 
 @Component({

@@ -2,10 +2,10 @@ import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/c
 import {Paginator} from '../../shared/paginator/paginator';
 import {Button} from '../../shared/button/button';
 import {Loader} from '../../shared/loader/loader';
-import {ListingResponseDTO} from '../../../core/models/ListingResponseDTO';
+import {ListingResponseDTO} from '../../../core/models/listing-general/ListingResponseDTO';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {debounceTime, finalize,Subject, switchMap, takeUntil} from 'rxjs';
-import {PaginatedListingDTO} from '../../../core/models/PaginatedListingDTO';
+import {PaginatedListingDTO} from '../../../core/models/listing-general/PaginatedListingDTO';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Dialog} from '../../shared/dialog/dialog';

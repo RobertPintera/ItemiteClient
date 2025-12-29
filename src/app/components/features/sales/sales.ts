@@ -2,7 +2,7 @@ import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/c
 import {PaymentService} from '../../../core/services/payment-service/payment-service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {debounceTime, finalize, Subject, switchMap, takeUntil} from 'rxjs';
-import {PaginatedListingDTO} from '../../../core/models/PaginatedListingDTO';
+import {PaginatedListingDTO} from '../../../core/models/listing-general/PaginatedListingDTO';
 import {GetSalesResponseDTO} from '../../../core/models/payments/GetSalesResponseDTO';
 import {GetSalesDTO} from '../../../core/models/payments/GetSalesDTO';
 import {LISTING_TYPES} from '../../../core/constants/constants';

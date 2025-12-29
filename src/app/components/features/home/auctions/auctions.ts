@@ -4,7 +4,7 @@ import {AuctionCard} from '../cards/auction-card/auction-card';
 import {ListingService} from '../../../../core/services/listing-service/listing.service';
 import {LISTING_TYPES} from '../../../../core/constants/constants';
 import {Carousel} from '../../../shared/carousel/carousel';
-import {ListingItemDTO} from '../../../../core/models/LitstingItemDTO';
+import {ListingItemDTO} from '../../../../core/models/listing-general/LitstingItemDTO';
 
 @Component({
   selector: 'app-auctions',

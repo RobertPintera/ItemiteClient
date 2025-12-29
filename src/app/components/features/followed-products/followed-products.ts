@@ -6,8 +6,8 @@ import {TranslatePipe} from "@ngx-translate/core";
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ListingResponseDTO} from '../../../core/models/ListingResponseDTO';
-import {PaginatedListingDTO} from '../../../core/models/PaginatedListingDTO';
+import {ListingResponseDTO} from '../../../core/models/listing-general/ListingResponseDTO';
+import {PaginatedListingDTO} from '../../../core/models/listing-general/PaginatedListingDTO';
 import {catchError, debounceTime, finalize, of, Subject, switchMap, takeUntil} from 'rxjs';
 import {LISTING_TYPES} from '../../../core/constants/constants';
 

@@ -2,7 +2,7 @@ import {Component, HostBinding, input} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {TranslatePipe} from '@ngx-translate/core';
 import {DatePipe, NgClass} from '@angular/common';
-import {ListingItemDTO} from '../../../core/models/LitstingItemDTO';
+import {ListingItemDTO} from '../../../core/models/listing-general/LitstingItemDTO';
 import {LISTING_TYPES} from '../../../core/constants/constants';
 
 @Component({

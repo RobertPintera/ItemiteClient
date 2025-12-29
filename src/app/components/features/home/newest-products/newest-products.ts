@@ -4,8 +4,8 @@ import {Carousel} from '../../../shared/carousel/carousel';
 import {ProductCard} from '../cards/product-card/product-card';
 import {ListingService} from '../../../../core/services/listing-service/listing.service';
 import {LISTING_TYPES, SORT_DIRECTION, SORTS_BY} from '../../../../core/constants/constants';
-import {ListingResponseDTO} from '../../../../core/models/ListingResponseDTO';
-import {ListingItemDTO} from '../../../../core/models/LitstingItemDTO';
+import {ListingResponseDTO} from '../../../../core/models/listing-general/ListingResponseDTO';
+import {ListingItemDTO} from '../../../../core/models/listing-general/LitstingItemDTO';
 
 @Component({
   selector: 'app-newest-products',

@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, computed, input, InputSignal, output} from '@angular/core';
 import {MessageResponse} from '../../../../../core/models/chat/MessageResponse';
-import {PhotoResponseDTO} from '../../../../../core/models/PhotoResponseDTO';
+import {PhotoResponseDTO} from '../../../../../core/models/graphics/PhotoResponseDTO';
 import {DatePipe} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LoadingCircle} from '../../../../shared/loading-circle/loading-circle';

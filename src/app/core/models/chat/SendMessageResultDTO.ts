@@ -1,5 +1,5 @@
 import {MessageResponse} from './MessageResponse';
-import {PhotoUploadResultDTO} from '../PhotoUploadResultDTO';
+import {PhotoUploadResultDTO} from '../graphics/PhotoUploadResultDTO';
 
 export interface SendMessageResultDTO {
   message: MessageResponse,

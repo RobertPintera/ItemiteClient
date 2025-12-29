@@ -2,7 +2,7 @@ import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/c
 import {TranslatePipe} from '@ngx-translate/core';
 import {Loader} from '../../shared/loader/loader';
 import {Paginator} from '../../shared/paginator/paginator';
-import {PaginatedListingDTO} from '../../../core/models/PaginatedListingDTO';
+import {PaginatedListingDTO} from '../../../core/models/listing-general/PaginatedListingDTO';
 import {GetPurchasesDTO} from '../../../core/models/payments/GetPurchasesDTO';
 import {GetPurchasesResponseDTO} from '../../../core/models/payments/GetPurchasesResponseDTO';
 import {debounceTime, finalize, Subject, switchMap, takeUntil} from 'rxjs';

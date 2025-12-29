@@ -1,5 +1,5 @@
 import {Component, input} from '@angular/core';
-import {ListingItemDTO} from '../../../../../core/models/LitstingItemDTO';
+import {ListingItemDTO} from '../../../../../core/models/listing-general/LitstingItemDTO';
 import {LISTING_TYPES} from '../../../../../core/constants/constants';
 import {TranslatePipe} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';

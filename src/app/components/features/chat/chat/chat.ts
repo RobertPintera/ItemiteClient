@@ -10,7 +10,7 @@ import {
   Signal, ViewChild, WritableSignal
 } from '@angular/core';
 import {MessageResponse} from '../../../../core/models/chat/MessageResponse';
-import {PhotoResponseDTO} from '../../../../core/models/PhotoResponseDTO';
+import {PhotoResponseDTO} from '../../../../core/models/graphics/PhotoResponseDTO';
 import {Message} from './message/message';
 import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {ChatMemberInfo} from '../../../../core/models/chat/ChatMemberInfo';
