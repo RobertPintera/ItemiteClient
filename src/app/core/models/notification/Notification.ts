@@ -1,5 +1,5 @@
 import {NotificationUserInfo} from './NotificationUserInfo';
-import {NotificationType} from '../../constants/constants';
+import {ResourceType} from '../../constants/constants';
 
 export interface Notification {
   notificationId: number,
@@ -8,7 +8,7 @@ export interface Notification {
   userId: number | null,
   userInfo: NotificationUserInfo | null,
   listingId: number | null,
-  resourceType: NotificationType,
+  resourceType: ResourceType,
   notificationSent: string,
   readAt: string | null
 }

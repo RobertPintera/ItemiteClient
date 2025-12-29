@@ -39,14 +39,14 @@ export const SORT_DIRECTION = {
 
 export type SortDirection = (typeof SORT_DIRECTION)[keyof typeof SORT_DIRECTION];
 
-export const NOTIFICATION_TYPE = {
+export const RESOURCE_TYPE = {
   AUCTION: 'Auction',
   PRODUCT: 'Product',
   USER: 'User',
   CHAT_PAGE: 'ChatPage'
 } as const;
 
-export type NotificationType = typeof NOTIFICATION_TYPE[keyof typeof NOTIFICATION_TYPE];
+export type ResourceType = typeof RESOURCE_TYPE[keyof typeof RESOURCE_TYPE];
 
 export const PAYMENT_STATUS = {
   AUTHORIZED: 'Authorized',
