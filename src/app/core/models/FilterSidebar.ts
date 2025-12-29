@@ -1,5 +1,5 @@
 import {OptionItem} from './OptionItem';
-import {Localization} from './Localization';
+import {Localization} from './location/Localization';
 
 export interface FilterSidebar {
   categoryIds: number[];

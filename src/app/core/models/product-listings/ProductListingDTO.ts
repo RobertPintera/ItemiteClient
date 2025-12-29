@@ -1,20 +1,19 @@
-import {LocationDTO} from './LocationDTO';
-import {CategoryDTO} from './CategoryDTO';
-import {Image} from './Image';
-import {User} from './User';
+import {CategoryDTO} from '../category/CategoryDTO';
+import {Image} from '../graphics/Image';
+import {LocationDTO} from '../location/LocationDTO';
+import {User} from '../user/User';
 
-export interface AuctionListingDTO {
+export interface ProductListingDTO {
   id: number;
   name: string;
   description: string;
-  startingBid: number;
-  currentBid: number | null;
+  price: number;
   views: number;
   followers: number;
   dateCreated: string;
-  dateEnds: string;
   isArchived: boolean;
   isFeatured: boolean;
+  isNegotiable: boolean;
   isFollowed: boolean | null;
   owner: User;
   location: LocationDTO;

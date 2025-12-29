@@ -1,4 +1,4 @@
-import {ListingType, SortBy, SortDirection} from '../constants/constants';
+import {ListingType, SortBy, SortDirection} from '../../constants/constants';
 
 export interface ListingFilter {
   pageSize: null | number;

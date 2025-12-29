@@ -3,12 +3,12 @@ import {ProductListingService} from '../../../../core/services/product-listing-s
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {CategoryTreeDTO} from '../../../../core/models/CategoryTreeDTO';
+import {CategoryTreeDTO} from '../../../../core/models/category/CategoryTreeDTO';
 import {OptionItem} from '../../../../core/models/OptionItem';
 import {SelectNode} from '../../../../core/models/SelectNode';
-import {Localization} from '../../../../core/models/Localization';
-import {ImageMedia} from '../../../../core/models/ImageMedia';
-import {PostProductListingDTO} from '../../../../core/models/PostProductListingDTO';
+import {Localization} from '../../../../core/models/location/Localization';
+import {ImageMedia} from '../../../../core/models/graphics/ImageMedia';
+import {PostProductListingDTO} from '../../../../core/models/product-listings/PostProductListingDTO';
 import {TranslatePipe} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
 import {CascadeSelect} from '../../../shared/cascade-select/cascade-select';
@@ -17,8 +17,8 @@ import {GeoMapAutocomplete} from '../../../shared/geo-map-autocomplete/geo-map-a
 import {MediaManager} from '../../../shared/media-manager/media-manager';
 import {InputNumber} from '../../../shared/input-number/input-number';
 import {isEmptyValidator, localizationValidator} from '../../../../core/utility/Validation';
-import {ProductListingDTO} from '../../../../core/models/ProductListingDTO';
-import {PutProductListingDTO} from '../../../../core/models/PutProductListingDTO';
+import {ProductListingDTO} from '../../../../core/models/product-listings/ProductListingDTO';
+import {PutProductListingDTO} from '../../../../core/models/product-listings/PutProductListingDTO';
 import {Location} from '@angular/common';
 import {finalize} from 'rxjs';
 

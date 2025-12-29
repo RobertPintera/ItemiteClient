@@ -8,7 +8,7 @@ import {ErrorHandlerService} from '../error-handler-service/error-handler-servic
 import {TranslateService} from '@ngx-translate/core';
 import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {User} from '../../models/User';
+import {User} from '../../models/user/User';
 import {Notification} from '../../models/notification/Notification';
 import {NotificationResponseDTO} from '../../models/notification/NotificationResponseDTO';
 

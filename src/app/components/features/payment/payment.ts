@@ -3,8 +3,8 @@ import {ProductListingService} from '../../../core/services/product-listing-serv
 import {AuctionListingService} from '../../../core/services/auction-listing-service/auction-listing.service';
 import {finalize, Subject, takeUntil} from 'rxjs';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {ProductListingDTO} from '../../../core/models/ProductListingDTO';
-import {AuctionListingDTO} from '../../../core/models/AuctionListingDTO';
+import {ProductListingDTO} from '../../../core/models/product-listings/ProductListingDTO';
+import {AuctionListingDTO} from '../../../core/models/auction-listing/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
 import {TranslatePipe} from '@ngx-translate/core';
 import {

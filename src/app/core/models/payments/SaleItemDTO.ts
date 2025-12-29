@@ -1,4 +1,4 @@
-import {ListingItemDTO} from '../LitstingItemDTO';
+import {ListingItemDTO} from '../listing-general/LitstingItemDTO';
 import {UserPaymentDTO} from './UserPaymentDTO';
 
 export interface SaleItemDTO {

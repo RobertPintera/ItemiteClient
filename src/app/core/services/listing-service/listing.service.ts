@@ -2,12 +2,12 @@ import {inject, Injectable, } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, Observable} from 'rxjs';
-import {ListingResponseDTO} from '../../models/ListingResponseDTO';
-import {ListingFilter} from '../../models/ListingFilter';
-import {PaginatedListingDTO} from '../../models/PaginatedListingDTO';
+import {ListingResponseDTO} from '../../models/listing-general/ListingResponseDTO';
+import {ListingFilter} from '../../models/product-listings/ListingFilter';
+import {PaginatedListingDTO} from '../../models/listing-general/PaginatedListingDTO';
 import {ListingType} from '../../constants/constants';
-import {ListingItemDTO} from '../../models/LitstingItemDTO';
-import {PostListingFollowDTO} from '../../models/PostListingFollowDTO';
+import {ListingItemDTO} from '../../models/listing-general/LitstingItemDTO';
+import {PostListingFollowDTO} from '../../models/listing-general/PostListingFollowDTO';
 
 @Injectable({
   providedIn: 'root'

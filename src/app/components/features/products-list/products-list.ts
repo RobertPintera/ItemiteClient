@@ -2,8 +2,8 @@ import {Component, inject, signal, OnInit, OnDestroy, ViewChild, HostBinding} fr
 import { ProductListView } from './product-list-view/product-list-view';
 import { ProductFilterSidebar } from './product-filter-sidebar/product-filter-sidebar';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { ListingFilter } from '../../../core/models/ListingFilter';
-import { ListingResponseDTO } from '../../../core/models/ListingResponseDTO';
+import { ListingFilter } from '../../../core/models/product-listings/ListingFilter';
+import { ListingResponseDTO } from '../../../core/models/listing-general/ListingResponseDTO';
 import {Subject, debounceTime, switchMap, takeUntil, finalize, catchError, of} from 'rxjs';
 import { ListingService } from '../../../core/services/listing-service/listing.service';
 import {ActivatedRoute, Router} from '@angular/router';

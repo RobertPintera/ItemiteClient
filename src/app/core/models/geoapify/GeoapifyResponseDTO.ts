@@ -1,4 +1,4 @@
-import {Localization} from '../Localization';
+import {Localization} from '../location/Localization';
 
 export interface GeoapifyResponseDTO {
   suggestions: Localization[]

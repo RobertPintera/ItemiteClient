@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment.development';
 import {AutocompletePayloadDTO} from '../../models/geoapify/AutocompletePayloadDTO';
 import {catchError, debounceTime, map, Observable, Subject, switchMap, takeUntil, throwError} from 'rxjs';
-import {Localization} from '../../models/Localization';
+import {Localization} from '../../models/location/Localization';
 import {GeoapifyResponseDTO} from '../../models/geoapify/GeoapifyResponseDTO';
 import {LatLonPayloadDTO} from '../../models/geoapify/LatLonPayloadDTO';
 

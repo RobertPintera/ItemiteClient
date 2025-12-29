@@ -2,10 +2,10 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, map, Observable} from 'rxjs';
-import {ProductListingDTO} from '../../models/ProductListingDTO';
-import {PutProductListingDTO} from '../../models/PutProductListingDTO';
-import {PostProductListingDTO} from '../../models/PostProductListingDTO';
-import {PostProductListingResponseDTO} from '../../models/PostProductListingResponseDTO';
+import {ProductListingDTO} from '../../models/product-listings/ProductListingDTO';
+import {PutProductListingDTO} from '../../models/product-listings/PutProductListingDTO';
+import {PostProductListingDTO} from '../../models/product-listings/PostProductListingDTO';
+import {PostProductListingResponseDTO} from '../../models/product-listings/PostProductListingResponseDTO';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 import {PostUserPriceDTO} from '../../models/product-listings/PostUserPriceDTO';
 

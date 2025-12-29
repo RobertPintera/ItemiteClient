@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, effect, inject, model, PLATFORM_ID, signal} from '@angular/core';
 import {GeocoderAutocomplete} from "../geocoder-autocomplete/geocoder-autocomplete";
 import {isPlatformBrowser} from '@angular/common';
-import {Localization} from '../../../core/models/Localization';
+import {Localization} from '../../../core/models/location/Localization';
 import {Marker, Map} from 'leaflet';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {Button} from '../button/button';

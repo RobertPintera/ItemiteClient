@@ -4,7 +4,7 @@ import {environment} from '../../../../environments/environment';
 import {catchError, Observable} from 'rxjs';
 import {PostStripeConnectStartResponseDTO} from '../../models/payments/PostStripeConnectStartResponseDTO';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
-import {PaginatedListingDTO} from '../../models/PaginatedListingDTO';
+import {PaginatedListingDTO} from '../../models/listing-general/PaginatedListingDTO';
 import {PostDisputeDTO} from '../../models/payments/PostDisputeDTO';
 import {GetPurchasesDTO} from '../../models/payments/GetPurchasesDTO';
 import {GetPurchasesResponseDTO} from '../../models/payments/GetPurchasesResponseDTO';

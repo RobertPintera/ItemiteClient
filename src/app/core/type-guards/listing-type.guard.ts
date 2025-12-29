@@ -1,5 +1,5 @@
-import { ProductListingDTO } from '../models/ProductListingDTO';
-import { AuctionListingDTO } from '../models/AuctionListingDTO';
+import { ProductListingDTO } from '../models/product-listings/ProductListingDTO';
+import { AuctionListingDTO } from '../models/auction-listing/AuctionListingDTO';
 
 export function isProductListing(article: ProductListingDTO | AuctionListingDTO | null): article is ProductListingDTO {
   return !!article &&

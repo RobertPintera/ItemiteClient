@@ -1,7 +1,7 @@
 import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {errorTranslations} from '../constants/ErrorTranslations';
-import {Localization} from '../models/Localization';
+import {Localization} from '../models/location/Localization';
 import {postalCodeRegexes} from '../constants/postalCodesRegex';
 export function PasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

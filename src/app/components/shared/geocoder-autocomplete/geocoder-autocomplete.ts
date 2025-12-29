@@ -11,7 +11,7 @@ import {
   WritableSignal
 } from '@angular/core';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
-import {Localization} from '../../../core/models/Localization';
+import {Localization} from '../../../core/models/location/Localization';
 
 @Component({
   selector: 'app-geocoder-autocomplete',

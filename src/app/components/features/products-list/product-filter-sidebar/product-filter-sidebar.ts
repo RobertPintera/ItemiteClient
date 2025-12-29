@@ -6,10 +6,10 @@ import {CategoryService} from '../../../../core/services/category-service/catego
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LISTING_TYPES, ListingType} from '../../../../core/constants/constants';
-import {ListingFilter} from '../../../../core/models/ListingFilter';
+import {ListingFilter} from '../../../../core/models/product-listings/ListingFilter';
 import {GeocoderAutocomplete} from '../../../shared/geocoder-autocomplete/geocoder-autocomplete';
-import {Localization} from '../../../../core/models/Localization';
-import {CategoryTreeDTO} from '../../../../core/models/CategoryTreeDTO';
+import {Localization} from '../../../../core/models/location/Localization';
+import {CategoryTreeDTO} from '../../../../core/models/category/CategoryTreeDTO';
 import {InputNumber} from '../../../shared/input-number/input-number';
 import {OptionItem} from '../../../../core/models/OptionItem';
 import {FilterSidebar} from '../../../../core/models/FilterSidebar';

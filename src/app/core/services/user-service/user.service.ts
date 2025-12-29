@@ -1,11 +1,11 @@
 import {lastValueFrom} from 'rxjs';
 import {environment} from '../../../../environments/environment.development';
-import {User} from '../../models/User';
-import {Localization} from '../../models/Localization';
+import {User} from '../../models/user/User';
+import {Localization} from '../../models/location/Localization';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {computed, effect, inject, Injectable, PLATFORM_ID, signal} from '@angular/core';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
-import {UserBasicInfo} from '../../models/UserBasicInfo';
+import {UserBasicInfo} from '../../models/user/UserBasicInfo';
 import {AuthService} from '../auth-service/auth.service';
 import {isPlatformBrowser} from '@angular/common';
 

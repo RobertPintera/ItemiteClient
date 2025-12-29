@@ -2,8 +2,8 @@ import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, map, Observable} from 'rxjs';
-import {CategoryDTO} from '../../models/CategoryDTO';
-import {CategoryTreeDTO} from '../../models/CategoryTreeDTO';
+import {CategoryDTO} from '../../models/category/CategoryDTO';
+import {CategoryTreeDTO} from '../../models/category/CategoryTreeDTO';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 
 @Injectable({

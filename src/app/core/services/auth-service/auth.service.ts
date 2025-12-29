@@ -7,11 +7,11 @@ import {
   PLATFORM_ID,
   signal,
 } from '@angular/core';
-import {UserBasicInfo} from '../../models/UserBasicInfo';
+import {UserBasicInfo} from '../../models/user/UserBasicInfo';
 import {filter, interval, lastValueFrom, race, take, timer} from 'rxjs';
 import {environment} from '../../../../environments/environment.development';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
-import {User} from '../../models/User';
+import {User} from '../../models/user/User';
 import {isPlatformBrowser} from '@angular/common';
 
 @Injectable({

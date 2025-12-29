@@ -9,7 +9,7 @@ import {
 import {GeocoderAutocomplete} from '../../shared/geocoder-autocomplete/geocoder-autocomplete';
 import {Map, Marker} from 'leaflet';
 import {isPlatformBrowser} from '@angular/common';
-import {Localization} from '../../../core/models/Localization';
+import {Localization} from '../../../core/models/location/Localization';
 import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
 import {LatLonPayloadDTO} from '../../../core/models/geoapify/LatLonPayloadDTO';
 import {EditableText} from '../../shared/editable-text/editable-text';

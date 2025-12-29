@@ -3,10 +3,10 @@ import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
 import {TranslatePipe} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
-import {ListingResponseDTO} from '../../../../core/models/ListingResponseDTO';
+import {ListingResponseDTO} from '../../../../core/models/listing-general/ListingResponseDTO';
 import {Loader} from '../../../shared/loader/loader';
 import {SORT_DIRECTION, SortBy, SortDirection, SORTS_BY} from '../../../../core/constants/constants';
-import {ListingFilter} from '../../../../core/models/ListingFilter';
+import {ListingFilter} from '../../../../core/models/product-listings/ListingFilter';
 import {OptionItem} from '../../../../core/models/OptionItem';
 import {ProductItem} from '../../../shared/product-item/product-item';
 

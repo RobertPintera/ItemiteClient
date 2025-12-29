@@ -1,4 +1,4 @@
-import {LocationDTO} from './LocationDTO';
+import {LocationDTO} from '../location/LocationDTO';
 
 export interface User {
   id: number,

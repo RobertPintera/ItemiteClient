@@ -5,7 +5,7 @@ import {Dialog} from '../../../../shared/dialog/dialog';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
 import {PaymentService} from '../../../../../core/services/payment-service/payment-service';
-import {ImageMedia} from '../../../../../core/models/ImageMedia';
+import {ImageMedia} from '../../../../../core/models/graphics/ImageMedia';
 import {isEmptyValidator} from '../../../../../core/utility/Validation';
 import {OptionItem} from '../../../../../core/models/OptionItem';
 import {finalize} from 'rxjs';
