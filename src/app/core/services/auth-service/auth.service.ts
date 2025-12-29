@@ -32,7 +32,8 @@ export class AuthService {
     {
       id: -1,
       username: "",
-      email: ""
+      email: "",
+      profilePhotoUrl: null
     }
   );
   readonly userBasicInfo = this._userBasicInfo.asReadonly();
@@ -74,7 +75,8 @@ export class AuthService {
       this._userBasicInfo.set({
         id: response.id,
         username: response.userName,
-        email: response.email
+        email: response.email,
+        profilePhotoUrl: null
       });
       this._isUserLoggedIn.set(true);
       return true;
@@ -88,7 +90,8 @@ export class AuthService {
     this._userBasicInfo.set({
       id: -1,
       username: "",
-      email: ""
+      email: "",
+      profilePhotoUrl: null
     });
   }
 
