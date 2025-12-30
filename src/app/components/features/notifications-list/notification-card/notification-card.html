@@ -27,7 +27,9 @@ text-secondary-foreground p-2 text-shadow-xs text-shadow-black bg-linear-to-r fr
     }
 
     <div>
-      <p class="font-bold text-lg"> {{ `notifications.${resourceType()}` | translate }} </p>
+      @if (resourceType() != null ) {
+        <p class="font-bold text-lg"> {{ `notifications.${resourceType()}` | translate }} </p>
+      }
       <p class="text-wrap-auto text-wrap text-justify text-lg"> {{ message() }} </p>
       @if(notificationImageUrl() !== null) {
         <img alt="Notification image" [src]="notificationImageUrl()" class="w-full aspect-square object-contain max-h-50"/>
