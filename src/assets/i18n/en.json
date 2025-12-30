@@ -587,7 +587,7 @@
     "_lock": "lock",
     "_unlock": "unlock",
     "expires": "Expires",
-    "date_error": "Expiration date must have set future time",
+    "date_error": "Expiration date must have set future time"
   },
   "reports": {
     "reports": "Reports",
