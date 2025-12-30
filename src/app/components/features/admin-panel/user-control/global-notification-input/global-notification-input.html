@@ -1,0 +1,35 @@
+<form [formGroup]="notifyForm" (ngSubmit)="SendNotification()"
+      class="flex flex-col flex-wrap gap-2"
+>
+  <div class="flex flex-row flex-wrap items-start">
+    <div class="flex flex-col w-full">
+      <label for="subject">{{ "admin_users_control.subject" | translate  }}:</label>
+      <input name="subject" id="subject" formControlName="subject"
+             class="text-muted-foreground p-1 w-full"
+      />
+      <label for="title">{{ "admin_users_control.title" | translate  }}:</label>
+      <input name="title" id="title" formControlName="title"
+             class="text-muted-foreground p-1 w-full"
+      />
+    </div>
+    <div class="flex flex-col w-full">
+      <label for="message">{{ "admin_users_control.message" | translate  }}:</label>
+      <textarea rows="4" name="message" id="message" formControlName="message"
+                class="text-muted-foreground p-1 w-full"
+      ></textarea>
+    </div>
+  </div>
+  <button
+    name="submitMessage" id="submitMessage"
+    type="submit"
+    [disabled]="loading()"
+    class="relative text-primary ring-primary enabled:hover:underline enabled:hover:cursor-pointer disabled:ring-accent disabled:text-accent ring-2 rounded-md w-full h-5"
+  >
+    @if (loading()) {
+      <div class="absolute inset-0 flex items-center w-full justify-center">
+        <app-loading-circle />
+      </div>
+    }
+    {{ "controls.confirm" | translate  }}
+  </button>
+</form>
