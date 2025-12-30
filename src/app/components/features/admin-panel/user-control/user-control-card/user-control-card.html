@@ -1,0 +1,143 @@
+<div class="bg-card rounded-lg rouen text-card-foreground p-2 gap-1 flex flex-col items-center justify-center w-150 max-w-full ring-1 ring-accent box-border">
+  <div class="flex flex-row flex-wrap gap-2 items-center border-b-2">
+    <img [src]=profilePicture() alt="profile picture"
+      class="aspect-square h-14 rounded-full bg-background p-1 object-cover shadow-md"
+    />
+    <div class="flex flex-col justify-center items-center">
+      <p class="text-primary text-xl text-wrap-auto text-wrap">
+        {{ name() }}
+      </p>
+      <p class="text-primary/80 text-base text-wrap-auto text-wrap">
+        {{ email() }}
+      </p>
+    </div>
+  </div>
+
+  @if (showOptions()) {
+    <div class="flex flex-row items-center gap-2">
+      <button (click)='ChangeTab("notify")'
+              class="flex w-full flex-1 text-nowrap flex-row items-center p-1 justify-center inset-shadow-2xs hover:cursor-pointer ring-1 hover:ring-primary hover:text-primary"
+              [class.underline]='currentTab() === "notify"'
+              [class.ring-primary]='currentTab() === "notify"'
+              [class.ring-ring]='currentTab() !== "notify"'
+      >
+        Send notification
+      </button>
+      <button (click)='ChangeTab("lock")'
+              class="flex w-full flex-1 text-nowrap flex-row items-center p-1 justify-center inset-shadow-2xs hover:cursor-pointer ring-1 hover:ring-primary hover:text-primary"
+              [class.underline]='currentTab() === "lock"'
+              [class.ring-primary]='currentTab() === "lock"'
+              [class.ring-ring]='currentTab() !== "lock"'
+      >
+        Lock account
+      </button>
+      <button (click)='ChangeTab("unlock")'
+              class="flex w-full flex-1 text-nowrap flex-row items-center p-1 justify-center inset-shadow-2xs hover:cursor-pointer ring-1 hover:ring-primary hover:text-primary"
+              [class.underline]='currentTab() === "unlock"'
+              [class.ring-primary]='currentTab() === "unlock"'
+              [class.ring-ring]='currentTab() !== "unlock"'
+      >
+        Unlock account
+      </button>
+    </div>
+
+    @switch (currentTab()) {
+      @case ("lock") {
+        <form [formGroup]="lockUserForm" (ngSubmit)="LockUser()"
+              class="flex flex-col flex-wrap gap-2 w-10/12"
+        >
+          <div class="flex flex-row flex-wrap items-start w-full gap-2">
+            <div class="flex flex-col">
+              <label for="expirationDate">Expires:</label>
+              <input type="date" name="expirationDate" id="expirationDate" formControlName="expirationDate" (input)="OnDateChanged($event)"
+                     class="text-muted-foreground p-1 hover:cursor-text"
+              />
+            </div>
+
+            <div class="flex flex-col flex-1 ">
+              <label for="reason">Reason:</label>
+              <textarea rows="4" name="reason" id="reason" formControlName="reason"
+                        class="text-muted-foreground w-full p-1"
+              ></textarea>
+            </div>
+          </div>
+
+          <button
+            name="submit" id="submit"
+            type="submit"
+            [disabled]="!isDateValid()"
+            class="relative text-primary ring-primary disabled:ring-accent disabled:text-accent ring-2 rounded-md w-full h-5"
+          >
+            @if (loading()) {
+              <div class="absolute inset-0 flex items-center w-full justify-center">
+                <app-loading-circle />
+              </div>
+            }
+
+            Confirm lock
+          </button>
+        </form>
+        @if (!isDateValid()) {
+          <p class="text-destructive text-sm"> Expiration date must have set future time </p>
+        }
+      }
+      @case ("notify") {
+        <form [formGroup]="notifyUserForm" (ngSubmit)="SendNotification()"
+              class="flex flex-col flex-wrap gap-2"
+        >
+          <div class="flex flex-row flex-wrap items-start">
+            <div class="flex flex-col w-full">
+              <label for="subject">Subject:</label>
+              <input name="subject" id="subject" formControlName="subject"
+                     class="text-muted-foreground p-1 w-full"
+              />
+              <label for="title">Title:</label>
+              <input name="title" id="title" formControlName="title"
+                     class="text-muted-foreground p-1 w-full"
+              />
+            </div>
+            <div class="flex flex-col w-full">
+              <label for="message">Message:</label>
+              <textarea rows="4" name="message" id="message" formControlName="message"
+                        class="text-muted-foreground p-1 w-full"
+              ></textarea>
+            </div>
+          </div>
+          <button
+            name="submitMessage" id="submitMessage"
+            type="submit"
+
+            class="relative text-primary ring-primary disabled:ring-accent disabled:text-accent ring-2 rounded-md w-full h-5"
+          >
+            @if (loading()) {
+              <div class="absolute inset-0 flex items-center w-full justify-center">
+                <app-loading-circle />
+              </div>
+            }
+            Send
+          </button>
+        </form>
+      }
+    }
+  }
+
+  <button type="button" class="w-full flex flex-row items-center hover:*:rotate-y-180 hover:cursor-pointer hover:*:scale-90 *:duration-400 *:transition-all"
+    (click)="SwitchShowOptions()"
+  >
+    <div class="flex-1 h-px bg-accent"></div>
+    <div>
+    @if (showOptions()) {
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+      </svg>
+    } @else {
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+      </svg>
+    }
+    </div>
+    <div class="flex-1 h-px bg-accent"></div>
+  </button>
+</div>
+
+
