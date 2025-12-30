@@ -2,7 +2,6 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {PaginatedUsersResponseDTO} from '../../models/user/PaginatedUsersResponseDTO';
 import {lastValueFrom, Observable} from 'rxjs';
-import {ChatListResponseDTO} from '../../models/chat/ChatListResponseDTO';
 import {environment} from '../../../../environments/environment.development';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 
@@ -15,11 +14,11 @@ export class AdminService {
 
   // region Users
   GetUsers(pageNumber: number, searchQuery: string | undefined = undefined, pageSize: number = 10): Observable<PaginatedUsersResponseDTO> {
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('PageNumber', pageNumber)
       .set('PageSize', pageSize);
     if(searchQuery) {
-      params.set('searchQuery', searchQuery);
+      params = params.append('Search', searchQuery);
     }
     return this._http.get<PaginatedUsersResponseDTO>(`${environment.itemiteApiUrl}/adminpanel/users`, {params:params, timeout: 15000, withCredentials: true})
   }
