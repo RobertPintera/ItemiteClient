@@ -107,6 +107,14 @@ export const routes: Routes = [
             .then(m => m.FullscreenChatPage),
         canActivate: [AuthGuard],
       }
+      },
+      {
+        path: 'report',
+        loadComponent: () =>
+          import('./components/features/report-form/report-form')
+            .then(m => m.ReportForm),
+        canActivate: [AuthGuard],
+      },
     ]
   },
   {
