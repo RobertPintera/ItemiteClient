@@ -65,7 +65,10 @@ export class ComboBox implements OnInit, OnDestroy, ControlValueAccessor {
 
   toggleDropdown() {
     if (this.isDisabled()) return;
-    window.dispatchEvent(new CustomEvent('close-all-combos'));
+    if (!this.isOpen()) {
+      window.dispatchEvent(new CustomEvent('close-all-combos'));
+    }
+
     this.onTouched();
     this.isOpen.set(!this.isOpen());
   }
