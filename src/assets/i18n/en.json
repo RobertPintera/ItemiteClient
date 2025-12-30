@@ -591,6 +591,12 @@
   },
   "reports": {
     "reports": "Reports",
-    "report": "Report"
+    "report": "Report",
+    "report_form": "Report form",
+    "report_desc": "If you noticed overuse of the service in any way, we are happy to investigate the case. Please just fill this form.",
+    "problem_description": "Problem description",
+    "optional_images": "Optional photos",
+    "success": "Report sent successfully",
+    "category": "Category"
   }
 }

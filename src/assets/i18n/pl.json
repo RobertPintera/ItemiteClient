@@ -584,6 +584,12 @@
   },
   "reports": {
     "reports": "Zgłoszenia",
-    "report": "Zgłoś"
+    "report": "Zgłoś",
+    "report_form": "Formularz zgłoszenia",
+    "report_desc": "Jeżeli zaobserwowano lub doznano jakichkolwiek nadużyć serwisu, chętnie zbadamy sprawę. Prosimy tylko wypełnić poniższy formularz.",
+    "problem_description": "Opis problemu",
+    "optional_images": "Opcjonalne zdjęcia",
+    "success": "Zgłoszenie wysłano pomyślnie",
+    "category": "Kategoria"
   }
 }
