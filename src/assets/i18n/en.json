@@ -570,5 +570,27 @@
     "ChatPage": "Chats",
     "User": "User",
     "delete_all": "Delete all"
+  },
+  "admin_users_control": {
+    "user_locked": "Account locked successfully",
+    "user_unlocked": "Account unlocked successfully",
+    "failed": "Operation failed",
+    "notif_sent": "Notification sent successfully",
+    "lock_account": "Lock account",
+    "unlock_account": "Unlock account",
+    "send_notification": "Send notification",
+    "send_notification_all": "Send notification to all users",
+    "title": "Title",
+    "subject": "Subject",
+    "reason": "Reason",
+    "message": "Message",
+    "_lock": "lock",
+    "_unlock": "unlock",
+    "expires": "Expires",
+    "date_error": "Expiration date must have set future time",
+  },
+  "reports": {
+    "reports": "Reports",
+    "report": "Report"
   }
 }

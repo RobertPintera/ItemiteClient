@@ -563,5 +563,27 @@
     "ChatPage": "Rozmowy",
     "User": "Użytkownik",
     "delete_all": "Usuń wszystkie"
+  },
+  "admin_users_control": {
+    "user_locked": "Konto zablokowane pomyślnie",
+    "user_unlocked": "Konto odblokowane pomślnie",
+    "failed": "Operacja się nie powiodła",
+    "notif_sent": "Powiadomienie wysłane pomyślnie",
+    "lock_account": "Zablokuj konto",
+    "unlock_account": "Odblokuj konto",
+    "send_notification": "Wyślij powiadomienie",
+    "send_notification_all": "Wyślij powiadomienie do wszystkich użytkowników",
+    "title": "Tytuł",
+    "subject": "Temat",
+    "reason": "Powód",
+    "message": "Wiadomość",
+    "_lock": "zablokowanie",
+    "_unlock": "odblokowanie",
+    "expires": "Wygasa",
+    "date_error": "Data wygaśnięcia musi mieć ustawiony czas przyszły"
+  },
+  "reports": {
+    "reports": "Zgłoszenia",
+    "report": "Zgłoś"
   }
 }
