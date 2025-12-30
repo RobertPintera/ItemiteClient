@@ -7,13 +7,15 @@ import {ErrorHandlerService} from '../../../../core/services/error-handler-servi
 import {LoadingCircle} from '../../../shared/loading-circle/loading-circle';
 import {UserControlCard} from './user-control-card/user-control-card';
 import {User} from '../../../../core/models/user/User';
+import {GlobalNotificationInput} from './global-notification-input/global-notification-input';
 
 @Component({
   selector: 'app-user-control',
   imports: [
     ReactiveFormsModule,
     LoadingCircle,
-    UserControlCard
+    UserControlCard,
+    GlobalNotificationInput
   ],
   templateUrl: './user-control.html',
   styleUrl: './user-control.css',
@@ -67,7 +69,7 @@ export class UserControl {
     this._loadingUsers.set(true);
     this._adminService.GetUsers(
       pageNum,
-      this.userSearchForm.get("query")?.value ?? undefined,
+      this.userSearchForm.value.query,
       this.USERS_PER_PAGE
     ).subscribe({
       next: (users) => {

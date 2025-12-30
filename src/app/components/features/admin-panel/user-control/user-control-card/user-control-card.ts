@@ -5,17 +5,21 @@ import {AdminService} from '../../../../../core/services/admin-service/admin.ser
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {User} from '../../../../../core/models/user/User';
 import {LoadingCircle} from '../../../../shared/loading-circle/loading-circle';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-control-card',
   imports: [
     ReactiveFormsModule,
-    LoadingCircle
+    LoadingCircle,
+    TranslatePipe
   ],
   templateUrl: './user-control-card.html',
   styleUrl: './user-control-card.css',
 })
 export class UserControlCard {
+  // todo success/fail message
+
   readonly user = input.required<User>();
 
   private _adminService = inject(AdminService);
@@ -52,23 +56,47 @@ export class UserControlCard {
       message: new FormControl('',[]),
       title: new FormControl('',[]),
       subject: new FormControl('',[])
-    })
+    });
+
+    this.unlockUserForm = new FormGroup({
+      reasonUnlock: new FormControl('',[])
+    });
   }
 
   // region notification
   notifyUserForm: FormGroup;
 
   async SendNotification() {
-    if(this._loading()) return;
+    const message:string = (this.notifyUserForm.get('message')?.value ?? "").trim();
+    if(this._loading() || message === "") return;
+    this._loading.set(true);
+    const success = await this._adminService.SendNotification(
+      this.user().id,
+      this.notifyUserForm.value.subject === "" ? "Itemite notification" : this.notifyUserForm.value.subject,
+      this.notifyUserForm.value.title === "" ? "Itemite notification" : this.notifyUserForm.value.title,
+      message
+    );
+    this._loading.set(false);
+
+  }
+  // endregion
+
+  // region User unlock
+  unlockUserForm: FormGroup;
+  async UnlockUser() {
+    const message = this.unlockUserForm.value.reasonUnlock ?? "";
 
     this._loading.set(true);
-
+    const success = await this._adminService.UnlockUser(this.user().id, message);
+    this._loading.set(false);
+    this._operationResult.set(
+      success ? "user_unlocked" : "failed"
+    );
   }
   // endregion
 
   // region User lock
   lockUserForm: FormGroup;
-
 
   OnDateChanged(event: Event) {
     const element = event.target as HTMLInputElement;
@@ -101,24 +129,13 @@ export class UserControlCard {
   async LockUser() {
     if(!this.isDateValid()) return;
 
-    const message = this.lockUserForm.get('reason')?.value ?? "";
+    const message = this.lockUserForm.value.reason ?? "";
 
     this._loading.set(true);
     const success = await this._adminService.LockUser(this.user().id, this._selectedDate(), message);
     this._loading.set(false);
     this._operationResult.set(
       success ? "user_locked" : "failed"
-    );
-  }
-
-  async UnlockUser() {
-    const message = this.lockUserForm.get('reason')?.value ?? "";
-
-    this._loading.set(true);
-    const success = await this._adminService.UnlockUser(this.user().id, message);
-    this._loading.set(false);
-    this._operationResult.set(
-      success ? "user_unlocked" : "failed"
     );
   }
   // endregion
