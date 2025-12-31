@@ -17,7 +17,8 @@ import {NotificationResponseDTO} from '../../models/notification/NotificationRes
 })
 export class NotificationService {
   private _userService = inject(AuthService);
-  private _hub: signalR.HubConnection;
+  private _notifHub: signalR.HubConnection;
+  private _broadcastHub: signalR.HubConnection;
   private _http = inject(HttpClient);
   private _errorService = inject(ErrorHandlerService);
 
@@ -40,8 +41,19 @@ export class NotificationService {
   private _platformId = inject(PLATFORM_ID);
 
   constructor() {
-    this._hub = new signalR.HubConnectionBuilder()
+    this._notifHub = new signalR.HubConnectionBuilder()
       .withUrl(`${environment.itemiteHubs}/notifications`)
+      .withAutomaticReconnect([
+        0,
+        2000,
+        10000,
+        30000,
+        60000
+      ])
+      .build();
+
+    this._broadcastHub = new signalR.HubConnectionBuilder()
+      .withUrl(`${environment.itemiteHubs}/broadcast`)
       .withAutomaticReconnect([
         0,
         2000,
@@ -56,6 +68,7 @@ export class NotificationService {
     this.RegisterMessageEvents();
     this.RegisterNotificationEvent();
     this.RegisterConnectionEvents();
+    this.RegisterBroadcastEvents();
 
     effect(() => {
       if(this._userService.isUserLoggedIn()) {
@@ -69,60 +82,67 @@ export class NotificationService {
   }
 
   private async Connect() {
-    if (this._hub.state !== signalR.HubConnectionState.Disconnected) return;
+    if (this._notifHub.state !== signalR.HubConnectionState.Disconnected) return;
 
     await this.FetchUnreadCount();
 
     try {
-      await this._hub.start();
-      console.log('SignalR for notification service  connected');
+      await this._notifHub.start();
+      console.log('SignalR for notification service connected');
     } catch (err) {
       console.error('SignalR start failed', err);
     }
   }
 
   private async Disconnect() {
-    if (this._hub.state === signalR.HubConnectionState.Disconnected) return;
-    await this._hub.stop();
+    if (this._notifHub.state === signalR.HubConnectionState.Disconnected) return;
+    await this._notifHub.stop();
+    await this._broadcastHub.stop();
   }
 
   private RegisterConnectionEvents() {
-    this._hub.onreconnecting(error => {
+    this._notifHub.onreconnecting(error => {
       console.log('SignalR for notification service reconnecting...', error);
     });
 
-    this._hub.onreconnected(connectionId => {
+    this._notifHub.onreconnected(connectionId => {
       console.log('SignalR for notification service reconnected:', connectionId);
       this.FetchUnreadCount();
     });
 
-    this._hub.onclose(error => {
+    this._notifHub.onclose(error => {
       console.log('SignalR for notification service closed', error);
+    });
+
+    this._broadcastHub.onreconnecting(error => {
+      console.log('SignalR for broadcast service reconnecting...', error);
+    });
+
+    this._broadcastHub.onreconnected(connectionId => {
+      console.log('SignalR for broadcast service reconnected:', connectionId);
+      this.FetchUnreadCount();
+    });
+
+    this._broadcastHub.onclose(error => {
+      console.log('SignalR for broadcast service closed', error);
     });
   }
 
   private RegisterNotificationEvent() {
-    this._hub.on("Notification", (notification: any) => {
-      console.log(notification);
+    this._notifHub.on("Notification", (notification: Notification) => {
       this._onNotificationReceived.next(notification);
       this._notificationCount.set(this._notificationCount()+1);
     });
   }
 
-  private MarkNotificationsAsRead(count: number) {
-    this._notificationCount.set(
-      Math.max(this._notificationCount()-count, 0)
-    );
-  }
-
   private RegisterMessageEvents() {
-    this._hub.on("MessageReceived", (message: MessageResponse) => {
+    this._notifHub.on("MessageReceived", (message: MessageResponse) => {
       console.log("Received message")
       console.log(message);
       this._onMessageReceived.next(message);
     });
 
-    this._hub.on("MessageUpdated", (message: MessageResponse) => {
+    this._notifHub.on("MessageUpdated", (message: MessageResponse) => {
       console.log("Edited message");
       console.log(message);
       this._onMessageUpdated.next(message);
@@ -133,11 +153,18 @@ export class NotificationService {
       messageDeletedString: string
     }
 
-    this._hub.on("MessageDeleted", (message: MessageDeletedResponse) => {
+    this._notifHub.on("MessageDeleted", (message: MessageDeletedResponse) => {
       console.log("Deleted message");
       console.log(message);
       this._onMessageDeleted.next(message.messageId);
     })
+  }
+
+  private RegisterBroadcastEvents() {
+    this._notifHub.on("SiteMessage", (notification: Notification) => {
+      this._onNotificationReceived.next(notification);
+      this._notificationCount.set(this._notificationCount()+1);
+    });
   }
 
   private async FetchUnreadCount() {
@@ -193,6 +220,12 @@ export class NotificationService {
       this._errorService.SendErrorMessage(error);
       return false
     }
+  }
+
+  private MarkNotificationsAsRead(count: number) {
+    this._notificationCount.set(
+      Math.max(this._notificationCount()-count, 0)
+    );
   }
 
   async DeleteNotifications(): Promise<boolean> {
