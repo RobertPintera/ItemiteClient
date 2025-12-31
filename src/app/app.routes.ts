@@ -114,6 +114,14 @@ export const routes: Routes = [
             .then(m => m.ReportForm),
         canActivate: [AuthGuard],
       },
+      {
+        path: 'admin-panel',
+        loadComponent: () => import('./components/features/admin-panel/admin-panel').then(m => m.AdminPanel),
+      },
+      {
+        path: 'admin-panel/user-control',
+        loadComponent: () => import('./components/features/admin-panel/user-control/user-control').then(m => m.UserControl),
+      }
     ]
   },
   {

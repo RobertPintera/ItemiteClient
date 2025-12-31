@@ -1,0 +1,4 @@
+:host ::ng-deep app-button.button-control .button-container {
+  width: 100%;
+  font-size: 2rem;
+}
