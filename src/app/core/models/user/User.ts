@@ -8,4 +8,5 @@ export interface User {
   phoneNumber: string | undefined,
   photoUrl: string | undefined,
   backgroundUrl: string | undefined
+  roles: string[]
 }

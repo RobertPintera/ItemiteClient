@@ -36,7 +36,22 @@ export class AuthService {
       profilePhotoUrl: null
     }
   );
+
+  private _userInfo = signal<User>(
+    {
+      id: -1,
+      userName: '',
+      email: '',
+      location: undefined,
+      phoneNumber: undefined,
+      photoUrl: undefined,
+      backgroundUrl: undefined,
+      roles: []
+    }
+  );
+
   readonly userBasicInfo = this._userBasicInfo.asReadonly();
+  readonly userInfo = this._userInfo.asReadonly();
   private _platformId = inject(PLATFORM_ID);
 
   constructor() {
@@ -76,8 +91,9 @@ export class AuthService {
         id: response.id,
         username: response.userName,
         email: response.email,
-        profilePhotoUrl: null
+        profilePhotoUrl: response.photoUrl ?? null
       });
+      this._userInfo.set(response);
       this._isUserLoggedIn.set(true);
       return true;
     } catch (error: any) {
@@ -92,6 +108,17 @@ export class AuthService {
       username: "",
       email: "",
       profilePhotoUrl: null
+    });
+
+    this._userInfo.set({
+      backgroundUrl: undefined,
+      location: undefined,
+      phoneNumber: undefined,
+      photoUrl: undefined,
+      roles: [],
+      userName: '',
+      id: -1,
+      email: "",
     });
   }
 

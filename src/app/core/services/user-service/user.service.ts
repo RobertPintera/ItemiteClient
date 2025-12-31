@@ -21,15 +21,10 @@ export class UserService {
       location: undefined,
       phoneNumber: undefined,
       photoUrl: undefined,
-      backgroundUrl: undefined
+      backgroundUrl: undefined,
+      roles: []
     }
   );
-
-  // shortcuts for easier refactoring and access
-  isUserLoggedIn = computed(() =>
-    this.authService.isUserLoggedIn()
-  );
-  userBasicInfo = computed(() => this.authService.userBasicInfo());
 
   private authService:AuthService = inject(AuthService);
   private http: HttpClient = inject(HttpClient);
@@ -38,6 +33,14 @@ export class UserService {
 
   readonly userInfo = this._userInfo.asReadonly();
 
+  // shortcuts for easier refactoring and access
+  isUserLoggedIn = computed(() =>
+    this.authService.isUserLoggedIn()
+  );
+  userBasicInfo = computed(() =>
+    this.authService.userBasicInfo()
+  );
+
   constructor() {
     if(!isPlatformBrowser(this._platformId)) return;
 
@@ -45,6 +48,14 @@ export class UserService {
       if(!this.authService.isUserLoggedIn()) {
         this.ClearUserInfo();
       }
+    });
+
+    effect(() => {
+      if(this.authService.userInfo().id < 0) return;
+
+      this._userInfo.set(
+        this.authService.userInfo()
+      );
     });
 
     this.OnServiceEnter();
@@ -109,7 +120,8 @@ export class UserService {
       location: undefined,
       phoneNumber: undefined,
       photoUrl: undefined,
-      backgroundUrl: undefined
+      backgroundUrl: undefined,
+      roles: []
     })
   }
 

@@ -3,7 +3,7 @@ import {inject, PLATFORM_ID} from '@angular/core';
 import {UserService} from '../../services/user-service/user.service';
 import {isPlatformBrowser} from '@angular/common';
 
-export const AuthGuard: CanActivateFn = async (route, state) => {
+export const AdminGuard: CanActivateFn = async (route, state) => {
   const platformId = inject(PLATFORM_ID);
   const userService = inject(UserService);
   const router = inject(Router);
@@ -21,7 +21,7 @@ export const AuthGuard: CanActivateFn = async (route, state) => {
     await userService.OnServiceEnter();
   }
 
-  return userService.isUserLoggedIn()
+  return userService.userInfo().roles.includes("Admin")
     ? true
     : router.createUrlTree(['/login']);
 };
