@@ -106,7 +106,6 @@ export const routes: Routes = [
           import('./components/features/chat/fullscreen-chat-page/fullscreen-chat-page')
             .then(m => m.FullscreenChatPage),
         canActivate: [AuthGuard],
-      }
       },
       {
         path: 'report',
