@@ -4,7 +4,7 @@
     @for(category of categories(); track category.id) {
       <a [routerLink]="['/products']" [queryParams]="{ id: category.id }">
         <div class="flex flex-col items-center gap-2 hover:scale-110 active:scale-95 transition-transform duration-200">
-          <img [src]="category.imageUrl" [alt]="category.name" class="size-42 object-cover select-none" width="1" height="1" />
+          <div class="size-42 svg-host" [innerHTML]="category.safeSvg"></div>
           <h4>{{'categories.' + category.name | translate}}</h4>
         </div>
       </a>

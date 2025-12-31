@@ -1,0 +1,4 @@
+:host ::ng-deep .svg-host > svg {
+  width: 100%;
+  height: 100%;
+}
