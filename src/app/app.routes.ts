@@ -121,6 +121,10 @@ export const routes: Routes = [
       {
         path: 'admin-panel/user-control',
         loadComponent: () => import('./components/features/admin-panel/user-control/user-control').then(m => m.UserControl),
+      },
+      {
+        path: 'admin-panel/category-control',
+        loadComponent: () => import('./components/features/admin-panel/category-control/category-control').then(m => m.CategoryControl),
       }
     ]
   },

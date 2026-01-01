@@ -591,5 +591,23 @@
     "optional_images": "Opcjonalne zdjęcia",
     "success": "Zgłoszenie wysłano pomyślnie",
     "category": "Kategoria"
+  },
+  "admin_category_control": {
+    "create_main_category": "Stwórz kategorię główą",
+    "show_subcategories": "Pokaż podkategorie",
+    "form_dialog": {
+      "edit": "Edycja kategorii głównej",
+      "create": "Tworzenie kategorii głównej",
+      "name": "Nazwa",
+      "description": "Opis",
+      "image": "Obraz (Tylko svg)"
+    }
+  },
+  "validator_errors_admin_category_control": {
+    "field_required": "Pole jest wymagane.",
+    "field_empty" : "Pole nie może być puste.",
+    "name_min" : "Imię musi mieć przynajmniej z 2 znaki",
+    "name_max" : "Imię nie może mieć więcej niż z 30 znaków",
+    "description_max": "Imię nie może mieć więcej niż z 100 znaków"
   }
 }

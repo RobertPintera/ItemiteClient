@@ -4,7 +4,6 @@ import {
   inject,
   input,
   output,
-  PLATFORM_ID,
   SecurityContext,
   Signal,
   signal,
@@ -12,7 +11,6 @@ import {
 } from '@angular/core';
 import {TranslatePipe} from "@ngx-translate/core";
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {Button} from '../button/button';
 
 @Component({
   selector: 'app-file-upload',
@@ -25,8 +23,8 @@ import {Button} from '../button/button';
 export class FileUpload {
   private _sanitizer: DomSanitizer = inject(DomSanitizer);
 
-  onConfirmClicked = output<File>();
-  onCancelClicked = output<void>();
+  readonly onConfirmClicked = output<File>();
+  readonly onCancelClicked = output<void>();
   readonly acceptedFormats = input("image/png, image/jpeg");
   readonly supportsPreview = input<boolean>(false);
   readonly maxSizeMB  = input<number>(5);

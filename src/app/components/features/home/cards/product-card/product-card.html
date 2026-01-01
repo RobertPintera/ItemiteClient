@@ -10,7 +10,7 @@
     <div class="flex flex-row">
       @if(product()?.categories?.length){
         <div class="border-2 border-border px-4 py-2 rounded-2xl bg-background text-foreground">
-          <p class="text-sm">{{ `categories.${product()?.categories?.[0]?.name}` | translate }}</p>
+          <p class="text-sm">{{ product()?.categories?.[0]?.name }}</p>
         </div>
       }
     </div>

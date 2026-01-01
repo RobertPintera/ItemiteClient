@@ -20,7 +20,7 @@ import {GetSalesResponseDTO} from '../../models/payments/GetSalesResponseDTO';
 export class PaymentService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/payment`;
-  private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
+  private _errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
   private platformId = inject(PLATFORM_ID);
   private authService = inject(AuthService);
 
@@ -74,7 +74,7 @@ export class PaymentService {
   connectStripeStart() {
     return this.postStripeConnectStart().pipe(
       catchError(err => {
-        this.errorHandlerService.SendErrorMessage(err);
+        this._errorHandlerService.SendErrorMessage(err);
         console.error('Error createProductListing:', err);
         throw err;
       })
@@ -84,7 +84,7 @@ export class PaymentService {
   loadOnboardingStatus(): Observable<GetOnboardingStatusResponseDTO> {
     return this.getOnboardingStatus().pipe(
       catchError(err => {
-        this.errorHandlerService.SendErrorMessage(err);
+        this._errorHandlerService.SendErrorMessage(err);
         console.error('Error loadOnboardingStatus:', err);
         throw err;
       })
@@ -98,7 +98,7 @@ export class PaymentService {
 
     return this.postPurchaseProduct(productListingId, body).pipe(
       catchError(err => {
-        this.errorHandlerService.SendErrorMessage(err);
+        this._errorHandlerService.SendErrorMessage(err);
         console.error('Error purchaseProduct:', err);
         throw err;
       })
@@ -112,7 +112,7 @@ export class PaymentService {
 
     return this.getMyPurchases(params).pipe(
       catchError(err => {
-        this.errorHandlerService.SendErrorMessage(err);
+        this._errorHandlerService.SendErrorMessage(err);
         console.error('Error loadPurchases:', err);
         throw err;
       })
@@ -126,7 +126,7 @@ export class PaymentService {
 
     return this.getMySales(params).pipe(
       catchError(err => {
-        this.errorHandlerService.SendErrorMessage(err);
+        this._errorHandlerService.SendErrorMessage(err);
         console.error('Error loadSales:', err);
         throw err;
       })
@@ -136,7 +136,7 @@ export class PaymentService {
   confirmDelivery(listingId: number) {
     return this.postConfirmDelivery(listingId).pipe(
       catchError(err => {
-        this.errorHandlerService.SendErrorMessage(err);
+        this._errorHandlerService.SendErrorMessage(err);
         console.error('Error confirmDelivery:', err);
         throw err;
       })
@@ -158,7 +158,7 @@ export class PaymentService {
 
     return this.postDispute(paymentId, formData).pipe(
       catchError(err => {
-        this.errorHandlerService.SendErrorMessage(err);
+        this._errorHandlerService.SendErrorMessage(err);
         console.error('Error dispute:', err);
         throw err;
       })

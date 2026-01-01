@@ -35,7 +35,7 @@ export class CategoryService {
     return this.http.get<CategoryTreeDTO>(`${this.baseUrl}/tree/${rootCategoryId}`);
   }
 
-  // Updating signals
+  // Logic
 
   loadMainCategories(): Observable<CategoryDTO[]> {
     return this.getMainCategories().pipe(

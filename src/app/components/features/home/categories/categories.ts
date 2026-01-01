@@ -18,11 +18,10 @@ export class Categories {
   private _categoryService = inject(CategoryService);
   private _sanitizer = inject(DomSanitizer);
 
-
   readonly categories = computed(() =>
     this._categoryService.mainCategories().map(category => ({
       ...category,
-      safeSvg: this._sanitizer.bypassSecurityTrustHtml(category.svgImage)
+      safeSvg: category.svgImage ? this._sanitizer.bypassSecurityTrustHtml(category.svgImage) : ''
     }))
   );
 }

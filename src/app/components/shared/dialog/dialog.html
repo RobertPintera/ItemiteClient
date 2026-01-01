@@ -1,7 +1,7 @@
 <div
   class="select-none p-1 inset-0 flex flex-col m-auto items-center justify-center z-1000
 fixed w-full max-w-[1920px] h-full bg-background/50 backdrop-grayscale-100 backdrop-blur-xs" tabindex="0" (click)="close()" (keyup.enter)="close()">
-  <div class="relative flex flex-col max-w-[80%] max-h-[80%] m-auto bg-card text-card-foreground rounded-sm shadow-xl p-4"
+  <div class="relative flex flex-col max-w-[80%] max-h-[80%] m-auto bg-card text-card-foreground rounded-sm shadow-xl p-4 overflow-auto"
         tabindex="0" (click)="$event.stopPropagation()" (keyup.enter)="$event.stopPropagation()">
     @if (header(); as header){
       <h3 class="mb-4">{{ header }}</h3>

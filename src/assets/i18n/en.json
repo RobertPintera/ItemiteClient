@@ -598,5 +598,23 @@
     "optional_images": "Optional photos",
     "success": "Report sent successfully",
     "category": "Category"
+  },
+  "admin_category_control": {
+    "create_main_category": "Create main category",
+    "show_subcategories": "Show subcategories",
+    "form_dialog": {
+      "edit": "Edit main category",
+      "create": "Create main category",
+      "name": "Name",
+      "description": "Description",
+      "image": "Image (Only svg)"
+    }
+  },
+  "validator_errors_admin_category_control": {
+    "field_required": "Field is required",
+    "field_empty" : "Field can't be empty",
+    "name_min": "Name must be at least 2 characters long",
+    "name_max": "Name cannot be more than 100 characters",
+    "description_max": "Description cannot be more than 100 characters"
   }
 }

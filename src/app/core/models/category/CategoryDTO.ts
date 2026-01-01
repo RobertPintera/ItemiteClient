@@ -2,5 +2,5 @@ export interface CategoryDTO {
   "id": number;
   "name": string;
   "description": string;
-  "svgImage": string;
+  "svgImage": string | null;
 }

@@ -14,7 +14,7 @@
          class="text-muted-foreground
          hover:text-muted-foreground/60
          focus:text-muted-foreground/60
-         duration-75">{{ 'product_details.home' | translate }} / {{ `categories.${article()?.categories?.[0]?.name}` | translate }}</a>
+         duration-75">{{ 'product_details.home' | translate }} / {{ article()?.categories?.[0]?.name }}</a>
       @if (isUserLogged() && !isAuthorLogged()){
         <button class="cursor-pointer" (click)="toggleFollowed()">
           @if (isFollowed()){
@@ -62,7 +62,7 @@
           <div class="flex flex-row flex-wrap gap-3 mb-4">
             @for (category of article()?.categories; track category.id){
               <div class="border-2 border-border px-4 py-2 rounded-2xl">
-                <p class="text-base md:text-xl">{{ `categories.${category.name}` | translate }}</p>
+                <p class="text-base md:text-xl">{{ category.name }}</p>
               </div>
             }
           </div>
