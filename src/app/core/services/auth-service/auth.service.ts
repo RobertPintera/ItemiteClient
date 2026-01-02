@@ -31,7 +31,7 @@ export class AuthService {
   private _userBasicInfo = signal<UserBasicInfo>(
     {
       id: -1,
-      username: "",
+      userName: "",
       email: "",
       profilePhotoUrl: null
     }
@@ -89,7 +89,7 @@ export class AuthService {
       );
       this._userBasicInfo.set({
         id: response.id,
-        username: response.userName,
+        userName: response.userName,
         email: response.email,
         profilePhotoUrl: response.photoUrl ?? null
       });
@@ -105,7 +105,7 @@ export class AuthService {
   private ClearUserInfo(): void {
     this._userBasicInfo.set({
       id: -1,
-      username: "",
+      userName: "",
       email: "",
       profilePhotoUrl: null
     });

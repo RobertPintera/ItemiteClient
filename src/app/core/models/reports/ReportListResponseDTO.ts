@@ -1,3 +1,5 @@
+import {Report} from './Report';
+
 export interface ReportListResponseDTO {
   items: Report[],
   totalPages: number,

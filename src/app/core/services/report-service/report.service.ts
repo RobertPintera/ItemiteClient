@@ -40,14 +40,16 @@ export class ReportService {
   }
 
   GetReports(
-    resourceType: ResourceType,
     pageNumber: number,
+    resourceType: ResourceType | undefined,
     pageSize: number = 20,
   ): Observable<ReportListResponseDTO> {
-    const params = new HttpParams()
-      .set('ResourceType', resourceType.toString())
+    let params = new HttpParams()
       .set('PageSize', pageSize)
       .set('PageNumber', pageNumber);
+    if(resourceType) {
+      params = params.append('ResourceType', resourceType.toString());
+    }
     return this._http.get<ReportListResponseDTO>(`${environment.itemiteApiUrl}/adminpanel/reports`, {params:params, timeout: 15000, withCredentials: true});
   }
 }

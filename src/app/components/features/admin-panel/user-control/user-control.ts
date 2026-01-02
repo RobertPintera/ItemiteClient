@@ -8,6 +8,7 @@ import {LoadingCircle} from '../../../shared/loading-circle/loading-circle';
 import {UserControlCard} from './user-control-card/user-control-card';
 import {User} from '../../../../core/models/user/User';
 import {GlobalNotificationInput} from './global-notification-input/global-notification-input';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-control',
@@ -15,7 +16,8 @@ import {GlobalNotificationInput} from './global-notification-input/global-notifi
     ReactiveFormsModule,
     LoadingCircle,
     UserControlCard,
-    GlobalNotificationInput
+    GlobalNotificationInput,
+    TranslatePipe
   ],
   templateUrl: './user-control.html',
   styleUrl: './user-control.css',

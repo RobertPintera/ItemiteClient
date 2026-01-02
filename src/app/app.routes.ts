@@ -116,17 +116,17 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'admin-panel',
+        path: 'admin',
         loadComponent: () => import('./components/features/admin-panel/admin-panel').then(m => m.AdminPanel),
         canActivate: [AdminGuard]
       },
       {
-        path: 'admin-panel/user-control',
+        path: 'admin/users',
         loadComponent: () => import('./components/features/admin-panel/user-control/user-control').then(m => m.UserControl),
         canActivate: [AdminGuard]
       },
       {
-        path: 'reports',
+        path: 'admin/reports',
         loadComponent: () =>
           import('./components/features/admin-panel/reports-list/reports-list').then(m => m.ReportsList),
         canActivate: [AuthGuard]

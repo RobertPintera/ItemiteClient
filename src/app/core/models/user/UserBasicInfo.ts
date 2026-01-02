@@ -1,6 +1,6 @@
 export interface UserBasicInfo {
   id : number,
-  username : string,
+  userName : string,
   email : string
   profilePhotoUrl: string | null
 }

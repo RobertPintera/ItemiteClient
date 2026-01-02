@@ -91,10 +91,10 @@ export class ReportForm implements OnInit {
     });
 
     this._translateService.onLangChange.subscribe((value) => {
-      this.UpdateErrorTranslations();
+      this.UpdateTranslations();
     });
 
-    this.UpdateErrorTranslations();
+    this.UpdateTranslations();
   }
 
   async OnSubmit() {
@@ -117,18 +117,18 @@ export class ReportForm implements OnInit {
   ChangeResourceType(option: OptionItem | undefined) {
     if(!option) return;
 
-    switch (option.value) {
+    switch (option.key) {
       case 'Auction':
-        this._resourceType = option.value;
+        this._resourceType = option.key;
         break;
       case 'Product':
-        this._resourceType = option.value;
+        this._resourceType = option.key;
         break;
       case 'ChatPage':
-        this._resourceType = option.value;
+        this._resourceType = option.key;
         break;
       case 'User':
-        this._resourceType = option.value;
+        this._resourceType = option.key;
         break;
     }
   }
@@ -170,7 +170,7 @@ export class ReportForm implements OnInit {
   }
   // endregion
 
-  UpdateErrorTranslations() {
+  UpdateTranslations() {
     this._comboboxOptionItems.update(items=> {
       const updated = [...items];
 

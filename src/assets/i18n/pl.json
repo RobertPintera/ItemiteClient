@@ -580,7 +580,10 @@
     "_lock": "zablokowanie",
     "_unlock": "odblokowanie",
     "expires": "Wygasa",
-    "date_error": "Data wygaśnięcia musi mieć ustawiony czas przyszły"
+    "date_error": "Data wygaśnięcia musi mieć ustawiony czas przyszły",
+    "users": "Użytkownicy",
+    "global_notification": "Powiadomienie globalne",
+    "search_users": "Szukaj użytkowników"
   },
   "reports": {
     "reports": "Zgłoszenia",
