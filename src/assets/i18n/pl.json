@@ -564,6 +564,14 @@
     "User": "Użytkownik",
     "delete_all": "Usuń wszystkie"
   },
+  "admin_panel": {
+    "admin_panel": "Panel administracji",
+    "users": "Użytkownicy",
+    "categories": "Kategorie",
+    "reports": "Zgłoszenia",
+    "payments": "Płatności",
+    "banners": "Grafika"
+  },
   "admin_users_control": {
     "user_locked": "Konto zablokowane pomyślnie",
     "user_unlocked": "Konto odblokowane pomślnie",

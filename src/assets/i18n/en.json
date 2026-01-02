@@ -571,6 +571,14 @@
     "User": "User",
     "delete_all": "Delete all"
   },
+  "admin_panel": {
+    "admin_panel": "Admin panel",
+    "users": "Users",
+    "categories": "Categories",
+    "reports": "Reports",
+    "payments": "Payments",
+    "banners": "Banners"
+  },
   "admin_users_control": {
     "user_locked": "Account locked successfully",
     "user_unlocked": "Account unlocked successfully",
