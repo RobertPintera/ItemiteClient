@@ -1,4 +1,4 @@
-export interface PostAdminPanelCategoryDTO {
+export interface PutAdminPanelCategoryDTO {
   name: string;
   description: string;
   parentCategoryId?: number | null;

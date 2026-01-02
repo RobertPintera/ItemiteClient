@@ -11,6 +11,7 @@ import {AdminService} from '../../../../../core/services/admin-service/admin.ser
 import {CategoryDTO} from '../../../../../core/models/category/CategoryDTO';
 import {finalize} from 'rxjs';
 import {PostAdminPanelCategoryDTO} from '../../../../../core/models/category/PostAdminPanelCategoryDTO';
+import {PutAdminPanelCategoryDTO} from '../../../../../core/models/category/PutAdminPanelCategoryDTO';
 
 @Component({
   selector: 'app-category-dialog',
@@ -33,10 +34,12 @@ export class CategoryDialog {
   readonly isOpen = model.required<boolean>();
 
   readonly editedCategory = input<CategoryDTO | null>(null);
+  readonly parentCategoryId = input.required<number | null>();
 
   readonly operationSuccess = output<void>();
 
   readonly isOpenFileUpload = signal<boolean>(false);
+  readonly isOpenPreviewImageDialog = signal<boolean>(false);
   readonly loading = signal<boolean>(false);
   readonly imagePreview = signal<SafeUrl | null>(null);
 
@@ -50,6 +53,7 @@ export class CategoryDialog {
     description: new FormControl<string>("",[
       Validators.maxLength(500)
     ]),
+    parentCategoryId: new FormControl<number | null>(null),
     svgImage: new FormControl<File | null>(null, Validators.required),
   });
 
@@ -57,10 +61,21 @@ export class CategoryDialog {
     effect(() => {
       const isOpen = this.isOpen();
       const editedCategory = untracked(() => this.editedCategory());
+      const parentCategoryId = untracked(() => this.parentCategoryId());
 
       if(!isOpen) return;
 
-      this.fillForm(editedCategory);
+      const svgControl = this.form.controls.svgImage;
+
+      if (parentCategoryId === null) {
+        svgControl.setValidators([Validators.required]);
+      } else {
+        svgControl.clearValidators();
+        svgControl.setValue(null);
+        this.imagePreview.set(null);
+      }
+
+      this.fillForm(editedCategory, parentCategoryId);
     });
   }
 
@@ -73,8 +88,29 @@ export class CategoryDialog {
     });
   }
 
+  cancelPreviewImageDialog() {
+    this.isOpenPreviewImageDialog.set(false);
+  }
+
+  openPreviewImageDialog() {
+    this.isOpenPreviewImageDialog.set(true);
+  }
+
+  deleteImage() {
+    this.imagePreview.set(null);
+    this.form.patchValue({ svgImage: null });
+    this.form.controls.svgImage.markAsDirty();
+    this.form.controls.svgImage.markAsTouched();
+    this.isOpenPreviewImageDialog.set(false);
+  }
+
   cancelFileUpload() {
     this.isOpenFileUpload.set(false);
+  }
+
+  openEditFileUpload() {
+    this.isOpenPreviewImageDialog.set(false);
+    this.isOpenFileUpload.set(true);
   }
 
   openFileUpload(){
@@ -100,15 +136,16 @@ export class CategoryDialog {
       return;
     }
 
-    const payload: PostAdminPanelCategoryDTO = {
-      name: this.form.value.name ?? '',
-      description: this.form.value.description ?? '',
-      svgImage: this.form.value.svgImage ?? null,
-    };
-
     const id = this.editedCategory()?.id;
 
     if(!id){
+      const payload: PostAdminPanelCategoryDTO = {
+        name: this.form.value.name ?? '',
+        description: this.form.value.description ?? '',
+        parentCategoryId: this.form.value.parentCategoryId,
+        svgImage: this.form.value.svgImage ?? null,
+      };
+
       this._adminService.createCategory(payload).pipe(
         finalize(() => {
           this.loading.set(false);
@@ -123,6 +160,13 @@ export class CategoryDialog {
         this.isOpen.set(false);
       });
     } else{
+      const payload: PutAdminPanelCategoryDTO = {
+        name: this.form.value.name ?? '',
+        description: this.form.value.description ?? '',
+        parentCategoryId: this.form.value.parentCategoryId,
+        svgImage: this.form.value.svgImage ?? null,
+      };
+
       this._adminService.updateCategory(id, payload).pipe(
         finalize(() => {
           this.loading.set(false);
@@ -139,9 +183,13 @@ export class CategoryDialog {
     }
   }
 
-  private fillForm(category: CategoryDTO | null) {
+  private fillForm(category: CategoryDTO | null, parentCategoryId: number | null) {
+    this.form.patchValue({
+      parentCategoryId: parentCategoryId
+    });
+
     if (!category) {
-      this.form.reset({ name: "", description: "", svgImage: null });
+      this.form.patchValue({name: "", description: "", svgImage: null});
       this.imagePreview.set(null);
       return;
     }
@@ -149,7 +197,7 @@ export class CategoryDialog {
     this.form.patchValue({
       name: category.name,
       description: category.description,
-      svgImage: null,
+      svgImage: null
     });
 
     if (category.svgImage) {

@@ -597,8 +597,8 @@
     "create_subcategory": "Stwórz podkategorię",
     "show_subcategories": "Pokaż podkategorie",
     "form_dialog": {
-      "edit": "Edycja kategorii głównej",
-      "create": "Tworzenie kategorii głównej",
+      "edit": "Edycja kategorii",
+      "create": "Tworzenie kategorii",
       "name": "Nazwa",
       "description": "Opis",
       "image": "Obraz (Tylko svg)"

@@ -604,8 +604,8 @@
     "create_subcategory": "Create subcategory",
     "show_subcategories": "Show subcategories",
     "form_dialog": {
-      "edit": "Edit main category",
-      "create": "Create main category",
+      "edit": "Edit category",
+      "create": "Create category",
       "name": "Name",
       "description": "Description",
       "image": "Image (Only svg)"

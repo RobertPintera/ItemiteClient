@@ -40,14 +40,14 @@
   <app-loading-dialog/>
 }
 @else if(isOpenDialog()){
-  <app-category-dialog [(isOpen)]="isOpenDialog" [editedCategory]="editedCategory()" (operationSuccess)="refreshCategories()"/>
+  <app-category-dialog [(isOpen)]="isOpenDialog" [parentCategoryId]="parentCategoryId()" [editedCategory]="editedCategory()" (operationSuccess)="refreshCategories()"/>
 }
 @else if(isOpenDeleteDialog()){
   <app-dialog [header]="'admin_category_control.delete_category' | translate" (closed)="closeDeleteDialog()">
     <form [formGroup]="deleteForm" (ngSubmit)="confirmDeleteCategory()" class="flex flex-col gap-2">
       <div class="flex items-center gap-2 w-full">
-        <label for="deleteFullTree" class="font-semibold">{{ 'admin_category_control.delete_full_tree' | translate }}</label>
         <input id="deleteFullTree" formControlName="deleteFullTree" name="deleteFullTree" type="checkbox"  class="w-4 h-4">
+        <label for="deleteFullTree" class="font-semibold">{{ 'admin_category_control.delete_full_tree' | translate }}</label>
       </div>
       <div class="flex flex-row justify-between gap-2 w-full">
         <app-button type="button" [label]="'controls.cancel' | translate" severity="accent" variant="outlined" (clickButton)="closeDeleteDialog()"/>

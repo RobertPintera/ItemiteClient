@@ -36,6 +36,7 @@ export class AdminService {
     const formData = new FormData();
     formData.append('Name', category.name);
     formData.append('Description', category.description);
+    if(category.parentCategoryId) formData.append("ParentCategoryId", category.parentCategoryId.toString());
     if(category.svgImage) formData.append('svgImage', category.svgImage);
 
     return this.postAdminPanelCategory(formData).pipe(
@@ -51,6 +52,7 @@ export class AdminService {
     const formData = new FormData();
     formData.append('Name', category.name);
     formData.append('Description', category.description);
+    if(category.parentCategoryId) formData.append("ParentCategoryId", category.parentCategoryId.toString());
     if(category.svgImage) formData.append('svgImage', category.svgImage);
 
     return this.putAdminPanelCategory(id, formData).pipe(

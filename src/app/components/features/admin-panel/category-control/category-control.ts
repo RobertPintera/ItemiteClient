@@ -4,7 +4,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, RouterLink} from '@angular/router';
-import {CategoryDialog} from './main-category-dialog/category-dialog';
+import {CategoryDialog} from './category-dialog/category-dialog';
 import {CategoryDTO} from '../../../../core/models/category/CategoryDTO';
 import {LoadingDialog} from '../../../shared/loading-dialog/loading-dialog';
 import {AdminService} from '../../../../core/services/admin-service/admin.service';
