@@ -21,6 +21,7 @@ export class Message {
   readonly onDeleteClicked = output<number>();
   readonly onEditClicked = output<number>();
   readonly onImageClicked = output<string>();
+  readonly onUserClicked = output<void>();
 
   readonly id = input.required<number>();
   readonly username = input.required<string>();
@@ -34,6 +35,7 @@ export class Message {
   readonly backgroundImage = input<string>();
   readonly isDeleted = input<boolean>(false);
   readonly isAwaitingUpdate:InputSignal<boolean> = input<boolean>(false);
+  readonly isUserClickable = input<boolean>(false);
 
   readonly hasPhotos = computed(() => this.photos().length !== 0);
 
@@ -49,5 +51,9 @@ export class Message {
     this.onImageClicked.emit(url);
   }
 
+  OnUserClicked() {
+    if(!this.isUserClickable() || this.isOwnMessage()) return;
+    this.onUserClicked.emit();
+  }
 
 }

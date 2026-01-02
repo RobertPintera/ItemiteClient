@@ -130,8 +130,5 @@
 </div>
 @if (auction) {
   <app-bid-dialog-history [id]="auction.id" [(isOpen)]="isOpenBidHistory"/>
-} @else if (product) {
-  <app-individual-pricing-dialog [listingId]="product.id" [(isOpen)]="isOpenIndividualPricingDialog"/>
-  <app-delete-individual-pricing-dialog [listingId]="product.id" [(isOpen)]="isOpenDeleteIndividualPricingDialog"/>
 }
 

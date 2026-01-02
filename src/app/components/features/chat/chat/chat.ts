@@ -5,7 +5,7 @@ import {
   ElementRef,
   HostListener,
   inject,
-  input, output,
+  input, OnInit, output, PLATFORM_ID,
   signal,
   Signal, ViewChild, WritableSignal
 } from '@angular/core';
@@ -25,6 +25,14 @@ import {ErrorHandlerService} from '../../../../core/services/error-handler-servi
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NotificationService} from '../../../../core/services/notification-service/notification.service';
 import {UserService} from '../../../../core/services/user-service/user.service';
+import {ListingBasicInfo} from '../../../../core/models/product-listings/ListingBasicInfo';
+import {ProductListingService} from '../../../../core/services/product-listing-service/product-listing.service';
+import {isPlatformServer} from '@angular/common';
+import {IndividualPricingDialog} from '../../product-details/individual-pricing-dialog/individual-pricing-dialog';
+import {OtherUserSettings} from '../../other-user-settings/other-user-settings';
+import {
+  DeleteIndividualPricingDialog
+} from '../../product-details/delete-individual-pricing-dialog/delete-individual-pricing-dialog';
 
 @Component({
   selector: 'app-chat',
@@ -37,135 +45,33 @@ import {UserService} from '../../../../core/services/user-service/user.service';
     ImagePreview,
     AttachedFiles,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IndividualPricingDialog,
+    OtherUserSettings,
+    DeleteIndividualPricingDialog
   ],
   templateUrl: './chat.html',
   styleUrl: './chat.css'
 })
-export class Chat implements AfterViewInit {
+export class Chat implements AfterViewInit, OnInit {
   private userService: UserService = inject(UserService);
   private messageService: MessageService = inject(MessageService);
   private errorService: ErrorHandlerService = inject(ErrorHandlerService);
   private notificationService: NotificationService = inject(NotificationService);
+  private productListingService = inject(ProductListingService);
 
   private readonly LIMIT = 20;
-
-  /////////////
-  // TESTING //
-  /////////////
-  // region Testing
-  testP1Vertical: PhotoResponseDTO = {
-    photoId: 0,
-    url: 'https://images.pexels.com/photos/1082663/pexels-photo-1082663.jpeg'
-  };
-  testP2Horizontal: PhotoResponseDTO = {
-    photoId: 1,
-    url: 'https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg'
-  };
-  testP3SquareLowRes: PhotoResponseDTO = {
-    photoId: 2,
-    url: 'https://opengameart.org/sites/default/files/styles/medium/public/dirt_13.png'
-  }
-  testP4Vertical: PhotoResponseDTO = {
-    photoId: 3,
-    url: 'https://images.pexels.com/photos/1082663/pexels-photo-1082663.jpeg'
-  };
-
-  testM1: MessageResponse = {
-    content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-    dateModified: undefined,
-    dateRead: undefined,
-    dateSent: '12:30 21.02.2024',
-    listingId: 0,
-    messageId: 1,
-    photos: [],
-    recipientId: 2,
-    senderId: 1,
-    isDeleted: false
-  };
-  testM2: MessageResponse = {
-    content: "Short text",
-    dateModified: "now",
-    dateRead: "12.31 21.02.2024",
-    dateSent: '12:30 21.02.2024',
-    listingId: 0,
-    messageId: 2,
-    photos: [],
-    recipientId: 2,
-    senderId: 1,
-    isDeleted: false
-  };
-  testM3: MessageResponse = {
-    content: undefined,
-    dateModified: "23:30 21.02.2025",
-    dateRead: "12.31 21.02.2024",
-    dateSent: '12:30 21.02.2024',
-    listingId: 0,
-    messageId: 3,
-    photos: [this.testP1Vertical, this.testP4Vertical],
-    recipientId: 2,
-    senderId: 2,
-    isDeleted: false
-  };
-  testM4: MessageResponse = {
-    content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,",
-    dateModified: undefined,
-    dateRead: undefined,
-    dateSent: '12:30 21.02.2024',
-    listingId: 0,
-    messageId: 4,
-    photos: [this.testP2Horizontal, this.testP3SquareLowRes],
-    recipientId: 2,
-    senderId: 1,
-    isDeleted: false
-  };
-  testM5: MessageResponse = {
-    content: "All we had to do was to follow that damn train CJ.",
-    dateModified: "23:30 21.02.2025",
-    dateRead: "12.31 21.02.2024",
-    dateSent: '12:30 21.02.2024',
-    listingId: 0,
-    messageId: 5,
-    recipientId: 2,
-    photos: [],
-    senderId: 2,
-    isDeleted: false
-  };
-
-  member1: ChatMemberInfo = {
-    id: 1,
-    userName: "Dawid Pacisław",
-    email: "robert@kozyra.pl",
-    photoUrl: undefined
-  }
-  member2: ChatMemberInfo = {
-    id: 2,
-    userName: "Filip Wójcisław",
-    email: "robert2@kozyslaw.com",
-    photoUrl: "https://cdn.prod.website-files.com/6859950a6a6d8258bcbc0c0f/68bf01df23fc967698fc204b_7485debfd9004eca65bebd1ee9c6a791_Mateusz%20Chrobok.webp"
-  }
-  testMembers:ChatMemberInfo[] = [
-    this.member1, this.member2
-  ];
-
-  // readonly currentUserId = signal(2);
-  // readonly chatMembers = input<ChatMemberInfo[]>(this.testMembers);
-
-  async CallApiTest() {
-    // simulate messages loading
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    this._messages.set([this.testM1, this.testM2, this.testM3, this.testM4, this.testM5]);
-  }
-  // endregion
-
-
-  // TODO disable attaching images when editing message?
 
   readonly currentUserId = computed(() => this.userService.userBasicInfo().id);
 
   // This needs to be filled in parent component - s
   readonly chatMembers = input.required<ChatMemberInfo[]>();
   readonly listingId = input.required<number>();
+  readonly inputListing = input<ListingBasicInfo>();
+  private _fetchedListing = signal<ListingBasicInfo|undefined>(undefined);
+  readonly listing = computed(() =>
+    this.inputListing() === undefined ? this._fetchedListing() : this.inputListing()
+  );
 
   updateLastMessageByDeletion = output<number>();
   updateLastMessageBySending = output<MessageResponse>();
@@ -204,6 +110,12 @@ export class Chat implements AfterViewInit {
   private _imagePreview: WritableSignal<undefined | string> =  signal(undefined);
   readonly imagePreview = this._imagePreview.asReadonly();
   readonly previewImage = computed(() => !!this._imagePreview());
+  private _showCustomPriceDialog = signal(false);
+  readonly showCustomPriceDialog = this._showCustomPriceDialog.asReadonly();
+  private _showDeletePriceDialog = signal(false);
+  readonly showDeletePriceDialog = this._showDeletePriceDialog.asReadonly();
+  private _showUserSettingDialog = signal(false);
+  readonly showUserSettingDialog = this._showUserSettingDialog.asReadonly();
 
   private _messageInput = signal("");
   readonly messageInput = this._messageInput.asReadonly();
@@ -221,6 +133,11 @@ export class Chat implements AfterViewInit {
   private _awaitingUpdate = signal<number>(-1);
   readonly awaitingUpdate = this._awaitingUpdate.asReadonly();
 
+  readonly isUserClickable = computed(() =>
+    this.listing() !== undefined &&
+    this.listing()?.ownerId === this.currentUserId()
+  );
+
   // stores id of currently edited
   private _selectedEditMessage: number = -1;
 
@@ -230,8 +147,6 @@ export class Chat implements AfterViewInit {
   form: FormGroup;
 
   constructor() {
-    // Test();
-
     this.notificationService.onMessageReceived.subscribe((message: MessageResponse) => {
       if(message.listingId !== this.listingId()) return;
       this._messages.update(messages => [...messages, message]);
@@ -258,21 +173,38 @@ export class Chat implements AfterViewInit {
     });
   }
 
-  Test() {
-    this.CallApiTest().then(() => {
-        this._loading.set(false);
-        if (this._parent) {
-          this.maxHeight = this._parent.clientHeight * 0.33;
-          this.el.nativeElement.style.maxHeight = `${this.maxHeight}px`;
-        }
-        this.AdjustHeight();
+  private _platformId = inject(PLATFORM_ID);
+
+  ngOnInit() {
+    // Fetch listing info if it wasn't passed manually via input
+    if(this.inputListing() || isPlatformServer(this._platformId)) return;
+
+    this.productListingService.loadProductListingPublic(
+      this.listingId()
+    ).subscribe({
+      next: (result) => {
+        this._fetchedListing.set(
+          {
+            id: result.id,
+            name: result.name,
+            mainImageUrl: result.mainImageUrl,
+            isArchived: result.isArchived,
+            ownerId: result.owner.id,
+            listingType: "Product",
+            price: result.price
+          }
+        );
+      },
+      error:(error) => {
+        // listing might be auction, not product
+        //  or other error might happen
+        //  either way, it will work as intended
       }
-    );
+    });
   }
 
   @ViewChild('chatContainer') chatContainer!: ElementRef<HTMLDivElement>;
   @ViewChild('chatWrapper') chatWrapper: ElementRef | undefined;
-
 
   LoadMessages(listingId: number, limit: number, cursor: string | undefined = undefined) {
 
@@ -545,6 +477,20 @@ export class Chat implements AfterViewInit {
     this._lastScrollPos = scrollContainer.scrollTop;*/
   }
   // endregion
+
+  SwitchCustomPriceDialog(show: boolean) {
+    this._showCustomPriceDialog.set(show);
+    this._showDeletePriceDialog.set(false);
+    this._showUserSettingDialog.set(false);
+  }
+  SwitchDeletePriceDialog(show: boolean) {
+    this._showDeletePriceDialog.set(show);
+    this._showCustomPriceDialog.set(false);
+    this._showUserSettingDialog.set(false);
+  }
+  SwitchUserSettingsDialog() {
+    this._showUserSettingDialog.set(!this._showUserSettingDialog());
+  }
 
   // region Message input formatting
   private _hideInput = signal(false);

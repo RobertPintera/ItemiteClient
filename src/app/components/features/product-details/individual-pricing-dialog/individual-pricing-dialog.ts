@@ -1,4 +1,4 @@
-import {Component, inject, input, model, signal} from '@angular/core';
+import {Component, inject, input, model, output, signal} from '@angular/core';
 import {Dialog} from "../../../shared/dialog/dialog";
 import {Button} from '../../../shared/button/button';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -27,16 +27,15 @@ export class IndividualPricingDialog {
   private _productService = inject(ProductListingService);
   private _formBuilder = inject(FormBuilder);
 
-  readonly isOpen = model.required<boolean>();
+  readonly isOpen = input.required<boolean>();
   readonly listingId = input.required<number>();
+  readonly userId = input.required<number>();
+
+  onClose = output<void>();
 
   readonly loading = signal<boolean>(false);
 
   readonly form = this._formBuilder.group({
-    userId: new FormControl<number>(0, [
-      Validators.required,
-      Validators.pattern(/^\d+$/)
-    ]),
     price: new FormControl<number>(0,[
       Validators.required,
       Validators.min(0.01),
@@ -46,9 +45,8 @@ export class IndividualPricingDialog {
   });
 
   closeDialog(){
-    this.isOpen.set(false);
+    this.onClose.emit();
     this.form.reset({
-      userId: 0,
       price: 0
     });
   }
@@ -59,26 +57,23 @@ export class IndividualPricingDialog {
       return;
     }
 
-    const userId = this.form.value.userId;
     const price = this.form.value.price;
 
-    if (userId === null || userId === undefined) return;
     if (price === null || price === undefined) return;
 
     const payload : PostUserPriceDTO = {
       price: price,
     };
 
-    this._productService.addUserIndividualPrice(this.listingId(), userId, payload).pipe(
+    this._productService.addUserIndividualPrice(this.listingId(), this.userId(), payload).pipe(
       finalize(() => {
         this.loading.set(false);
       })
     ).subscribe(() => {
       this.form.reset({
-        userId: 0,
         price: 0
       });
-      this.isOpen.set(false);
+      this.onClose.emit();
     });
   }
 }

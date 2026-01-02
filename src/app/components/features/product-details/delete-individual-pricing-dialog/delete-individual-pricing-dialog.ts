@@ -1,4 +1,4 @@
-import {Component, inject, input, model, signal} from '@angular/core';
+import {Component, inject, input, model, output, signal} from '@angular/core';
 import {ProductListingService} from '../../../../core/services/product-listing-service/product-listing.service';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {finalize} from 'rxjs';
@@ -13,7 +13,6 @@ import {TranslatePipe} from '@ngx-translate/core';
   imports: [
     Button,
     Dialog,
-    InputNumber,
     LoadingDialog,
     ReactiveFormsModule,
     TranslatePipe
@@ -25,20 +24,18 @@ export class DeleteIndividualPricingDialog {
   private _productService = inject(ProductListingService);
   private _formBuilder = inject(FormBuilder);
 
-  readonly isOpen = model.required<boolean>();
+  readonly isOpen = input.required<boolean>();
   readonly listingId = input.required<number>();
 
   readonly loading = signal<boolean>(false);
+  readonly userId = input.required<number>();
 
-  readonly form = this._formBuilder.group({
-    userId: new FormControl<number>(0, [
-      Validators.required,
-      Validators.pattern(/^\d+$/)
-    ])
-  });
+  onClose = output<void>();
+
+  readonly form = this._formBuilder.group({});
 
   closeDialog(){
-    this.isOpen.set(false);
+    this.onClose.emit();
     this.form.reset({
       userId: 0,
     });
@@ -50,9 +47,7 @@ export class DeleteIndividualPricingDialog {
       return;
     }
 
-    const userId = this.form.value.userId;
-
-    if (userId === null || userId === undefined) return;
+    const userId = this.userId();
 
     this._productService.deleteUserIndividualPrice(this.listingId(), userId).pipe(
       finalize(() => {
@@ -62,7 +57,7 @@ export class DeleteIndividualPricingDialog {
       this.form.reset({
         userId: 0,
       });
-      this.isOpen.set(false);
+      this.onClose.emit();
     });
   }
 }

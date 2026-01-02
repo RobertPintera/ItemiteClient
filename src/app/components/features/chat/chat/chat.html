@@ -21,6 +21,30 @@
   />
 }
 
+
+<app-other-user-settings
+  [isOpen]="showUserSettingDialog()"
+  (onCloseClicked)="SwitchUserSettingsDialog()"
+  (onDeletePriceClicked)="SwitchDeletePriceDialog(true)"
+  (onEditPriceClicked)="SwitchCustomPriceDialog(true)"
+/>
+
+<app-individual-pricing-dialog
+  [isOpen]="showCustomPriceDialog()"
+  [userId]="otherMemberInfo().id"
+  [listingId]="listingId()"
+  (onClose)="SwitchCustomPriceDialog(false)"
+/>
+
+<app-delete-individual-pricing-dialog
+  [isOpen]="showDeletePriceDialog()"
+  [userId]="otherMemberInfo().id"
+  [listingId]="listingId()"
+  (onClose)="SwitchDeletePriceDialog(false)"
+/>
+
+
+
 <div class="rounded-sm h-full w-full m-auto flex shadow-inner" #chatWrapper>
   <!-- Message window -->
   <div
@@ -63,9 +87,11 @@
             [profileImage]= "IsOwnMessage(message.senderId) ? currentProfileImg() : otherProfileImg()"
             [isDeleted]="message.isDeleted"
             [isAwaitingUpdate]="message.messageId === awaitingUpdate()"
+            [isUserClickable]="isUserClickable()"
             (onDeleteClicked)="OnDeletionRequested($event)"
             (onEditClicked)="OnEditionRequested($event)"
             (onImageClicked)="OnPreviewClicked($event)"
+            (onUserClicked)="SwitchUserSettingsDialog()"
           />
         }
       </div>

@@ -19,6 +19,8 @@
              class="h-14 mt-1 rounded-full shadow-[0_0_10px_rgba(0,0,0,0.25)]
                 dark:shadow-[0_0_10px_rgba(10,10,10,0.5)] object-cover aspect-square"
              [class.order-1]="isOwnMessage()"
+             [class.hover:cursor-pointer]="isUserClickable()&&!isOwnMessage()"
+             (click)="OnUserClicked()"
         />
 
         <div class="flex flex-col">
@@ -26,6 +28,8 @@
             <div
                 [class.self-start]="!isOwnMessage()"
                 [class.self-end]="isOwnMessage()"
+                [class.hover:cursor-pointer]="isUserClickable()&&!isOwnMessage()"
+                (click)="OnUserClicked()"
                 class="flex flex-row items-center"
             >
                 @if(isOwnMessage() && !isDeleted() && !isAwaitingUpdate()) {

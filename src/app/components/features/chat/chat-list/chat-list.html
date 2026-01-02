@@ -79,6 +79,7 @@
       class="snap-start min-h-full"
       [chatMembers]="selectedMembers()!"
       [listingId]="selectedListingId()!"
+      [inputListing]="listingBasicInfo()"
       (updateLastMessageByDeletion)="UpdateLastMessageByDeletion($event)"
       (updateLastMessageByEdition)="UpdateLastMessage($event, 'edition')"
       (updateLastMessageBySending)="UpdateLastMessage($event, 'new')"

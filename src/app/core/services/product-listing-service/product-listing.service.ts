@@ -41,8 +41,8 @@ export class ProductListingService {
     return this.http.put(`${this.baseUrl}/${id}`, formData);
   }
 
-  private postUserPrice(listingId: number, userId: number, params: HttpParams) {
-    return this.http.post(`${this.baseUrl}/${listingId}/user-price/${userId}`, params,
+  private postUserPrice(listingId: number, userId: number, data: PostUserPriceDTO) {
+    return this.http.post(`${this.baseUrl}/${listingId}/user-price/${userId}`, data,
       {
         headers: {
           'Content-Type': 'application/json'
@@ -138,10 +138,8 @@ export class ProductListingService {
   }
 
   addUserIndividualPrice(listingId: number, userId: number, data: PostUserPriceDTO) {
-    const params = new HttpParams()
-      .set('price', data.price);
 
-    return this.postUserPrice(listingId, userId, params).pipe(
+    return this.postUserPrice(listingId, userId, data).pipe(
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
         console.error('Error addUserIndividualPrice:', err);

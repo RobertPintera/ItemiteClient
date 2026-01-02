@@ -44,8 +44,6 @@ interface ButtonOrder {
     FloatingChatContainer,
     NgClass,
     BidHistoryDialog,
-    IndividualPricingDialog,
-    DeleteIndividualPricingDialog,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'

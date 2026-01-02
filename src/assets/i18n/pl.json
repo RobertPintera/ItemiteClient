@@ -594,5 +594,9 @@
     "optional_images": "Opcjonalne zdjęcia",
     "success": "Zgłoszenie wysłano pomyślnie",
     "category": "Kategoria"
+  },
+  "other_user_settings": {
+    "edit_price": "Ustaw indywidualną cenę produktu dla użytkownika",
+    "delete_price": "Usuń indywidualną cenę produktu dla użytkownika"
   }
 }

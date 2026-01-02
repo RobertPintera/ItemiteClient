@@ -60,6 +60,13 @@ export class ChatList implements AfterViewInit {
     }
     return undefined;
   });
+  readonly listingBasicInfo = computed(() => {
+    if(this._chatList().length > 0 && this._selected() >= 0) {
+      return this._chatList()[this._selected()].listing;
+    }
+    return undefined;
+  });
+
 
   constructor() {
     this._notificationService.onMessageReceived.subscribe((message: MessageResponse) => {

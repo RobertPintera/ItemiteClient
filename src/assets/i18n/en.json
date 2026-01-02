@@ -539,7 +539,7 @@
     "header": "Sales",
     "sale": "Sale",
     "no_sales": "Can't find any sales.",
-    "show_product": "Pokaż produkt"
+    "show_product": "Show product"
   },
   "transactions": {
     "status": {
@@ -601,5 +601,9 @@
     "optional_images": "Optional photos",
     "success": "Report sent successfully",
     "category": "Category"
+  },
+  "other_user_settings": {
+    "edit_price": "Edit individual price for user",
+    "delete_price": "Delete individual price for user"
   }
 }
