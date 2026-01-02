@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainCategoryDialog } from './main-category-dialog';
+import { CategoryDialog } from './category-dialog';
 
-describe('MainCategoryDialog', () => {
-  let component: MainCategoryDialog;
-  let fixture: ComponentFixture<MainCategoryDialog>;
+describe('CategoryDialog', () => {
+  let component: CategoryDialog;
+  let fixture: ComponentFixture<CategoryDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MainCategoryDialog]
+      imports: [CategoryDialog]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MainCategoryDialog);
+    fixture = TestBed.createComponent(CategoryDialog);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

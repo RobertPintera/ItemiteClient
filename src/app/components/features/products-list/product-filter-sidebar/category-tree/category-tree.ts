@@ -1,7 +1,6 @@
 import {Component, input, model, output } from '@angular/core';
 import {NgClass, NgTemplateOutlet} from '@angular/common';
 import {CategoryTreeDTO} from '../../../../../core/models/category/CategoryTreeDTO';
-import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-category-tree',
@@ -9,7 +8,6 @@ import {TranslatePipe} from '@ngx-translate/core';
   imports: [
     NgClass,
     NgTemplateOutlet,
-    TranslatePipe
   ],
   styleUrl: './category-tree.css'
 })

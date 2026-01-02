@@ -13,7 +13,7 @@ import {finalize} from 'rxjs';
 import {PostAdminPanelCategoryDTO} from '../../../../../core/models/category/PostAdminPanelCategoryDTO';
 
 @Component({
-  selector: 'app-main-category-dialog',
+  selector: 'app-category-dialog',
   imports: [
     Dialog,
     LoadingDialog,
@@ -22,10 +22,10 @@ import {PostAdminPanelCategoryDTO} from '../../../../../core/models/category/Pos
     Button,
     FileUpload
   ],
-  templateUrl: './main-category-dialog.html',
-  styleUrl: './main-category-dialog.css',
+  templateUrl: './category-dialog.html',
+  styleUrl: './category-dialog.css',
 })
-export class MainCategoryDialog {
+export class CategoryDialog {
   private _adminService = inject(AdminService);
   private _formBuilder = inject(FormBuilder);
   private _sanitizer = inject(DomSanitizer);

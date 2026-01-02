@@ -8,6 +8,7 @@ import {PostAdminPanelCategoryResponseDTO} from '../../models/category/PostAdmin
 import {CategoryDTO} from '../../models/category/CategoryDTO';
 import {PaymentCountsResponseDTO} from '../../models/payments/PaymentCountsResponseDTO';
 import {PostAdminPanelCategoryDTO} from '../../models/category/PostAdminPanelCategoryDTO';
+import {DeleteAdminPanelCategoryDTO} from '../../models/category/DeleteAdminPanelCategoryDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,8 @@ export class AdminService {
     return this._http.put<CategoryDTO>(`${this._baseUrl}/category/${id}`, formData);
   }
 
-  private deleteAdminPanelCategory(id: number): Observable<void> {
-    return this._http.delete<void>(`${this._baseUrl}/category/${id}`);
+  private deleteAdminPanelCategory(id: number, params: HttpParams): Observable<void> {
+    return this._http.delete<void>(`${this._baseUrl}/category/${id}`, { params });
   }
 
   createCategory(category: PostAdminPanelCategoryDTO): Observable<PostAdminPanelCategoryResponseDTO>{
@@ -61,8 +62,12 @@ export class AdminService {
     );
   }
 
-  deleteCategory(id: number){
-    return this.deleteAdminPanelCategory(id).pipe(
+  deleteCategory(id: number, settings: DeleteAdminPanelCategoryDTO)
+  {
+    const params = new HttpParams()
+      .set('deleteFullTree', settings.deleteFullTree);
+
+    return this.deleteAdminPanelCategory(id, params).pipe(
       catchError(err => {
         this._errorHandlerService.SendErrorMessage(err);
         console.error('Error deleteCategory:', err);

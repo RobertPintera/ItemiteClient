@@ -601,6 +601,7 @@
   },
   "admin_category_control": {
     "create_main_category": "Create main category",
+    "create_subcategory": "Create subcategory",
     "show_subcategories": "Show subcategories",
     "form_dialog": {
       "edit": "Edit main category",
@@ -608,7 +609,10 @@
       "name": "Name",
       "description": "Description",
       "image": "Image (Only svg)"
-    }
+    },
+    "no_categories": "Can't find any categories.",
+    "delete_category": "Are you sure to delete this category? This operation is undone!",
+    "delete_full_tree": "Delete full tree"
   },
   "validator_errors_admin_category_control": {
     "field_required": "Field is required",

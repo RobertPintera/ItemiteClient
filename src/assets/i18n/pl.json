@@ -594,6 +594,7 @@
   },
   "admin_category_control": {
     "create_main_category": "Stwórz kategorię główą",
+    "create_subcategory": "Stwórz podkategorię",
     "show_subcategories": "Pokaż podkategorie",
     "form_dialog": {
       "edit": "Edycja kategorii głównej",
@@ -601,7 +602,10 @@
       "name": "Nazwa",
       "description": "Opis",
       "image": "Obraz (Tylko svg)"
-    }
+    },
+    "no_categories": "Nie można znaleźć żadnych kategorii.",
+    "delete_category": "Czy na pewno chcesz usunąć tą kategorię? Ta operacja jest nieodwracalna!",
+    "delete_full_tree": "Usunięcie całego drzewa"
   },
   "validator_errors_admin_category_control": {
     "field_required": "Pole jest wymagane.",

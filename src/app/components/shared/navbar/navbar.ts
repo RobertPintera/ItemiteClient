@@ -1,12 +1,10 @@
 import {Component, inject, signal} from '@angular/core';
-import {TranslatePipe} from '@ngx-translate/core';
 import {CategoryService} from '../../../core/services/category-service/category.service';
 import {NavigationEnd, Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   imports: [
-    TranslatePipe,
     RouterLink,
   ],
   templateUrl: './navbar.html',
