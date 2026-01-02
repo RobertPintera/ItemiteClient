@@ -4,6 +4,7 @@ import { Home } from './components/features/home/home';
 import {Test} from './components/features/test/test';
 import {GuestGuard} from './core/guards/guest-guard/guest-guard';
 import {AuthGuard} from './core/guards/auth-guard/auth-guard';
+import {AdminGuard} from './core/guards/admin-guard/admin-guard';
 
 export const routes: Routes = [
   {
@@ -117,10 +118,18 @@ export const routes: Routes = [
       {
         path: 'admin-panel',
         loadComponent: () => import('./components/features/admin-panel/admin-panel').then(m => m.AdminPanel),
+        canActivate: [AdminGuard]
       },
       {
         path: 'admin-panel/user-control',
         loadComponent: () => import('./components/features/admin-panel/user-control/user-control').then(m => m.UserControl),
+        canActivate: [AdminGuard]
+      },
+      {
+        path: 'reports',
+        loadComponent: () =>
+          import('./components/features/admin-panel/reports-list/reports-list').then(m => m.ReportsList),
+        canActivate: [AuthGuard]
       }
     ]
   },
