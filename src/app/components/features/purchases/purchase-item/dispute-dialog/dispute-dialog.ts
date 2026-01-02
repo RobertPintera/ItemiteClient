@@ -44,8 +44,7 @@ export class DisputeDialog {
     description: new FormControl<string>("",[
       Validators.required,
       isEmptyValidator,
-      Validators.minLength(2),
-      Validators.maxLength(2500)
+      Validators.maxLength(500)
     ]),
     photos: new FormControl<ImageMedia[]>([], Validators.required),
   });

@@ -64,3 +64,11 @@ export const PAYMENT_STATUS = {
 } as const;
 
 export type PaymentStatus = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
+
+export const DISPUTE_RESOLUTION = {
+  REFUND_BUYER: 'Refund Buyer',
+  DECLINED: 'Declined',
+  PARTIAL_REFUND: 'Partial Refund'
+} as const;
+
+export type DisputeResolution = (typeof DISPUTE_RESOLUTION)[keyof typeof DISPUTE_RESOLUTION];

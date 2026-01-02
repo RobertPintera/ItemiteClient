@@ -130,6 +130,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/features/admin-panel/reports-list/reports-list').then(m => m.ReportsList),
         canActivate: [AuthGuard]
+      },
+      {
+        path: 'admin/category',
+        loadComponent: () => import('./components/features/admin-panel/category-control/category-control').then(m => m.CategoryControl),
+      },
+      {
+        path: 'admin/payment',
+        loadComponent: () => import('./components/features/admin-panel/payment-control/payment-control').then(m => m.PaymentControl),
       }
     ]
   },

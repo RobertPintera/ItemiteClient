@@ -1,0 +1,97 @@
+@if(loading()){
+  <app-loading-dialog/>
+}
+@else if(isOpenPreviewImageDialog()) {
+  <app-dialog (closed)="cancelPreviewImageDialog()">
+    <div class="flex flex-col justify-center h-full w-full">
+      <div class="flex items-center justify-center w-full h-full overflow-hidden">
+        <img [src]="imagePreview()" alt="SVG preview" class="size-full object-contain">
+      </div>
+      <div class="flex flex-wrap justify-between gap-2 flex-row p-4 w-full h-fit">
+        <app-button (clickButton)="cancelPreviewImageDialog()" label="Close" severity="accent" variant="outlined"/>
+        <div class="flex gap-2">
+          <app-button (clickButton)="deleteImage()" label="Delete" severity="danger"/>
+          <app-button (clickButton)="openEditFileUpload()" label="Edit" severity="primary"/>
+        </div>
+      </div>
+    </div>
+  </app-dialog>
+}
+@else if(isOpenFileUpload()){
+  <app-file-upload acceptedFormats="image/svg+xml" [supportsPreview]="true" (onCancelClicked)="cancelFileUpload()" (onConfirmClicked)="confirmFileUpload($event)"/>
+}
+@else {
+  <app-dialog [header]="editedCategory() ? ('admin_category_control.form_dialog.edit' | translate) : ('admin_category_control.form_dialog.create' | translate)"
+              (closed)="closeDialog()">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2 w-[100vw] max-w-full sm:max-w-md">
+      <div class="flex flex-col gap-2 w-full">
+        <label for="name" class="text-xl font-semibold">{{ 'admin_category_control.form_dialog.name' | translate }}</label>
+        <input type="text" name="name" formControlName="name" class="border rounded px-3 py-2">
+        @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)) {
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if(form.controls.name.hasError('required')) {
+                <li>{{ 'validator_errors_admin_category_control.field_required' | translate }}</li>
+              }
+              @if(form.controls.name.hasError('empty')){
+                <li>{{ 'validator_errors_admin_category_control.field_empty' | translate }}</li>
+              }
+              @if(form.controls.name.hasError('minlength')){
+                <li>{{ 'validator_errors_admin_category_control.name_min' | translate }}</li>
+              }
+              @if(form.controls.name.hasError('maxlength')){
+                <li>{{ 'validator_errors_admin_category_control.name_max' | translate }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+      <div class="flex flex-col gap-2 w-full">
+        <label for="description" class="text-xl font-semibold">{{ 'admin_category_control.form_dialog.description' | translate }}</label>
+        <textarea id="description" name="description" formControlName="description" rows="5" class="border rounded px-3 py-2"></textarea>
+        @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)) {
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if(form.controls.description.hasError('maxlength')){
+                <li>{{ 'validator_errors_admin_category_control.description_max' | translate }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+      <input type="hidden" id="parentCategoryId" name="parentCategoryId" formControlName="parentCategoryId">
+      @if(!parentCategoryId()){
+        <div class="flex flex-col gap-2 w-full">
+          <label for="svgImage" class="text-xl font-semibold">{{ 'admin_category_control.form_dialog.image' | translate }}</label>
+          <button type="button" class="flex justify-center items-center border-border border-2 w-32 h-32 rounded-2xl bg-background cursor-pointer"
+                  (click)="!form.controls.svgImage.value ? openFileUpload() : openPreviewImageDialog()">
+            @if(!form.controls.svgImage.value){
+              <svg xmlns="http://www.w3.org/2000/svg" height="48px"
+                   viewBox="0 -960 960 960" width="48px" fill="#1f1f1f">
+                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/>
+              </svg>
+            }
+            @else{
+              <img [src]="imagePreview()" alt="SVG preview" class="size-full object-contain">
+            }
+          </button>
+          @if (form.controls.svgImage.invalid && (form.controls.svgImage.touched || form.controls.svgImage.dirty)) {
+            <div>
+              <ul class="text-destructive text-sm list-disc pl-4">
+                @if(form.controls.svgImage.hasError('required')) {
+                  <li>{{ 'validator_errors_admin_category_control.field_required' | translate }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+      }
+
+      <div class="flex flex-row justify-between gap-2">
+        <app-button type="button" [label]="'controls.cancel' | translate" severity="accent" variant="outlined" (clickButton)="closeDialog()"/>
+        <app-button type="submit" [label]="'controls.save' | translate"/>
+      </div>
+    </form>
+  </app-dialog>
+}
+

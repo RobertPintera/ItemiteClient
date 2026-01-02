@@ -21,5 +21,5 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'external-login-error', renderMode: RenderMode.Client },
   { path: 'me', renderMode: RenderMode.Client },
 
-  { path: '**', renderMode: RenderMode.Prerender }
+  { path: '**', renderMode: RenderMode.Client }
 ];

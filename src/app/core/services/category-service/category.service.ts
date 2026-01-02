@@ -27,7 +27,7 @@ export class CategoryService {
     return this.http.get<CategoryDTO[]>(`${this.baseUrl}/main`);
   }
 
-  private getSubCategories(parentId: number): Observable<CategoryDTO[]> {
+  private getSubcategories(parentId: number): Observable<CategoryDTO[]> {
     return this.http.get<CategoryDTO[]>(`${this.baseUrl}/sub/${parentId}`);
   }
 
@@ -35,7 +35,7 @@ export class CategoryService {
     return this.http.get<CategoryTreeDTO>(`${this.baseUrl}/tree/${rootCategoryId}`);
   }
 
-  // Updating signals
+  // Logic
 
   loadMainCategories(): Observable<CategoryDTO[]> {
     return this.getMainCategories().pipe(
@@ -53,9 +53,16 @@ export class CategoryService {
 
   loadCategoryTree(rootCategoryId: number): Observable<CategoryTreeDTO> {
     return this.getCategoryTree(rootCategoryId).pipe(
-      map(tree => {
-        return tree;
-      }),
+      catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
+        console.error('Error loadCategoryTree:', err);
+        throw err;
+      })
+    );
+  }
+
+  loadSubcategories(rootCategoryId: number): Observable<CategoryDTO[]> {
+    return this.getSubcategories(rootCategoryId).pipe(
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadCategoryTree:', err);

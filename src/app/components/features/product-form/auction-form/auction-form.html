@@ -71,7 +71,7 @@
       <app-combo-box formControlName="mainCategory" [items]="mainCategoriesOptions" (selectedItemChange)="selectMainCategory($event)">
         <ng-template let-item>
           <span>
-            {{item?.value | translate}}
+            {{item?.value}}
           </span>
         </ng-template>
       </app-combo-box>
@@ -90,12 +90,12 @@
       <app-cascade-select formControlName="subcategory" [items]="subCategoriesOptions()" [(selectedItem)]="selectedSubCategory" (selectedItemChange)="selectSubCategory($event)">
         <ng-template #selectedItemTemplate let-item>
           <span>
-            {{item?.value | translate}}
+            {{item?.value}}
           </span>
         </ng-template>
         <ng-template #nodeTemplate let-node>
           <span>
-            {{node?.value | translate}}
+            {{node?.value}}
           </span>
         </ng-template>
       </app-cascade-select>

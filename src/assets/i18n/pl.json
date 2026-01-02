@@ -606,5 +606,27 @@
   "other_user_settings": {
     "edit_price": "Ustaw indywidualną cenę produktu dla użytkownika",
     "delete_price": "Usuń indywidualną cenę produktu dla użytkownika"
+  },
+  "admin_category_control": {
+    "create_main_category": "Stwórz kategorię główą",
+    "create_subcategory": "Stwórz podkategorię",
+    "show_subcategories": "Pokaż podkategorie",
+    "form_dialog": {
+      "edit": "Edycja kategorii",
+      "create": "Tworzenie kategorii",
+      "name": "Nazwa",
+      "description": "Opis",
+      "image": "Obraz (Tylko svg)"
+    },
+    "no_categories": "Nie można znaleźć żadnych kategorii.",
+    "delete_category": "Czy na pewno chcesz usunąć tą kategorię? Ta operacja jest nieodwracalna!",
+    "delete_full_tree": "Usunięcie całego drzewa"
+  },
+  "validator_errors_admin_category_control": {
+    "field_required": "Pole jest wymagane.",
+    "field_empty" : "Pole nie może być puste.",
+    "name_min" : "Imię musi mieć przynajmniej z 2 znaki",
+    "name_max" : "Imię nie może mieć więcej niż z 30 znaków",
+    "description_max": "Imię nie może mieć więcej niż z 100 znaków"
   }
 }
