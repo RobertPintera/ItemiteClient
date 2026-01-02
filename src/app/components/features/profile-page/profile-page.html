@@ -204,6 +204,15 @@
         (onConfirmClicked)='OnImageEditionSubmitted($event)'
       />
     }
+
+    <!-- Admin -->
+    @if (isAdmin()) {
+      <p id="admin" class="mt-2  text-2xl md:text-3xl lg:text-4xl">{{"admin_panel.admin_panel" | translate}}</p>
+      <div class="ml-5 flex flex-col w-full">
+      <app-button class="button-control min-w-fit w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1rem)]"
+                  routerLink="/admin" label="{{'admin_panel.admin_panel' | translate}}"/>
+      </div>
+    }
   }
 </div>
 

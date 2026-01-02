@@ -43,7 +43,9 @@ import {OwnProducts} from './own-products/own-products';
     EditEmail,
     EditPassword,
     BillingAndPayments,
-    OwnProducts
+    OwnProducts,
+    Button,
+    RouterLink
   ],
   templateUrl: './profile-page.html',
   styleUrl: './profile-page.css'
@@ -129,6 +131,10 @@ export class ProfilePage implements OnInit {
   });
   readonly phoneNumber = computed(() =>
     this._phone() === "" ? "----" : this._phone() );
+
+  readonly isAdmin = computed(() =>
+    this._userService.userInfo().roles.includes("Admin")
+  );
   // endregion
 
   // region Edit switches
