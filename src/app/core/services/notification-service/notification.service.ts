@@ -76,6 +76,7 @@ export class NotificationService {
       }
       else {
         this.Disconnect();
+        this._showNotificationList.set(false);
         this._notificationCount.set(0);
       }
     });
