@@ -69,11 +69,10 @@ export class AuthService {
     });
 
     this.errorHandlerService.onLoggedOutDetected.subscribe(() =>
-      {
-        this.ClearUserInfo();
-        this._isUserLoggedIn.set(false);
-      }
-    );
+    {
+      this.ClearUserInfo();
+      this._isUserLoggedIn.set(false);
+    });
   }
 
   async ResolveAuth(): Promise<boolean> {
@@ -157,29 +156,33 @@ export class AuthService {
   // This will need to be recalled once this.autoRefreshToken()
   //  - handled in effect()
   async PerformContinuesTokenRefresh() {
-    // Make sure there is only one token refresh loop
-    if(this._tokenRefreshLoopRunning) return;
-
+    if (this._tokenRefreshLoopRunning) return;
     this._tokenRefreshLoopRunning = true;
-    while (this.isUserLoggedIn()) {
-      if(await this.RefreshToken() == 401) {
-        this._isUserLoggedIn.set(false);
-        break;
+
+    try {
+      while (this._isUserLoggedIn() === true) {
+
+        const stop = interval(1000).pipe(
+          filter(() => this._isUserLoggedIn() !== true),
+          take(1)
+        );
+
+        await lastValueFrom(
+          race(
+            timer(this._refreshTokenMinutesSpacing * 60 * 1000),
+            stop
+          )
+        );
+
+        if (this._isUserLoggedIn() !== true) break;
+
+
+        const status = await this.RefreshToken();
+        if (status === 401) break;
       }
-
-      const stop = interval(1000).pipe(
-        filter(() => !this.isUserLoggedIn()), take(1)
-      );
-
-      await lastValueFrom(
-        race(
-          timer(this._refreshTokenMinutesSpacing * 60 * 1000),
-          stop
-        )
-      );
-      console.log("Refreshed token");
+    } finally {
+      this._tokenRefreshLoopRunning = false;
     }
-    this._tokenRefreshLoopRunning = false;
   }
 
   private async RefreshToken() : Promise<number> {
