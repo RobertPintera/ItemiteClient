@@ -125,6 +125,10 @@ export const routes: Routes = [
       {
         path: 'admin-panel/category-control',
         loadComponent: () => import('./components/features/admin-panel/category-control/category-control').then(m => m.CategoryControl),
+      },
+      {
+        path: 'admin-panel/payment-control',
+        loadComponent: () => import('./components/features/admin-panel/payment-control/payment-control').then(m => m.PaymentControl),
       }
     ]
   },
