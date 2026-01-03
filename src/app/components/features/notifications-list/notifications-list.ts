@@ -162,6 +162,7 @@ export class NotificationsList implements AfterViewInit {
     }
 
     if(notification.resourceType === "User") {
+      this._router.navigate([`/user/${notification.userId}`]);
       return;
     }
 
