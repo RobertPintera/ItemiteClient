@@ -85,12 +85,12 @@ export class Chat implements AfterViewInit, OnInit {
     this.chatMembers().find((member) => member.id === this.currentUserId())!
   );
 
-  readonly otherMemberInfo: Signal<ChatMemberInfo> = computed(() =>
+  readonly otherMemberInfo: Signal<ChatMemberInfo | undefined> = computed(() =>
     this.chatMembers().find((member) => member.id !== this.currentUserId())!
   );
 
-  readonly otherUsername = computed(() => this.otherMemberInfo().userName);
-  readonly otherProfileImg = computed(() => this.otherMemberInfo().photoUrl ??
+  readonly otherUsername = computed(() => this.otherMemberInfo()?.userName ?? "");
+  readonly otherProfileImg = computed(() => this.otherMemberInfo()?.photoUrl ??
     "../../../../assets/images/default_profile_pic.png");
 
   private _messages = signal<MessageResponse[]>([]);
@@ -211,7 +211,9 @@ export class Chat implements AfterViewInit, OnInit {
     const el = this.chatContainer?.nativeElement;
     const prevScrollHeight = el?.scrollHeight;
 
-    this.messageService.GetChat(listingId, this.otherMemberInfo().id, limit, cursor).subscribe({
+    if(!this.otherMemberInfo()) return;
+
+    this.messageService.GetChat(listingId, this.otherMemberInfo()!.id, limit, cursor).subscribe({
         next: chat => {
           this._messages.set([...chat.items, ...this._messages()]);
           this._resultCode.set(200);
@@ -255,8 +257,10 @@ export class Chat implements AfterViewInit, OnInit {
     const attachments = this.attachments();
     this.ClearAttachments();
 
+    if(!this.otherMemberInfo()) return;
+
     this.messageService.SendMessage(
-      this.otherMemberInfo().id,
+      this.otherMemberInfo()!.id,
       this.listingId(),
       input === "" ? undefined : input,
       attachments.length === 0 ? undefined : attachments

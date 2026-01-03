@@ -26,17 +26,10 @@ import {UserService} from '../../../core/services/user-service/user.service';
 @Component({
   selector: 'app-user-page',
   imports: [
-    GeocoderAutocomplete,
-    EditableText,
     TranslatePipe,
     ReactiveFormsModule,
-    ConfirmDialog,
-    FileUpload,
-    FileUpload,
     LoadingCircle,
     FormsModule,
-    Button,
-    RouterLink
   ],
   templateUrl: './user-page.html',
   styleUrl: './user-page.css'
