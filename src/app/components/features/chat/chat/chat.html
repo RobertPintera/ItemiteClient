@@ -23,6 +23,7 @@
 
 
 <app-other-user-settings
+  [userId]="otherMemberInfo()?.id ?? -1"
   [isOpen]="showUserSettingDialog()"
   (onCloseClicked)="SwitchUserSettingsDialog()"
   (onDeletePriceClicked)="SwitchDeletePriceDialog(true)"

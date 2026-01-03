@@ -72,11 +72,17 @@
               @if(product){
                 <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
                 <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
-                <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
+                <a class="flex flex-row items-center" [routerLink]="[`/user/${product.owner.id}`]">
+                  {{'product_details.vendor' | translate}}:
+                  <p class="hover:underline font-bold" >{{ product.owner.userName }} </p>
+                </a>
               } @else if(auction) {
                 <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
                 <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
-                <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
+                <a class="flex flex-row items-center" [routerLink]="[`/user/${auction.owner.id}`]">
+                  {{'product_details.vendor' | translate}}:
+                  <p class="hover:underline font-bold" > {{ auction.owner.userName }} </p>
+                </a>
                 <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
                 <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
               }
@@ -103,11 +109,21 @@
             @if(product){
               <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
               <p>{{'product_details.price' | translate}}: {{ product.price }}$ {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
-              <p>{{'product_details.vendor' | translate}}: {{ product.owner.userName }}</p>
+              <a class="flex flex-row items-center" [routerLink]="[`/user/${product.owner.id}`]">
+                {{'product_details.vendor' | translate}}:
+                <p class="hover:underline font-bold" >
+                  {{ product.owner.userName }}
+                </p>
+              </a>
             } @else if(auction) {
               <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
               <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd HH:mm' }}</p>
-              <p>{{'product_details.vendor' | translate}}: {{ auction.owner.userName }}</p>
+              <a class="flex flex-row items-center"  [routerLink]="[`/user/${auction.owner.id}`]">
+                {{'product_details.vendor' | translate}}:
+                <p class="hover:underline font-bold" >
+                  {{ auction.owner.userName }}
+                </p>
+              </a>
               <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
               <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
             }

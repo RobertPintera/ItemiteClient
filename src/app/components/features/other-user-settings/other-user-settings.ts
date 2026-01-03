@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {InputNumber} from '../../shared/input-number/input-number';
 import {LoadingDialog} from '../../shared/loading-dialog/loading-dialog';
 import {TranslatePipe} from '@ngx-translate/core';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-other-user-settings',
@@ -13,12 +14,15 @@ import {TranslatePipe} from '@ngx-translate/core';
     Dialog,
     FormsModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    RouterLink
   ],
   templateUrl: './other-user-settings.html',
   styleUrl: './other-user-settings.css',
 })
 export class OtherUserSettings {
+  userId = input.required<number>();
+
   onEditPriceClicked = output<void>();
   onDeletePriceClicked = output<void>();
   onCloseClicked = output<void>();

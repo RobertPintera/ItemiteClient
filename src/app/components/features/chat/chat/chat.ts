@@ -1,18 +1,22 @@
 import {
-  AfterViewInit, ChangeDetectorRef,
+  AfterViewInit,
   Component,
-  computed, effect,
+  computed,
+  effect,
   ElementRef,
   HostListener,
   inject,
-  input, OnInit, output, PLATFORM_ID,
+  input,
+  OnInit,
+  output,
+  PLATFORM_ID,
   signal,
-  Signal, ViewChild, WritableSignal
+  Signal,
+  ViewChild,
+  WritableSignal
 } from '@angular/core';
 import {MessageResponse} from '../../../../core/models/chat/MessageResponse';
-import {PhotoResponseDTO} from '../../../../core/models/graphics/PhotoResponseDTO';
 import {Message} from './message/message';
-import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {ChatMemberInfo} from '../../../../core/models/chat/ChatMemberInfo';
 import {FileUpload} from "../../../shared/file-upload/file-upload";
 import {LoadingCircle} from '../../../shared/loading-circle/loading-circle';

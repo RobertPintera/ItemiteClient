@@ -1,26 +1,21 @@
 import {
   Component,
   computed,
-  inject, OnInit,
-  PLATFORM_ID, Signal, SecurityContext,
+  effect,
+  inject,
+  input,
+  OnInit,
+  PLATFORM_ID,
+  Signal,
   signal,
-  WritableSignal, effect, input
+  WritableSignal
 } from '@angular/core';
-import {GeocoderAutocomplete} from '../../shared/geocoder-autocomplete/geocoder-autocomplete';
 import {Map, Marker} from 'leaflet';
 import {isPlatformBrowser} from '@angular/common';
 import {Localization} from '../../../core/models/location/Localization';
-import {GeoapifyService} from '../../../core/services/geoapify-service/geoapify.service';
-import {EditableText} from '../../shared/editable-text/editable-text';
-import {FormsModule, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
-import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
-import {FileUpload} from '../../shared/file-upload/file-upload';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {AuthService} from '../../../core/services/auth-service/auth.service';
-import {Router, RouterLink} from '@angular/router';
 import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
-import {Button} from '../../shared/button/button';
 import {UserService} from '../../../core/services/user-service/user.service';
 
 @Component({
@@ -36,11 +31,7 @@ import {UserService} from '../../../core/services/user-service/user.service';
 })
 export class UserPage implements OnInit {
   // region Injectables
-  private _geoapify: GeoapifyService = inject(GeoapifyService);
-  private _sanitizer: DomSanitizer = inject(DomSanitizer);
   private _userService: UserService = inject(UserService);
-  private _authService: AuthService = inject(AuthService);
-  private _router: Router = inject(Router);
   // endregion
 
   userId = input.required<number>();
@@ -97,7 +88,11 @@ export class UserPage implements OnInit {
   constructor() {
     effect(() => {
       if(!this.loading() && this._map === undefined) {
-        this.InitMap(50.2970546, 18.6926949, "Gliwice");
+        this.InitMap(
+          this._localization()?.latitude ?? 50.2970546,
+          this._localization()?.longitude ?? 18.6926949,
+          this._localization()?.city ?? "Gliwice"
+        );
       }
     });
   }
@@ -143,42 +138,6 @@ export class UserPage implements OnInit {
     }
   }
 
-  private ResetMarkerToCurrentLocalization() {
-    // If localization is not set
-    if(this._currentMarker()) {
-      this._map?.flyTo(this._currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949],
-        13);
-    }
-  }
-
-  private AllowMapControl(allow: boolean) {
-    if(allow) {
-      this._map?.boxZoom?.enable();
-      this._map?.scrollWheelZoom?.enable();
-      this._map?.touchZoom?.enable();
-      this._map?.dragging?.enable();
-      this._map?.doubleClickZoom?.enable();
-      this._map?.setZoomAround(this._currentMarker()?.getLatLng() ?? [50.2970546, 18.6926949],
-        10);
-      return;
-    }
-    this.ResetMarkerToCurrentLocalization();
-    this._map?.doubleClickZoom?.disable();
-    this._map?.boxZoom?.disable();
-    this._map?.scrollWheelZoom?.disable();
-    this._map?.touchZoom?.disable();
-    this._map?.dragging?.disable();
-  }
-
-  async FlyTo(lat: number, lon: number, city: string) {
-    if (isPlatformBrowser(this._platformId)) {
-      const { marker } = await import('leaflet');
-      this._map = this._map.flyTo([lat, lon], 13);
-      this.ClearMarker();
-      this._currentMarker.set(marker([lat, lon]).addTo(this._map).bindPopup(city).openPopup());
-    }
-  }
-
   async InitMap(lat:number, lng:number, city:string) {
     this.ClearMarker();
     if (isPlatformBrowser(this._platformId)) {
@@ -189,11 +148,11 @@ export class UserPage implements OnInit {
       Icon.Default.prototype.options.shadowSize = [25, 41];
 
       this._map = map(this._mapEl).setView([lat,lng], 13);
+
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(this._map);
       this._currentMarker.set(marker([lat, lng]).addTo(this._map).bindPopup(city).openPopup());
-      this.AllowMapControl(false);
     }
   }
 }

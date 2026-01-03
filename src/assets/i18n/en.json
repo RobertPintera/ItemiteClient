@@ -611,6 +611,8 @@
     "category": "Category"
   },
   "other_user_settings": {
+    "user_options": "User options",
+    "visit_user_page": "Visit user page",
     "edit_price": "Edit individual price for user",
     "delete_price": "Delete individual price for user"
   },
