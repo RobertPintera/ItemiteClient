@@ -49,6 +49,12 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'user/:userId',
+        loadComponent: () =>
+          import('./components/features/user-page/user-page')
+            .then(m => m.UserPage),
+      },
+      {
         path: 'dev',
         component: Test
       },

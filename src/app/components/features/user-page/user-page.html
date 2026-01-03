@@ -1,0 +1,47 @@
+<div class="flex relative m-auto flex-col max-w-7xl shrink-1 w-full text-foreground bg-background p-5">
+  @if (loading()) {
+    <app-loading-circle class="m-auto"/>
+  } @else {
+    <div class="flex relative h-60 sm:h-100 flex-row space-x-10 items-center shadow-md p-4 bg-card text-card-foreground rounded-sm">
+      @if (hasBackgroundImage()) {
+        <img class="absolute w-full h-full rounded-sm object-cover z-0 inset-0"
+             [src]="backgroundImage()"
+             alt="background image"
+        />
+      }
+
+      <img class="max-w-1/3 drop-shadow-2xl rounded-full max-h-80 aspect-square object-contain z-1 bg-card p-1"
+           alt="Profile picture"
+           [src]="profileImage()"/>
+      <div class="flex flex-col">
+        <div class="relative italic text-2xl md:text-3xl lg:text-4xl flex flex-col w-full justify-start text-start items-center rounded-sm bg-card/90 text-card-foreground">
+          <p>{{userName()}}</p>
+        </div>
+      </div>
+    </div>
+
+    <p id="details" class="text-2xl md:text-3xl lg:text-4xl">{{"user_info.details" | translate}}</p>
+    <div class="text-base sm:text-xl ml-5 grid grid-custom items-center max-w-full sm:">
+      <p>Email:</p>
+      <div class="flex items-center flex-row">
+        <p class="mr-5">{{email()}}</p>
+      </div>
+
+      <p>{{"user_info.phone" | translate}}:</p>
+      <p>{{phone()}}</p>
+    </div>
+
+    <p id="localization" class="text-2xl md:text-3xl lg:text-4xl">{{"user_info.localization" | translate}}</p>
+    <div class="text-base sm:text-xl ml-5 max-w-full grid items-center grid-custom">
+      <p>{{"user_info.localization" | translate}}:</p>
+      <div class="flex flex-row items-center flex-wrap break-all">
+        <p class="mr-5">{{localization()}}</p>
+      </div>
+    </div>
+
+
+    <!-- leaflet map -->
+    <div id="map" class="h-100 rounded-md max-w-full ml-5 z-0"></div>
+  }
+</div>
+
