@@ -66,9 +66,25 @@ export const PAYMENT_STATUS = {
 export type PaymentStatus = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
 
 export const DISPUTE_RESOLUTION = {
-  REFUND_BUYER: 'Refund Buyer',
+  REFUND_BUYER: 'RefundBuyer',
   DECLINED: 'Declined',
-  PARTIAL_REFUND: 'Partial Refund'
+  PARTIAL_REFUND: 'PartialRefund'
 } as const;
 
 export type DisputeResolution = (typeof DISPUTE_RESOLUTION)[keyof typeof DISPUTE_RESOLUTION];
+
+export const BANNER_POSITION = {
+  LEFT: "Left",
+  RIGHT: "Right",
+  TOP: "Top",
+  BOTTOM: "Bottom",
+} as const;
+
+export type BannerPosition = (typeof BANNER_POSITION)[keyof typeof BANNER_POSITION];
+
+export const PAYMENT_TYPE = {
+  LATEST: 'Latest',
+  WITH_STATUS: 'With status',
+} as const;
+
+export type PaymentType = (typeof PAYMENT_TYPE)[keyof typeof PAYMENT_TYPE];

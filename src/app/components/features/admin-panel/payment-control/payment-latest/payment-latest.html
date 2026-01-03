@@ -1,0 +1,26 @@
+<!--@if(loading()){-->
+<!--  <div class="flex justify-center py-16 w-full">-->
+<!--    <app-loader/>-->
+<!--  </div>-->
+<!--} @else if (totalPages() === 0){-->
+<!--  <div class="flex justify-center py-16 w-full">-->
+<!--    <h2>{{'user_products.no_products' | translate}}</h2>-->
+<!--  </div>-->
+<!--}-->
+<!--@else {-->
+<!--  <div class="w-full flex py-4 justify-end">-->
+<!--    <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>-->
+<!--  </div>-->
+<!--  <div class="flex flex-row flex-wrap justify-center">-->
+<!--    @let data = payments();-->
+
+<!--    @if(data && data.items.length){-->
+<!--      @for (payment of data.items; track product.id){-->
+<!--        <app-product-item [product]="payment" [showStatus]="true" [isMd]="isMd()"/>-->
+<!--      }-->
+<!--    }-->
+<!--  </div>-->
+<!--  <div class="w-full flex py-4 justify-end">-->
+<!--    <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>-->
+<!--  </div>-->
+<!--}-->

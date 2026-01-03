@@ -89,8 +89,6 @@
     "speakers": "Głośniki",
     "headphones": "Słuchawki",
     "gaming": "Gaming",
-    "console_games": "Gry konsolowe",
-    "computer_games": "Gry komputerowe",
 
     "motorization": "Motoryzacja",
     "cars": "Samochody",
@@ -338,6 +336,7 @@
     "create": "Stwórz",
     "delete": "Usuń",
     "cancel": "Anuluj",
+    "back": "Wróć",
     "confirm": "Potwierdź",
     "enable": "Aktywuj",
     "enable_edition": "Włącz edycję",
@@ -608,6 +607,7 @@
     "delete_price": "Usuń indywidualną cenę produktu dla użytkownika"
   },
   "admin_category_control": {
+    "header": "Kategorie",
     "create_main_category": "Stwórz kategorię główą",
     "create_subcategory": "Stwórz podkategorię",
     "show_subcategories": "Pokaż podkategorie",
@@ -628,5 +628,26 @@
     "name_min" : "Imię musi mieć przynajmniej z 2 znaki",
     "name_max" : "Imię nie może mieć więcej niż z 30 znaków",
     "description_max": "Imię nie może mieć więcej niż z 100 znaków"
+  },
+  "admin_payment_control": {
+    "header": "Płatności",
+    "latest": "Najnowsze",
+    "with_status": "Z statusem",
+    "statistics": {
+      "header": "Statystyki",
+      "transferred": "Przekazane",
+      "disputed": "W trakcie sporu",
+      "pending": "Oczekujące",
+      "authorized": "Autoryzowane",
+      "pending_capture": "Oczekujące na rozliczenie",
+      "outbid": "Przebite",
+      "pending_review": "Oczekujące na weryfikację",
+      "refund_scheduled": "Zaplanowany zwrot",
+      "partial_refund_scheduled": "Zaplanowany częściowy zwrot",
+      "refunded": "Zwrócone",
+      "partially_refunded": "Częściowo zwrócone",
+      "failed": "Nieudane",
+      "total_payments": "Wszystkie płatności"
+    }
   }
 }

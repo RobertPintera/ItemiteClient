@@ -90,8 +90,6 @@
     "speakers": "Speakers",
     "headphones": "Headphones",
     "gaming": "Gaming",
-    "console_games": "Console Games",
-    "computer_games": "Computer Games",
 
     "motorization": "Motorization",
     "cars": "Cars",
@@ -340,6 +338,7 @@
     "create": "Create",
     "delete": "Delete",
     "cancel": "Cancel",
+    "back": "Back",
     "confirm": "Confirm",
     "enable": "Enable",
     "enable_edition": "Enable edition",
@@ -615,6 +614,7 @@
     "delete_price": "Delete individual price for user"
   },
   "admin_category_control": {
+    "header": "Categories",
     "create_main_category": "Create main category",
     "create_subcategory": "Create subcategory",
     "show_subcategories": "Show subcategories",
@@ -635,5 +635,14 @@
     "name_min": "Name must be at least 2 characters long",
     "name_max": "Name cannot be more than 100 characters",
     "description_max": "Description cannot be more than 100 characters"
+  },
+  "admin_payment_control": {
+    "header": "Payments",
+    "latest": "Latest",
+    "with_status": "With status",
+    "statistics": {
+      "header": "Statistics",
+      "total_payments": "Total payments"
+    }
   }
 }

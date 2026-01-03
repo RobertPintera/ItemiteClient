@@ -1,5 +1,5 @@
 <div class="flex m-auto flex-col max-w-7xl w-full py-4 px-8 gap-4">
-  <h1>Categories</h1>
+  <h1>{{ 'admin_category_control.header' | translate }}</h1>
   <div class="w-full flex justify-between py-4 gap-2 flex-wrap">
     <app-button [label]="!parentCategoryId() ? ('admin_category_control.create_main_category' | translate) :
       ('admin_category_control.create_subcategory' | translate)"
@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="flex flex-wrap justify-between gap-2 mt-4">
-            <app-button routerLink="/admin-panel/category-control" [queryParams]="{ id: category.id }" [label]="'admin_category_control.show_subcategories' | translate" severity="secondary"/>
+            <app-button routerLink="/admin/category" [queryParams]="{ id: category.id }" [label]="'admin_category_control.show_subcategories' | translate" severity="secondary"/>
             <div class="flex flex-wrap gap-2">
               <app-button [label]="'controls.delete' | translate" severity="danger" (clickButton)="openDeleteDialog(category.id)"/>
               <app-button [label]="'controls.edit' | translate" (clickButton)="openDialog(category)"/>
