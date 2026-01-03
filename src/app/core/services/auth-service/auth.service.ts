@@ -161,11 +161,16 @@ export class AuthService {
     if(this._tokenRefreshLoopRunning) return;
 
     this._tokenRefreshLoopRunning = true;
+
+    await new Promise(resolve => setTimeout(resolve, 10000));
+
     while (this.isUserLoggedIn()) {
       if(await this.RefreshToken() == 401) {
         this._isUserLoggedIn.set(false);
         break;
       }
+
+      console.log("Refreshed token");
 
       const stop = interval(1000).pipe(
         filter(() => !this.isUserLoggedIn()), take(1)
@@ -177,7 +182,6 @@ export class AuthService {
           stop
         )
       );
-      console.log("Refreshed token");
     }
     this._tokenRefreshLoopRunning = false;
   }
