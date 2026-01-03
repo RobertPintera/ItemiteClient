@@ -561,7 +561,38 @@
     "bid": "Bid",
     "buyer": "Buyer",
     "seller": "Seller",
-    "platform_fee_amount": "Platform fee amount"
+    "platform_fee_amount": "Platform fee amount",
+    "payment": "Payment",
+    "details": "Payment details",
+    "total_amount": "Total amount",
+    "seller_amount": "Seller amount",
+    "approved_by": "Approved by",
+
+    "platform_fee_percentage": "Platform fee percentage",
+
+    "transfer_attempts": "Transfer attempts",
+    "transfer_trigger": "Transfer trigger",
+    "actual_transfer_method": "Transfer method",
+
+    "charge_date": "Charge date",
+    "transfer_date": "Transfer date",
+    "scheduled_transfer_date": "Scheduled transfer date",
+
+    "refund": "Refund",
+    "refund_amount": "Refund amount",
+    "refund_attempts": "Refund attempts",
+    "refund_date": "Refund date",
+    "scheduled_refund_date": "Scheduled refund date",
+
+    "dispute": "Dispute",
+    "disputedBy": "Disputed by",
+    "approvedBy": "Resolved by",
+    "reason": "Reason",
+    "description": "Description",
+    "created_at": "Created at",
+    "resolved_at": "Resolved at",
+    "notes": "Notes",
+    "evidences": "Evidences"
   },
   "notifications": {
     "Auction": "Auction",

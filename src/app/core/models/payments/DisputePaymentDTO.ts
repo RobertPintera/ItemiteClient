@@ -1,5 +1,6 @@
 import {ListingItemDTO} from '../listing-general/LitstingItemDTO';
 import {UserPaymentDTO} from './UserPaymentDTO';
+import {EvidenceDTO} from './EvidenceDTO';
 
 export interface DisputePaymentDTO  {
   id: number;
@@ -11,10 +12,7 @@ export interface DisputePaymentDTO  {
   createdAt: string;
   resolvedAt: string;
   notes: string;
-  evidence: {
-    photoId: number;
-    url: string;
-  }[],
+  evidence: EvidenceDTO[],
   listing: ListingItemDTO;
   disputedBy: UserPaymentDTO;
   resolvedBy: UserPaymentDTO;

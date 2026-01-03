@@ -1,7 +1,7 @@
 import {PaymentItemDTO} from './PaymentItemDTO';
 
 export interface PaginatedPaymentResponseDTO {
-  items: PaymentItemDTO;
+  items: PaymentItemDTO[];
   totalPages: number;
   currentPage: number;
   itemFrom: number;

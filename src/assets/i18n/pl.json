@@ -554,7 +554,39 @@
     "bid": "Oferta",
     "buyer": "Kupujący",
     "seller": "Sprzedający",
-    "platform_fee_amount": "Opłata platformy"
+    "platform_fee_amount": "Opłata platformy",
+
+    "payment": "Płatność",
+    "details": "Szczegóły płatności",
+    "total_amount": "Kwota całkowita",
+    "seller_amount": "Kwota sprzedawcy",
+    "approved_by": "Zatwierdzone przez",
+
+    "platform_fee_percentage": "Procent opłaty platformy",
+
+    "transfer_attempts": "Próby przelewu",
+    "transfer_trigger": "Wyzwalacz przelewu",
+    "actual_transfer_method": "Metoda przelewu",
+
+    "charge_date": "Data obciążenia",
+    "transfer_date": "Data przelewu",
+    "scheduled_transfer_date": "Planowana data przelewu",
+
+    "refund": "Zwrot",
+    "refund_amount": "Kwota zwrotu",
+    "refund_attempts": "Próby zwrotu",
+    "refund_date": "Data zwrotu",
+    "scheduled_refund_date": "Planowana data zwrotu",
+
+    "dispute": "Spór",
+    "disputedBy": "Zgłoszone przez",
+    "approvedBy": "Rozstrzygnięte przez",
+    "reason": "Powód",
+    "description": "Opis",
+    "created_at": "Utworzono",
+    "resolved_at": "Rozstrzygnięto",
+    "notes": "Notatki",
+    "evidences": "Dowody"
   },
   "notifications": {
     "Auction": "Aukcja",

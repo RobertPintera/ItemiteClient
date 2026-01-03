@@ -1,1 +1,220 @@
-<p>payment-item works!</p>
+<div class="flex bg-card text-card-foreground flex-col w-full border-2 gap-2 border-transparent border-b-border shadow-xl p-4
+  hover:border-border hover:rounded-xl hover:z-10 hover:scale-[1.02]
+  duration-150">
+  <!-- Payment -->
+  <div class="flex flex-row justify-between gap-2">
+    <h3>{{payment().paymentId}} - Payment</h3>
+    <p class="text-xl md:text-2xl">{{ 'transactions.status.header' | translate }}: {{ ('transactions.status.' + (payment().status | underscore)) | translate }}</p>
+  </div>
+  <div class="flex flex-col h-full w-full border-border border-t-2 gap-2 py-2">
+    <div class="flex flex-row justify-between gap-2">
+      <div class="flex flex-col">
+        <p class="text-base md:text-xl">{{'transactions.total_amount' | translate }}: {{payment().totalAmount}} {{payment().currency}} </p>
+        <p class="text-base md:text-xl">{{ 'transactions.seller_amount' | translate }}: {{payment().sellerAmount}} {{payment().currency}}</p>
+        @if(payment().approvedBy){
+          <p class="text-base md:text-xl">{{ 'transactions.approved_by' | translate }}: {{payment().approvedBy}}</p>
+        }
+      </div>
+      <div class="flex flex-col text-right">
+        <p class="text-base md:text-xl">
+          {{ 'transactions.platform_fee_percentage' | translate }}:
+          {{ payment().platformFeePercentage }}%
+        </p>
+        <p class="text-base md:text-xl">
+          {{ 'transactions.platform_fee_amount' | translate }}:
+          {{ payment().platformFeeAmount }} {{ payment().currency }}
+        </p>
+
+      </div>
+    </div>
+  </div>
+  <!-- Listing -->
+  <div class="flex flex-col h-full w-full border-border border-y-2 gap-2 py-2">
+    <p class="text-xl md:text-2xl">{{ payment().listing.name }}</p>
+    <div class="flex flex-col md:flex-row gap-2">
+      <div class="h-64 aspect-square">
+        <img [src]="payment().listing.mainImageUrl" (error)="imageError($event)" [alt]=" payment().listing.name" class="size-full object-contain" height="1" width="1">
+      </div>
+      <div class="flex flex-col-reverse md:flex-row w-full gap-4">
+        <div class="flex flex-1 flex-col w-full justify-between min-w-0 gap-4 p-0 md:p-8 md:pt-12">
+          <div class="flex flex-row flex-wrap gap-3">
+            @for (category of payment().listing.categories; track category.id){
+              <div class="border-2 border-border px-4 py-2 rounded-2xl bg-background text-foreground">
+                <p class="text-base md:text-xl">{{ `categories.${category.name}` | translate }}</p>
+              </div>
+            }
+          </div>
+          <div class="flex flex-col gap-2">
+            <p class="text-base md:text-xl">{{ 'product_details.localization' | translate }}: {{  payment().listing.location.country }}, {{ payment().listing.location.city}}, {{ payment().listing.location.state}}</p>
+            <p class="text-base md:text-xl">{{ 'product_details.date_of_issue' | translate }}: {{  payment().listing.dateCreated | date:'yyyy-MM-dd' }}</p>
+          </div>
+        </div>
+        <div class="flex-none flex flex-col items-start md:items-end md:py-4">
+          @if( payment().listing.listingType === LISTING_TYPES.PRODUCT){
+            <p class="text-xl sm:text-xl">{{ 'product_details.price' | translate }}: {{  payment().listing.price }} pln</p>
+            <p class="text-base md:text-lg">{{  payment().listing.isNegotiable ? ('product_details.negotiable' | translate) : "" }}</p>
+          }
+          @else if( payment().listing.listingType === LISTING_TYPES.AUCTION){
+            <p class="text-xl sm:text-2xl">{{ 'product_details.current_bid' | translate }}: {{  payment().listing.currentBid ??  payment().listing.startingBid}} {{ payment().currency }}</p>
+            <p class="text-base md:text-lg">{{ 'product_details.starting_bid' | translate }}: {{  payment().listing.startingBid }} {{ payment().currency }}</p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Buyer and Seller -->
+  <div class="flex flex-row justify-between gap-4 py-2">
+    <div class="flex flex-col flex-1">
+      <h4>{{ 'transactions.buyer' | translate }}</h4>
+      <div class="flex flex-row items-center gap-2">
+        <div class="size-10 rounded-full overflow-hidden bg-muted">
+          <img
+            [src]="payment().buyer.profilePhotoUrl"
+            (error)="imageError($event)"
+            [alt]="payment().buyer.userName"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex flex-col">
+          <p>{{ payment().buyer.userName }}</p>
+          <p>{{ payment().buyer.email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col flex-1">
+      <h4>{{ 'transactions.seller'  | translate }}</h4>
+      <div class="flex flex-row items-center gap-2">
+        <div class="size-10 rounded-full overflow-hidden bg-muted">
+          <img
+            [src]="payment().seller.profilePhotoUrl"
+            (error)="imageError($event)"
+            [alt]="payment().seller.userName"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex flex-col">
+          <p>{{ payment().seller.userName }}</p>
+          <p>{{ payment().seller.email }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="flex w-full bg-primary hover:bg-primary/70 justify-center rounded-lg" (click)="togglePaymentDetails()">
+    @if(isOpenPaymentDetails()){
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z"/></svg>
+    }
+    @else{
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/></svg>
+    }
+  </button>
+  @if(isOpenPaymentDetails()){
+    <!-- Details of payment -->
+    <div class="flex flex-col h-full w-full border-border border-y-2 gap-2 py-2">
+      <h4>{{ 'transactions.details' | translate }}</h4>
+      <div class="flex flex-row justify-between gap-2">
+        <div class="flex flex-col">
+          @if(payment().transferAttempts){
+            <p class="text-base md:text-xl">{{ 'transactions.transfer_attempts' | translate }}: {{ payment().transferAttempts }}</p>
+          }
+          @if(payment().transferTrigger){
+            <p class="text-base md:text-xl">{{ 'transactions.transfer_trigger' | translate }}: {{ payment().transferTrigger }}</p>
+          }
+          @if(payment().actualTransferMethod){
+            <p class="text-base md:text-xl">{{ 'transactions.actual_transfer_method' | translate }}: {{ payment().actualTransferMethod }}</p>
+          }
+        </div>
+        <div class="flex flex-col">
+          @if(payment().chargeDate){
+            <p class="text-base md:text-xl">{{ 'transactions.charge_date' | translate }}: {{ payment().chargeDate }}</p>
+          }
+          @if(payment().transferDate){
+            <p class="text-base md:text-xl">{{ 'transactions.transfer_date' | translate }}: {{ payment().transferDate }}</p>
+          }
+          @if(payment().scheduledTransferDate){
+            <p class="text-base md:text-xl">{{ 'transactions.scheduled_transfer_date' | translate }}: {{ payment().scheduledTransferDate }}</p>
+          }
+        </div>
+      </div>
+    </div>
+    <!-- Refund -->
+    @if(payment().refundAmount){
+    <div class="flex flex-col h-full w-full border-border border-b-2 gap-2 py-2">
+      <h4>{{ 'transactions.refund' | translate }}</h4>
+      <div class="flex flex-row justify-between gap-2">
+        <div class="flex flex-col">
+          @if(payment().refundAmount){
+            <p class="text-base md:text-xl">{{ 'transactions.refund_amount' }}: {{ payment().refundAmount }}</p>
+          }
+          @if(payment().refundAttempts){
+            <p class="text-base md:text-xl">{{ 'transactions.refund_attempts' }}: {{ payment().refundAttempts }}</p>
+          }
+        </div>
+        <div class="flex flex-col">
+          @if(payment().refundDate){
+            <p class="text-base md:text-xl">{{ 'transactions.refund_date' | translate }}: {{ payment().refundDate }}</p>
+          }
+          @if(payment().scheduledRefundDate){
+            <p class="text-base md:text-xl">{{ 'transactions.scheduled_refund_date' }}: {{payment().scheduledRefundDate}}</p>
+          }
+        </div>
+      </div>
+    </div>
+    }
+    <!-- Dispute -->
+    @if (payment().dispute){
+      <h4>{{ 'transactions.dispute' | translate }}</h4>
+      <div class="flex flex-row justify-between gap-4">
+        @if(payment().dispute.disputedBy){
+          <div class="flex flex-col flex-1">
+            <h4>{{ 'transactions.disputedBy' | translate }}</h4>
+            <div class="flex flex-row items-center gap-2">
+              <div class="size-10 rounded-full overflow-hidden bg-muted">
+                <img
+                  [src]="payment().dispute.disputedBy.profilePhotoUrl"
+                  (error)="imageError($event)"
+                  [alt]="payment().dispute.disputedBy.userName"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div class="flex flex-col">
+                <p>{{ payment().dispute.disputedBy.userName }}</p>
+                <p>{{ payment().dispute.disputedBy.email }}</p>
+              </div>
+            </div>
+          </div>
+        }
+        @if(payment().dispute.resolvedBy){
+          <div class="flex flex-col flex-1">
+            <h4>{{ 'transactions.approvedBy' | translate }}</h4>
+            <div class="flex flex-row items-center gap-2">
+              <div class="size-10 rounded-full overflow-hidden bg-muted">
+                <img
+                  [src]="payment().dispute.resolvedBy.profilePhotoUrl"
+                  (error)="imageError($event)"
+                  [alt]="payment().dispute.resolvedBy.userName"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div class="flex flex-col">
+                <p>{{ payment().dispute.resolvedBy.userName }}</p>
+                <p>{{ payment().dispute.resolvedBy.email }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="flex flex-col">
+        <p>  {{ 'transactions.status.header' | translate }}:
+          {{ ('transactions.status.' + (payment().dispute.status | underscore)) | translate }}</p>
+        <p>{{ 'transactions.reason' | translate}}: {{ payment().dispute.reason }}</p>
+        <p>{{ 'transactions.description' | translate}}: {{ payment().dispute.description }}</p>
+        <p>{{ 'transactions.refund_amount' | translate}}: {{ payment().dispute.refundAmount }}</p>
+        <p>{{ 'transactions.created_at' | translate}}: {{ payment().dispute.createdAt }}</p>
+        <p>{{ 'transactions.resolved_at' | translate}}: {{ payment().dispute.resolvedAt }}</p>
+        <p>{{ 'transactions.notes' | translate }}: {{ payment().dispute.notes }}</p>
+      </div>
+      <app-button [label]="'transactions.evidences' | translate"/>
+    }
+  }
+</div>
