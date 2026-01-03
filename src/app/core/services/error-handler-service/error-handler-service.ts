@@ -1,4 +1,4 @@
-import {Injectable, Signal, signal} from '@angular/core';
+import {effect, Injectable, Signal, signal} from '@angular/core';
 import {ErrorHandler} from '../../utility/ErrorHandler';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subject} from 'rxjs';
@@ -23,6 +23,17 @@ export class ErrorHandlerService {
 
   private _onLoggedErrorCodeDetected = new Subject<void>();
   get onLoggedOutDetected() { return this._onLoggedErrorCodeDetected.asObservable(); }
+
+  private _onAccountLockedDetected = new Subject<void>();
+  get onAccountLockedDetected() { return this._onAccountLockedDetected.asObservable(); }
+
+  constructor() {
+    effect(() => {
+      if(this.lastErrorMessage() == "Account is locked") {
+        this._onAccountLockedDetected.next();
+      }
+    });
+  }
 
   InvokeLoggedOutEvent() {
     this._onLoggedErrorCodeDetected.next();

@@ -68,12 +68,14 @@ export class AuthService {
       }
     });
 
-    this.errorHandlerService.onLoggedOutDetected.subscribe(() =>
-      {
-        this.ClearUserInfo();
-        this._isUserLoggedIn.set(false);
-      }
-    );
+    this.errorHandlerService.onAccountLockedDetected.subscribe(() => {
+      this.Logout();
+    });
+
+    this.errorHandlerService.onLoggedOutDetected.subscribe(() => {
+      this.ClearUserInfo();
+      this._isUserLoggedIn.set(false);
+    });
   }
 
   async ResolveAuth(): Promise<boolean> {
@@ -221,6 +223,7 @@ export class AuthService {
         this.http.get<string>(`${environment.itemiteApiUrl}/auth/logout`, {timeout: 10000, withCredentials: true})
       );
       this._isUserLoggedIn.set(false);
+      this.ClearUserInfo();
       return true;
     } catch (error: any) {
       return false;
