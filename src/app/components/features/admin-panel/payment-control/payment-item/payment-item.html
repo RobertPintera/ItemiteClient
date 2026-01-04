@@ -115,24 +115,24 @@
       <div class="flex flex-row justify-between gap-2">
         <div class="flex flex-col">
           @if(payment().transferAttempts){
-            <p class="text-base md:text-xl">{{ 'transactions.transfer_attempts' | translate }}: {{ payment().transferAttempts }}</p>
+            <p>{{ 'transactions.transfer_attempts' | translate }}: {{ payment().transferAttempts }}</p>
           }
           @if(payment().transferTrigger){
-            <p class="text-base md:text-xl">{{ 'transactions.transfer_trigger' | translate }}: {{ payment().transferTrigger }}</p>
+            <p>{{ 'transactions.transfer_trigger' | translate }}: {{ payment().transferTrigger }}</p>
           }
           @if(payment().actualTransferMethod){
-            <p class="text-base md:text-xl">{{ 'transactions.actual_transfer_method' | translate }}: {{ payment().actualTransferMethod }}</p>
+            <p>{{ 'transactions.actual_transfer_method' | translate }}: {{ payment().actualTransferMethod }}</p>
           }
         </div>
         <div class="flex flex-col">
           @if(payment().chargeDate){
-            <p class="text-base md:text-xl">{{ 'transactions.charge_date' | translate }}: {{ payment().chargeDate }}</p>
+            <p>{{ 'transactions.charge_date' | translate }}: {{ payment().chargeDate | date:'yyyy-MM-dd'}}</p>
           }
           @if(payment().transferDate){
-            <p class="text-base md:text-xl">{{ 'transactions.transfer_date' | translate }}: {{ payment().transferDate }}</p>
+            <p>{{ 'transactions.transfer_date' | translate }}: {{ payment().transferDate | date:'yyyy-MM-dd'}}</p>
           }
           @if(payment().scheduledTransferDate){
-            <p class="text-base md:text-xl">{{ 'transactions.scheduled_transfer_date' | translate }}: {{ payment().scheduledTransferDate }}</p>
+            <p>{{ 'transactions.scheduled_transfer_date' | translate }}: {{ payment().scheduledTransferDate | date:'yyyy-MM-dd'}}</p>
           }
         </div>
       </div>
@@ -144,18 +144,18 @@
       <div class="flex flex-row justify-between gap-2">
         <div class="flex flex-col">
           @if(payment().refundAmount){
-            <p class="text-base md:text-xl">{{ 'transactions.refund_amount' }}: {{ payment().refundAmount }}</p>
+            <p>{{ 'transactions.refund_amount' }}: {{ payment().refundAmount }}</p>
           }
           @if(payment().refundAttempts){
-            <p class="text-base md:text-xl">{{ 'transactions.refund_attempts' }}: {{ payment().refundAttempts }}</p>
+            <p>{{ 'transactions.refund_attempts' }}: {{ payment().refundAttempts }}</p>
           }
         </div>
         <div class="flex flex-col">
           @if(payment().refundDate){
-            <p class="text-base md:text-xl">{{ 'transactions.refund_date' | translate }}: {{ payment().refundDate }}</p>
+            <p>{{ 'transactions.refund_date' | translate }}: {{ payment().refundDate | date:'yyyy-MM-dd'}}</p>
           }
           @if(payment().scheduledRefundDate){
-            <p class="text-base md:text-xl">{{ 'transactions.scheduled_refund_date' }}: {{payment().scheduledRefundDate}}</p>
+            <p>{{ 'transactions.scheduled_refund_date' }}: {{payment().scheduledRefundDate | date:'yyyy-MM-dd'}}</p>
           }
         </div>
       </div>
@@ -214,7 +214,40 @@
         <p>{{ 'transactions.resolved_at' | translate}}: {{ payment().dispute.resolvedAt }}</p>
         <p>{{ 'transactions.notes' | translate }}: {{ payment().dispute.notes }}</p>
       </div>
-      <app-button [label]="'transactions.evidences' | translate"/>
+      <div class="flex flex-col gap-2">
+        <h4>{{ 'transactions.evidences' | translate }}</h4>
+        <div class="flex flex-row flex-wrap gap-4">
+          @for(evidence of payment().dispute.evidence; track evidence.photoId){
+            <button (click)="openPreviewEvidenceDialog(evidence)" class="flex justify-center items-center border-border border-2 w-32 h-32 rounded-2xl bg-background cursor-pointer overflow-hidden">
+              <img [src]="evidence.url" [alt]="evidence.photoId" class="w-full h-full object-cover select-none" draggable="false">
+            </button>
+          }
+        </div>
+      </div>
     }
   }
+  <div class="flex justify-between gap-2 mt-2">
+    <app-button [label]="'transactions.show_product' | translate" severity="secondary" routerLink="/product" [queryParams]="{ id: payment().listing.id, type: payment().listing.listingType }"/>
+
+    @if(payment().status === PAYMENT_STATUS.DISPUTED){
+      <div class="flex flex-row gap-2">
+        <app-button [label]="'transactions.resolve_dispute.header' | translate" severity="primary" (clickButton)="openResolveDisputeDialog()"/>
+      </div>
+    }
+  </div>
 </div>
+@if(isOpenPreviewEvidenceDialog()) {
+  <app-dialog (closed)="closePreviewEvidenceDialog()">
+    <div class="flex flex-col justify-center h-full w-full">
+      <div class="flex items-center justify-center w-full h-full overflow-hidden">
+        <img [src]="selectedEvidence()?.url" alt="selectedEvidence()?.photoId" class="size-full object-contain">
+      </div>
+      <div class="flex flex-wrap justify-between gap-2 flex-row p-4 w-full h-fit">
+        <app-button (clickButton)="closePreviewEvidenceDialog()" label="Close" severity="accent" variant="outlined"/>
+      </div>
+    </div>
+  </app-dialog>
+}
+@if(payment().dispute){
+  <app-resolve-dispute-dialog [(isOpen)]="isOpenResolveDisputeDialog" [dispute]="payment().dispute" [paymentTotalAmount]="payment().totalAmount" (resolveDisputeSuccess)="resolveDispute()"/>
+}

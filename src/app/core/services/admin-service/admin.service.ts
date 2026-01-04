@@ -110,7 +110,7 @@ export class AdminService {
   }
 
   private postAdminPanelDisputeResolve(disputeId: number, body: PostAdminPanelDisputeResolveDTO) {
-    return this._http.post(`${this._baseUrl}/dispute/${disputeId}`, body);
+    return this._http.post(`${this._baseUrl}/dispute/resolve/${disputeId}`, body);
   }
 
   loadPaymentsWithStatus(filter: GetAdminPanelPaymentsWithStatusDTO) {
@@ -266,7 +266,7 @@ export class AdminService {
     if(searchQuery) {
       params = params.append('Search', searchQuery);
     }
-    return this._http.get<PaginatedUsersResponseDTO>(`${environment.itemiteApiUrl}/adminpanel/users`, {params:params, timeout: 15000, withCredentials: true})
+    return this._http.get<PaginatedUsersResponseDTO>(`${environment.itemiteApiUrl}/adminpanel/users`, {params:params, timeout: 15000, withCredentials: true});
   }
 
   async LockUser(userId: number, lockoutEnd: string, lockoutMessage: string): Promise<boolean> {
@@ -290,7 +290,7 @@ export class AdminService {
     const payload = {
       userId: userId,
       unlockMessage: unlockMessage
-    }
+    };
     try {
       await lastValueFrom(
         this._http.post(`${environment.itemiteApiUrl}/adminpanel/unlock-user`, payload, {timeout: 15000, withCredentials: true})
@@ -325,7 +325,7 @@ export class AdminService {
       emailSubject: emailSubject,
       title: title,
       message: message
-    }
+    };
     try {
       await lastValueFrom(
         this._http.post(`${environment.itemiteApiUrl}/adminpanel/notification/${userId}`, payload, {

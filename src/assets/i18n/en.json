@@ -592,7 +592,25 @@
     "created_at": "Created at",
     "resolved_at": "Resolved at",
     "notes": "Notes",
-    "evidences": "Evidences"
+    "evidences": "Evidences",
+    "show_product": "Show Product",
+    "resolve_dispute": {
+      "header": "Resolve dispute",
+      "resolution": {
+        "header": "Resolution",
+        "refund_buyer": "Refund buyer",
+        "declined": "Declined",
+        "partial_refund": "Partial refund"
+      },
+      "partial_refund_amount": "Partial refund amount",
+      "reviewer_notes": "Reviewer notes"
+    }
+  },
+  "validator_errors_resolve_dispute": {
+    "field_required": "Field is required",
+    "partial_refund_min": "Partial Refund must be greater than 0.",
+    "partial_refund_max": "Bid must be less than total amount.",
+    "reviewer_notes_max": "Reviewer notes cannot be more than 100 characters"
   },
   "notifications": {
     "Auction": "Auction",

@@ -105,6 +105,9 @@ export class PaymentLatest implements OnInit, OnDestroy {
     this.applyFilter(this.filter());
   }
 
+  refreshFilter() {
+    this.applyFilter(this.filter());
+  }
 
   private applyFilter(filter: PaginatedListingDTO) {
     this.isBlocked.set(true);

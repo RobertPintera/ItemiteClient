@@ -20,7 +20,7 @@
 @else if(isOpenFileUpload()){
   <app-file-upload acceptedFormats="image/svg+xml" [supportsPreview]="true" (onCancelClicked)="cancelFileUpload()" (onConfirmClicked)="confirmFileUpload($event)"/>
 }
-@else {
+@else if(isOpen()){
   <app-dialog [header]="editedCategory() ? ('admin_category_control.form_dialog.edit' | translate) : ('admin_category_control.form_dialog.create' | translate)"
               (closed)="closeDialog()">
     <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2 w-[100vw] max-w-full sm:max-w-md">

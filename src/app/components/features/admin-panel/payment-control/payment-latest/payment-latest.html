@@ -16,7 +16,7 @@
 
     @if(data && data.items.length){
       @for (payment of data.items; track payment.paymentId){
-        <app-payment-item [payment]="payment"/>
+        <app-payment-item [payment]="payment" (successAction)="refreshFilter()"/>
       }
     }
   </div>

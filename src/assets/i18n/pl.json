@@ -586,7 +586,25 @@
     "created_at": "Utworzono",
     "resolved_at": "Rozstrzygnięto",
     "notes": "Notatki",
-    "evidences": "Dowody"
+    "evidences": "Dowody",
+    "show_product": "Pokaż produkt",
+    "resolve_dispute": {
+      "header": "Rozwiąż spór",
+      "resolution": {
+        "header": "Rozwiązanie",
+        "refund_buyer": "Całościowy",
+        "declined": "Odmowa",
+        "partial_refund": "Częściowy zwrot"
+      },
+      "partial_refund_amount": "Częściowa kwota zwrotu",
+      "reviewer_notes": "Notatki recenzującego"
+    }
+  },
+  "validator_errors_resolve_dispute": {
+    "field_required": "Pole jest wymagane",
+    "partial_refund_min": "Kwota częściowego zwrotu musi być większa niż 0.",
+    "partial_refund_max": "Kwota oferty musi być mniejsza niż całkowita kwota.",
+    "reviewer_notes_max": "Uwagi recenzenta nie mogą mieć więcej niż 500 znaków."
   },
   "notifications": {
     "Auction": "Aukcja",
