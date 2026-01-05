@@ -1,16 +1,40 @@
 <div class="flex m-auto flex-col max-w-7xl w-full py-4 px-8 gap-4">
   <h1>{{ 'admin_payment_control.header' | translate }}</h1>
   <div class="w-full flex py-4 gap-2 flex-wrap justify-between">
-    <div class="flex gap-2">
-      <app-button [label]="'admin_payment_control.latest' | translate" severity="primary" (clickButton)="select(PAYMENT_TYPE.LATEST)" [disabled]="selectedOption() === PAYMENT_TYPE.LATEST "/>
-      <app-button [label]="'admin_payment_control.with_status' | translate" severity="primary" (clickButton)="select(PAYMENT_TYPE.WITH_STATUS)" [disabled]="selectedOption() === PAYMENT_TYPE.WITH_STATUS"/>
+    <div class="flex flex-wrap gap-2">
+      <app-button [label]="'admin_payment_control.latest' | translate" severity="primary" (clickButton)="select(PAYMENT_TYPE.LATEST)" [disabled]="filter().type === PAYMENT_TYPE.LATEST "/>
+      <app-button [label]="'admin_payment_control.with_status' | translate" severity="primary" (clickButton)="select(PAYMENT_TYPE.WITH_STATUS)" [disabled]="filter().type === PAYMENT_TYPE.WITH_STATUS"/>
+      @if(filter().type === PAYMENT_TYPE.WITH_STATUS){
+        <app-combo-box [items]="statusOptions" [(selectedItem)]="selectedStatus" (selectedItemChange)="selectStatus($event)"/>
+      }
     </div>
     <app-button [label]="'admin_payment_control.statistics.header' | translate" severity="accent" (clickButton)="openCountsDialog()"/>
   </div>
-  @if(selectedOption() === PAYMENT_TYPE.LATEST){
-    <app-payment-latest/>
-  } @else {
-    <app-payment-with-status/>
+  @if(loading()){
+    <div class="flex justify-center py-16 w-full">
+      <app-loader/>
+    </div>
+  } @else if (totalPages() === 0){
+    <div class="flex justify-center py-16 w-full">
+      <h2>{{'user_products.no_products' | translate}}</h2>
+    </div>
+  }
+  @else {
+    <div class="w-full flex py-4 justify-end">
+      <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
+    </div>
+    <div class="flex flex-col w-full">
+      @let data = payments();
+
+      @if(data && data.items.length){
+        @for (payment of data.items; track payment.paymentId){
+          <app-payment-item [payment]="payment" (successAction)="refreshFilter()"/>
+        }
+      }
+    </div>
+    <div class="w-full flex py-4 justify-end">
+      <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
+    </div>
   }
 </div>
 @if (isOpenCountsDialog()){

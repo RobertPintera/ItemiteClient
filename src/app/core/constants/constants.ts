@@ -50,15 +50,15 @@ export type ResourceType = typeof RESOURCE_TYPE[keyof typeof RESOURCE_TYPE];
 
 export const PAYMENT_STATUS = {
   AUTHORIZED: 'Authorized',
-  PENDING_CAPTURE: 'Pending capture',
+  PENDING_CAPTURE: 'PendingCapture',
   OUTBID: "Outbid",
   PENDING: "Pending",
-  PENDING_REVIEW: "Pending review",
+  PENDING_REVIEW: "PendingReview",
   TRANSFERRED: "Transferred",
-  REFUND_SCHEDULED: "Refund scheduled",
-  PARTIAL_REFUND_SCHEDULED: "Partial refund scheduled",
+  REFUND_SCHEDULED: "RefundScheduled",
+  PARTIAL_REFUND_SCHEDULED: "PartialRefundScheduled",
   REFUNDED: "Refunded",
-  PARTIALLY_REFUNDED: "Partially refunded",
+  PARTIALLY_REFUNDED: "PartiallyRefunded",
   DISPUTED: "Disputed",
   FAILED: "Failed",
 } as const;
