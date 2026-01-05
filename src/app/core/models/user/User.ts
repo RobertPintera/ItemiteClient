@@ -7,6 +7,7 @@ export interface User {
   location: LocationDTO | undefined,
   phoneNumber: string | undefined,
   photoUrl: string | undefined,
-  backgroundUrl: string | undefined
+  backgroundUrl: string | undefined,
+  authProvider: string,
   roles: string[]
 }

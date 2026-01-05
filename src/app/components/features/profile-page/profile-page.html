@@ -81,20 +81,22 @@
       <p>Email:</p>
       <div class="flex items-center flex-row">
         <p class="mr-5">{{email()}}</p>
-        <button (click)="ShowEditEmail()"
-          class="rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-          <div class="text-sm sm:text-lg ">{{'controls.edit' | translate}}</div>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
-            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-          </svg>
-        </button>
-        @if (editEmail()) {
-          <div class="absolute z-10 inset-0 m-auto bg-background flex items-center justify-center max-w-[1920px]">
-            <app-edit-email
-              (onCancel)="HideEditEmail()"
-              (onSubmitted)="OnEmailSubmitted($event)"
-            />
-          </div>
+        @if(showExtraEdition()) {
+          <button (click)="ShowEditEmail()"
+            class="rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+            <div class="text-sm sm:text-lg ">{{'controls.edit' | translate}}</div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
+              <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+            </svg>
+          </button>
+          @if (editEmail()) {
+            <div class="absolute z-10 inset-0 m-auto bg-background flex items-center justify-center max-w-[1920px]">
+              <app-edit-email
+                (onCancel)="HideEditEmail()"
+                (onSubmitted)="OnEmailSubmitted($event)"
+              />
+            </div>
+          }
         }
       </div>
 
@@ -164,19 +166,20 @@
 
     <!-- Security -->
     <p id="security" class="text-2xl md:text-3xl lg:text-4xl">{{"user_info.security" | translate}}</p>
+
     <div class="ml-5 flex flex-col w-full">
+      @if(showExtraEdition()) {
+        <button (click)="SwitchEditPassword()"
+                class="mt-2  rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+          <p class="text-sm sm:text-lg">{{"login_register.reset_password" | translate}}</p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
+            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+          </svg>
+        </button>
 
-      <button (click)="SwitchEditPassword()"
-              class="mt-2  rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-        <p class="text-sm sm:text-lg">{{"login_register.reset_password" | translate}}</p>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
-          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-        </svg>
-      </button>
-
-      <input type="checkbox" class="hidden peer" [checked]="editPassword()"/>
-      <app-change-password class="transition-all origin-top h-0 peer-checked:h-fit transition-discrete peer-checked:scale-y-100 scale-y-0 duration-300"/>
-
+        <input type="checkbox" class="hidden peer" [checked]="editPassword()"/>
+        <app-change-password class="transition-all origin-top h-0 peer-checked:h-fit transition-discrete peer-checked:scale-y-100 scale-y-0 duration-300"/>
+      }
       <button (click)="LogoutAllDevices()"
         class="mt-2 rounded-md hover:underline  shadow-md cursor-pointer p-1 flex text-start flex-row items-center w-fit">
         <div class="text-sm sm:text-lg">{{'user_edition.logout_all' | translate}}</div>
@@ -185,7 +188,6 @@
         </svg>
 
       </button>
-
     </div>
 
     <!-- Owned Articles -->

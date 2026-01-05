@@ -23,6 +23,7 @@ export class UserService {
       phoneNumber: undefined,
       photoUrl: undefined,
       backgroundUrl: undefined,
+      authProvider: "",
       roles: []
     }
   );
@@ -122,6 +123,7 @@ export class UserService {
       phoneNumber: undefined,
       photoUrl: undefined,
       backgroundUrl: undefined,
+      authProvider: "",
       roles: []
     })
   }

@@ -46,6 +46,7 @@ export class AuthService {
       phoneNumber: undefined,
       photoUrl: undefined,
       backgroundUrl: undefined,
+      authProvider: '',
       roles: []
     }
   );
@@ -117,6 +118,7 @@ export class AuthService {
       location: undefined,
       phoneNumber: undefined,
       photoUrl: undefined,
+      authProvider: "",
       roles: [],
       userName: '',
       id: -1,
