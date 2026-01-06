@@ -46,6 +46,7 @@ export class AuthService {
       phoneNumber: undefined,
       photoUrl: undefined,
       backgroundUrl: undefined,
+      authProvider: '',
       roles: []
     }
   );
@@ -68,8 +69,11 @@ export class AuthService {
       }
     });
 
-    this.errorHandlerService.onLoggedOutDetected.subscribe(() =>
-    {
+    this.errorHandlerService.onAccountLockedDetected.subscribe(() => {
+      this.Logout();
+    });
+
+    this.errorHandlerService.onLoggedOutDetected.subscribe(() => {
       this.ClearUserInfo();
       this._isUserLoggedIn.set(false);
     });
@@ -114,6 +118,7 @@ export class AuthService {
       location: undefined,
       phoneNumber: undefined,
       photoUrl: undefined,
+      authProvider: "",
       roles: [],
       userName: '',
       id: -1,
@@ -156,33 +161,33 @@ export class AuthService {
   // This will need to be recalled once this.autoRefreshToken()
   //  - handled in effect()
   async PerformContinuesTokenRefresh() {
-    if (this._tokenRefreshLoopRunning) return;
+    // Make sure there is only one token refresh loop
+    if(this._tokenRefreshLoopRunning) return;
+
     this._tokenRefreshLoopRunning = true;
 
-    try {
-      while (this._isUserLoggedIn() === true) {
+    await new Promise(resolve => setTimeout(resolve, 10000));
 
-        const stop = interval(1000).pipe(
-          filter(() => this._isUserLoggedIn() !== true),
-          take(1)
-        );
-
-        await lastValueFrom(
-          race(
-            timer(this._refreshTokenMinutesSpacing * 60 * 1000),
-            stop
-          )
-        );
-
-        if (this._isUserLoggedIn() !== true) break;
-
-
-        const status = await this.RefreshToken();
-        if (status === 401) break;
+    while (this.isUserLoggedIn()) {
+      if(await this.RefreshToken() == 401) {
+        this._isUserLoggedIn.set(false);
+        break;
       }
-    } finally {
-      this._tokenRefreshLoopRunning = false;
+
+      console.log("Refreshed token");
+
+      const stop = interval(1000).pipe(
+        filter(() => !this.isUserLoggedIn()), take(1)
+      );
+
+      await lastValueFrom(
+        race(
+          timer(this._refreshTokenMinutesSpacing * 60 * 1000),
+          stop
+        )
+      );
     }
+    this._tokenRefreshLoopRunning = false;
   }
 
   private async RefreshToken() : Promise<number> {
@@ -220,6 +225,7 @@ export class AuthService {
         this.http.get<string>(`${environment.itemiteApiUrl}/auth/logout`, {timeout: 10000, withCredentials: true})
       );
       this._isUserLoggedIn.set(false);
+      this.ClearUserInfo();
       return true;
     } catch (error: any) {
       return false;

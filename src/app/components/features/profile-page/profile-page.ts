@@ -85,6 +85,9 @@ export class ProfilePage implements OnInit {
   private _currentImageEdition: "" | "profile" | "background" = "";
   private _loading = signal(true);
   readonly loading = this._loading.asReadonly();
+  readonly showExtraEdition = computed(
+    () => this._userService.userInfo().authProvider === "Email"
+  );
   // endregion
 
   // region email edition

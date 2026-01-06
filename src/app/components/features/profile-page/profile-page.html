@@ -1,4 +1,4 @@
-<div class="flex relative m-auto flex-col max-w-7xl shrink-1 w-full text-foreground bg-background p-5">
+<div class="flex relative m-auto flex-col max-w-7xl shrink w-full text-foreground bg-background p-5">
   @if (loading()) {
     <app-loading-circle class="m-auto"/>
   } @else {
@@ -11,8 +11,9 @@
       }
       <div class="absolute z-2 self-start justify-self-end flex items-end justify-end m-1 inset-0 place-self-end">
         <button (click)="OnLogoutClicked()"
-                class="rounded-md hover:underline shadow-md shadow-(color:--secondary) bg-card/90 text-card-foreground
-      cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+                class="rounded-md hover:underline shadow-md shadow-secondary bg-card/90 text-card-foreground
+                    cursor-pointer p-1 flex text-start flex-row items-center w-fit"
+        >
           <div class="text-sm sm:text-lg">{{'user_edition.logout' | translate}}</div>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                class="bg-destructive text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
@@ -25,14 +26,14 @@
           {{'user_info.profile_image' | translate}}
         </p>
         <button (click)="TryDeleteProfileImage()"
-                class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+                class="rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
           <div class="text-sm sm:text-lg">{{'controls.delete' | translate}}</div>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-destructive text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
             <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
           </svg>
         </button>
         <button (click)='ShowImageEditionDialog("profile")'
-                class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+                class="rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
           <div class="text-sm sm:text-lg">{{'controls.edit' | translate}}</div>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
             <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
@@ -60,14 +61,14 @@
         {{'user_info.background_image' | translate}}
       </p>
       <button (click)="TryDeleteBackgroundImage()"
-              class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+              class="rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
         <div class="text-sm sm:text-lg">{{'controls.delete' | translate}}</div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-destructive text-destructive-foreground rounded-r-md size-6 p-1 h-fit">
           <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
         </svg>
       </button>
       <button (click)='ShowImageEditionDialog("background")'
-              class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+              class="rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
         <div class="text-sm sm:text-lg">{{'controls.edit' | translate}}</div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
           <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
@@ -80,20 +81,22 @@
       <p>Email:</p>
       <div class="flex items-center flex-row">
         <p class="mr-5">{{email()}}</p>
-        <button (click)="ShowEditEmail()"
-          class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-          <div class="text-sm sm:text-lg ">{{'controls.edit' | translate}}</div>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
-            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-          </svg>
-        </button>
-        @if (editEmail()) {
-          <div class="absolute z-10 inset-0 m-auto bg-background flex items-center justify-center max-w-[1920px]">
-            <app-edit-email
-              (onCancel)="HideEditEmail()"
-              (onSubmitted)="OnEmailSubmitted($event)"
-            />
-          </div>
+        @if(showExtraEdition()) {
+          <button (click)="ShowEditEmail()"
+            class="rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+            <div class="text-sm sm:text-lg ">{{'controls.edit' | translate}}</div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
+              <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+            </svg>
+          </button>
+          @if (editEmail()) {
+            <div class="absolute z-10 inset-0 m-auto bg-background flex items-center justify-center max-w-[1920px]">
+              <app-edit-email
+                (onCancel)="HideEditEmail()"
+                (onSubmitted)="OnEmailSubmitted($event)"
+              />
+            </div>
+          }
         }
       </div>
 
@@ -118,7 +121,7 @@
     <div class="ml-5 flex items-center flex-row">
       <button
         (click)="SwitchLocalizationEdition()"
-        class="rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+        class="rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
         <div class="text-sm sm:text-lg">
           @if (editLocalization()) {
             {{"controls.cancel" | translate}}
@@ -136,7 +139,7 @@
           [disabled]="!tempLocIsValid()"
           (click)="UpdateLocalization()"
           class="disabled:bg-primary/50 disabled:text-primary-foreground/50 disabled:cursor-no-drop
-        bg-primary text-primary-foreground rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit ">
+        bg-primary text-primary-foreground rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit ">
           <div class="text-sm sm:text-lg text-primary-foreground">
             {{"controls.save" | translate}}
           </div>
@@ -163,19 +166,20 @@
 
     <!-- Security -->
     <p id="security" class="text-2xl md:text-3xl lg:text-4xl">{{"user_info.security" | translate}}</p>
+
     <div class="ml-5 flex flex-col w-full">
+      @if(showExtraEdition()) {
+        <button (click)="SwitchEditPassword()"
+                class="mt-2  rounded-md hover:underline shadow-md shadow-secondary cursor-pointer p-1 flex text-start flex-row items-center w-fit">
+          <p class="text-sm sm:text-lg">{{"login_register.reset_password" | translate}}</p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
+            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+          </svg>
+        </button>
 
-      <button (click)="SwitchEditPassword()"
-              class="mt-2  rounded-md hover:underline shadow-md shadow-(color:--secondary) cursor-pointer p-1 flex text-start flex-row items-center w-fit">
-        <p class="text-sm sm:text-lg">{{"login_register.reset_password" | translate}}</p>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="bg-accent text-accent-foreground rounded-r-md size-6 p-1 h-fit">
-          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
-        </svg>
-      </button>
-
-      <input type="checkbox" class="hidden peer" [checked]="editPassword()"/>
-      <app-change-password class="transition-all origin-top h-0 peer-checked:h-fit transition-discrete peer-checked:scale-y-100 scale-y-0 duration-300"/>
-
+        <input type="checkbox" class="hidden peer" [checked]="editPassword()"/>
+        <app-change-password class="transition-all origin-top h-0 peer-checked:h-fit transition-discrete peer-checked:scale-y-100 scale-y-0 duration-300"/>
+      }
       <button (click)="LogoutAllDevices()"
         class="mt-2 rounded-md hover:underline  shadow-md cursor-pointer p-1 flex text-start flex-row items-center w-fit">
         <div class="text-sm sm:text-lg">{{'user_edition.logout_all' | translate}}</div>
@@ -184,7 +188,6 @@
         </svg>
 
       </button>
-
     </div>
 
     <!-- Owned Articles -->
@@ -202,6 +205,7 @@
         [supportsPreview]="true"
         (onCancelClicked)="OnImageEditionCancelled()"
         (onConfirmClicked)='OnImageEditionSubmitted($event)'
+        [maxSizeMB]="10"
       />
     }
 

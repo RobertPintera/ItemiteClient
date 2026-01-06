@@ -1,4 +1,4 @@
-import {lastValueFrom} from 'rxjs';
+import {lastValueFrom, Observable} from 'rxjs';
 import {environment} from '../../../../environments/environment.development';
 import {User} from '../../models/user/User';
 import {Localization} from '../../models/location/Localization';
@@ -8,6 +8,7 @@ import {ErrorHandlerService} from '../error-handler-service/error-handler-servic
 import {UserBasicInfo} from '../../models/user/UserBasicInfo';
 import {AuthService} from '../auth-service/auth.service';
 import {isPlatformBrowser} from '@angular/common';
+import {MessageResponse} from '../../models/chat/MessageResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class UserService {
       phoneNumber: undefined,
       photoUrl: undefined,
       backgroundUrl: undefined,
+      authProvider: "",
       roles: []
     }
   );
@@ -121,6 +123,7 @@ export class UserService {
       phoneNumber: undefined,
       photoUrl: undefined,
       backgroundUrl: undefined,
+      authProvider: "",
       roles: []
     })
   }
@@ -286,5 +289,9 @@ export class UserService {
       this.errorHandlerService.SendErrorMessage(error);
       return false;
     }
+  }
+
+  GetUser(userId: number) : Observable<User> {
+    return this.http.get<User>(`${environment.itemiteApiUrl}/user/${userId}`, {timeout: 15000});
   }
 }

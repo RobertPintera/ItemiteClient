@@ -23,6 +23,7 @@
 
 
 <app-other-user-settings
+  [userId]="otherMemberInfo()?.id ?? -1"
   [isOpen]="showUserSettingDialog()"
   (onCloseClicked)="SwitchUserSettingsDialog()"
   (onDeletePriceClicked)="SwitchDeletePriceDialog(true)"
@@ -31,14 +32,14 @@
 
 <app-individual-pricing-dialog
   [isOpen]="showCustomPriceDialog()"
-  [userId]="otherMemberInfo().id"
+  [userId]="otherMemberInfo()?.id ?? -1"
   [listingId]="listingId()"
   (onClose)="SwitchCustomPriceDialog(false)"
 />
 
 <app-delete-individual-pricing-dialog
   [isOpen]="showDeletePriceDialog()"
-  [userId]="otherMemberInfo().id"
+  [userId]="otherMemberInfo()?.id ?? -1"
   [listingId]="listingId()"
   (onClose)="SwitchDeletePriceDialog(false)"
 />

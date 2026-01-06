@@ -653,6 +653,8 @@
     "category": "Kategoria"
   },
   "other_user_settings": {
+    "user_options": "Opcje użytkownika",
+    "visit_user_page": "Odwiedź stronę użytkownika",
     "edit_price": "Ustaw indywidualną cenę produktu dla użytkownika",
     "delete_price": "Usuń indywidualną cenę produktu dla użytkownika"
   },
