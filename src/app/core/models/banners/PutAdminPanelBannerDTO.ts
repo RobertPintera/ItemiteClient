@@ -4,5 +4,5 @@ export interface PutAdminPanelBannerDTO {
   offsetY: number;
   position: string;
   isActive: boolean;
-  photo: string;
+  photo: File | null;
 }

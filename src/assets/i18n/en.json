@@ -693,5 +693,23 @@
       "header": "Statistics",
       "total_payments": "Total payments"
     }
+  },
+  "admin_banner_control": {
+    "header": "Banners",
+    "create": "Create banner",
+    "edit": "Edit banner",
+    "name": "Name",
+    "active": "Active",
+    "image": "Image",
+    "position": {
+      "header": "Position",
+      "left": "Left",
+      "right": "Right",
+      "bottom": "Bottom",
+      "top": "Top"
+    },
+    "no_banners": "Can't find any banner. Create your first banner!",
+    "deactivate": "Deactivate",
+    "activate": "Activate"
   }
 }

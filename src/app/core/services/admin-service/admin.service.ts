@@ -214,7 +214,7 @@ export class AdminService {
     formData.append('Offset.Y', data.offsetY.toString());
     formData.append('Position', data.position);
     formData.append('IsActive', data.isActive.toString());
-    formData.append('photo', data.photo);
+    if(data.photo) formData.append('photo', data.photo);
 
 
     return this.putAdminPanelBanner(bannerId,formData).pipe(

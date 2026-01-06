@@ -699,5 +699,23 @@
       "failed": "Nieudane",
       "total_payments": "Wszystkie płatności"
     }
+  },
+  "admin_banner_control": {
+    "header": "Banery",
+    "create": "Tworzenie banera",
+    "edit": "Edycja banera",
+    "name": "Nazwa",
+    "active": "Aktywny",
+    "image": "Obraz",
+    "position": {
+      "header": "Pozycja",
+      "left": "Lewy",
+      "right": "Prawy",
+      "bottom": "Dolny",
+      "top": "Górny"
+    },
+    "no_banners": "Nie można znaleźć żadnego banera. Stwórz twój pierwszy baner!",
+    "deactivate": "Deaktywuj",
+    "activate": "Aktywuj"
   }
 }

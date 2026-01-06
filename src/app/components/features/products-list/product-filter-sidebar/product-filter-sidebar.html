@@ -4,7 +4,7 @@
     @if (!isXl()){
       <app-button label="X" (clickButton)="closeFilterX()" class="absolute right-[-16px] top-[-16px]"/>
     }
-    <p class="font-semibold text-lg">{{ `categories.${categoryTree()?.name}` | translate }}</p>
+    <p class="font-semibold text-lg">{{ categoryTree()?.name }}</p>
     <app-category-tree [categories]="categoryTree()?.subCategories ?? []" [(selectedIds)]="filterSidebar().categoryIds"  (categorySelected)="useCategoriesIds($event)"/>
     <div class="flex w-full flex-col sm:flex-row xl:flex-col gap-2">
       <div class="flex flex-1 flex-col gap-2">
@@ -13,7 +13,6 @@
           <app-input-number [(value)]="filterSidebar().priceFrom" [min]="0" [max]="10000000" (enterPressed)="usePriceFrom($event)" (blurInput)="usePriceFrom($event)" class="flex-1 w-full"/>
           <span class="shrink-0 text-2xl">-</span>
           <app-input-number [(value)]="filterSidebar().priceTo" [min]="0" [max]="10000000" (enterPressed)="usePriceTo($event)" (blurInput)="usePriceTo($event)" class="flex-1 w-full"/>
-          <span class="shrink-0 text-2xl">$</span>
         </div>
         @if (filterSidebar().priceError){
           <div class="flex flex-row w-full">

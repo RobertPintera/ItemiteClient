@@ -1,0 +1,91 @@
+@if(loading()){
+  <app-loading-dialog/>
+}
+@else if(isOpenPreviewImageDialog()) {
+  <app-dialog (closed)="cancelPreviewImageDialog()">
+    <div class="flex flex-col justify-center h-full w-full">
+      <div class="flex items-center justify-center w-full h-full overflow-hidden">
+        <img [src]="imagePreview()" alt="Preview" class="size-full object-contain">
+      </div>
+      <div class="flex flex-wrap justify-between gap-2 flex-row p-4 w-full h-fit">
+        <app-button (clickButton)="cancelPreviewImageDialog()" label="Close" severity="accent" variant="outlined"/>
+        <div class="flex gap-2">
+          <app-button (clickButton)="deleteImage()" label="Delete" severity="danger"/>
+          <app-button (clickButton)="openEditFileUpload()" label="Edit" severity="primary"/>
+        </div>
+      </div>
+    </div>
+  </app-dialog>
+}
+@else if(isOpenFileUpload()){
+  <app-file-upload [supportsPreview]="true" (onCancelClicked)="cancelFileUpload()" (onConfirmClicked)="confirmFileUpload($event)"/>
+}
+@else if(isOpen()){
+  <app-dialog [header]="editedBanner() ? ('admin_banner_control.edit' | translate) : ('admin_banner_control.create' | translate)" (closed)="closeDialog()">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2 w-[100vw] max-w-full sm:max-w-xl">
+      <div class="flex flex-col gap-2 w-full">
+        <label for="name" class="text-xl font-semibold">{{ 'admin_category_control.form_dialog.name' | translate }}</label>
+        <input type="text" name="name" formControlName="name" class="border rounded px-3 py-2">
+        @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)) {
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if(form.controls.name.hasError('required')) {
+                <li>{{ 'validator_errors_admin_category_control.field_required' | translate }}</li>
+              }
+              @if(form.controls.name.hasError('empty')){
+                <li>{{ 'validator_errors_admin_category_control.field_empty' | translate }}</li>
+              }
+              @if(form.controls.name.hasError('minlength')){
+                <li>{{ 'validator_errors_admin_category_control.name_min' | translate }}</li>
+              }
+              @if(form.controls.name.hasError('maxlength')){
+                <li>{{ 'validator_errors_admin_category_control.name_max' | translate }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+      <div class="flex flex-col gap-2 w-full">
+        <label for="position" class="text-xl font-semibold">{{ 'Position' | translate }}</label>
+        <app-combo-box formControlName="position" [items]="positionOptions">
+          <ng-template let-item>
+            <span>{{`${item?.value | snakeCase}` | translate}}</span>
+          </ng-template>
+        </app-combo-box>
+      </div>
+      <div class="flex flex-col items-start gap-2 ">
+        <label for="isActive" class="text-xl font-semibold">{{ 'Active' | translate }}</label>
+        <input type="checkbox" name="isActive" formControlName="isActive">
+      </div>
+      <div class="flex flex-col justify-start items-start gap-2 w-full">
+        <label for="photo" class="text-xl font-semibold">{{ 'admin_category_control.form_dialog.image' | translate }}</label>
+        <button type="button" class="flex justify-center items-center border-border border-2 w-full aspect-[5/1] rounded-2xl bg-background cursor-pointer"
+                (click)="!imagePreview() ? openFileUpload() : openPreviewImageDialog()">
+          @if(!imagePreview()){
+            <svg xmlns="http://www.w3.org/2000/svg" height="48px"
+                 viewBox="0 -960 960 960" width="48px" fill="#1f1f1f">
+              <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/>
+            </svg>
+          }
+          @else{
+            <img [src]="imagePreview()" alt="Preview" class="size-full object-contain">
+          }
+        </button>
+        @if (form.controls.photo.invalid && (form.controls.photo.touched || form.controls.photo.dirty)) {
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if(form.controls.photo.hasError('required')) {
+                <li>{{ 'validator_errors_admin_category_control.field_required' | translate }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+
+      <div class="flex flex-wrap justify-between gap-2 flex-row p-4 w-full h-fit">
+        <app-button (clickButton)="closeDialog()" label="Close" severity="accent" variant="outlined"/>
+        <app-button type="submit" [label]="'controls.save' | translate"/>
+      </div>
+    </form>
+  </app-dialog>
+}

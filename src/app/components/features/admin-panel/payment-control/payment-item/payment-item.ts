@@ -10,7 +10,6 @@ import {Dialog} from '../../../../shared/dialog/dialog';
 import {EvidenceDTO} from '../../../../../core/models/payments/EvidenceDTO';
 import {RouterLink} from '@angular/router';
 import {ResolveDisputeDialog} from './resolve-dispute-dialog/resolve-dispute-dialog';
-import {DisputeDialog} from '../../../purchases/purchase-item/dispute-dialog/dispute-dialog';
 
 @Component({
   selector: 'app-payment-item',
