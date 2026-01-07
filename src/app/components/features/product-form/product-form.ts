@@ -4,7 +4,7 @@ import {AuctionForm} from './auction-form/auction-form';
 import {ActivatedRoute} from '@angular/router';
 import {LISTING_TYPES, ListingType} from '../../../core/constants/constants';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {AuctionListingService} from '../../../core/services/auction-listing-service/auction-listing.service';
 import {ProductListingService} from '../../../core/services/product-listing-service/product-listing.service';
 import {ProductListingDTO} from '../../../core/models/product-listings/ProductListingDTO';

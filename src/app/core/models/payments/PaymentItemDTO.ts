@@ -1,6 +1,6 @@
 import {ListingItemDTO} from '../listing-general/LitstingItemDTO';
 import {UserPaymentDTO} from './UserPaymentDTO';
-import {DisputeDTO} from './DisputeDTO';
+import {DisputePaymentDTO} from './DisputePaymentDTO';
 
 export interface PaymentItemDTO {
   paymentId: number;
@@ -28,5 +28,5 @@ export interface PaymentItemDTO {
   buyer: UserPaymentDTO;
   seller: UserPaymentDTO;
   approvedBy: UserPaymentDTO;
-  dispute: DisputeDTO;
+  dispute: DisputePaymentDTO;
 }

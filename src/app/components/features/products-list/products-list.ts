@@ -8,6 +8,7 @@ import {Subject, debounceTime, switchMap, takeUntil, finalize, catchError, of} f
 import { ListingService } from '../../../core/services/listing-service/listing.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ListingType, SortBy, SortDirection} from '../../../core/constants/constants';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-products-list',
@@ -69,10 +70,8 @@ export class ProductsList implements OnInit, OnDestroy {
             return of(null);
           }),
           finalize(() => {
-            setTimeout(() => {
-              this.isBlocked.set(false);
-              this.loading.set(false);
-            }, 500);
+            this.isBlocked.set(false);
+            this.loading.set(false);
           })
         );
       }),

@@ -1,9 +1,9 @@
 <main class="p-8 flex flex-col gap-12">
-  <app-baner/>
+  <app-baner [banner]="topBanner()"/>
   <app-categories/>
   <div class="h-0.5 bg-border my-6"></div>
   <app-dedicated-products/>
-  <app-baner/>
+  <app-baner [banner]="bottomBanner()"/>
   <div class="flex flex-col lg:flex-row lg:items-start gap-4">
     <div class="w-full lg:w-3/5">
       <app-newest-products/>

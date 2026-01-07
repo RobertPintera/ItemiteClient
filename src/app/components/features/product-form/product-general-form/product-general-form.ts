@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, model, signal} from '@angular/core';
+import {Component, computed, effect, inject, input, model, signal} from '@angular/core';
 import {ProductListingService} from '../../../../core/services/product-listing-service/product-listing.service';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -9,7 +9,7 @@ import {SelectNode} from '../../../../core/models/SelectNode';
 import {Localization} from '../../../../core/models/location/Localization';
 import {ImageMedia} from '../../../../core/models/graphics/ImageMedia';
 import {PostProductListingDTO} from '../../../../core/models/product-listings/PostProductListingDTO';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
 import {CascadeSelect} from '../../../shared/cascade-select/cascade-select';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
@@ -20,7 +20,8 @@ import {isEmptyValidator, localizationValidator} from '../../../../core/utility/
 import {ProductListingDTO} from '../../../../core/models/product-listings/ProductListingDTO';
 import {PutProductListingDTO} from '../../../../core/models/product-listings/PutProductListingDTO';
 import {Location} from '@angular/common';
-import {finalize} from 'rxjs';
+import {finalize, Subject, takeUntil} from 'rxjs';
+import { CategoryDTO } from '../../../../core/models/category/CategoryDTO';
 
 @Component({
   selector: 'app-product-general-form',
@@ -44,6 +45,10 @@ export class ProductGeneralForm {
   private _formBuilder = inject(FormBuilder);
   private _router = inject(Router);
   private _location = inject(Location);
+  private _translator = inject(TranslateService)
+
+  private _destroy$ = new Subject<void>();
+
 
   readonly loading = model.required<boolean>();
   readonly product = input<ProductListingDTO | null>(null);
@@ -55,10 +60,7 @@ export class ProductGeneralForm {
 
   readonly mainCategories = this._categoryService.mainCategories();
 
-  readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(category => ({
-    key: category.id.toString(),
-    value: "categories." + category.name
-  }));
+  readonly mainCategoriesOptions = signal<OptionItem[]>([]);
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
   readonly form = this._formBuilder.group({
@@ -97,6 +99,28 @@ export class ProductGeneralForm {
         this.fillForm(product);
       }
     });
+
+     this.updateMainCategoriesOptions();
+
+  // Nasłuchuj na zmiany języka
+  this._translator.onLangChange
+    .pipe(takeUntil(this._destroy$))
+    .subscribe(() => {
+      this.updateMainCategoriesOptions();
+      this.updateSubCategoriesOptions();
+      this.updateSelectedCategories();
+    });
+  }
+
+  ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
+  getCategoryName(category: any): string {
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
   }
 
   selectMainCategory(option?: OptionItem){
@@ -230,7 +254,7 @@ export class ProductGeneralForm {
     return {
       option: {
         key: category.id.toString(),
-        value: 'categories.' + category.name
+        value: this.getCategoryName(category)
       },
       childrenNodes: category.subCategories?.map(cat => this.mapCategoryToSelectNode(cat)) || []
     };
@@ -275,7 +299,7 @@ export class ProductGeneralForm {
 
     const mainOption = {
       key: main.id.toString(),
-      value: "categories." + main.name
+      value: this.getCategoryName(main)
     };
 
     this.selectMainCategory(mainOption);
@@ -289,9 +313,74 @@ export class ProductGeneralForm {
 
     const subOption: OptionItem = {
       key: sub.id.toString(),
-      value: "categories." +  sub.name
+      value: this.getCategoryName(main)
     };
 
     this.form.get('subcategory')?.setValue(subOption);
   }
+
+  private updateMainCategoriesOptions() {
+    const options = this.mainCategories.map(category => ({
+      key: category.id.toString(),
+      value: this.getCategoryName(category)
+    }));
+    this.mainCategoriesOptions.set(options);
+  }
+
+  private updateSubCategoriesOptions() {
+    const categories = this.categories();
+      if (categories && categories.subCategories) {
+        const subCategoriesNodes = categories.subCategories.map(cat => 
+          this.mapCategoryToSelectNode(cat)
+        );
+      this.subCategoriesOptions.set(subCategoriesNodes);
+    }
+  }
+  private updateSelectedCategories() {
+  // Aktualizuj główną kategorię
+  const mainCategoryControl = this.form.get('mainCategory');
+  const currentMainCategory = mainCategoryControl?.value;
+  if (currentMainCategory) {
+    const category = this.mainCategories.find(c => c.id.toString() === currentMainCategory.key);
+    if (category) {
+      const updatedMainOption = {
+        key: currentMainCategory.key,
+        value: this.getCategoryName(category)
+      };
+      this.selectedMainCategory.set(updatedMainOption);
+      mainCategoryControl.setValue(updatedMainOption);
+    }
+  }
+
+
+  const subCategoryControl = this.form.get('subcategory');
+  const currentSubCategory = subCategoryControl?.value;
+  if (currentSubCategory) {
+    const subCategory = this.findCategoryById(this.categories(), currentSubCategory.key);
+    if (subCategory) {
+      const updatedSubOption = {
+        key: currentSubCategory.key,
+        value: this.getCategoryName(subCategory)
+      };
+      this.selectedSubCategory.set(updatedSubOption);
+      subCategoryControl.setValue(updatedSubOption);
+    }
+  }
+}
+private findCategoryById(categoryTree: CategoryTreeDTO | null, id: string): CategoryTreeDTO | null {
+  if (!categoryTree) return null;
+  
+  if (categoryTree.id.toString() === id) {
+    return categoryTree;
+  }
+  
+  if (categoryTree.subCategories) {
+    for (const subCat of categoryTree.subCategories) {
+      const found = this.findCategoryById(subCat, id);
+      if (found) return found;
+    }
+  }
+  
+  return null;
+}
 }

@@ -89,8 +89,6 @@
     "speakers": "Głośniki",
     "headphones": "Słuchawki",
     "gaming": "Gaming",
-    "console_games": "Gry konsolowe",
-    "computer_games": "Gry komputerowe",
 
     "motorization": "Motoryzacja",
     "cars": "Samochody",
@@ -338,6 +336,7 @@
     "create": "Stwórz",
     "delete": "Usuń",
     "cancel": "Anuluj",
+    "back": "Wróć",
     "confirm": "Potwierdź",
     "enable": "Aktywuj",
     "enable_edition": "Włącz edycję",
@@ -556,7 +555,57 @@
     "bid": "Oferta",
     "buyer": "Kupujący",
     "seller": "Sprzedający",
-    "platform_fee_amount": "Opłata platformy"
+    "platform_fee_amount": "Opłata platformy",
+
+    "payment": "Płatność",
+    "details": "Szczegóły płatności",
+    "total_amount": "Kwota całkowita",
+    "seller_amount": "Kwota sprzedawcy",
+    "approved_by": "Zatwierdzone przez",
+
+    "platform_fee_percentage": "Procent opłaty platformy",
+
+    "transfer_attempts": "Próby przelewu",
+    "transfer_trigger": "Wyzwalacz przelewu",
+    "actual_transfer_method": "Metoda przelewu",
+
+    "charge_date": "Data obciążenia",
+    "transfer_date": "Data przelewu",
+    "scheduled_transfer_date": "Planowana data przelewu",
+
+    "refund": "Zwrot",
+    "refund_amount": "Kwota zwrotu",
+    "refund_attempts": "Próby zwrotu",
+    "refund_date": "Data zwrotu",
+    "scheduled_refund_date": "Planowana data zwrotu",
+
+    "dispute": "Spór",
+    "disputedBy": "Zgłoszone przez",
+    "approvedBy": "Rozstrzygnięte przez",
+    "reason": "Powód",
+    "description": "Opis",
+    "created_at": "Utworzono",
+    "resolved_at": "Rozstrzygnięto",
+    "notes": "Notatki",
+    "evidences": "Dowody",
+    "show_product": "Pokaż produkt",
+    "resolve_dispute": {
+      "header": "Rozwiąż spór",
+      "resolution": {
+        "header": "Rozwiązanie",
+        "refund_buyer": "Całościowy",
+        "declined": "Odmowa",
+        "partial_refund": "Częściowy zwrot"
+      },
+      "partial_refund_amount": "Częściowa kwota zwrotu",
+      "reviewer_notes": "Notatki recenzującego"
+    }
+  },
+  "validator_errors_resolve_dispute": {
+    "field_required": "Pole jest wymagane",
+    "partial_refund_min": "Kwota częściowego zwrotu musi być większa niż 0.",
+    "partial_refund_max": "Kwota oferty musi być mniejsza niż całkowita kwota.",
+    "reviewer_notes_max": "Uwagi recenzenta nie mogą mieć więcej niż 500 znaków."
   },
   "notifications": {
     "Auction": "Aukcja",
@@ -611,6 +660,7 @@
     "delete_price": "Usuń indywidualną cenę produktu dla użytkownika"
   },
   "admin_category_control": {
+    "header": "Kategorie",
     "create_main_category": "Stwórz kategorię główą",
     "create_subcategory": "Stwórz podkategorię",
     "show_subcategories": "Pokaż podkategorie",
@@ -631,5 +681,44 @@
     "name_min" : "Imię musi mieć przynajmniej z 2 znaki",
     "name_max" : "Imię nie może mieć więcej niż z 30 znaków",
     "description_max": "Imię nie może mieć więcej niż z 100 znaków"
+  },
+  "admin_payment_control": {
+    "header": "Płatności",
+    "latest": "Najnowsze",
+    "with_status": "Z statusem",
+    "statistics": {
+      "header": "Statystyki",
+      "transferred": "Przekazane",
+      "disputed": "W trakcie sporu",
+      "pending": "Oczekujące",
+      "authorized": "Autoryzowane",
+      "pending_capture": "Oczekujące na rozliczenie",
+      "outbid": "Przebite",
+      "pending_review": "Oczekujące na weryfikację",
+      "refund_scheduled": "Zaplanowany zwrot",
+      "partial_refund_scheduled": "Zaplanowany częściowy zwrot",
+      "refunded": "Zwrócone",
+      "partially_refunded": "Częściowo zwrócone",
+      "failed": "Nieudane",
+      "total_payments": "Wszystkie płatności"
+    }
+  },
+  "admin_banner_control": {
+    "header": "Banery",
+    "create": "Tworzenie banera",
+    "edit": "Edycja banera",
+    "name": "Nazwa",
+    "active": "Aktywny",
+    "image": "Obraz",
+    "position": {
+      "header": "Pozycja",
+      "left": "Lewy",
+      "right": "Prawy",
+      "bottom": "Dolny",
+      "top": "Górny"
+    },
+    "no_banners": "Nie można znaleźć żadnego banera. Stwórz twój pierwszy baner!",
+    "deactivate": "Deaktywuj",
+    "activate": "Aktywuj"
   }
 }
