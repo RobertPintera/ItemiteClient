@@ -76,7 +76,7 @@ export function UpdatePhoneErrors(formGroup: FormGroup, controlName = 'phoneNumb
   }
 
   if (control?.hasError('pattern')) {
-    const translation:string = errorTranslations.get(`field_regex`)!;
+    const translation:string = `${errorTranslations.get('field_regex')!}. ${errorTranslations.get('phone_regex')!}`;
     errors.push(translation);
   }
 

@@ -19,6 +19,7 @@ export class EditableText implements OnInit {
   readonly minLength = input(20);
   readonly validators = input<ValidatorFn | ValidatorFn[] | undefined>([]);
   readonly verticalLayout = input<boolean>(false);
+  readonly extraErrorInfoOnRegex = input<string>();
 
   // Outputs
   onEdit = output<string>();
@@ -79,6 +80,7 @@ export class EditableText implements OnInit {
 
     this.translate.onLangChange.subscribe(() => {
       UpdateErrorTranslations(this.translate);
+      this.UpdateErrors();
     });
   }
 
@@ -128,7 +130,9 @@ export class EditableText implements OnInit {
     }
 
     if (control?.hasError('pattern') || control?.hasError('email')) {
-      const translation:string = errorTranslations.get("field_regex") ?? "";
+      const translation:string =
+        `${errorTranslations.get("field_regex") ?? ""}. ${this.extraErrorInfoOnRegex()}`
+        ;
       if(translation != "") {
         errors.push(translation);
       }

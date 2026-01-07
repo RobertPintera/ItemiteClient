@@ -35,6 +35,7 @@ export class ConfirmEmail {
     this._activatedRoute.queryParams.subscribe((params) => {
       this._token.set(encodeURIComponent(params['token']));
       this._email.set(params['email']);
+      console.log(this._token());
     });
   }
 

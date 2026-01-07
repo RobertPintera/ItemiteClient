@@ -375,6 +375,7 @@
     "pass_match": "Passwords must match",
     "phone_min_len" : "Phone number must be at least 3 characters long",
     "phone_max_len" : "Phone number cannot be more than 20 characters",
+    "phone_regex" : "Make sure number starts with country code +xx",
     "name_min_len" : "Username must be at least 3 characters long",
     "name_max_len" : "Username cannot be more than 20 characters",
     "name_pattern" : "Username can have only letters, digits and characters \"._@+-\"",

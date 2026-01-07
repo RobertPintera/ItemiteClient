@@ -30,11 +30,6 @@ export class LoginRegister implements OnInit {
 
   // TODO Block submit when API bad request until value change
 
-  // TODO API errors
-  //  --> email, username used, awaiting email confirmation etc
-  //  --> login_register.mail_used
-  // TODO API integration & Google login
-
   private router = inject(Router);
   private _translate = inject(TranslateService);
   private _userService = inject(AuthService);
@@ -141,6 +136,10 @@ export class LoginRegister implements OnInit {
   constructor() {
     this._translate.onLangChange.subscribe(() => {
       UpdateErrorTranslations(this._translate);
+      this._usernameErrors.set(UpdateUsernameErrors(this.registerForm));
+      this._phoneErrors.set(UpdatePhoneErrors(this.registerForm));
+      this._emailErrors.set(UpdateEmailErrors(this.loginForm));
+      this._passwordErrors.set(UpdatePasswordErrors(this.loginForm));
     });
     UpdateErrorTranslations(this._translate);
 

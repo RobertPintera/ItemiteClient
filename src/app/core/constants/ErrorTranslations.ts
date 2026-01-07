@@ -18,6 +18,7 @@ export const errorTranslations = new Map(
     ["field_regex","Value must follow valid format"],
     ["field_min_len", "Value has too few characters"],
     ["field_max_len", "Value has too many characters"],
+    ["phone_regex", "Make sure number starts with country code +xx"]
   ]
 );
 

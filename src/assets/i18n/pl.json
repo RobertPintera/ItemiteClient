@@ -373,6 +373,7 @@
     "pass_match": "Hasła muszą być jednakowe",
     "phone_min_len" : "nr telefonu nie może mieć mniej niż 7 znaków",
     "phone_max_len" : "Nr telefonu nie może mieć więcej niż 20 znaków",
+    "phone_regex" : "Upewnij się, że nr telefonu zaczyna się od kodu kraju +xx",
     "name_min_len" : "Nazwa użytkownika musi mieć co najmniej 3 znaki",
     "name_max_len" : "Nazwa użytkownika nie może mieć więcej niż 20 znaków",
     "name_pattern" : "Nazwa użytkownika może mieć tylko litery, cyfry i znaki \"._@+-\"",

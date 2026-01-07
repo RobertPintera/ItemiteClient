@@ -101,7 +101,11 @@
       </div>
 
       <p>{{"user_info.phone" | translate}}:</p>
-      <app-editable-text [text]="phone()" [validators]="phoneValidators" (onEdit)="UpdatePhone($event)"/>
+      <app-editable-text
+        [text]="phone()"
+        [validators]="phoneValidators"
+        [extraErrorInfoOnRegex]='"validator_errors.phone_regex" | translate'
+        (onEdit)="UpdatePhone($event)"/>
     </div>
 
     <p id="localization" class="text-2xl md:text-3xl lg:text-4xl">{{"user_info.localization" | translate}}</p>
