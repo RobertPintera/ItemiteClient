@@ -81,6 +81,7 @@ export class ProductsList implements OnInit, OnDestroy {
     });
 
     this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      this.loading.set(true);
       const updated: Partial<ListingFilter> = {};
 
       const num = (name: string) => {
