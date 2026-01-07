@@ -1,2 +1,5 @@
-<div class="w-full h-64 bg-blue-200 rounded-2xl">
+<div class="w-full aspect-[6/1] bg-blue-200 rounded-2xl overflow-hidden">
+  @if(banner()){
+    <img [src]="banner()?.url" alt="Preview" class="size-full object-cover">
+  }
 </div>

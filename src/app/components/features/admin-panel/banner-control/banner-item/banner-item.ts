@@ -7,7 +7,7 @@ import {ConfirmDialog} from '../../../../shared/confirm-dialog/confirm-dialog';
 import {AdminService} from '../../../../../core/services/admin-service/admin.service';
 import {finalize} from 'rxjs';
 import {LoadingDialog} from '../../../../shared/loading-dialog/loading-dialog';
-import {BannerDialog} from '../banner-form/banner-dialog';
+import {BannerDialog} from '../banner-dialog/banner-dialog';
 
 @Component({
   selector: 'app-banner-item',

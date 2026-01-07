@@ -1,7 +1,7 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {Button} from '../../../shared/button/button';
 import {TranslatePipe} from '@ngx-translate/core';
-import {BannerDialog} from './banner-form/banner-dialog';
+import {BannerDialog} from './banner-dialog/banner-dialog';
 import {AdminService} from '../../../../core/services/admin-service/admin.service';
 import {BannerDTO} from '../../../../core/models/banners/BannerDTO';
 import {finalize} from 'rxjs';
