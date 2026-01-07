@@ -144,6 +144,10 @@ export const routes: Routes = [
       {
         path: 'admin/payment',
         loadComponent: () => import('./components/features/admin-panel/payment-control/payment-control').then(m => m.PaymentControl),
+      },
+      {
+        path: 'admin/banners',
+        loadComponent: () => import('./components/features/admin-panel/banner-control/banner-control').then(m => m.BannerControl),
       }
     ]
   },

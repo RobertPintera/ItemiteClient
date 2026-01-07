@@ -17,8 +17,6 @@ import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {BidHistoryDialog} from './bid-history-dialog/bid-history-dialog';
-import {IndividualPricingDialog} from './individual-pricing-dialog/individual-pricing-dialog';
-import {DeleteIndividualPricingDialog} from './delete-individual-pricing-dialog/delete-individual-pricing-dialog';
 
 interface ButtonSettings {
   label: string;
@@ -84,8 +82,6 @@ export class ProductDetails implements OnInit, OnDestroy {
   readonly isOwner = signal<boolean>(false);
 
   readonly isOpenBidHistory = signal<boolean>(false);
-  readonly isOpenIndividualPricingDialog = signal<boolean>(false);
-  readonly isOpenDeleteIndividualPricingDialog = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -242,14 +238,6 @@ export class ProductDetails implements OnInit, OnDestroy {
     this.isOpenBidHistory.set(true);
   }
 
-  openDeleteIndividualPricing() {
-    this.isOpenDeleteIndividualPricingDialog.set(true);
-  }
-
-  openIndividualPricing() {
-    this.isOpenIndividualPricingDialog.set(true);
-  }
-
   getVisibleButtons(): ButtonOrder[] {
     const buttonsSettings: ButtonSettings[] = [];
 
@@ -268,10 +256,6 @@ export class ProductDetails implements OnInit, OnDestroy {
         buttonsSettings.push({label: 'product_details.send_message', onClick: () => this.OnMessageClicked()});
       }
       buttonsSettings.push({ label: this.isClickPhoneNumber() ? this.product.owner.phoneNumber ?? 'product_details.call' : 'product_details.call', onClick: () => this.clickNumber()});
-      if (this.isAuthorLogged() && !isArchived){
-        buttonsSettings.push({label: 'product_details.individual_pricing', onClick: () => this.openIndividualPricing()});
-        buttonsSettings.push({label: 'product_details.delete_individual_pricing', onClick: () => this.openDeleteIndividualPricing(), severity: 'danger'});
-      }
     }
     // For auctions
     else if (this.auction){
@@ -282,7 +266,7 @@ export class ProductDetails implements OnInit, OnDestroy {
       }
       else {
         if (!isArchived)
-          buttonsSettings.push({label: 'product_details.bid', routerLink: ['/payment'], queryParams: { id: this.auction.id, type: LISTING_TYPES.PRODUCT }});
+          buttonsSettings.push({label: 'product_details.bid', routerLink: ['/payment'], queryParams: { id: this.auction.id, type: LISTING_TYPES.AUCTION }});
         buttonsSettings.push({label: 'product_details.send_message', onClick: () => this.OnMessageClicked()});
       }
       buttonsSettings.push({label: this.isClickPhoneNumber() ? this.auction.owner.phoneNumber ?? 'product_details.call' : 'product_details.call', onClick: () => this.clickNumber(),});

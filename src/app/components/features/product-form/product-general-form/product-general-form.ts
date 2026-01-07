@@ -57,7 +57,7 @@ export class ProductGeneralForm {
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(category => ({
     key: category.id.toString(),
-    value: "categories." + category.name
+    value: category.name
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
@@ -230,7 +230,7 @@ export class ProductGeneralForm {
     return {
       option: {
         key: category.id.toString(),
-        value: 'categories.' + category.name
+        value: category.name
       },
       childrenNodes: category.subCategories?.map(cat => this.mapCategoryToSelectNode(cat)) || []
     };
@@ -275,7 +275,7 @@ export class ProductGeneralForm {
 
     const mainOption = {
       key: main.id.toString(),
-      value: "categories." + main.name
+      value: main.name
     };
 
     this.selectMainCategory(mainOption);
@@ -289,7 +289,7 @@ export class ProductGeneralForm {
 
     const subOption: OptionItem = {
       key: sub.id.toString(),
-      value: "categories." +  sub.name
+      value: sub.name
     };
 
     this.form.get('subcategory')?.setValue(subOption);

@@ -58,7 +58,7 @@ export class AuctionForm {
 
   readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
     key: cat.id.toString(),
-    value: "categories." + cat.name
+    value: cat.name
   }));
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
@@ -240,7 +240,7 @@ export class AuctionForm {
     return {
       option: {
         key: category.id.toString(),
-        value: "categories." + category.name
+        value: category.name
       },
       childrenNodes: category.subCategories?.map(cat => this.mapCategoryToSelectNode(cat)) || []
     };
@@ -290,7 +290,7 @@ export class AuctionForm {
 
     const mainOption = {
       key: main.id.toString(),
-      value: "categories." + main.name
+      value: main.name
     };
 
     this.selectMainCategory(mainOption);
@@ -304,7 +304,7 @@ export class AuctionForm {
 
     const subOption: OptionItem = {
       key: sub.id.toString(),
-      value: "categories." + sub.name
+      value: sub.name
     };
 
     this.form.get('subcategory')?.setValue(subOption);

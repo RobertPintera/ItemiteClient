@@ -90,8 +90,6 @@
     "speakers": "Speakers",
     "headphones": "Headphones",
     "gaming": "Gaming",
-    "console_games": "Console Games",
-    "computer_games": "Computer Games",
 
     "motorization": "Motorization",
     "cars": "Cars",
@@ -340,6 +338,7 @@
     "create": "Create",
     "delete": "Delete",
     "cancel": "Cancel",
+    "back": "Back",
     "confirm": "Confirm",
     "enable": "Enable",
     "enable_edition": "Enable edition",
@@ -563,7 +562,56 @@
     "bid": "Bid",
     "buyer": "Buyer",
     "seller": "Seller",
-    "platform_fee_amount": "Platform fee amount"
+    "platform_fee_amount": "Platform fee amount",
+    "payment": "Payment",
+    "details": "Payment details",
+    "total_amount": "Total amount",
+    "seller_amount": "Seller amount",
+    "approved_by": "Approved by",
+
+    "platform_fee_percentage": "Platform fee percentage",
+
+    "transfer_attempts": "Transfer attempts",
+    "transfer_trigger": "Transfer trigger",
+    "actual_transfer_method": "Transfer method",
+
+    "charge_date": "Charge date",
+    "transfer_date": "Transfer date",
+    "scheduled_transfer_date": "Scheduled transfer date",
+
+    "refund": "Refund",
+    "refund_amount": "Refund amount",
+    "refund_attempts": "Refund attempts",
+    "refund_date": "Refund date",
+    "scheduled_refund_date": "Scheduled refund date",
+
+    "dispute": "Dispute",
+    "disputedBy": "Disputed by",
+    "approvedBy": "Resolved by",
+    "reason": "Reason",
+    "description": "Description",
+    "created_at": "Created at",
+    "resolved_at": "Resolved at",
+    "notes": "Notes",
+    "evidences": "Evidences",
+    "show_product": "Show Product",
+    "resolve_dispute": {
+      "header": "Resolve dispute",
+      "resolution": {
+        "header": "Resolution",
+        "refund_buyer": "Refund buyer",
+        "declined": "Declined",
+        "partial_refund": "Partial refund"
+      },
+      "partial_refund_amount": "Partial refund amount",
+      "reviewer_notes": "Reviewer notes"
+    }
+  },
+  "validator_errors_resolve_dispute": {
+    "field_required": "Field is required",
+    "partial_refund_min": "Partial Refund must be greater than 0.",
+    "partial_refund_max": "Bid must be less than total amount.",
+    "reviewer_notes_max": "Reviewer notes cannot be more than 100 characters"
   },
   "notifications": {
     "Auction": "Auction",
@@ -618,6 +666,7 @@
     "delete_price": "Delete individual price for user"
   },
   "admin_category_control": {
+    "header": "Categories",
     "create_main_category": "Create main category",
     "create_subcategory": "Create subcategory",
     "show_subcategories": "Show subcategories",
@@ -638,5 +687,32 @@
     "name_min": "Name must be at least 2 characters long",
     "name_max": "Name cannot be more than 100 characters",
     "description_max": "Description cannot be more than 100 characters"
+  },
+  "admin_payment_control": {
+    "header": "Payments",
+    "latest": "Latest",
+    "with_status": "With status",
+    "statistics": {
+      "header": "Statistics",
+      "total_payments": "Total payments"
+    }
+  },
+  "admin_banner_control": {
+    "header": "Banners",
+    "create": "Create banner",
+    "edit": "Edit banner",
+    "name": "Name",
+    "active": "Active",
+    "image": "Image",
+    "position": {
+      "header": "Position",
+      "left": "Left",
+      "right": "Right",
+      "bottom": "Bottom",
+      "top": "Top"
+    },
+    "no_banners": "Can't find any banner. Create your first banner!",
+    "deactivate": "Deactivate",
+    "activate": "Activate"
   }
 }

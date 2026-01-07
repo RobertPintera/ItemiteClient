@@ -2,7 +2,7 @@
 
 @layer components {
   .button-container {
-    @apply transition-colors px-4 py-2 rounded-lg;
+    @apply transition-colors px-4 py-2 rounded-lg border-2 border-transparent;
   }
 
   .button-primary-filled,

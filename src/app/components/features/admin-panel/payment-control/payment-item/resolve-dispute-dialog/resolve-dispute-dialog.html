@@ -1,0 +1,60 @@
+@if(loading()){
+  <app-loading-dialog/>
+}
+@else if(isOpen()) {
+  <app-dialog [header]="'transactions.resolve_dispute.header' | translate"
+              (closed)="closeDialog()">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2 w-[100vw] max-w-full sm:max-w-md">
+      <div class="flex flex-col gap-2 w-full">
+        <label for="resolution" class="text-xl font-semibold">{{ 'transactions.resolve_dispute.resolution.header' | translate }}</label>
+        <app-combo-box formControlName="resolution" [items]="resolutionOptions" (selectedItemChange)="selectResolution($event)">
+          <ng-template let-item>
+            <span>{{`transactions.resolve_dispute.resolution.${item?.value | snakeCase}` | translate}}</span>
+          </ng-template>
+        </app-combo-box>
+      </div>
+
+      @if (form.controls.resolution.value?.key === DISPUTE_RESOLUTION.PARTIAL_REFUND){
+        <div class="flex flex-col gap-2 w-full">
+          <label for="partialRefundAmount" class="text-xl font-semibold">{{ 'transactions.resolve_dispute.partial_refund_amount' | translate }}</label>
+          <app-input-number id="partialRefundAmount" formControlName="partialRefundAmount" [min]="0" [max]="1000000" [step]="0.01"/>
+        </div>
+        @if (form.controls.partialRefundAmount.invalid && (form.controls.partialRefundAmount.touched || form.controls.partialRefundAmount.dirty)) {
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if(form.controls.partialRefundAmount.hasError('required')) {
+                <li>{{ 'validator_errors_resolve_dispute.field_required' | translate }}</li>
+              }
+              @if(form.controls.partialRefundAmount.hasError('min')) {
+                <li>{{ 'validator_errors_resolve_dispute.partial_refund_min' | translate }}</li>
+              }
+              @if(form.controls.partialRefundAmount.hasError('max')) {
+                <li>{{ 'validator_errors_resolve_dispute.partial_refund_max' | translate }}</li>
+              }
+            </ul>
+          </div>
+        }
+      }
+
+      <div class="flex flex-col gap-2 w-full">
+        <label for="reviewerNotes" class="text-xl font-semibold">{{ 'transactions.resolve_dispute.reviewer_notes' | translate }}</label>
+        <textarea id="reviewerNotes" name="reviewerNotes" formControlName="reviewerNotes" rows="5" class="border rounded px-3 py-2"></textarea>
+        @if (form.controls.reviewerNotes.invalid && (form.controls.reviewerNotes.touched || form.controls.reviewerNotes.dirty)) {
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if(form.controls.reviewerNotes.hasError('maxlength')){
+                <li>{{ 'validator_errors_resolve_dispute.reviewer_notes_max' | translate }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+
+      <div class="flex flex-row justify-between gap-2">
+        <app-button type="button" [label]="'controls.cancel' | translate" severity="accent" variant="outlined" (clickButton)="closeDialog()"/>
+        <app-button type="submit" [label]="'controls.save' | translate"/>
+      </div>
+    </form>
+  </app-dialog>
+}
+

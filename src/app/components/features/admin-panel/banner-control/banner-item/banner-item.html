@@ -1,0 +1,31 @@
+<div class="flex bg-card text-card-foreground flex-col w-full border-2 gap-2 border-transparent border-b-border shadow-xl p-4
+  hover:border-border hover:rounded-xl hover:z-10 hover:scale-[1.02]
+  duration-150">
+  <h3>{{banner().name}}</h3>
+  <div class="flex flex-row flex-wrap justify-between gap-2">
+    <p>Status: {{banner().isActive}}</p>
+    <p>Position: {{banner().position}}</p>
+  </div>
+  <div class="w-full aspect-[5/1]">
+    <img [src]="banner().url" [alt]="banner().name" class="size-full object-contain">
+  </div>
+  <div class="flex flex-wrap justify-between gap-2 mt-2">
+    <app-button [label]="banner().isActive ? ('admin_banner_control.deactivate' | translate) : ('admin_banner_control.active' | translate)"
+                [severity]="banner().isActive ? BUTTON_SEVERITY.DANGER : BUTTON_SEVERITY.PRIMARY"
+                (clickButton)="toggleActive()"/>
+
+    <div class="flex flex-row flex-wrap gap-2">
+      <app-button [label]="'controls.delete' | translate" severity="danger" (clickButton)="openDeleteDialog()"/>
+      <app-button [label]="'controls.edit' | translate" severity="primary" (clickButton)="openEditDialog()"/>
+    </div>
+  </div>
+</div>
+@if(loading()){
+  <app-loading-dialog/>
+}
+@else if (isOpenDeleteDialog()){
+  <app-confirm-dialog (onCancelClicked)="cancelDelete()" (onConfirmClicked)="confirmDelete()"/>
+}
+@else if (isOpenEditDialog()){
+  <app-banner-dialog [(isOpen)]="isOpenEditDialog" [editedBanner]="banner()" (operationSuccess)="confirmBanner()"/>
+}
