@@ -76,6 +76,9 @@ export class LoginRegister implements OnInit {
     }
   });
 
+  private _registerSuccess: WritableSignal<boolean> = signal(false);
+  readonly registerSuccess = this._registerSuccess.asReadonly();
+
   async SwitchShowRegister() {
     // Wait for 0.5s for the animation to complete
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -197,6 +200,8 @@ export class LoginRegister implements OnInit {
     let success = false;
     this._processing.set(true);
     if (this.showRegisterForm()) {
+      this._registerSuccess.set(false);
+
       success = await this._userService.Register(
         this.registerForm.value.username,
         this.registerForm.value.email,
@@ -205,17 +210,12 @@ export class LoginRegister implements OnInit {
           undefined : this.registerForm.value.phoneNumber
       );
 
-      if(!success) {this._processing.set(false); return;}
-
-      success = await this._userService.Login(this.registerForm.value.email, this.registerForm.value.password);
-
-      if(success) {
-        // route to main
-        this.router.navigate(['']);
+      if(!success) {
+        this._processing.set(false);
         return;
       }
-
       this.SwitchShowRegister();
+      this._registerSuccess.set(true);
       this._processing.set(false);
       return;
     }
