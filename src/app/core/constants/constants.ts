@@ -43,7 +43,8 @@ export const RESOURCE_TYPE = {
   AUCTION: 'Auction',
   PRODUCT: 'Product',
   USER: 'User',
-  CHAT_PAGE: 'ChatPage'
+  CHAT_PAGE: 'ChatPage',
+  ADMIN: 'Admin'
 } as const;
 
 export type ResourceType = typeof RESOURCE_TYPE[keyof typeof RESOURCE_TYPE];
