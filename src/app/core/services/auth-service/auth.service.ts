@@ -131,7 +131,7 @@ export class AuthService {
     const payload = {email: email, password: password};
     try {
       const userInfo = await lastValueFrom(
-        this.http.post<UserBasicInfo>(`${environment.itemiteApiUrl}/auth/login`, payload, {timeout: 10000, withCredentials: true})
+        this.http.post<UserBasicInfo>(`${environment.itemiteApiUrl}/auth/login`, payload, {withCredentials: true})
       );
       this._isUserLoggedIn.set(true);
       this._userBasicInfo.set(userInfo);
@@ -149,7 +149,7 @@ export class AuthService {
       {userName: username, email: email, password: password};
     try {
       const userId = await lastValueFrom(
-        this.http.post<number>(`${environment.itemiteApiUrl}/auth/register`, payload, {timeout: 10000})
+        this.http.post<number>(`${environment.itemiteApiUrl}/auth/register`, payload)
       );
       return true;
     } catch (error: any) {
