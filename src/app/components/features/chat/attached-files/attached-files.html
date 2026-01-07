@@ -2,7 +2,7 @@
 z-10 flex flex-col max-h-50 max-w-2/3 overflow-y-auto">
 
   <div class="max-w-full w-100 p-1 self-end items-end flex flex-col bg-background ">
-    <p class="w-full text-center text-secondary"> {{files().length}} / MAX_COUNT </p>
+    <p class="w-full text-center text-secondary"> {{files().length}} / {{ MAX_COUNT }} </p>
     @for (file of files(); track $index) {
       <div class="flex self-end flex-row items-center gap-1 w-full">
         <p class="text-nowrap overflow-hidden flex-1 overflow-ellipsis">{{file.name}}</p>
