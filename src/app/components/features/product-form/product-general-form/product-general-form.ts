@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, input, model, signal} from '@angular/core';
+import {Component, effect, inject, input, model, OnDestroy, signal} from '@angular/core';
 import {ProductListingService} from '../../../../core/services/product-listing-service/product-listing.service';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -21,7 +21,7 @@ import {ProductListingDTO} from '../../../../core/models/product-listings/Produc
 import {PutProductListingDTO} from '../../../../core/models/product-listings/PutProductListingDTO';
 import {Location} from '@angular/common';
 import {finalize, Subject, takeUntil} from 'rxjs';
-import { CategoryDTO } from '../../../../core/models/category/CategoryDTO';
+import {CategoryDTO} from '../../../../core/models/category/CategoryDTO';
 
 @Component({
   selector: 'app-product-general-form',
@@ -39,14 +39,13 @@ import { CategoryDTO } from '../../../../core/models/category/CategoryDTO';
   templateUrl: './product-general-form.html',
   styleUrl: './product-general-form.css'
 })
-export class ProductGeneralForm {
+export class ProductGeneralForm implements OnDestroy {
   private _productListingService = inject(ProductListingService);
   private _categoryService = inject(CategoryService);
   private _formBuilder = inject(FormBuilder);
   private _router = inject(Router);
   private _location = inject(Location);
-  private _translator = inject(TranslateService)
-
+  private _translator = inject(TranslateService);
   private _destroy$ = new Subject<void>();
 
 
@@ -58,7 +57,7 @@ export class ProductGeneralForm {
   readonly selectedMainCategory = signal<OptionItem>({key: '', value: ''});
   readonly selectedSubCategory = signal<OptionItem>({key: '', value: ''});
 
-  readonly mainCategories = this._categoryService.mainCategories();
+  readonly mainCategories = this._categoryService.mainCategories;
 
   readonly mainCategoriesOptions = signal<OptionItem[]>([]);
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
@@ -100,16 +99,20 @@ export class ProductGeneralForm {
       }
     });
 
-     this.updateMainCategoriesOptions();
-
-  // Nasłuchuj na zmiany języka
-  this._translator.onLangChange
-    .pipe(takeUntil(this._destroy$))
-    .subscribe(() => {
-      this.updateMainCategoriesOptions();
-      this.updateSubCategoriesOptions();
-      this.updateSelectedCategories();
+    effect(() => {
+      const categories = this.mainCategories();
+      if (categories.length) {
+        this.updateMainCategoriesOptions();
+      }
     });
+
+    this._translator.onLangChange
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(() => {
+        this.updateMainCategoriesOptions();
+        this.updateSubCategoriesOptions();
+        this.updateSelectedCategories();
+      });
   }
 
   ngOnDestroy() {
@@ -117,7 +120,7 @@ export class ProductGeneralForm {
     this._destroy$.complete();
   }
 
-  getCategoryName(category: any): string {
+  getCategoryName(category: CategoryDTO): string {
     return this._translator.getCurrentLang() === 'pl'
       ? category.polishName
       : category.name;
@@ -125,6 +128,7 @@ export class ProductGeneralForm {
 
   selectMainCategory(option?: OptionItem){
     if (!option) return;
+    this.form.get('subcategory')?.reset();
 
     this.selectedMainCategory.set(option);
     const id = Number(option.key);
@@ -139,7 +143,6 @@ export class ProductGeneralForm {
           this.form.get('subcategory')?.enable();
         } else {
           this.form.get('subcategory')?.disable();
-          this.form.get('subcategory')?.reset();
         }
       },
       error: err => console.error(err)
@@ -313,14 +316,14 @@ export class ProductGeneralForm {
 
     const subOption: OptionItem = {
       key: sub.id.toString(),
-      value: this.getCategoryName(main)
+      value: this.getCategoryName(sub)
     };
 
     this.form.get('subcategory')?.setValue(subOption);
   }
 
   private updateMainCategoriesOptions() {
-    const options = this.mainCategories.map(category => ({
+    const options = this.mainCategories().map(category => ({
       key: category.id.toString(),
       value: this.getCategoryName(category)
     }));
@@ -329,58 +332,59 @@ export class ProductGeneralForm {
 
   private updateSubCategoriesOptions() {
     const categories = this.categories();
-      if (categories && categories.subCategories) {
-        const subCategoriesNodes = categories.subCategories.map(cat => 
-          this.mapCategoryToSelectNode(cat)
-        );
+    if (categories && categories.subCategories) {
+      const subCategoriesNodes = categories.subCategories.map(cat =>
+        this.mapCategoryToSelectNode(cat)
+      );
       this.subCategoriesOptions.set(subCategoriesNodes);
     }
   }
   private updateSelectedCategories() {
-  // Aktualizuj główną kategorię
-  const mainCategoryControl = this.form.get('mainCategory');
-  const currentMainCategory = mainCategoryControl?.value;
-  if (currentMainCategory) {
-    const category = this.mainCategories.find(c => c.id.toString() === currentMainCategory.key);
-    if (category) {
-      const updatedMainOption = {
-        key: currentMainCategory.key,
-        value: this.getCategoryName(category)
-      };
-      this.selectedMainCategory.set(updatedMainOption);
-      mainCategoryControl.setValue(updatedMainOption);
+    // Aktualizuj główną kategorię
+    const mainCategoryControl = this.form.get('mainCategory');
+    const currentMainCategory = mainCategoryControl?.value;
+    if (currentMainCategory) {
+      const category = this.mainCategories().find(c => c.id.toString() === currentMainCategory.key);
+      if (category) {
+        const updatedMainOption = {
+          key: currentMainCategory.key,
+          value: this.getCategoryName(category)
+        };
+        this.selectedMainCategory.set(updatedMainOption);
+        mainCategoryControl.setValue(updatedMainOption);
+      }
+    }
+
+
+    const subCategoryControl = this.form.get('subcategory');
+    const currentSubCategory = subCategoryControl?.value;
+    if (currentSubCategory) {
+      const subCategory = this.findCategoryById(this.categories(), currentSubCategory.key);
+      if (subCategory) {
+        const updatedSubOption = {
+          key: currentSubCategory.key,
+          value: this.getCategoryName(subCategory)
+        };
+        this.selectedSubCategory.set(updatedSubOption);
+        subCategoryControl.setValue(updatedSubOption);
+      }
     }
   }
 
+  private findCategoryById(categoryTree: CategoryTreeDTO | null, id: string): CategoryTreeDTO | null {
+    if (!categoryTree) return null;
 
-  const subCategoryControl = this.form.get('subcategory');
-  const currentSubCategory = subCategoryControl?.value;
-  if (currentSubCategory) {
-    const subCategory = this.findCategoryById(this.categories(), currentSubCategory.key);
-    if (subCategory) {
-      const updatedSubOption = {
-        key: currentSubCategory.key,
-        value: this.getCategoryName(subCategory)
-      };
-      this.selectedSubCategory.set(updatedSubOption);
-      subCategoryControl.setValue(updatedSubOption);
+    if (categoryTree.id.toString() === id) {
+      return categoryTree;
     }
-  }
-}
-private findCategoryById(categoryTree: CategoryTreeDTO | null, id: string): CategoryTreeDTO | null {
-  if (!categoryTree) return null;
-  
-  if (categoryTree.id.toString() === id) {
-    return categoryTree;
-  }
-  
-  if (categoryTree.subCategories) {
-    for (const subCat of categoryTree.subCategories) {
-      const found = this.findCategoryById(subCat, id);
-      if (found) return found;
+
+    if (categoryTree.subCategories) {
+      for (const subCat of categoryTree.subCategories) {
+        const found = this.findCategoryById(subCat, id);
+        if (found) return found;
+      }
     }
+
+    return null;
   }
-  
-  return null;
-}
 }

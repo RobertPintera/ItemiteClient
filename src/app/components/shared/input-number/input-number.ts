@@ -1,4 +1,4 @@
-import {Component, input, model, output } from '@angular/core';
+import {Component, input, model, output, signal} from '@angular/core';
 import {NG_VALUE_ACCESSOR} from '@angular/forms';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
@@ -31,6 +31,8 @@ export class InputNumber {
   readonly valueChange = output<number | null>();
   readonly enterPressed = output<number | null>();
   readonly blurInput = output<number | null>();
+
+  readonly disabled = signal<boolean>(false);
 
   onKeyDown(event: KeyboardEvent) {
     this.onTouched();
@@ -178,7 +180,7 @@ export class InputNumber {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-
+    this.disabled.set(isDisabled);
   }
   // -------------------
 

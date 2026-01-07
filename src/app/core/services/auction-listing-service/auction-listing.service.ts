@@ -89,7 +89,7 @@ export class AuctionListingService {
     formData.append('Location.Country', auction.locationCountry);
     formData.append('Location.City', auction.locationCity);
     formData.append('Location.State', auction.locationState);
-    formData.append('StartingBid', parseFloat(auction.startingBid.toFixed(2)).toString());
+    if (auction.startingBid) formData.append('StartingBid', parseFloat(auction.startingBid.toFixed(2)).toString());
     formData.append('DateEnds', auction.dateEnds);
 
     auction.existingPhotoIds.forEach((photo, idx) => {

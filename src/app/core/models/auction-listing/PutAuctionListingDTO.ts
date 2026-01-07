@@ -7,7 +7,7 @@ export interface PutAuctionListingDTO {
   locationCity: string;
   locationState: string;
   categoryId: number;
-  startingBid: number;
+  startingBid: number | null;
   existingPhotoIds: number[];
   existingPhotoOrders: number[];
   dateEnds: string;

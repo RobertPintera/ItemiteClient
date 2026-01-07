@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, model, signal} from '@angular/core';
+import {Component, effect, inject, input, model, OnDestroy, signal} from '@angular/core';
 import {Button} from "../../../shared/button/button";
 import {CascadeSelect} from "../../../shared/cascade-select/cascade-select";
 import {ComboBox} from "../../../shared/combo-box/combo-box";
@@ -22,6 +22,7 @@ import {Location} from '@angular/common';
 import {LISTING_TYPES} from '../../../../core/constants/constants';
 import {auctionDurationValidator, isEmptyValidator, localizationValidator} from '../../../../core/utility/Validation';
 import {finalize, Subject, takeUntil} from 'rxjs';
+import {CategoryDTO} from '../../../../core/models/category/CategoryDTO';
 
 @Component({
   selector: 'app-auction-form',
@@ -39,13 +40,13 @@ import {finalize, Subject, takeUntil} from 'rxjs';
   templateUrl: './auction-form.html',
   styleUrl: './auction-form.css'
 })
-export class AuctionForm {
+export class AuctionForm implements OnDestroy {
   private _auctionListingService = inject(AuctionListingService);
   private _categoryService = inject(CategoryService);
   private _formBuilder = inject(FormBuilder);
   private _router = inject(Router);
   private _location = inject(Location);
-   private _translator = inject(TranslateService)
+  private _translator = inject(TranslateService);
   private _destroy$ = new Subject<void>();
 
   readonly loading = model.required<boolean>();
@@ -56,7 +57,7 @@ export class AuctionForm {
   readonly selectedMainCategory = signal<OptionItem>({key: '', value: ''});
   readonly selectedSubCategory = signal<OptionItem>({key: '', value: ''});
 
-  readonly mainCategories = this._categoryService.mainCategories();
+  readonly mainCategories = this._categoryService.mainCategories;
 
   readonly mainCategoriesOptions = signal<OptionItem[]>([]);
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
@@ -101,16 +102,20 @@ export class AuctionForm {
       }
     });
 
-    this.updateMainCategoriesOptions();
-    
-      // Nasłuchuj na zmiany języka
-      this._translator.onLangChange
-        .pipe(takeUntil(this._destroy$))
-        .subscribe(() => {
-          this.updateMainCategoriesOptions();
-          this.updateSubCategoriesOptions();
-          this.updateSelectedCategories();
-        });
+    effect(() => {
+      const categories = this.mainCategories();
+      if (categories.length) {
+        this.updateMainCategoriesOptions();
+      }
+    });
+
+    this._translator.onLangChange
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(() => {
+        this.updateMainCategoriesOptions();
+        this.updateSubCategoriesOptions();
+        this.updateSelectedCategories();
+      });
   }
 
   ngOnDestroy() {
@@ -120,6 +125,7 @@ export class AuctionForm {
 
   selectMainCategory(option?: OptionItem){
     if (!option) return;
+    this.form.get('subcategory')?.reset();
 
     this.selectedMainCategory.set(option);
     const id = Number(option.key);
@@ -134,7 +140,6 @@ export class AuctionForm {
           this.form.get('subcategory')?.enable();
         } else {
           this.form.get('subcategory')?.disable();
-          this.form.get('subcategory')?.reset();
         }
       },
       error: err => console.error(err)
@@ -193,7 +198,7 @@ export class AuctionForm {
         locationCountry: this.form.value.localization?.country ?? '',
         locationCity: this.form.value.localization?.city ?? '',
         locationState: this.form.value.localization?.state ?? '',
-        startingBid: this.form.value.startingBid ?? 0,
+        startingBid: this.form.value.startingBid ?? null,
         categoryId: Number(this.form.value.subcategory?.key ?? this.form.value.mainCategory?.key),
         dateEnds: this.form.value.dateEnds
           ? this.toUtcISOString(this.form.value.dateEnds)
@@ -203,9 +208,6 @@ export class AuctionForm {
         newImages: newImages,
         newImageOrders: newImageOrders
       };
-
-      console.log(payload.dateEnds);
-      console.log(this.form.value.dateEnds);
 
       this._auctionListingService.updateAuctionListing(auction.id ,payload).pipe(
         finalize(() => this.loading.set(false))
@@ -268,6 +270,10 @@ export class AuctionForm {
       description: auction.description,
     });
 
+    if(auction.currentBid){
+      this.form.get('startingBid')?.disable();
+    }
+
     const dateLocal = new Date(auction.dateEnds)
       .toISOString()
       .slice(0, 16); // YYYY-MM-DDTHH:mm
@@ -319,7 +325,7 @@ export class AuctionForm {
 
     const subOption: OptionItem = {
       key: sub.id.toString(),
-      value: this.getCategoryName(main)
+      value: this.getCategoryName(sub)
     };
 
     this.form.get('subcategory')?.setValue(subOption);
@@ -328,8 +334,9 @@ export class AuctionForm {
   private toUtcISOString(date: string): string {
     return new Date(date).toISOString();
   }
-private updateMainCategoriesOptions() {
-    const options = this.mainCategories.map(category => ({
+
+  private updateMainCategoriesOptions() {
+    const options = this.mainCategories().map(category => ({
       key: category.id.toString(),
       value: this.getCategoryName(category)
     }));
@@ -338,66 +345,63 @@ private updateMainCategoriesOptions() {
 
   private updateSubCategoriesOptions() {
     const categories = this.categories();
-      if (categories && categories.subCategories) {
-        const subCategoriesNodes = categories.subCategories.map(cat => 
-          this.mapCategoryToSelectNode(cat)
-        );
+    if (categories && categories.subCategories) {
+      const subCategoriesNodes = categories.subCategories.map(cat =>
+        this.mapCategoryToSelectNode(cat)
+      );
       this.subCategoriesOptions.set(subCategoriesNodes);
     }
   }
   private updateSelectedCategories() {
-  // Aktualizuj główną kategorię
-  const mainCategoryControl = this.form.get('mainCategory');
-  const currentMainCategory = mainCategoryControl?.value;
-  if (currentMainCategory) {
-    const category = this.mainCategories.find(c => c.id.toString() === currentMainCategory.key);
-    if (category) {
-      const updatedMainOption = {
-        key: currentMainCategory.key,
-        value: this.getCategoryName(category)
-      };
-      this.selectedMainCategory.set(updatedMainOption);
-      mainCategoryControl.setValue(updatedMainOption);
+    // Aktualizuj główną kategorię
+    const mainCategoryControl = this.form.get('mainCategory');
+    const currentMainCategory = mainCategoryControl?.value;
+    if (currentMainCategory) {
+      const category = this.mainCategories().find(c => c.id.toString() === currentMainCategory.key);
+      if (category) {
+        const updatedMainOption = {
+          key: currentMainCategory.key,
+          value: this.getCategoryName(category)
+        };
+        this.selectedMainCategory.set(updatedMainOption);
+      }
+    }
+
+    const subCategoryControl = this.form.get('subcategory');
+    const currentSubCategory = subCategoryControl?.value;
+    if (currentSubCategory) {
+      const subCategory = this.findCategoryById(this.categories(), currentSubCategory.key);
+      if (subCategory) {
+        const updatedSubOption = {
+          key: currentSubCategory.key,
+          value: this.getCategoryName(subCategory)
+        };
+        this.selectedSubCategory.set(updatedSubOption);
+        subCategoryControl.setValue(updatedSubOption);
+      }
     }
   }
 
-
-  const subCategoryControl = this.form.get('subcategory');
-  const currentSubCategory = subCategoryControl?.value;
-  if (currentSubCategory) {
-    const subCategory = this.findCategoryById(this.categories(), currentSubCategory.key);
-    if (subCategory) {
-      const updatedSubOption = {
-        key: currentSubCategory.key,
-        value: this.getCategoryName(subCategory)
-      };
-      this.selectedSubCategory.set(updatedSubOption);
-      subCategoryControl.setValue(updatedSubOption);
-    }
-  }
-}
-
-getCategoryName(category: any): string {
+  getCategoryName(category: CategoryDTO): string {
     return this._translator.getCurrentLang() === 'pl'
       ? category.polishName
       : category.name;
   }
 
-private findCategoryById(categoryTree: CategoryTreeDTO | null, id: string): CategoryTreeDTO | null {
-  if (!categoryTree) return null;
-  
-  if (categoryTree.id.toString() === id) {
-    return categoryTree;
-  }
-  
-  if (categoryTree.subCategories) {
-    for (const subCat of categoryTree.subCategories) {
-      const found = this.findCategoryById(subCat, id);
-      if (found) return found;
-    }
-  }
-  
-  return null;
-}
+  private findCategoryById(categoryTree: CategoryTreeDTO | null, id: string): CategoryTreeDTO | null {
+    if (!categoryTree) return null;
 
+    if (categoryTree.id.toString() === id) {
+      return categoryTree;
+    }
+
+    if (categoryTree.subCategories) {
+      for (const subCat of categoryTree.subCategories) {
+        const found = this.findCategoryById(subCat, id);
+        if (found) return found;
+      }
+    }
+
+    return null;
+  }
 }

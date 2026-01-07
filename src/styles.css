@@ -212,7 +212,7 @@ body {
 
   input:disabled,
   textarea:disabled {
-    @apply border-2 border-ring ring-ring rounded-xl bg-white;
+    @apply border-2 border-ring ring-ring rounded-xl bg-ring/20;
   }
 
   /* Chrome */
