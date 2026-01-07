@@ -10,6 +10,8 @@ import {TranslatePipe} from '@ngx-translate/core';
   styleUrl: './attached-files.css'
 })
 export class AttachedFiles {
+  readonly MAX_COUNT = 6;
+
   readonly files = input<File[]>([]);
   readonly onFileDeleted = output<number>();
   readonly onRequestAdd = output<void>();
