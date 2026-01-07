@@ -37,6 +37,7 @@ import {OtherUserSettings} from '../../other-user-settings/other-user-settings';
 import {
   DeleteIndividualPricingDialog
 } from '../../product-details/delete-individual-pricing-dialog/delete-individual-pricing-dialog';
+import {LISTING_TYPES, ListingType} from '../../../../core/constants/constants';
 
 @Component({
   selector: 'app-chat',
@@ -71,6 +72,7 @@ export class Chat implements AfterViewInit, OnInit {
   // This needs to be filled in parent component - s
   readonly chatMembers = input.required<ChatMemberInfo[]>();
   readonly listingId = input.required<number>();
+  readonly listingType = input<ListingType>();
   readonly inputListing = input<ListingBasicInfo>();
   private _fetchedListing = signal<ListingBasicInfo|undefined>(undefined);
   readonly listing = computed(() =>
@@ -183,28 +185,32 @@ export class Chat implements AfterViewInit, OnInit {
     // Fetch listing info if it wasn't passed manually via input
     if(this.inputListing() || isPlatformServer(this._platformId)) return;
 
-    this.productListingService.loadProductListingPublic(
-      this.listingId()
-    ).subscribe({
-      next: (result) => {
-        this._fetchedListing.set(
-          {
-            id: result.id,
-            name: result.name,
-            mainImageUrl: result.mainImageUrl,
-            isArchived: result.isArchived,
-            ownerId: result.owner.id,
-            listingType: "Product",
-            price: result.price
+    if(this.listingType()){
+      if(this.listingType() === LISTING_TYPES.PRODUCT){
+        this.productListingService.loadProductListingPublic(
+          this.listingId()
+        ).subscribe({
+          next: (result) => {
+            this._fetchedListing.set(
+              {
+                id: result.id,
+                name: result.name,
+                mainImageUrl: result.mainImageUrl,
+                isArchived: result.isArchived,
+                ownerId: result.owner.id,
+                listingType: "Product",
+                price: result.price
+              }
+            );
+          },
+          error:(error) => {
+            // listing might be auction, not product
+            //  or other error might happen
+            //  either way, it will work as intended
           }
-        );
-      },
-      error:(error) => {
-        // listing might be auction, not product
-        //  or other error might happen
-        //  either way, it will work as intended
+        });
       }
-    });
+    }
   }
 
   @ViewChild('chatContainer') chatContainer!: ElementRef<HTMLDivElement>;
@@ -218,27 +224,26 @@ export class Chat implements AfterViewInit, OnInit {
     if(!this.otherMemberInfo()) return;
 
     this.messageService.GetChat(listingId, this.otherMemberInfo()!.id, limit, cursor).subscribe({
-        next: chat => {
-          this._messages.set([...chat.items, ...this._messages()]);
-          this._resultCode.set(200);
-          this._loading.set(false);
-          this._cursor = chat.nextCursor;
-          this._hasMore.set(chat.hasMore);
-          this.onListingLoaded.emit(listingId);
+      next: chat => {
+        this._messages.set([...chat.items, ...this._messages()]);
+        this._resultCode.set(200);
+        this._loading.set(false);
+        this._cursor = chat.nextCursor;
+        this._hasMore.set(chat.hasMore);
+        this.onListingLoaded.emit(listingId);
 
-          // this.adjustHeight();
+        // this.adjustHeight();
 
-          /*setTimeout(() => {
-            const scrollContainer = this.scrollContainer.nativeElement as HTMLElement;
-            scrollContainer.scrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-          }, 50);*/
-        },
-        error: error => {
-          console.log(error);
-          this._loading.set(false);
-        }
+        /*setTimeout(() => {
+          const scrollContainer = this.scrollContainer.nativeElement as HTMLElement;
+          scrollContainer.scrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        }, 50);*/
+      },
+      error: error => {
+        console.log(error);
+        this._loading.set(false);
       }
-    );
+    });
   }
 
   OnLoadMessagesClicked() {

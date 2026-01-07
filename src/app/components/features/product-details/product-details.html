@@ -2,19 +2,30 @@
   @if (auction) {
     <app-floating-chat-container
       [class.hidden]="!showChat()"
-      (onExitClicked)="disableChatVisibility()" [listingId]="auction.id" [productOwner]="auction.owner"/>
+      (onExitClicked)="disableChatVisibility()"
+      [listingId]="auction.id" [listingType]="LISTING_TYPES.AUCTION" [productOwner]="auction.owner"/>
   } @else if (product) {
     <app-floating-chat-container
       [class.hidden]="!showChat()"
-      (onExitClicked)="disableChatVisibility()" [listingId]="product.id" [productOwner]="product.owner"/>
+      (onExitClicked)="disableChatVisibility()"
+      [listingId]="product.id" [listingType]="LISTING_TYPES.PRODUCT" [productOwner]="product.owner"/>
   }
   <div class="flex flex-col w-full max-w-[1500px] py-4 px-8">
     <div class="flex flex-wrap w-full justify-between">
-      <a routerLink="/products" [queryParams]="{ id: article()?.categories?.[0]?.id ?? null  }"
-         class="text-muted-foreground
+      @if(article()?.categories?.length){
+        <a routerLink="/products" [queryParams]="{ id: article()?.categories?.[0]?.id ?? null  }"
+           class="text-muted-foreground
          hover:text-muted-foreground/60
          focus:text-muted-foreground/60
          duration-75">{{ 'product_details.home' | translate }} / {{ getCategoryName(article()?.categories?.[0]) }}</a>
+      }
+      @else{
+        <a routerLink="/"
+           class="text-muted-foreground
+         hover:text-muted-foreground/60
+         focus:text-muted-foreground/60
+         duration-75">{{ 'product_details.home' | translate }}</a>
+      }
       @if (isUserLogged() && !isAuthorLogged()){
         <button class="cursor-pointer" (click)="toggleFollowed()">
           @if (isFollowed()){

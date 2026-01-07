@@ -1,10 +1,10 @@
 import {Component, computed, ElementRef, inject, input, output, signal, Signal, ViewChild} from '@angular/core';
 import {Chat} from '../chat/chat';
 import {ChatMemberInfo} from '../../../../core/models/chat/ChatMemberInfo';
-import {AuthService} from '../../../../core/services/auth-service/auth.service';
 import {User} from "../../../../core/models/user/User";
 import {CdkDrag, CdkDragHandle} from "@angular/cdk/drag-drop";
 import {UserService} from '../../../../core/services/user-service/user.service';
+import {ListingType} from '../../../../core/constants/constants';
 
 @Component({
   selector: 'app-floating-chat-container',
@@ -24,6 +24,7 @@ export class FloatingChatContainer {
   readonly maximize = this._maximize.asReadonly();
 
   readonly listingId = input.required<number>();
+  readonly listingType = input<ListingType>();
   readonly productOwner = input.required<User>();
 
   private readonly _currentUser = computed(() => this._userService.userInfo());

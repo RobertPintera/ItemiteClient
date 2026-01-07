@@ -118,7 +118,7 @@ export class AuctionListingService {
       }),
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
-        console.error('Error loadProductListingPublic:', err);
+        console.error('Error loadAuctionListingPublic:', err);
         throw err;
       })
     );
@@ -131,7 +131,7 @@ export class AuctionListingService {
       }),
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);
-        console.error('Error loadProductListingAuth:', err);
+        console.error('Error loadAuctionListingPublic:', err);
         throw err;
       })
     );
