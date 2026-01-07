@@ -9,7 +9,7 @@ export interface ListingItemDTO {
     state: string;
   }
   dateCreated: string;
-  categories: { id: string; name: string }[];
+  categories: { id: string; name: string; polishName: string }[];
   mainImageUrl: string;
   isFeatured: boolean;
   isArchived: boolean;

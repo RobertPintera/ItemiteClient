@@ -1,7 +1,7 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import {ListingItemDTO} from '../../../../../core/models/listing-general/LitstingItemDTO';
 import {LISTING_TYPES} from '../../../../../core/constants/constants';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';
 
 @Component({
@@ -14,6 +14,14 @@ import {RouterLink} from '@angular/router';
   styleUrl: './product-card.css'
 })
 export class ProductCard {
+  private _translator = inject(TranslateService)
+
   readonly product = input<ListingItemDTO>();
   protected readonly LISTING_TYPES = LISTING_TYPES;
+
+  getCategoryName(category: any): string {
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
+  }
 }

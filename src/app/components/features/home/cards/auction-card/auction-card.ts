@@ -3,7 +3,7 @@ import {RouterLink} from '@angular/router';
 import {ListingItemDTO} from '../../../../../core/models/listing-general/LitstingItemDTO';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {map} from 'rxjs';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-auction-card',
@@ -16,6 +16,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class AuctionCard implements OnInit {
   private _breakpointObserver = inject(BreakpointObserver);
+  private _translator = inject(TranslateService)
 
   readonly auction = input<ListingItemDTO>();
   readonly isRow = signal<boolean>(false);
@@ -35,5 +36,11 @@ export class AuctionCard implements OnInit {
         })
       )
       .subscribe(value => this.isRow.set(value));
+  }
+
+  getCategoryName(category: any): string {
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
   }
 }

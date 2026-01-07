@@ -1,7 +1,7 @@
 import {Component, computed, effect, inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import {Button} from '../../shared/button/button';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {ProductListingService} from '../../../core/services/product-listing-service/product-listing.service';
 import {ProductListingDTO} from '../../../core/models/product-listings/ProductListingDTO';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
@@ -57,6 +57,7 @@ export class ProductDetails implements OnInit, OnDestroy {
   private _route = inject(ActivatedRoute);
   private _platformId = inject(PLATFORM_ID);
   private _router = inject(Router);
+  private _translator = inject(TranslateService)
 
   private _toggleFollowSubject = new Subject<void>();
   private _destroy$ = new Subject<void>();
@@ -95,6 +96,12 @@ export class ProductDetails implements OnInit, OnDestroy {
   get auction(): AuctionListingDTO | null {
     const value = this.article();
     return isAuctionListing(value) ? value : null;
+  }
+
+  getCategoryName(category: any): string {
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
   }
 
   OnMessageClicked(): void {

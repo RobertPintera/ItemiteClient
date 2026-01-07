@@ -1,7 +1,7 @@
-import {Component, input, model, OnInit, output, signal} from '@angular/core';
+import {Component, inject, input, model, OnInit, output, signal} from '@angular/core';
 import {Paginator} from '../../../shared/paginator/paginator';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {Button} from '../../../shared/button/button';
 import {ListingResponseDTO} from '../../../../core/models/listing-general/ListingResponseDTO';
 import {Loader} from '../../../shared/loader/loader';

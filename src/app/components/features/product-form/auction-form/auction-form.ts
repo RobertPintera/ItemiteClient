@@ -7,7 +7,7 @@ import {GeoMapAutocomplete} from "../../../shared/geo-map-autocomplete/geo-map-a
 import {InputNumber} from "../../../shared/input-number/input-number";
 import {MediaManager} from "../../../shared/media-manager/media-manager";
 import {Router} from "@angular/router";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {CategoryTreeDTO} from '../../../../core/models/category/CategoryTreeDTO';
 import {OptionItem} from '../../../../core/models/OptionItem';
@@ -21,7 +21,7 @@ import {PostAuctionListingDTO} from '../../../../core/models/auction-listing/Pos
 import {Location} from '@angular/common';
 import {LISTING_TYPES} from '../../../../core/constants/constants';
 import {auctionDurationValidator, isEmptyValidator, localizationValidator} from '../../../../core/utility/Validation';
-import {finalize} from 'rxjs';
+import {finalize, Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-auction-form',
@@ -45,6 +45,8 @@ export class AuctionForm {
   private _formBuilder = inject(FormBuilder);
   private _router = inject(Router);
   private _location = inject(Location);
+   private _translator = inject(TranslateService)
+  private _destroy$ = new Subject<void>();
 
   readonly loading = model.required<boolean>();
   readonly auction = input<AuctionListingDTO | null>(null);
@@ -56,10 +58,7 @@ export class AuctionForm {
 
   readonly mainCategories = this._categoryService.mainCategories();
 
-  readonly mainCategoriesOptions: OptionItem[] = this.mainCategories.map(cat => ({
-    key: cat.id.toString(),
-    value: "categories." + cat.name
-  }));
+  readonly mainCategoriesOptions = signal<OptionItem[]>([]);
   readonly subCategoriesOptions = signal<SelectNode[] | undefined>(undefined);
 
   readonly form = this._formBuilder.group({
@@ -101,6 +100,22 @@ export class AuctionForm {
         this.fillForm(auction);
       }
     });
+
+    this.updateMainCategoriesOptions();
+    
+      // Nasłuchuj na zmiany języka
+      this._translator.onLangChange
+        .pipe(takeUntil(this._destroy$))
+        .subscribe(() => {
+          this.updateMainCategoriesOptions();
+          this.updateSubCategoriesOptions();
+          this.updateSelectedCategories();
+        });
+  }
+
+  ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   selectMainCategory(option?: OptionItem){
@@ -240,7 +255,7 @@ export class AuctionForm {
     return {
       option: {
         key: category.id.toString(),
-        value: "categories." + category.name
+        value: this.getCategoryName(category)
       },
       childrenNodes: category.subCategories?.map(cat => this.mapCategoryToSelectNode(cat)) || []
     };
@@ -290,7 +305,7 @@ export class AuctionForm {
 
     const mainOption = {
       key: main.id.toString(),
-      value: "categories." + main.name
+      value: this.getCategoryName(main)
     };
 
     this.selectMainCategory(mainOption);
@@ -304,7 +319,7 @@ export class AuctionForm {
 
     const subOption: OptionItem = {
       key: sub.id.toString(),
-      value: "categories." + sub.name
+      value: this.getCategoryName(main)
     };
 
     this.form.get('subcategory')?.setValue(subOption);
@@ -313,4 +328,76 @@ export class AuctionForm {
   private toUtcISOString(date: string): string {
     return new Date(date).toISOString();
   }
+private updateMainCategoriesOptions() {
+    const options = this.mainCategories.map(category => ({
+      key: category.id.toString(),
+      value: this.getCategoryName(category)
+    }));
+    this.mainCategoriesOptions.set(options);
+  }
+
+  private updateSubCategoriesOptions() {
+    const categories = this.categories();
+      if (categories && categories.subCategories) {
+        const subCategoriesNodes = categories.subCategories.map(cat => 
+          this.mapCategoryToSelectNode(cat)
+        );
+      this.subCategoriesOptions.set(subCategoriesNodes);
+    }
+  }
+  private updateSelectedCategories() {
+  // Aktualizuj główną kategorię
+  const mainCategoryControl = this.form.get('mainCategory');
+  const currentMainCategory = mainCategoryControl?.value;
+  if (currentMainCategory) {
+    const category = this.mainCategories.find(c => c.id.toString() === currentMainCategory.key);
+    if (category) {
+      const updatedMainOption = {
+        key: currentMainCategory.key,
+        value: this.getCategoryName(category)
+      };
+      this.selectedMainCategory.set(updatedMainOption);
+      mainCategoryControl.setValue(updatedMainOption);
+    }
+  }
+
+
+  const subCategoryControl = this.form.get('subcategory');
+  const currentSubCategory = subCategoryControl?.value;
+  if (currentSubCategory) {
+    const subCategory = this.findCategoryById(this.categories(), currentSubCategory.key);
+    if (subCategory) {
+      const updatedSubOption = {
+        key: currentSubCategory.key,
+        value: this.getCategoryName(subCategory)
+      };
+      this.selectedSubCategory.set(updatedSubOption);
+      subCategoryControl.setValue(updatedSubOption);
+    }
+  }
+}
+
+getCategoryName(category: any): string {
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
+  }
+
+private findCategoryById(categoryTree: CategoryTreeDTO | null, id: string): CategoryTreeDTO | null {
+  if (!categoryTree) return null;
+  
+  if (categoryTree.id.toString() === id) {
+    return categoryTree;
+  }
+  
+  if (categoryTree.subCategories) {
+    for (const subCat of categoryTree.subCategories) {
+      const found = this.findCategoryById(subCat, id);
+      if (found) return found;
+    }
+  }
+  
+  return null;
+}
+
 }

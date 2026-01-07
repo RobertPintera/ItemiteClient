@@ -4,7 +4,7 @@ import {Button} from '../../../shared/button/button';
 import {ActivatedRoute} from '@angular/router';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {ComboBox} from '../../../shared/combo-box/combo-box';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {LISTING_TYPES, ListingType} from '../../../../core/constants/constants';
 import {ListingFilter} from '../../../../core/models/product-listings/ListingFilter';
 import {GeocoderAutocomplete} from '../../../shared/geocoder-autocomplete/geocoder-autocomplete';
@@ -30,6 +30,7 @@ import {FilterSidebar} from '../../../../core/models/FilterSidebar';
 export class ProductFilterSidebar implements OnInit {
   private _categoryService = inject(CategoryService);
   private _route = inject(ActivatedRoute);
+  private _translator = inject(TranslateService)
 
   readonly filter = input.required<ListingFilter>();
   readonly localizationText = input.required<string | null>();
@@ -160,6 +161,14 @@ export class ProductFilterSidebar implements OnInit {
         country: country,
       };
     }
+  }
+
+  getCategoryName(category: CategoryTreeDTO | null): string {
+    if (!category) return '';
+
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
   }
 
   closeFilterX(){
