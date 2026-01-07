@@ -12,12 +12,13 @@
   }
   <div class="flex flex-col w-full max-w-[1500px] py-4 px-8">
     <div class="flex flex-wrap w-full justify-between">
-      @if(article()?.categories?.length){
+      @let categories = article()?.categories;
+      @if(categories){
         <a routerLink="/products" [queryParams]="{ id: article()?.categories?.[0]?.id ?? null  }"
            class="text-muted-foreground
          hover:text-muted-foreground/60
          focus:text-muted-foreground/60
-         duration-75">{{ 'product_details.home' | translate }} / {{ getCategoryName(article()?.categories?.[0]) }}</a>
+         duration-75">{{ 'product_details.home' | translate }} / {{ getCategoryName(categories[0]) }}</a>
       }
       @else{
         <a routerLink="/"
@@ -83,17 +84,39 @@
               @if(product){
                 <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
                 <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
-                <a class="flex flex-row items-center" [routerLink]="[`/user/${product.owner.id}`]">
-                  {{'product_details.vendor' | translate}}:
-                  <p class="hover:underline font-bold" >{{ product.owner.userName }} </p>
-                </a>
+                <div class="flex flex-col gap-2">
+                  <p>{{'product_details.vendor' | translate}}:</p>
+                  <div class="flex flex-row items-center gap-2">
+                    <a class="size-10 rounded-full overflow-hidden bg-muted" [routerLink]="['/user', article()?.owner?.id]">
+                      <img [src]="article()?.owner?.photoUrl"
+                           (error)="imageError($event)"
+                           [alt]="article()?.owner?.userName"
+                           class="w-full h-full object-cover">
+                    </a>
+                    <div class="flex flex-col">
+                      <p>{{ article()?.owner?.userName }}</p>
+                      <p>{{ article()?.owner?.email }}</p>
+                    </div>
+                  </div>
+                </div>
               } @else if(auction) {
                 <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
                 <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd' }}</p>
-                <a class="flex flex-row items-center" [routerLink]="[`/user/${auction.owner.id}`]">
-                  {{'product_details.vendor' | translate}}:
-                  <p class="hover:underline font-bold" > {{ auction.owner.userName }} </p>
-                </a>
+                <div class="flex flex-col gap-2">
+                  <p>{{'product_details.vendor' | translate}}:</p>
+                  <div class="flex flex-row items-center gap-2">
+                    <a class="size-10 rounded-full overflow-hidden bg-muted" [routerLink]="['/user', article()?.owner?.id]">
+                      <img [src]="article()?.owner?.photoUrl"
+                           (error)="imageError($event)"
+                           [alt]="article()?.owner?.userName"
+                           class="w-full h-full object-cover">
+                    </a>
+                    <div class="flex flex-col">
+                      <p>{{ article()?.owner?.userName }}</p>
+                      <p>{{ article()?.owner?.email }}</p>
+                    </div>
+                  </div>
+                </div>
                 <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
                 <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
               }
@@ -120,21 +143,39 @@
             @if(product){
               <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
               <p>{{'product_details.price' | translate}}: {{ product.price }}$ {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
-              <a class="flex flex-row items-center" [routerLink]="[`/user/${product.owner.id}`]">
-                {{'product_details.vendor' | translate}}:
-                <p class="hover:underline font-bold" >
-                  {{ product.owner.userName }}
-                </p>
-              </a>
+              <div class="flex flex-col gap-2">
+                <p>{{'product_details.vendor' | translate}}:</p>
+                <div class="flex flex-row items-center gap-2">
+                  <a class="size-10 rounded-full overflow-hidden bg-muted" [routerLink]="['/user', article()?.owner?.id]">
+                  <img [src]="article()?.owner?.photoUrl"
+                      (error)="imageError($event)"
+                      [alt]="article()?.owner?.userName"
+                      class="w-full h-full object-cover">
+                  </a>
+                  <div class="flex flex-col">
+                    <p>{{ article()?.owner?.userName }}</p>
+                    <p>{{ article()?.owner?.email }}</p>
+                  </div>
+                </div>
+              </div>
             } @else if(auction) {
               <p>{{'product_details.date_of_issue' | translate}}: {{ auction.dateCreated | date:'yyyy-MM-dd' }}</p>
               <p>{{ 'product_details.date_ends' | translate }}: {{ auction.dateEnds | date:'yyyy-MM-dd HH:mm' }}</p>
-              <a class="flex flex-row items-center"  [routerLink]="[`/user/${auction.owner.id}`]">
-                {{'product_details.vendor' | translate}}:
-                <p class="hover:underline font-bold" >
-                  {{ auction.owner.userName }}
-                </p>
-              </a>
+              <div class="flex flex-col gap-2">
+                <p>{{'product_details.vendor' | translate}}:</p>
+                <div class="flex flex-row items-center gap-2">
+                  <a class="size-10 rounded-full overflow-hidden bg-muted" [routerLink]="['/user', article()?.owner?.id]">
+                    <img [src]="article()?.owner?.photoUrl"
+                         (error)="imageError($event)"
+                         [alt]="article()?.owner?.userName"
+                         class="w-full h-full object-cover">
+                  </a>
+                  <div class="flex flex-col">
+                    <p>{{ article()?.owner?.userName }}</p>
+                    <p>{{ article()?.owner?.email }}</p>
+                  </div>
+                </div>
+              </div>
               <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
               <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
             }

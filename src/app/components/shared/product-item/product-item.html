@@ -47,12 +47,12 @@
           </div>
           <div class="flex-none flex flex-col items-start md:items-end md:pr-8">
             @if(product()?.listingType === LISTING_TYPES.PRODUCT){
-              <p class="text-xl md:text-3xl">{{ 'product_details.price' | translate }}: {{ product()?.price }} $</p>
+              <p class="text-xl md:text-3xl">{{ 'product_details.price' | translate }}: {{ product()?.price }} pln</p>
               <p class="text-base md:text-lg">{{ product()?.isNegotiable ? ('product_details.negotiable' | translate) : "" }}</p>
             }
             @else if(product()?.listingType === LISTING_TYPES.AUCTION){
-              <p class="text-xl md:text-3xl">{{ 'product_details.current_bid' | translate }}: {{ product()?.currentBid ?? product()?.startingBid}}$</p>
-              <p class="text-base md:text-lg">{{ 'product_details.starting_bid' | translate }}: {{ product()?.startingBid }}</p>
+              <p class="text-xl md:text-3xl">{{ 'product_details.current_bid' | translate }}: {{ product()?.currentBid ?? product()?.startingBid}} pln</p>
+              <p class="text-base md:text-lg">{{ 'product_details.starting_bid' | translate }}: {{ product()?.startingBid }} pln</p>
             }
           </div>
         </div>

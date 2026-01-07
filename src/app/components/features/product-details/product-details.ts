@@ -17,6 +17,8 @@ import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {BidHistoryDialog} from './bid-history-dialog/bid-history-dialog';
+import {imageError} from '../../../core/utility/global-utility';
+import {CategoryDTO} from '../../../core/models/category/CategoryDTO';
 
 interface ButtonSettings {
   label: string;
@@ -55,7 +57,7 @@ export class ProductDetails implements OnInit, OnDestroy {
   private _route = inject(ActivatedRoute);
   private _platformId = inject(PLATFORM_ID);
   private _router = inject(Router);
-  private _translator = inject(TranslateService)
+  private _translator = inject(TranslateService);
 
   private _toggleFollowSubject = new Subject<void>();
   private _destroy$ = new Subject<void>();
@@ -94,7 +96,7 @@ export class ProductDetails implements OnInit, OnDestroy {
     return isAuctionListing(value) ? value : null;
   }
 
-  getCategoryName(category: any): string {
+  getCategoryName(category: CategoryDTO): string {
     return this._translator.getCurrentLang() === 'pl'
       ? category.polishName
       : category.name;
@@ -318,4 +320,5 @@ export class ProductDetails implements OnInit, OnDestroy {
   }
 
   protected readonly LISTING_TYPES = LISTING_TYPES;
+  protected readonly imageError = imageError;
 }
