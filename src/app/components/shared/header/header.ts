@@ -5,9 +5,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {OptionItem} from '../../../core/models/OptionItem';
 import {isPlatformBrowser} from '@angular/common';
 import {OnProfileMenu} from '../../features/on-profile-menu/on-profile-menu';
-import {UserService} from '../../../core/services/user-service/user.service';
 import {AuthService} from '../../../core/services/auth-service/auth.service';
 import {NotificationService} from '../../../core/services/notification-service/notification.service';
+import {languages} from '../../../core/constants/languages';
 
 @Component({
   selector: 'app-header',
@@ -26,12 +26,7 @@ export class Header {
   private _router = inject(Router);
   private _notificationService = inject(NotificationService);
 
-  readonly languages: OptionItem[] = [
-    { key: 'en', value: 'en' },
-    { key: 'pl', value: 'pl' },
-  ];
-
-  readonly selectedLanguage = signal<OptionItem>(this.languages[0]);
+  readonly selectedLanguage = signal<OptionItem>(languages[0]);
   private _showProfileMenu = signal(false);
   readonly showProfileMenu = this._showProfileMenu.asReadonly();
   private _playHideAnim = signal(false);
@@ -48,10 +43,9 @@ export class Header {
 
     const savedLanguage = localStorage.getItem('selectedLanguage');
     if (savedLanguage) {
-      const languageItem = this.languages.find(l => l.value === savedLanguage);
+      const languageItem = languages.find(l => l.value === savedLanguage);
       if (languageItem) {
         this.selectedLanguage.set(languageItem);
-        this._translate.use(languageItem.value);
       }
     } else {
       this._translate.use(this.selectedLanguage().value);
@@ -94,4 +88,6 @@ export class Header {
     }
     await this._router.navigate(['login']);
   }
+
+  protected readonly languages = languages;
 }
