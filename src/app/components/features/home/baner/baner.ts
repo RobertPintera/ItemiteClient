@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, input} from '@angular/core';
+import {BannerDTO} from '../../../../core/models/banners/BannerDTO';
 
 @Component({
   selector: 'app-baner',
@@ -8,4 +9,5 @@ import { Component } from '@angular/core';
 })
 export class Baner {
 
+  readonly banner = input.required<BannerDTO | null>();
 }

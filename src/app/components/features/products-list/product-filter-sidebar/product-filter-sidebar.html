@@ -13,7 +13,6 @@
           <app-input-number [(value)]="filterSidebar().priceFrom" [min]="0" [max]="10000000" (enterPressed)="usePriceFrom($event)" (blurInput)="usePriceFrom($event)" class="flex-1 w-full"/>
           <span class="shrink-0 text-2xl">-</span>
           <app-input-number [(value)]="filterSidebar().priceTo" [min]="0" [max]="10000000" (enterPressed)="usePriceTo($event)" (blurInput)="usePriceTo($event)" class="flex-1 w-full"/>
-          <span class="shrink-0 text-2xl">$</span>
         </div>
         @if (filterSidebar().priceError){
           <div class="flex flex-row w-full">
