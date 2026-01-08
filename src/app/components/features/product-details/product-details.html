@@ -27,7 +27,6 @@
         listingType: "Product",
         price: product.price
       }'/>
-    />
   }
   <div class="flex flex-col w-full max-w-[1500px] py-4 px-8">
     <div class="flex flex-wrap w-full justify-between">
@@ -103,6 +102,9 @@
               @if(product){
                 <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
                 <p>{{'product_details.price' | translate}}: {{ product.price }} pln{{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
+                @if(product.yourPrice !== null){
+                  <p>{{ 'product_details.your_price' | translate }}: {{ product.yourPrice }} pln</p>
+                }
                 <div class="flex flex-col gap-2">
                   <p>{{'product_details.vendor' | translate}}:</p>
                   <div class="flex flex-row items-center gap-2">
@@ -162,6 +164,9 @@
             @if(product){
               <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
               <p>{{'product_details.price' | translate}}: {{ product.price }} pln {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
+              @if(product.yourPrice !== null){
+                <p>{{ 'product_details.your_price' | translate }}: {{ product.yourPrice }} pln</p>
+              }
               <div class="flex flex-col gap-2">
                 <p>{{'product_details.vendor' | translate}}:</p>
                 <div class="flex flex-row items-center gap-2">

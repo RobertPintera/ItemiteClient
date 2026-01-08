@@ -8,6 +8,7 @@ export interface ProductListingDTO {
   name: string;
   description: string;
   price: number;
+  yourPrice: number;
   views: number;
   followers: number;
   dateCreated: string;
