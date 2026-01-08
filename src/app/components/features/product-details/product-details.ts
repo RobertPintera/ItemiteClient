@@ -264,7 +264,7 @@ export class ProductDetails implements OnInit, OnDestroy {
           buttonsSettings.push({label: 'product_details.buy', routerLink: ['/payment'], queryParams: { id: this.product.id, type: LISTING_TYPES.PRODUCT }});
         buttonsSettings.push({label: 'product_details.send_message', onClick: () => this.OnMessageClicked()});
       }
-      buttonsSettings.push({ label: this.isClickPhoneNumber() ? this.product.owner.phoneNumber ?? 'product_details.call' : 'product_details.call', onClick: () => this.clickNumber()});
+      buttonsSettings.push({ label: this.isClickPhoneNumber() ? this.product.owner.phoneNumber ?? 'product_details.no_phone' : 'product_details.call', onClick: () => this.clickNumber()});
     }
     // For auctions
     else if (this.auction){
@@ -278,7 +278,7 @@ export class ProductDetails implements OnInit, OnDestroy {
           buttonsSettings.push({label: 'product_details.bid', routerLink: ['/payment'], queryParams: { id: this.auction.id, type: LISTING_TYPES.AUCTION }});
         buttonsSettings.push({label: 'product_details.send_message', onClick: () => this.OnMessageClicked()});
       }
-      buttonsSettings.push({label: this.isClickPhoneNumber() ? this.auction.owner.phoneNumber ?? 'product_details.call' : 'product_details.call', onClick: () => this.clickNumber(),});
+      buttonsSettings.push({label: this.isClickPhoneNumber() ? this.auction.owner.phoneNumber ?? 'product_details.no_phone' : 'product_details.call', onClick: () => this.clickNumber(),});
       buttonsSettings.push({label: 'product_details.bids_history', onClick: () => this.openBidHistory()});
     }
 

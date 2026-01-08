@@ -83,7 +83,7 @@
             <div class="flex flex-col gap-2 text-xl mb-2">
               @if(product){
                 <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
-                <p>{{'product_details.price' | translate}}: {{ product.price }}${{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
+                <p>{{'product_details.price' | translate}}: {{ product.price }} pln{{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
                 <div class="flex flex-col gap-2">
                   <p>{{'product_details.vendor' | translate}}:</p>
                   <div class="flex flex-row items-center gap-2">
@@ -117,8 +117,8 @@
                     </div>
                   </div>
                 </div>
-                <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
-                <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
+                <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }} pln</p>
+                <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? auction.startingBid  }} pln</p>
               }
               @for (button of getVisibleButtons(); track button.id){
                 <app-button
@@ -142,7 +142,7 @@
           @if (isLg()){
             @if(product){
               <p>{{'product_details.date_of_issue' | translate}}: {{product.dateCreated | date:'yyyy-MM-dd'}}</p>
-              <p>{{'product_details.price' | translate}}: {{ product.price }}$ {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
+              <p>{{'product_details.price' | translate}}: {{ product.price }} pln {{ product.isNegotiable ? (' - ' + ('product_details.negotiable' | translate)) : '' }}</p>
               <div class="flex flex-col gap-2">
                 <p>{{'product_details.vendor' | translate}}:</p>
                 <div class="flex flex-row items-center gap-2">
@@ -176,8 +176,8 @@
                   </div>
                 </div>
               </div>
-              <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }}$</p>
-              <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }}$</p>
+              <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }} pln</p>
+              <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }} pln</p>
             }
             @for (button of getVisibleButtons(); track button.id){
               <app-button

@@ -13,6 +13,7 @@ import {LISTING_TYPES, ListingType} from '../../../core/constants/constants';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductItem} from '../../shared/product-item/product-item';
 import {UserService} from '../../../core/services/user-service/user.service';
+import {PaymentService} from '../../../core/services/payment-service/payment-service';
 
 @Component({
   selector: 'app-user-products',
@@ -33,6 +34,9 @@ export class UserProducts implements OnInit, OnDestroy {
   private _listingService = inject(ListingService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
+  private _paymentService = inject(PaymentService);
+
+  readonly onboardingStatus = this._paymentService.onboardingStatus;
 
   readonly isMd = signal<boolean>(false);
   readonly isOpenDialog = signal<boolean>(false);

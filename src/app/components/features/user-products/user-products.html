@@ -1,7 +1,7 @@
 <div class="flex m-auto flex-col max-w-7xl w-full py-4 px-8 gap-4">
   <h1>{{ 'user_products.header' | translate }}</h1>
   <div class="w-full flex justify-between py-4 gap-2 flex-wrap">
-    <app-button [label]="'controls.create' | translate" (clickButton)="openDialog()"/>
+    <app-button [label]="'controls.create' | translate" (clickButton)="openDialog()" [disabled]="!onboardingStatus()"/>
     @if(!loading() && totalPages() !== 0){
       <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
     }

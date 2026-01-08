@@ -23,7 +23,8 @@
     "individual_pricing": "Individual pricing",
     "delete_individual_pricing": "Delete individual pricing",
     "user_id": "User Id",
-    "buy": "Buy"
+    "buy": "Buy",
+    "no_phone": "No phone number"
   },
   "paginator": {
     "preposition": "from"

@@ -2,6 +2,6 @@
   <p class="text-2xl md:text-3xl lg:text-4xl">{{'user_info.your_articles' | translate}}</p>
   <div class="flex flex-wrap gap-2 w-full pl-4">
     <app-button [routerLink]="onboardingStatus() ? '/user-products' : null" [label]="'user_info.your_product_and_auctions' | translate" [disabled]="!onboardingStatus()"/>
-    <app-button [routerLink]="onboardingStatus() ? '/followed-products' : null" [label]="'user_info.your_followed_products' | translate" severity="secondary" [disabled]="!onboardingStatus()"/>
+    <app-button routerLink='/followed-products' [label]="'user_info.your_followed_products' | translate" severity="secondary"/>
   </div>
 </div>
