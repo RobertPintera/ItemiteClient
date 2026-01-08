@@ -137,7 +137,7 @@ export class ReportForm implements OnInit {
     const field = this.reportForm.get("message");
     const cleared = field?.value.trim() ?? "";
 
-    const length = cleared.length;
+    const length = cleared.length + (cleared.match(/\n/g)?.length ?? 0) * 3;
 
     this._text.set(cleared);
     this._currentChars.set(length);

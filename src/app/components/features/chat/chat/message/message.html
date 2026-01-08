@@ -53,7 +53,7 @@
 
             <!-- Message content -->
             @if(content()) {
-                <p class="p-1 rounded-lg text-secondary-foreground bg-secondary w-fit min-w-20"
+                <p class="p-1 rounded-lg text-secondary-foreground bg-secondary w-fit max-w-full min-w-20 wrap-anywhere"
                   [class.self-end]="isOwnMessage()"
                   [class.text-right]="isOwnMessage()"
                   [class.italic]="isDeleted()"

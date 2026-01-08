@@ -65,7 +65,8 @@ export class Chat implements AfterViewInit, OnInit {
   private notificationService: NotificationService = inject(NotificationService);
   private productListingService = inject(ProductListingService);
 
-  private readonly LIMIT = 20;
+  private readonly PER_PAGE_LIMIT = 20;
+  readonly MAX_CHARS = 1000;
 
   readonly currentUserId = computed(() => this.userService.userBasicInfo().id);
 
@@ -124,6 +125,8 @@ export class Chat implements AfterViewInit, OnInit {
 
   private _messageInput = signal("");
   readonly messageInput = this._messageInput.asReadonly();
+  private _inputLength = signal(0);
+  readonly inputLength = this._inputLength.asReadonly();
 
   private _attachments = signal<File[]>([]);
   readonly attachments = this._attachments.asReadonly();
@@ -170,7 +173,8 @@ export class Chat implements AfterViewInit, OnInit {
       if(this.listingId() === undefined
         || this.currentUserId() < 0
         || !this.otherMemberInfo()) return;
-      this.LoadMessages(this.listingId(), this.LIMIT);
+      this._messages.set([]);
+      this.LoadMessages(this.listingId(), this.PER_PAGE_LIMIT);
     });
 
     this.form = new FormGroup({
@@ -181,8 +185,14 @@ export class Chat implements AfterViewInit, OnInit {
   private _platformId = inject(PLATFORM_ID);
 
   ngOnInit() {
+    if(isPlatformServer(this._platformId)) return;
+
+    this.form.get("messageInput")?.valueChanges.subscribe((value) => {
+      this.OnInput();
+    });
+
     // Fetch listing info if it wasn't passed manually via input
-    if(this.inputListing() || isPlatformServer(this._platformId)) return;
+    if(this.inputListing()) return;
 
     this.productListingService.loadProductListingPublicNoError(
       this.listingId()
@@ -208,18 +218,22 @@ export class Chat implements AfterViewInit, OnInit {
     });
   }
 
+  OnInput() {
+    const field = this.form.get("messageInput");
+    const cleared: string = field?.value.trim() ?? "";
 
+    const length = cleared.length + (cleared.match(/\n/g)?.length ?? 0) * 3;
+
+    this._inputLength.set(length);
+  }
 
   @ViewChild('chatContainer') chatContainer!: ElementRef<HTMLDivElement>;
   @ViewChild('chatWrapper') chatWrapper: ElementRef | undefined;
 
   LoadMessages(listingId: number, limit: number, cursor: string | undefined = undefined) {
-
-    const el = this.chatContainer?.nativeElement;
-    const prevScrollHeight = el?.scrollHeight;
-
     if(!this.otherMemberInfo()) return;
 
+    this._loading.set(true);
     this.messageService.GetChat(listingId, this.otherMemberInfo()!.id, limit, cursor).subscribe({
       next: chat => {
         this._messages.set([...chat.items, ...this._messages()]);
@@ -228,13 +242,6 @@ export class Chat implements AfterViewInit, OnInit {
         this._cursor = chat.nextCursor;
         this._hasMore.set(chat.hasMore);
         this.onListingLoaded.emit(listingId);
-
-        // this.adjustHeight();
-
-        /*setTimeout(() => {
-          const scrollContainer = this.scrollContainer.nativeElement as HTMLElement;
-          scrollContainer.scrollTop = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-        }, 50);*/
       },
       error: error => {
         console.log(error);
@@ -244,12 +251,12 @@ export class Chat implements AfterViewInit, OnInit {
   }
 
   OnLoadMessagesClicked() {
-    this.LoadMessages(this.listingId(), this.LIMIT, this._cursor);
+    this.LoadMessages(this.listingId(), this.PER_PAGE_LIMIT, this._cursor);
   }
 
   // region Submit
   OnSubmit() {
-    const input = this.form.value.messageInput.trim();
+    const input:string = this.form.value.messageInput.trim();
 
     if(this.editingMessage()) {
       this.OnEditMessageSubmit(input);
@@ -277,6 +284,7 @@ export class Chat implements AfterViewInit, OnInit {
       },
       error: error => {
         this.errorService.SendErrorMessage(error);
+        this.LoadTextIntoInput(input);
       }
     });
   }
