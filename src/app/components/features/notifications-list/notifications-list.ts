@@ -108,8 +108,6 @@ export class NotificationsList implements AfterViewInit {
   }
 
   private async ChangePage(page: number) {
-
-    // todo call api and load into _ogTotalPages & _ogCurrentPage
     this._loading.set(true);
     const notifications =
       await this._notificationService.FetchNotifications(this.PAGE_SIZE, page);

@@ -6,7 +6,7 @@
     <div class="h-32 w-full flex flex-col justify-center items-center shadow-inner ">
       <p class="text-xl text-secondary-foreground"> {{"on_profile_menu.notifications" | translate}} </p>
     </div>
-    <div class="relative scroll-hidden w-full grow flex-1 transition-all duration-200 overflow-y-auto flex-col">
+    <div class="relative scroll-hidden h-[calc(100%-var(--spacing)*32)] w-full grow flex-1 transition-all duration-200 overflow-y-auto flex-col">
       @if (hasItemsOnPage()) {
         <div class="w-full flex flex-row items-center mt-3 mb-3">
           <div class="h-px bg-accent flex-1"></div>
