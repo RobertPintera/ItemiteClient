@@ -137,6 +137,10 @@ export class ProductListingService {
     );
   }
 
+  loadProductListingPublicNoError(id: number){
+    return this.getProductListingPublic(id);
+  }
+
   addUserIndividualPrice(listingId: number, userId: number, data: PostUserPriceDTO) {
 
     return this.postUserPrice(listingId, userId, data).pipe(

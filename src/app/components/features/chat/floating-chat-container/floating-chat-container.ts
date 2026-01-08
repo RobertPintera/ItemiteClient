@@ -4,7 +4,7 @@ import {ChatMemberInfo} from '../../../../core/models/chat/ChatMemberInfo';
 import {User} from "../../../../core/models/user/User";
 import {CdkDrag, CdkDragHandle} from "@angular/cdk/drag-drop";
 import {UserService} from '../../../../core/services/user-service/user.service';
-import {ListingType} from '../../../../core/constants/constants';
+import {ListingBasicInfo} from '../../../../core/models/product-listings/ListingBasicInfo';
 
 @Component({
   selector: 'app-floating-chat-container',
@@ -23,9 +23,8 @@ export class FloatingChatContainer {
   private _maximize = signal(false);
   readonly maximize = this._maximize.asReadonly();
 
-  readonly listingId = input.required<number>();
-  readonly listingType = input<ListingType>();
   readonly productOwner = input.required<User>();
+  readonly listing = input.required<ListingBasicInfo>();
 
   private readonly _currentUser = computed(() => this._userService.userInfo());
   readonly chatMembers: Signal<ChatMemberInfo[]> = computed(() =>

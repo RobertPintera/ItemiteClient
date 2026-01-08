@@ -72,7 +72,6 @@ export class Chat implements AfterViewInit, OnInit {
   // This needs to be filled in parent component - s
   readonly chatMembers = input.required<ChatMemberInfo[]>();
   readonly listingId = input.required<number>();
-  readonly listingType = input<ListingType>();
   readonly inputListing = input<ListingBasicInfo>();
   private _fetchedListing = signal<ListingBasicInfo|undefined>(undefined);
   readonly listing = computed(() =>
@@ -185,33 +184,31 @@ export class Chat implements AfterViewInit, OnInit {
     // Fetch listing info if it wasn't passed manually via input
     if(this.inputListing() || isPlatformServer(this._platformId)) return;
 
-    if(this.listingType()){
-      if(this.listingType() === LISTING_TYPES.PRODUCT){
-        this.productListingService.loadProductListingPublic(
-          this.listingId()
-        ).subscribe({
-          next: (result) => {
-            this._fetchedListing.set(
-              {
-                id: result.id,
-                name: result.name,
-                mainImageUrl: result.mainImageUrl,
-                isArchived: result.isArchived,
-                ownerId: result.owner.id,
-                listingType: "Product",
-                price: result.price
-              }
-            );
-          },
-          error:(error) => {
-            // listing might be auction, not product
-            //  or other error might happen
-            //  either way, it will work as intended
+    this.productListingService.loadProductListingPublicNoError(
+      this.listingId()
+    ).subscribe({
+      next: (result) => {
+        this._fetchedListing.set(
+          {
+            id: result.id,
+            name: result.name,
+            mainImageUrl: result.mainImageUrl,
+            isArchived: result.isArchived,
+            ownerId: result.owner.id,
+            listingType: "Product",
+            price: result.price
           }
-        });
+        );
+      },
+      error:(error) => {
+        // listing might be auction, not product
+        //  or other error might happen
+        //  either way, it will work as intended
       }
-    }
+    });
   }
+
+
 
   @ViewChild('chatContainer') chatContainer!: ElementRef<HTMLDivElement>;
   @ViewChild('chatWrapper') chatWrapper: ElementRef | undefined;

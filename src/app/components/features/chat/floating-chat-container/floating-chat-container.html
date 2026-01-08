@@ -45,7 +45,8 @@
       <div class="flex flex-1">
         <app-chat
           [chatMembers]="chatMembers()"
-          [listingId]="listingId()"
+          [listingId]="listing().id"
+          [inputListing]="listing()"
           class="min-h-full w-full"
         />
       </div>

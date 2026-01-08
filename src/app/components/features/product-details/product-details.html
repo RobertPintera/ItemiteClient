@@ -3,12 +3,31 @@
     <app-floating-chat-container
       [class.hidden]="!showChat()"
       (onExitClicked)="disableChatVisibility()"
-      [listingId]="auction.id" [listingType]="LISTING_TYPES.AUCTION" [productOwner]="auction.owner"/>
+      [productOwner]="auction.owner"
+      [listing]='{
+        id: auction.id,
+        name: auction.name,
+        mainImageUrl: auction.images[0].imageUrl,
+        isArchived: false,
+        ownerId: auction.owner.id,
+        listingType: "Auction",
+        price: auction.currentBid ?? auction.startingBid
+      }'/>
   } @else if (product) {
     <app-floating-chat-container
       [class.hidden]="!showChat()"
       (onExitClicked)="disableChatVisibility()"
-      [listingId]="product.id" [listingType]="LISTING_TYPES.PRODUCT" [productOwner]="product.owner"/>
+      [productOwner]="product.owner"
+      [listing]='{
+        id: product.id,
+        name: product.name,
+        mainImageUrl: product.images[0].imageUrl,
+        isArchived: false,
+        ownerId: product.owner.id,
+        listingType: "Product",
+        price: product.price
+      }'/>
+    />
   }
   <div class="flex flex-col w-full max-w-[1500px] py-4 px-8">
     <div class="flex flex-wrap w-full justify-between">
