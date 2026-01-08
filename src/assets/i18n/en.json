@@ -462,7 +462,10 @@
     "create_auction": "Create auction",
     "edit_auction": "Edit auction",
     "preview": "Preview",
-    "error_url_listing_type": "The URL contains an invalid form type."
+    "error_url_listing_type": "The URL contains an invalid form type.",
+    "error_owner": "You are not owner of product.",
+    "error_archive": "The offer is archive.",
+    "error_exists": "The offer doesn't exist."
   },
   "followed_products": {
     "header": "Followed products",

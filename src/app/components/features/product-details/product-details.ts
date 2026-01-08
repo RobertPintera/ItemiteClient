@@ -164,7 +164,7 @@ export class ProductDetails implements OnInit, OnDestroy {
         if (validId === null) return;
 
         if(type === 'Product'){
-          this._productListingService.loadProudctListingAuth(validId).subscribe({
+          this._productListingService.loadProductListingAuth(validId).subscribe({
             next: product => {
               this.article.set(product);
               console.log(this.product);

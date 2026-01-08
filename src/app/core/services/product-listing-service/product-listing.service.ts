@@ -127,7 +127,7 @@ export class ProductListingService {
     );
   }
 
-  loadProudctListingAuth(id: number){
+  loadProductListingAuth(id: number){
     return this.getProductListingAuth(id).pipe(
       catchError(err => {
         this.errorHandlerService.SendErrorMessage(err);

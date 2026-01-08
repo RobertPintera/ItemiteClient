@@ -145,7 +145,7 @@ export class Payment implements OnInit, OnDestroy {
       if (validId === null) return;
 
       if(type === 'Product')
-        this._productListingService.loadProudctListingAuth(validId).subscribe(product => this.article.set(product));
+        this._productListingService.loadProductListingAuth(validId).subscribe(product => this.article.set(product));
       else if (type === 'Auction')
         this._auctionListingService.loadAuctionListingAuth(validId).subscribe(auction => {
           this.article.set(auction);

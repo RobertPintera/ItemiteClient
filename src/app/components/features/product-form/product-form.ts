@@ -10,8 +10,9 @@ import {ProductListingService} from '../../../core/services/product-listing-serv
 import {ProductListingDTO} from '../../../core/models/product-listings/ProductListingDTO';
 import {AuctionListingDTO} from '../../../core/models/auction-listing/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
-import {EMPTY, map, switchMap} from 'rxjs';
+import {EMPTY, finalize, map, of, switchMap} from 'rxjs';
 import {LoadingDialog} from '../../shared/loading-dialog/loading-dialog';
+import {UserService} from '../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-product-form',
@@ -29,6 +30,9 @@ export class ProductForm{
   private _destroyRef = inject(DestroyRef);
   private _auctionListingService = inject(AuctionListingService);
   private _productListingService = inject(ProductListingService);
+  private _userService = inject(UserService);
+
+  readonly userInfo = this._userService.userBasicInfo;
 
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
   readonly formType = signal<ListingType | null>(null);
@@ -64,13 +68,13 @@ export class ProductForm{
         switchMap(({ formType, id }) => {
           if (!formType || !id) {
             this.article.set(null);
-            return EMPTY;
+            return of(null);
           }
 
           return formType === LISTING_TYPES.PRODUCT
-            ? this._productListingService.loadProudctListingAuth(id)
+            ? this._productListingService.loadProductListingAuth(id)
             : this._auctionListingService.loadAuctionListingAuth(id);
-        })
+        }),
       )
       .subscribe({
         next: listing => {

@@ -147,11 +147,11 @@ export class ProductGeneralForm implements OnDestroy {
 
     if(!idProduct) return;
 
+    this.isOpenArchiveDialog.set(false);
     this.loading.set(true);
 
     this._listingService.archiveListing(idProduct).pipe(finalize(() => {
       this.loading.set(false);
-      this.isOpenArchiveDialog.set(false);
     })).subscribe(() => {
       this._location.back();
     });

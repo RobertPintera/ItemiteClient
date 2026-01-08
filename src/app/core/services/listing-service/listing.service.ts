@@ -8,6 +8,7 @@ import {PaginatedListingDTO} from '../../models/listing-general/PaginatedListing
 import {ListingType} from '../../constants/constants';
 import {ListingItemDTO} from '../../models/listing-general/LitstingItemDTO';
 import {PostListingFollowDTO} from '../../models/listing-general/PostListingFollowDTO';
+import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ import {PostListingFollowDTO} from '../../models/listing-general/PostListingFoll
 export class ListingService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.itemiteApiUrl}/listing`;
+  private errorHandlerService: ErrorHandlerService = inject(ErrorHandlerService);
 
   // API
 
@@ -84,6 +86,7 @@ export class ListingService {
 
     return this.getListingUser(id, params).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error getFilteredListings:', err);
         throw err;
       })
@@ -93,6 +96,7 @@ export class ListingService {
   archiveListing(id: number) {
     return this.putArchiveListing(id).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error archiveListing:', err);
         throw err;
       })
@@ -102,6 +106,7 @@ export class ListingService {
   loadDedicatedListing(type: ListingType): Observable<ListingItemDTO[]> {
     return this.getDedicatedListing(type).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error loadDedicatedListing:',err);
         throw err;
       })
@@ -115,6 +120,7 @@ export class ListingService {
 
     return this.getListingFollow(params).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error getFilteredListings:', err);
         throw err;
       })
@@ -124,6 +130,7 @@ export class ListingService {
   addFollowedListing(id: number): Observable<PostListingFollowDTO>{
     return this.postListingFollow(id).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error addFollowedListing:',err);
         throw err;
       })
@@ -133,6 +140,7 @@ export class ListingService {
   deleteFollowedListing(id: number): Observable<void> {
     return this.deleteListingFollow(id).pipe(
       catchError(err => {
+        this.errorHandlerService.SendErrorMessage(err);
         console.error('Error deleteFollowedListing:',err);
         throw err;
       })

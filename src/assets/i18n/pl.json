@@ -455,7 +455,10 @@
     "create_auction": "Tworzenie aukcji",
     "edit_auction": "Edycja aukcji",
     "preview": "Podgląd",
-    "error_url_listing_type": "URL zawiera nieprawidłowy typ formularza."
+    "error_url_listing_type": "URL zawiera nieprawidłowy typ formularza.",
+    "error_owner": "Nie jesteś właścicielem oferty.",
+    "error_archive": "Oferta jest zaarchiwizowana.",
+    "error_exists": "Oferta nie istnieje."
   },
   "followed_products": {
     "header": "Obserwowane produkty",
