@@ -3,8 +3,10 @@
     <div class="flex flex-col gap-2 w-[100vw] max-w-full sm:max-w-sm">
       <div class="flex flex-col gap-2 w-full">
         <app-button type="button" [label]="'other_user_settings.visit_user_page' | translate" severity="primary" variant="outlined" [routerLink]="[`/user/${userId()}`]"/>
-        <app-button type="button" [label]="'other_user_settings.edit_price' | translate" severity="primary" variant="outlined" (clickButton)="EditPrice()"/>
-        <app-button type="button" [label]="'other_user_settings.delete_price' | translate" severity="primary" variant="outlined" (clickButton)="DeletePrice()"/>
+        @if (showPriceEdition()) {
+          <app-button type="button" [label]="'other_user_settings.edit_price' | translate" severity="primary" variant="outlined" (clickButton)="EditPrice()"/>
+          <app-button type="button" [label]="'other_user_settings.delete_price' | translate" severity="primary" variant="outlined" (clickButton)="DeletePrice()"/>
+        }
       </div>
 
       <div class="flex flex-row self-end">

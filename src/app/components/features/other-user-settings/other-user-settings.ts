@@ -22,6 +22,7 @@ import {RouterLink} from '@angular/router';
 })
 export class OtherUserSettings {
   userId = input.required<number>();
+  showPriceEdition = input.required<boolean>();
 
   onEditPriceClicked = output<void>();
   onDeletePriceClicked = output<void>();

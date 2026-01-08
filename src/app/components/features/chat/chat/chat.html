@@ -28,6 +28,7 @@
   (onCloseClicked)="SwitchUserSettingsDialog()"
   (onDeletePriceClicked)="SwitchDeletePriceDialog(true)"
   (onEditPriceClicked)="SwitchCustomPriceDialog(true)"
+  [showPriceEdition]="listing()?.listingType === 'Product'"
 />
 
 <app-individual-pricing-dialog
