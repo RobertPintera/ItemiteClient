@@ -42,6 +42,7 @@ export class AdminService {
   createCategory(category: PostAdminPanelCategoryDTO): Observable<PostAdminPanelCategoryResponseDTO>{
     const formData = new FormData();
     formData.append('Name', category.name);
+    formData.append('PolishName', category.polishName);
     formData.append('Description', category.description);
     if(category.parentCategoryId) formData.append("ParentCategoryId", category.parentCategoryId.toString());
     if(category.svgImage) formData.append('svgImage', category.svgImage);
@@ -58,6 +59,7 @@ export class AdminService {
   updateCategory(id: number, category: PostAdminPanelCategoryDTO) {
     const formData = new FormData();
     formData.append('Name', category.name);
+    formData.append('PolishName', category.polishName);
     formData.append('Description', category.description);
     if(category.parentCategoryId) formData.append("ParentCategoryId", category.parentCategoryId.toString());
     if(category.svgImage) formData.append('svgImage', category.svgImage);
