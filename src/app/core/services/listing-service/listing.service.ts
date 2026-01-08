@@ -26,8 +26,8 @@ export class ListingService {
     return this.http.get<ListingResponseDTO>(`${this.baseUrl}/${id}`, { params } );
   }
 
-  private deleteArchiveListing(id: number) {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+  private putArchiveListing(id: number) {
+    return this.http.put(`${this.baseUrl}/archive/${id}`, {});
   }
 
   private getDedicatedListing(listingType: ListingType): Observable<ListingItemDTO[]>{
@@ -90,10 +90,10 @@ export class ListingService {
     );
   }
 
-  deleteArchivedListing(id: number) {
-    return this.deleteArchiveListing(id).pipe(
+  archiveListing(id: number) {
+    return this.putArchiveListing(id).pipe(
       catchError(err => {
-        console.error('Error deleteListing:', err);
+        console.error('Error archiveListing:', err);
         throw err;
       })
     );

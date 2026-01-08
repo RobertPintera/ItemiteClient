@@ -141,10 +141,20 @@
 
   <!-- Actions -->
   <div class="flex flex-row flex-wrap w-full justify-between gap-4">
-    <app-button type="button" severity="accent" variant="outlined" [label]="'cancel' | translate" (clickButton)="cancel()"/>
+    <app-button type="button" severity="accent" variant="outlined" [label]="'controls.cancel' | translate" (clickButton)="cancel()"/>
 
     <div class="flex flex-row flex-wrap gap-4">
-      <app-button type="submit" [label]="product() ? ('edit' | translate) : ( 'create' | translate) "/>
+      @if(product()){
+        <app-button type="button" severity="secondary" [label]="'product_details.archive' | translate" (clickButton)="openArchiveDialog()"/>
+      }
+      <app-button type="submit" [label]="product() ? ('controls.edit' | translate) : ( 'controls.create' | translate) "/>
     </div>
   </div>
 </form>
+@if(loading()){
+  <app-loading-dialog/>
+}
+@else if(isOpenArchiveDialog()){
+  <app-confirm-dialog [prompt]="'product_details.archive_offer' | translate" (onCancelClicked)="closeArchiveDialog()" (onConfirmClicked)="archiveProduct()"/>
+}
+

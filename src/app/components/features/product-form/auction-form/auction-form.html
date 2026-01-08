@@ -162,10 +162,10 @@
 
   <!-- Actions -->
   <div class="flex flex-row flex-wrap w-full justify-between gap-4">
-    <app-button type="button" severity="accent" variant="outlined" [label]="'cancel' | translate" (clickButton)="cancel()"/>
+    <app-button type="button" severity="accent" variant="outlined" [label]="'controls.cancel' | translate" (clickButton)="cancel()"/>
 
     <div class="flex flex-row flex-wrap gap-4">
-      <app-button type="submit" [label]="auction() ? ('edit' | translate) : ( 'create' | translate) "/>
+      <app-button type="submit" [label]="auction() ? ('controls.edit' | translate) : ( 'controls.create' | translate) "/>
     </div>
   </div>
 </form>

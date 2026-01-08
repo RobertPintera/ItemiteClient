@@ -3,10 +3,10 @@
     <p>{{ 'geo_map_autocomplete.selected_city' | translate }}: {{currentLocalization()?.formatted ?? '-----'}}</p>
     <div class="flex flex-row gap-2">
       @if(isEdit()){
-        <app-button [label]="('cancel' | translate)" severity="accent" variant="outlined" (clickButton)="cancel()"/>
-        <app-button [label]="('save' | translate)" severity="primary" (clickButton)="save()"/>
+        <app-button [label]="('controls.cancel' | translate)" severity="accent" variant="outlined" (clickButton)="cancel()"/>
+        <app-button [label]="('controls.save' | translate)" severity="primary" (clickButton)="save()"/>
       } @else {
-        <app-button [label]="('edit' | translate)" severity="primary" (clickButton)="edit()" [disabled]="isDisabled()"/>
+        <app-button [label]="('controls.edit' | translate)" severity="primary" (clickButton)="edit()" [disabled]="isDisabled()"/>
       }
     </div>
   </div>
