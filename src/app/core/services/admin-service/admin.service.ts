@@ -95,6 +95,16 @@ export class AdminService {
     return this._http.delete<void>(`${this._baseUrl}/${id}`);
   }
 
+  deleteListing(id: number){
+    return this.deleteAdminPanelListing(id).pipe(
+      catchError(err => {
+        this._errorHandlerService.SendErrorMessage(err);
+        console.error('Error deleteListing:', err);
+        throw err;
+      })
+    );
+  }
+
   // endregion
 
   // region Payments
@@ -311,7 +321,7 @@ export class AdminService {
       emailSubject: emailSubject,
       title: title,
       message: message
-    }
+    };
     try {
       await lastValueFrom(
         this._http.post(`${environment.itemiteApiUrl}/adminpanel/global-notification`, payload, {timeout: 15000, withCredentials: true})

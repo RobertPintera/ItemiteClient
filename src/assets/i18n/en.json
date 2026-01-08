@@ -27,7 +27,9 @@
     "buy": "Buy",
     "no_phone": "No phone number",
     "archive": "Archive",
-    "archive_offer": "Are you sure to archive your offer? This action is undone!"
+    "archive_offer": "Are you sure to archive your offer? This action is undone!",
+    "delete_offer": "Delete offer",
+    "delete_offer_dialog": "Are you sure to delete your offer? This action is undone!"
   },
   "paginator": {
     "preposition": "from"

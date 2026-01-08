@@ -223,4 +223,9 @@
 @if (auction) {
   <app-bid-dialog-history [id]="auction.id" [(isOpen)]="isOpenBidHistory"/>
 }
-
+@if (loading()){
+  <app-loading-dialog/>
+}
+@else if (isOpenDeleteOfferDialog()){
+  <app-confirm-dialog [prompt]="'product_details.delete_offer_dialog' | translate" (onCancelClicked)="cancelDeleteOfferDialog()" (onConfirmClicked)="deleteOffer()"/>
+}

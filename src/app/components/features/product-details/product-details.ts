@@ -13,12 +13,15 @@ import {DatePipe, isPlatformBrowser, isPlatformServer, NgClass} from '@angular/c
 import {Map, Marker} from 'leaflet';
 import {ButtonSeverity, LISTING_TYPES} from '../../../core/constants/constants';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
-import {debounceTime, Subject, takeUntil} from 'rxjs';
+import {debounceTime, finalize, Subject, takeUntil} from 'rxjs';
 import {FloatingChatContainer} from '../chat/floating-chat-container/floating-chat-container';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {BidHistoryDialog} from './bid-history-dialog/bid-history-dialog';
 import {imageError} from '../../../core/utility/global-utility';
 import {CategoryDTO} from '../../../core/models/category/CategoryDTO';
+import {AdminService} from '../../../core/services/admin-service/admin.service';
+import {LoadingDialog} from '../../shared/loading-dialog/loading-dialog';
+import {ConfirmDialog} from '../../shared/confirm-dialog/confirm-dialog';
 
 interface ButtonSettings {
   label: string;
@@ -44,12 +47,15 @@ interface ButtonOrder {
     FloatingChatContainer,
     NgClass,
     BidHistoryDialog,
+    LoadingDialog,
+    ConfirmDialog,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css'
 })
 export class ProductDetails implements OnInit, OnDestroy {
   private _breakpointObserver = inject(BreakpointObserver);
+  private _adminService = inject(AdminService);
   private _productListingService = inject(ProductListingService);
   private _auctionListingService = inject(AuctionListingService);
   private _userService = inject(UserService);
@@ -84,6 +90,8 @@ export class ProductDetails implements OnInit, OnDestroy {
   readonly isClickPhoneNumber = signal<boolean>(false);
   readonly isOwner = signal<boolean>(false);
 
+  readonly loading = signal<boolean>(false);
+  readonly isOpenDeleteOfferDialog = signal<boolean>(false);
   readonly isOpenBidHistory = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
@@ -244,6 +252,29 @@ export class ProductDetails implements OnInit, OnDestroy {
     this._toggleFollowSubject.next();
   }
 
+  openDeleteOfferDialog(){
+    this.isOpenDeleteOfferDialog.set(true);
+  }
+
+  cancelDeleteOfferDialog() {
+    this.isOpenDeleteOfferDialog.set(false);
+  }
+
+  deleteOffer(){
+    const id = this.article()?.id;
+
+    if(!id) return;
+
+    this.loading.set(true);
+
+    this._adminService.deleteListing(id).pipe(finalize(() => {
+      this.loading.set(false);
+      this.isOpenDeleteOfferDialog.set(false);
+    })).subscribe(() => {
+      this._router.navigate(['/']);
+    });
+  }
+
   openBidHistory() {
     this.isOpenBidHistory.set(true);
   }
@@ -281,6 +312,10 @@ export class ProductDetails implements OnInit, OnDestroy {
       }
       buttonsSettings.push({label: this.isClickPhoneNumber() ? this.auction.owner.phoneNumber ?? 'product_details.no_phone' : 'product_details.call', onClick: () => this.clickNumber(),});
       buttonsSettings.push({label: 'product_details.bids_history', onClick: () => this.openBidHistory()});
+    }
+
+    if(this._userService.userInfo().roles.includes('Admin')){
+      buttonsSettings.push({label: 'product_details.delete_offer', severity: "danger", onClick: () => this.openDeleteOfferDialog()});
     }
 
     return buttonsSettings.map((btn, index) => ({

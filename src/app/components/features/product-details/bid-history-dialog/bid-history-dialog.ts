@@ -3,12 +3,16 @@ import {Bid} from '../../../../core/models/auction-listing/Bid';
 import {AuctionListingService} from '../../../../core/services/auction-listing-service/auction-listing.service';
 import {Dialog} from '../../../shared/dialog/dialog';
 import {DatePipe} from '@angular/common';
+import {Button} from '../../../shared/button/button';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-bid-dialog-history',
   imports: [
     Dialog,
-    DatePipe
+    DatePipe,
+    Button,
+    TranslatePipe
   ],
   templateUrl: './bid-history-dialog.html',
   styleUrl: './bid-history-dialog.css',

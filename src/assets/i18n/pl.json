@@ -27,7 +27,9 @@
     "buy": "Kup",
     "no_phone": "Brak numeru telefonu",
     "archive": "Archiwizuj",
-    "archive_offer": "Czy na chcesz zaarchiwizować tą ofertę? Ta akcja jest nieodwraclana!"
+    "archive_offer": "Czy na chcesz zaarchiwizować tą ofertę? Ta akcja jest nieodwracalna!",
+    "delete_offer": "Usuń ofertę",
+    "delete_offer_dialog": "Czy na pewno chcesz usunąć ofertę? Ta akcja jest nieodwracalna!"
   },
   "paginator": {
     "preposition": "z"
