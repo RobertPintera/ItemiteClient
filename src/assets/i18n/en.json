@@ -25,7 +25,9 @@
     "delete_individual_pricing": "Delete individual pricing",
     "user_id": "User Id",
     "buy": "Buy",
-    "no_phone": "No phone number"
+    "no_phone": "No phone number",
+    "archive": "Archive",
+    "archive_offer": "Are you sure to archive your offer? This action is undone!"
   },
   "paginator": {
     "preposition": "from"
@@ -675,7 +677,8 @@
     "form_dialog": {
       "edit": "Edit category",
       "create": "Create category",
-      "name": "Name",
+      "name": "English Name",
+      "polish_name": "Polish Name",
       "description": "Description",
       "image": "Image (Only svg)"
     },

@@ -25,7 +25,9 @@
     "delete_individual_pricing": "Usunięcie indywidualnej wyceny",
     "user_id": "Identyfikator użytkownika",
     "buy": "Kup",
-    "no_phone": "Brak numeru telefonu"
+    "no_phone": "Brak numeru telefonu",
+    "archive": "Archiwizuj",
+    "archive_offer": "Czy na chcesz zaarchiwizować tą ofertę? Ta akcja jest nieodwraclana!"
   },
   "paginator": {
     "preposition": "z"
@@ -669,7 +671,8 @@
     "form_dialog": {
       "edit": "Edycja kategorii",
       "create": "Tworzenie kategorii",
-      "name": "Nazwa",
+      "name": "Angielska Nazwa",
+      "polish_name": "Polska nazwa",
       "description": "Opis",
       "image": "Obraz (Tylko svg)"
     },

@@ -47,6 +47,28 @@
         }
       </div>
       <div class="flex flex-col gap-2 w-full">
+        <label for="polish_name" class="text-xl font-semibold">{{ 'admin_category_control.form_dialog.polish_name' | translate }}</label>
+        <input type="text" name="polish_name" formControlName="polish_name" class="border rounded px-3 py-2">
+        @if (form.controls.polish_name.invalid && (form.controls.polish_name.touched || form.controls.polish_name.dirty)) {
+          <div>
+            <ul class="text-destructive text-sm list-disc pl-4">
+              @if(form.controls.polish_name.hasError('required')) {
+                <li>{{ 'validator_errors_admin_category_control.field_required' | translate }}</li>
+              }
+              @if(form.controls.polish_name.hasError('empty')){
+                <li>{{ 'validator_errors_admin_category_control.field_empty' | translate }}</li>
+              }
+              @if(form.controls.polish_name.hasError('minlength')){
+                <li>{{ 'validator_errors_admin_category_control.name_min' | translate }}</li>
+              }
+              @if(form.controls.polish_name.hasError('maxlength')){
+                <li>{{ 'validator_errors_admin_category_control.name_max' | translate }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+      <div class="flex flex-col gap-2 w-full">
         <label for="description" class="text-xl font-semibold">{{ 'admin_category_control.form_dialog.description' | translate }}</label>
         <textarea id="description" name="description" formControlName="description" rows="5" class="border rounded px-3 py-2"></textarea>
         @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)) {

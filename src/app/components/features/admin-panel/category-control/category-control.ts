@@ -1,6 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {Button} from '../../../shared/button/button';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {CategoryService} from '../../../../core/services/category-service/category.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ActivatedRoute, RouterLink} from '@angular/router';
@@ -34,6 +34,7 @@ export class CategoryControl implements OnInit {
   private _sanitizer = inject(DomSanitizer);
   private _route = inject(ActivatedRoute);
   private _formBuilder = inject(FormBuilder);
+  private _translator = inject(TranslateService);
 
   readonly categories = signal<CategoryView[]>([]);
 
@@ -55,6 +56,12 @@ export class CategoryControl implements OnInit {
       this.parentCategoryId.set(id);
       this.loadCategories(id);
     });
+  }
+
+  getCategoryName(category: any): string {
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
   }
 
   openDialog(category?: CategoryDTO): void {

@@ -22,6 +22,9 @@ import {PutProductListingDTO} from '../../../../core/models/product-listings/Put
 import {Location} from '@angular/common';
 import {finalize, Subject, takeUntil} from 'rxjs';
 import {CategoryDTO} from '../../../../core/models/category/CategoryDTO';
+import {ConfirmDialog} from '../../../shared/confirm-dialog/confirm-dialog';
+import {LoadingDialog} from '../../../shared/loading-dialog/loading-dialog';
+import {ListingService} from '../../../../core/services/listing-service/listing.service';
 
 @Component({
   selector: 'app-product-general-form',
@@ -35,12 +38,15 @@ import {CategoryDTO} from '../../../../core/models/category/CategoryDTO';
     ReactiveFormsModule,
     TranslatePipe,
     InputNumber,
+    ConfirmDialog,
+    LoadingDialog,
   ],
   templateUrl: './product-general-form.html',
   styleUrl: './product-general-form.css'
 })
 export class ProductGeneralForm implements OnDestroy {
   private _productListingService = inject(ProductListingService);
+  private _listingService = inject(ListingService);
   private _categoryService = inject(CategoryService);
   private _formBuilder = inject(FormBuilder);
   private _router = inject(Router);
@@ -51,6 +57,8 @@ export class ProductGeneralForm implements OnDestroy {
 
   readonly loading = model.required<boolean>();
   readonly product = input<ProductListingDTO | null>(null);
+
+  readonly isOpenArchiveDialog = signal<boolean>(false);
 
   readonly categories = signal<CategoryTreeDTO | null>(null);
 
@@ -124,6 +132,29 @@ export class ProductGeneralForm implements OnDestroy {
     return this._translator.getCurrentLang() === 'pl'
       ? category.polishName
       : category.name;
+  }
+
+  openArchiveDialog(){
+    this.isOpenArchiveDialog.set(true);
+  }
+
+  closeArchiveDialog() {
+    this.isOpenArchiveDialog.set(false);
+  }
+
+  archiveProduct() {
+    const idProduct = this.product()?.id;
+
+    if(!idProduct) return;
+
+    this.loading.set(true);
+
+    this._listingService.archiveListing(idProduct).pipe(finalize(() => {
+      this.loading.set(false);
+      this.isOpenArchiveDialog.set(false);
+    })).subscribe(() => {
+      this._location.back();
+    });
   }
 
   selectMainCategory(option?: OptionItem){
