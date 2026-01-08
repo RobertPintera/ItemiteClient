@@ -1,4 +1,4 @@
-import {Component, computed, inject, input, OnInit, PLATFORM_ID, signal} from '@angular/core';
+import {Component, computed, effect, inject, input, OnInit, PLATFORM_ID, signal} from '@angular/core';
 import {Chat} from '../chat/chat';
 import {ChatMemberInfo} from '../../../../core/models/chat/ChatMemberInfo';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -12,28 +12,31 @@ import {isPlatformServer} from '@angular/common';
   styleUrl: './fullscreen-chat-page.css',
 })
 export class FullscreenChatPage implements OnInit {
-  readonly listingId = signal<number>(-1);
+  readonly listingId = input.required<number>();
   readonly chatMembers = signal<ChatMemberInfo[]>([]);
 
-  private _router = inject(Router);
   private _platformId = inject(PLATFORM_ID);
 
   readonly isValid = computed(() =>
-    this.chatMembers().length > 1
+    this.chatMembers().length > 1 &&
+    this.listingId() !== undefined &&
+    this.listingId() > -1
   );
 
   ngOnInit(): void {
     if(isPlatformServer(this._platformId)) return;
 
-    const state = history.state;
-    console.log(state);
+    this.GetDataFromState();
 
-    if (!state?.listingId || !state?.chatMembers) {
+  }
+
+  private GetDataFromState() {
+    const state = history.state;
+
+    if (!state?.chatMembers) {
       return;
     }
 
-    this.listingId.set(state.listingId);
     this.chatMembers.set(state.chatMembers);
   }
-
 }

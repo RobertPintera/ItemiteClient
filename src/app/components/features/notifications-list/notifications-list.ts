@@ -193,14 +193,13 @@ export class NotificationsList implements AfterViewInit {
       ];
       const listingId = notification.listingId ?? -1;
 
-      await this._router.navigate(
-        ['chat'],
-        {state: {
-          chatMembers: chatMembers, listingId: listingId}
-        }
+      await this._router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+        this._router.navigate(['chat'],
+          {
+            state: { chatMembers: chatMembers },
+            queryParams: { listingId: listingId }
+          })
       );
-
-      return;
     }
   }
   OnCloseClicked() {
