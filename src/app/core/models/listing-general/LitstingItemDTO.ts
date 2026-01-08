@@ -1,3 +1,5 @@
+import {BasicCategory} from '../category/BasicCategory';
+
 export interface ListingItemDTO {
   id: number;
   name: string;
@@ -9,7 +11,7 @@ export interface ListingItemDTO {
     state: string;
   }
   dateCreated: string;
-  categories: { id: string; name: string; polishName: string }[];
+  categories: BasicCategory[];
   mainImageUrl: string;
   isFeatured: boolean;
   isArchived: boolean;

@@ -6,7 +6,7 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {ProductListingDTO} from '../../../core/models/product-listings/ProductListingDTO';
 import {AuctionListingDTO} from '../../../core/models/auction-listing/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {
   StripeCardCvcComponent,
   StripeCardExpiryComponent, StripeCardGroupDirective, StripeCardNumberComponent, StripeService
@@ -24,6 +24,9 @@ import {InputNumber} from '../../shared/input-number/input-number';
 import {PaymentForm} from '../../../core/models/PaymentForm';
 import {PostBidAuctionListingDTO} from '../../../core/models/auction-listing/PostBidAuctionListingDTO';
 import {isEmptyValidator, postalCodeValidator} from '../../../core/utility/Validation';
+import {CategoryDTO} from '../../../core/models/category/CategoryDTO';
+import {imageError} from '../../../core/utility/global-utility';
+import {UserService} from '../../../core/services/user-service/user.service';
 
 @Component({
   selector: 'app-payment',
@@ -49,11 +52,15 @@ export class Payment implements OnInit, OnDestroy {
   private _productListingService = inject(ProductListingService);
   private _auctionListingService = inject(AuctionListingService);
   private _errorHandlerService = inject(ErrorHandlerService);
+  private _userService = inject(UserService);
   private _paymentService = inject(PaymentService);
   private _route = inject(ActivatedRoute);
+  private _translator = inject(TranslateService);
   private _formBuilder = inject(FormBuilder);
   private _router = inject(Router);
   protected stripeService = inject(StripeService);
+
+  readonly userInfo = this._userService.userInfo;
 
   readonly countriesOptions = countries.map(country => ({
     key: country.code,
@@ -180,6 +187,12 @@ export class Payment implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  getCategoryName(category: CategoryDTO): string {
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
+  }
+
   pay() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -232,4 +245,6 @@ export class Payment implements OnInit, OnDestroy {
       }
     });
   }
+
+  protected readonly imageError = imageError;
 }

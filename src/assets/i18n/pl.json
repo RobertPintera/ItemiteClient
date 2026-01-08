@@ -492,7 +492,10 @@
     "payment_card_details": "Dane karty płatniczej",
     "bid": "Oferta",
     "bid_amount": "Wartość oferty",
-    "billing_information": "Informacje rozliczeniowe"
+    "billing_information": "Informacje rozliczeniowe",
+    "error_owner": "You are owner of product.",
+    "error_archive": "The offer is archive.",
+    "error_exists": "The offer doesn't exist."
   },
   "validator_errors_payment": {
     "field_required": "Pole jest wymagane.",

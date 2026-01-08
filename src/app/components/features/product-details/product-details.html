@@ -201,7 +201,7 @@
                 </div>
               </div>
               <p>{{ 'product_details.starting_bid' | translate }}: {{ auction.startingBid }} pln</p>
-              <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? 0 }} pln</p>
+              <p>{{ 'product_details.current_bid' | translate }}: {{ auction.currentBid ?? auction.startingBid }} pln</p>
             }
             @for (button of getVisibleButtons(); track button.id){
               <app-button
