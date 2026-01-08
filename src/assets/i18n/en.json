@@ -675,7 +675,8 @@
     "form_dialog": {
       "edit": "Edit category",
       "create": "Create category",
-      "name": "Name",
+      "name": "English Name",
+      "polish_name": "Polish Name",
       "description": "Description",
       "image": "Image (Only svg)"
     },

@@ -669,7 +669,8 @@
     "form_dialog": {
       "edit": "Edycja kategorii",
       "create": "Tworzenie kategorii",
-      "name": "Nazwa",
+      "name": "Angielska Nazwa",
+      "polish_name": "Polska nazwa",
       "description": "Opis",
       "image": "Obraz (Tylko svg)"
     },

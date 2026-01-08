@@ -50,6 +50,12 @@ export class CategoryDialog {
       Validators.minLength(2),
       Validators.maxLength(100)
     ]),
+    polish_name: new FormControl<string>("", [
+      Validators.required,
+      isEmptyValidator,
+      Validators.minLength(2),
+      Validators.maxLength(100)
+    ]),
     description: new FormControl<string>("",[
       Validators.maxLength(500)
     ]),
@@ -83,6 +89,7 @@ export class CategoryDialog {
     this.isOpen.set(false);
     this.form.reset({
       name: "",
+      polish_name: "",
       description: "",
       svgImage: null
     });
@@ -141,6 +148,7 @@ export class CategoryDialog {
     if(!id){
       const payload: PostAdminPanelCategoryDTO = {
         name: this.form.value.name ?? '',
+        polishName: this.form.value.polish_name ?? '',
         description: this.form.value.description ?? '',
         parentCategoryId: this.form.value.parentCategoryId,
         svgImage: this.form.value.svgImage ?? null,
@@ -153,6 +161,7 @@ export class CategoryDialog {
       ).subscribe(() => {
         this.form.reset({
           name: null,
+          polish_name: null,
           description: "",
           svgImage: null
         });
@@ -162,6 +171,7 @@ export class CategoryDialog {
     } else{
       const payload: PutAdminPanelCategoryDTO = {
         name: this.form.value.name ?? '',
+        polishName: this.form.value.polish_name ?? '',
         description: this.form.value.description ?? '',
         parentCategoryId: this.form.value.parentCategoryId,
         svgImage: this.form.value.svgImage ?? null,
@@ -174,6 +184,7 @@ export class CategoryDialog {
       ).subscribe(() => {
         this.form.reset({
           name: null,
+          polish_name: null,
           description: "",
           svgImage: null
         });
@@ -196,6 +207,7 @@ export class CategoryDialog {
 
     this.form.patchValue({
       name: category.name,
+      polish_name: category.polishName,
       description: category.description,
       svgImage: null
     });
