@@ -75,12 +75,12 @@ export class ProductGeneralForm implements OnDestroy {
       Validators.required,
       isEmptyValidator,
       Validators.minLength(2),
-      Validators.maxLength(30)]
+      Validators.maxLength(50)]
     ),
     price: new FormControl<number>(0,[
       Validators.required,
       Validators.min(0.01),
-      Validators.max(1000000),
+      Validators.max(999999.99),
       Validators.pattern(/^\d+(\.\d{1,2})?$/)
     ]),
     mainCategory: new FormControl<OptionItem | null>(null, Validators.required),
