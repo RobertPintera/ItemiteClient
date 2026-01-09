@@ -131,7 +131,7 @@ export class AuthService {
     const payload = {email: email, password: password};
     try {
       const userInfo = await lastValueFrom(
-        this.http.post<UserBasicInfo>(`${environment.itemiteApiUrl}/auth/login`, payload, {withCredentials: true})
+        this.http.post<UserBasicInfo>(`${environment.itemiteApiUrl}/auth/login`, payload)
       );
       this._isUserLoggedIn.set(true);
       this._userBasicInfo.set(userInfo);
