@@ -4,13 +4,13 @@ import {AuctionForm} from './auction-form/auction-form';
 import {ActivatedRoute} from '@angular/router';
 import {LISTING_TYPES, ListingType} from '../../../core/constants/constants';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {TranslatePipe} from '@ngx-translate/core';
 import {AuctionListingService} from '../../../core/services/auction-listing-service/auction-listing.service';
 import {ProductListingService} from '../../../core/services/product-listing-service/product-listing.service';
 import {ProductListingDTO} from '../../../core/models/product-listings/ProductListingDTO';
 import {AuctionListingDTO} from '../../../core/models/auction-listing/AuctionListingDTO';
 import {isAuctionListing, isProductListing} from '../../../core/type-guards/listing-type.guard';
-import {EMPTY, finalize, map, of, switchMap} from 'rxjs';
+import {catchError, map, of, switchMap} from 'rxjs';
 import {LoadingDialog} from '../../shared/loading-dialog/loading-dialog';
 import {UserService} from '../../../core/services/user-service/user.service';
 
@@ -37,6 +37,7 @@ export class ProductForm{
   readonly article = signal<ProductListingDTO | AuctionListingDTO | null>(null);
   readonly formType = signal<ListingType | null>(null);
   readonly loading = signal<boolean>(false);
+  readonly notFound = signal<boolean>(false);
 
   get product(): ProductListingDTO | null {
     const value = this.article();
@@ -66,14 +67,22 @@ export class ProductForm{
           return { formType, id: id ? Number(id) : null };
         }),
         switchMap(({ formType, id }) => {
+          this.notFound.set(false);
+
           if (!formType || !id) {
             this.article.set(null);
             return of(null);
           }
 
           return formType === LISTING_TYPES.PRODUCT
-            ? this._productListingService.loadProductListingAuth(id)
-            : this._auctionListingService.loadAuctionListingAuth(id);
+            ? this._productListingService.loadProductListingAuth(id).pipe(catchError(() => {
+              this.notFound.set(true);
+              return of(null);
+            }))
+            : this._auctionListingService.loadAuctionListingAuth(id).pipe(catchError(() => {
+              this.notFound.set(true);
+              return of(null);
+            }));
         }),
       )
       .subscribe({

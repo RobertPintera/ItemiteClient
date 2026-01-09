@@ -3,15 +3,19 @@
   <div class="flex justify-center py-16  w-full">
     <h2>{{ 'product_form.error_url_listing_type' | translate }}</h2>
   </div>
-} @else if (data) {
-  @if(data.owner.id !== userInfo().id){
+} @else {
+  @if(data && data.owner.id !== userInfo().id){
     <div class="flex justify-center py-16  w-full">
       <h2>{{ 'product_form.error_owner' | translate }}</h2>
     </div>
   }
-  @else if (data.isArchived){
+  @else if (data && data.isArchived){
     <div class="flex justify-center py-16  w-full">
       <h2>{{ 'product_form.error_archive' | translate }}</h2>
+    </div>
+  } @else if (notFound()){
+    <div class="flex justify-center py-16  w-full">
+      <h2>{{ 'product_form.error_exists' | translate }}</h2>
     </div>
   }
   @else{
@@ -26,10 +30,6 @@
       </div>
     </div>
   }
-} @else{
-  <div class="flex justify-center py-16  w-full">
-    <h2>{{ 'product_form.error_exists' | translate }}</h2>
-  </div>
 }
 @if(loading()){
   <app-loading-dialog/>
