@@ -3,7 +3,7 @@
     duration-150">
   <div class="flex flex-row justify-between gap-2">
     <h3>{{sale().paymentId}} - {{ 'sales.sale' | translate }}</h3>
-    <p class="text-xl md:text-2xl">{{ 'transactions.status.header' | translate }}: {{ ('transactions.status.' + (sale().status | underscore)) | translate }}</p>
+    <p class="text-xl md:text-2xl">{{ 'transactions.status.header' | translate }}: {{ ('transactions.status.' + (sale().status | snakeCase)) | translate }}</p>
   </div>
   <div class="flex flex-row justify-between w-full text-lg md:text-xl gap-2">
     <p>{{ 'transactions.sold' | translate }}: {{ sale().totalAmount }} {{ sale().currency }}</p>

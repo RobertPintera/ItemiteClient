@@ -560,6 +560,7 @@
     "show_product": "Show product"
   },
   "transactions": {
+    "no_transactions": "Can't find any transactions.",
     "status": {
       "header": "Status",
       "authorized": "Authorized",

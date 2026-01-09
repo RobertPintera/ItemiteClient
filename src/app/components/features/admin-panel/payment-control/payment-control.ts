@@ -19,6 +19,7 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 import {PaginatedPaymentResponseDTO} from '../../../../core/models/payments/PaginatedPaymentResponseDTO';
 import {PaymentFilter} from '../../../../core/models/payments/PaymentFilter';
 import {GetAdminPanelPaymentsWithStatusDTO} from '../../../../core/models/payments/GetAdminPanelPaymentsWithStatusDTO';
+import {SnakeCasePipe} from '../../../../core/pipes/snake-case-pipe/snake-case-pipe';
 
 @Component({
   selector: 'app-payment-control',
@@ -33,6 +34,7 @@ import {GetAdminPanelPaymentsWithStatusDTO} from '../../../../core/models/paymen
   ],
   templateUrl: './payment-control.html',
   styleUrl: './payment-control.css',
+  providers: [SnakeCasePipe]
 })
 export class PaymentControl implements OnInit, OnDestroy {
   private _adminService = inject(AdminService);
@@ -40,6 +42,7 @@ export class PaymentControl implements OnInit, OnDestroy {
   private _router = inject(Router);
   private _destroyRef = inject(DestroyRef);
   private _breakpointObserver = inject(BreakpointObserver);
+  private _snakeCase = inject(SnakeCasePipe);
   private isFirstLoad = true;
 
   readonly isMd = signal<boolean>(false);
@@ -63,7 +66,7 @@ export class PaymentControl implements OnInit, OnDestroy {
 
   readonly statusOptions: OptionItem[] = Object.values(PAYMENT_STATUS).map(value => ({
     key: value,
-    value: value,
+    value: this._snakeCase.transform(value)
   }));
 
   readonly selectedStatus = signal<OptionItem>(this.statusOptions[0]);

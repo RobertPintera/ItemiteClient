@@ -5,9 +5,9 @@ import {Button} from '../../../shared/button/button';
 import {DatePipe} from '@angular/common';
 import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {RouterLink} from '@angular/router';
-import {UnderscorePipe} from '../../../../core/pipes/underscore-pipe/underscore-pipe';
 import {imageError} from '../../../../core/utility/global-utility';
 import {BasicCategory} from '../../../../core/models/category/BasicCategory';
+import {SnakeCasePipe} from '../../../../core/pipes/snake-case-pipe/snake-case-pipe';
 
 @Component({
   selector: 'app-sale-item',
@@ -16,7 +16,7 @@ import {BasicCategory} from '../../../../core/models/category/BasicCategory';
     DatePipe,
     TranslatePipe,
     RouterLink,
-    UnderscorePipe
+    SnakeCasePipe
   ],
   templateUrl: './sale-item.html',
   styleUrl: './sale-item.css',

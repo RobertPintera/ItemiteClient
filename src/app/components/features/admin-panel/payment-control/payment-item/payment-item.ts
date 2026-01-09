@@ -11,6 +11,7 @@ import {EvidenceDTO} from '../../../../../core/models/payments/EvidenceDTO';
 import {RouterLink} from '@angular/router';
 import {ResolveDisputeDialog} from './resolve-dispute-dialog/resolve-dispute-dialog';
 import {BasicCategory} from '../../../../../core/models/category/BasicCategory';
+import {SnakeCasePipe} from '../../../../../core/pipes/snake-case-pipe/snake-case-pipe';
 
 @Component({
   selector: 'app-payment-item',
@@ -22,6 +23,7 @@ import {BasicCategory} from '../../../../../core/models/category/BasicCategory';
     Dialog,
     RouterLink,
     ResolveDisputeDialog,
+    SnakeCasePipe,
   ],
   templateUrl: './payment-item.html',
   styleUrl: './payment-item.css',

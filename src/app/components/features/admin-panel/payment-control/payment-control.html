@@ -5,7 +5,13 @@
       <app-button [label]="'admin_payment_control.latest' | translate" severity="primary" (clickButton)="select(PAYMENT_TYPE.LATEST)" [disabled]="filter().type === PAYMENT_TYPE.LATEST "/>
       <app-button [label]="'admin_payment_control.with_status' | translate" severity="primary" (clickButton)="select(PAYMENT_TYPE.WITH_STATUS)" [disabled]="filter().type === PAYMENT_TYPE.WITH_STATUS"/>
       @if(filter().type === PAYMENT_TYPE.WITH_STATUS){
-        <app-combo-box [items]="statusOptions" [(selectedItem)]="selectedStatus" (selectedItemChange)="selectStatus($event)"/>
+        <app-combo-box [items]="statusOptions" [(selectedItem)]="selectedStatus" (selectedItemChange)="selectStatus($event)">
+          <ng-template let-item>
+            <span>
+              {{`transactions.status.${item?.value}` | translate}}
+            </span>
+          </ng-template>
+        </app-combo-box>
       }
     </div>
     <app-button [label]="'admin_payment_control.statistics.header' | translate" severity="accent" (clickButton)="openCountsDialog()"/>
@@ -16,7 +22,7 @@
     </div>
   } @else if (totalPages() === 0){
     <div class="flex justify-center py-16 w-full">
-      <h2>{{'user_products.no_products' | translate}}</h2>
+      <h2>{{'transactions.no_transactions' | translate}}</h2>
     </div>
   }
   @else {

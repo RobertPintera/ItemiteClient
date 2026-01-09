@@ -11,8 +11,8 @@ import {LoadingDialog} from '../../../shared/loading-dialog/loading-dialog';
 import {finalize} from 'rxjs';
 import {DisputeDialog} from './dispute-dialog/dispute-dialog';
 import {imageError} from '../../../../core/utility/global-utility';
-import {UnderscorePipe} from '../../../../core/pipes/underscore-pipe/underscore-pipe';
 import {BasicCategory} from '../../../../core/models/category/BasicCategory';
+import {SnakeCasePipe} from '../../../../core/pipes/snake-case-pipe/snake-case-pipe';
 
 @Component({
   selector: 'app-purchase-item',
@@ -24,7 +24,7 @@ import {BasicCategory} from '../../../../core/models/category/BasicCategory';
     ConfirmDialog,
     LoadingDialog,
     DisputeDialog,
-    UnderscorePipe
+    SnakeCasePipe
   ],
   templateUrl: './purchase-item.html',
   styleUrl: './purchase-item.css',
