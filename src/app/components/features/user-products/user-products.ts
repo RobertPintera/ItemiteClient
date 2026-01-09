@@ -38,6 +38,7 @@ export class UserProducts implements OnInit, OnDestroy {
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
   private _paymentService = inject(PaymentService);
+  private isFirstLoad = true;
 
   readonly onboardingStatus = this._paymentService.onboardingStatus;
 
@@ -68,6 +69,7 @@ export class UserProducts implements OnInit, OnDestroy {
   ];
 
   readonly selectedOption = signal<OptionItem>(this.listingOptions[0]);
+
 
   ngOnInit() {
     this._breakpointObserver.observe([
@@ -123,7 +125,24 @@ export class UserProducts implements OnInit, OnDestroy {
 
       this.filter.set(newFilter);
 
-      this.applyFilter(this.filter());
+      if(this.isFirstLoad){
+        this.isFirstLoad = false;
+        this.isBlocked.set(true);
+        this.loading.set(true);
+        this._listingService.loadUserListings(
+          this.userId() ?? this.userInfo().id,
+          this.filter()
+        ).pipe(
+          finalize(() => {
+            this.isBlocked.set(false);
+            this.loading.set(false);
+          })
+        ).subscribe(data => {
+          this.listings.set(data);
+        });
+      } else {
+        this.applyFilter(this.filter());
+      }
     });
   }
 
