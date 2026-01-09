@@ -27,9 +27,10 @@ export class FollowedProducts implements OnInit, OnDestroy {
   private _listingService = inject(ListingService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
+  private isFirstLoad = true;
 
   readonly isMd = signal<boolean>(false);
-  readonly loading = signal<boolean>(true);
+  readonly loading = signal<boolean>(false);
   readonly listings = signal<ListingResponseDTO | null>(null);
 
   readonly totalPages = computed(() => this.listings()?.totalPages ?? 0);
@@ -50,7 +51,6 @@ export class FollowedProducts implements OnInit, OnDestroy {
       this.isMd.set(result.breakpoints['(min-width: 768px)']);
     });
 
-
     this._filterPageSubject.pipe(
       debounceTime(1000),
       switchMap(filter => {
@@ -61,10 +61,8 @@ export class FollowedProducts implements OnInit, OnDestroy {
             return of(null);
           }),
           finalize(() => {
-            setTimeout(() => {
-              this.isBlocked.set(false);
-              this.loading.set(false);
-            }, 500);
+            this.isBlocked.set(false);
+            this.loading.set(false);
           })
         );
       }),
@@ -89,7 +87,24 @@ export class FollowedProducts implements OnInit, OnDestroy {
 
       this.filter.set(newFilter);
 
-      this.applyFilter(this.filter());
+      if(this.isFirstLoad){
+        this.isFirstLoad = false;
+        this.isBlocked.set(true);
+        this.loading.set(true);
+
+        this._listingService.loadFollowedListing(this.filter()).pipe(
+          catchError(err => {
+            console.error('Error loading listings:', err);
+            return of(null);
+          }),
+          finalize(() => {
+            this.isBlocked.set(false);
+            this.loading.set(false);
+          })
+        ).subscribe(data => this.listings.set(data));
+      } else{
+        this.applyFilter(this.filter());
+      }
     });
   }
 
