@@ -17,6 +17,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LoadingCircle} from '../../shared/loading-circle/loading-circle';
 import {UserService} from '../../../core/services/user-service/user.service';
+import {Button} from '../../shared/button/button';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-user-page',
@@ -25,6 +27,8 @@ import {UserService} from '../../../core/services/user-service/user.service';
     ReactiveFormsModule,
     LoadingCircle,
     FormsModule,
+    Button,
+    RouterLink,
   ],
   templateUrl: './user-page.html',
   styleUrl: './user-page.css'

@@ -299,8 +299,8 @@
     "profile_image": "Profile image",
     "phone": "Phone",
     "your_offers": "Your offers",
-
     "your_articles": "Your articles",
+    "articles": "Articles",
     "your_product_and_auctions": "Products & auctions",
     "your_followed_products": "Followed products",
     "billing_payments": "Billing & payments",
@@ -436,8 +436,14 @@
   "cancel": "Cancel",
   "user_products": {
     "header": "Your products and auctions",
+    "header_user": "Products and auctions of user",
     "no_products": "Can't find any article. Create your first product!",
-    "select_offer": "Select offer"
+    "select_offer": "Select offer",
+    "options": {
+      "all": "All",
+      "active": "Active",
+      "archived": "Archived"
+    }
   },
   "geo_map_autocomplete": {
     "selected_city": "Selected city",

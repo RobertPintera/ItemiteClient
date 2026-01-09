@@ -44,6 +44,13 @@
 
     <!-- leaflet map -->
     <div id="map" class="h-100 rounded-md max-w-full ml-5 z-0 mt-2"></div>
+
+    <div class="flex flex-col mt-4 gap-2">
+      <p class="text-2xl md:text-3xl lg:text-4xl">{{'user_info.articles' | translate}}</p>
+      <div class="flex flex-wrap gap-2 w-full pl-4">
+        <app-button routerLink="/user-products" [label]="'user_info.your_product_and_auctions' | translate" [queryParams]="{ id: userId() }"/>
+      </div>
+    </div>
   }
 </div>
 

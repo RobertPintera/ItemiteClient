@@ -9,6 +9,7 @@ import {ListingType} from '../../constants/constants';
 import {ListingItemDTO} from '../../models/listing-general/LitstingItemDTO';
 import {PostListingFollowDTO} from '../../models/listing-general/PostListingFollowDTO';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
+import {GetUserListingDTO} from '../../models/listing-general/GetUserListingDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -79,10 +80,14 @@ export class ListingService {
     );
   }
 
-  loadUserListings(id: number, filter: PaginatedListingDTO) {
-    const params = new HttpParams()
+  loadUserListings(id: number, filter: GetUserListingDTO) {
+    let params = new HttpParams()
       .set('pageSize', filter.pageSize)
       .set('pageNumber', filter.pageNumber);
+
+    if (filter.areArchived !== null) {
+      params = params.set('areArchived', filter.areArchived);
+    }
 
     return this.getListingUser(id, params).pipe(
       catchError(err => {

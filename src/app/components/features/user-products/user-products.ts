@@ -5,7 +5,6 @@ import {Loader} from '../../shared/loader/loader';
 import {ListingResponseDTO} from '../../../core/models/listing-general/ListingResponseDTO';
 import {ListingService} from '../../../core/services/listing-service/listing.service';
 import {debounceTime, finalize,Subject, switchMap, takeUntil} from 'rxjs';
-import {PaginatedListingDTO} from '../../../core/models/listing-general/PaginatedListingDTO';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Dialog} from '../../shared/dialog/dialog';
@@ -14,6 +13,9 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {ProductItem} from '../../shared/product-item/product-item';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {PaymentService} from '../../../core/services/payment-service/payment-service';
+import {ComboBox} from '../../shared/combo-box/combo-box';
+import {GetUserListingDTO} from '../../../core/models/listing-general/GetUserListingDTO';
+import {OptionItem} from '../../../core/models/OptionItem';
 
 @Component({
   selector: 'app-user-products',
@@ -23,7 +25,8 @@ import {PaymentService} from '../../../core/services/payment-service/payment-ser
     Loader,
     Dialog,
     TranslatePipe,
-    ProductItem
+    ProductItem,
+    ComboBox
   ],
   templateUrl: './user-products.html',
   styleUrl: './user-products.css'
@@ -45,14 +48,26 @@ export class UserProducts implements OnInit, OnDestroy {
 
   readonly totalPages = computed(() => this.listings()?.totalPages ?? 0);
 
-  readonly filter = signal<PaginatedListingDTO>({
+  readonly userInfo = this._userService.userBasicInfo;
+  readonly userId = signal<number | null>(null);
+
+  readonly filter = signal<GetUserListingDTO>({
     pageSize: 10,
     pageNumber: 1,
+    areArchived: null
   });
   readonly isBlocked = signal<boolean>(false);
 
-  private filterPageSubject = new Subject<PaginatedListingDTO>();
+  private filterPageSubject = new Subject<GetUserListingDTO>();
   private destroy$ = new Subject<void>();
+
+  readonly listingOptions: OptionItem[] = [
+    { key: "-", value: "user_products.options.all" },
+    { key: "false", value: "user_products.options.active" },
+    { key: "true", value: "user_products.options.archived" },
+  ];
+
+  readonly selectedOption = signal<OptionItem>(this.listingOptions[0]);
 
   ngOnInit() {
     this._breakpointObserver.observe([
@@ -61,12 +76,11 @@ export class UserProducts implements OnInit, OnDestroy {
       this.isMd.set(result.breakpoints['(min-width: 768px)']);
     });
 
-
     this.filterPageSubject.pipe(
       debounceTime(1000),
       switchMap(filter => {
         this.loading.set(true);
-        return this._listingService.loadUserListings(this._userService.userBasicInfo().id, filter).pipe(
+        return this._listingService.loadUserListings(this.userId() ?? this.userInfo().id, filter).pipe(
           finalize(() => {
             setTimeout(() => {
               this.isBlocked.set(false);
@@ -83,14 +97,27 @@ export class UserProducts implements OnInit, OnDestroy {
     });
 
     this._route.queryParamMap.subscribe(params => {
-      const updated: Partial<PaginatedListingDTO> = {};
+      const updated: Partial<GetUserListingDTO> = {};
 
       const num = (name: string) => {
         const value = params.get(name);
         return value !== null ? Number(value) : null;
       };
+      const str = (name: string) => params.get(name);
 
       updated.pageNumber = num('pageNumber') ?? this.filter().pageNumber;
+
+      const optionListing = str('areArchived');
+
+      if(optionListing === null){
+        updated.areArchived = null;
+      } else if(optionListing === "false"){
+        updated.areArchived = false;
+      } else if(optionListing === "true"){
+        updated.areArchived = true;
+      }
+
+      this.userId.set(num('id'));
 
       const newFilter = { ...this.filter(), ...updated };
 
@@ -105,17 +132,38 @@ export class UserProducts implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  usePaginator(pageNumber: number): void {
-    this.filter().pageNumber = pageNumber;
+  selectOption(option?: OptionItem){
+    if(!option) return;
+
+    if(option.key === "-"){
+      this.updateFilter({areArchived: null });
+    } else if(option.key === "false"){
+      this.updateFilter({areArchived: false });
+    } else if(option.key === "true"){
+      this.updateFilter({areArchived: true });
+    }
+  }
+
+  updateFilter(partial: Partial<GetUserListingDTO>){
+    const newFilter = { ...this.filter(), ...partial };
+
+    const hasOtherChanges = Object.keys(partial).some(key => key !== 'pageNumber');
+
+    if (hasOtherChanges) {
+      newFilter.pageNumber = 1;
+    }
+
+    this.filter.set(newFilter);
+
+    const query = this.serializeFilterToQuery({...newFilter});
 
     this._router.navigate([], {
-      queryParams: {
-        pageNumber: pageNumber,
-      },
-      queryParamsHandling: 'merge'
+      queryParams: query
     });
+  }
 
-    this.applyFilter(this.filter());
+  usePaginator(pageNumber: number): void {
+    this.updateFilter({pageNumber: pageNumber});
   }
 
   openDialog(){
@@ -132,9 +180,21 @@ export class UserProducts implements OnInit, OnDestroy {
     });
   }
 
-  private applyFilter(filter: PaginatedListingDTO) {
+  private applyFilter(filter: GetUserListingDTO) {
     this.isBlocked.set(true);
     this.filterPageSubject.next(filter);
+  }
+
+  private serializeFilterToQuery(filter: GetUserListingDTO): Record<string, string | number | (string | number)[]> {
+    const params: Record<string, string | number | (string | number)[]> = {};
+
+    const userId = this.userId();
+
+    if (userId) params['id'] = userId;
+    if (filter.areArchived !== null) params['areArchived'] = `${filter.areArchived}`;
+    if (filter.pageNumber !== null) params['pageNumber'] = filter.pageNumber;
+
+    return params;
   }
 
   protected readonly LISTING_TYPES = LISTING_TYPES;
