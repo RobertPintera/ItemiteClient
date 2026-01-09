@@ -156,7 +156,8 @@ export class Payment implements OnInit, OnDestroy {
       else if (type === 'Auction')
         this._auctionListingService.loadAuctionListingAuth(validId).subscribe(auction => {
           this.article.set(auction);
-          const minBid = auction.currentBid ?? auction.startingBid;
+          let minBid = auction.currentBid ?? auction.startingBid;
+          minBid = +(minBid + 0.01).toFixed(2);
 
           const bidControl = this.form.controls.bidAmount;
           if (bidControl) {
