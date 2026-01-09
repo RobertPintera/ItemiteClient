@@ -126,7 +126,7 @@
               </p>
           </div>
       }
-      @if(inputLength() < MAX_CHARS) {
+      @if(inputLength() > MAX_CHARS) {
         <p class="flex flex-row items-center text-destructive font-mono absolute bottom-0 font-bold ml-auto mr-auto">
           -{{ inputLength()-MAX_CHARS }}
         </p>
