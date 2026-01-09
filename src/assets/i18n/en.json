@@ -704,7 +704,7 @@
     "field_required": "Field is required",
     "field_empty" : "Field can't be empty",
     "name_min": "Name must be at least 2 characters long",
-    "name_max": "Name cannot be more than 100 characters",
+    "name_max": "Name cannot be more than 50 characters",
     "description_max": "Description cannot be more than 100 characters"
   },
   "admin_payment_control": {

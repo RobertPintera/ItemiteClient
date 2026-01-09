@@ -48,13 +48,13 @@ export class CategoryDialog {
       Validators.required,
       isEmptyValidator,
       Validators.minLength(2),
-      Validators.maxLength(100)
+      Validators.maxLength(50)
     ]),
     polish_name: new FormControl<string>("", [
       Validators.required,
       isEmptyValidator,
       Validators.minLength(2),
-      Validators.maxLength(100)
+      Validators.maxLength(50)
     ]),
     description: new FormControl<string>("",[
       Validators.maxLength(500)

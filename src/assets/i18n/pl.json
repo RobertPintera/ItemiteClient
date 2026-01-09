@@ -698,9 +698,9 @@
   "validator_errors_admin_category_control": {
     "field_required": "Pole jest wymagane.",
     "field_empty" : "Pole nie może być puste.",
-    "name_min" : "Imię musi mieć przynajmniej z 2 znaki",
-    "name_max" : "Imię nie może mieć więcej niż z 30 znaków",
-    "description_max": "Imię nie może mieć więcej niż z 100 znaków"
+    "name_min" : "Nazwa musi mieć przynajmniej z 2 znaki",
+    "name_max" : "Nazwa nie może mieć więcej niż z 50 znaków",
+    "description_max": "Opis nie może mieć więcej niż z 100 znaków"
   },
   "admin_payment_control": {
     "header": "Płatności",
