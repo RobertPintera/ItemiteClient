@@ -1,6 +1,6 @@
-import {Component, input, output, signal} from '@angular/core';
+import {Component, inject, input, output, signal} from '@angular/core';
 import {PaymentItemDTO} from '../../../../../core/models/payments/PaymentItemDTO';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 import {UnderscorePipe} from '../../../../../core/pipes/underscore-pipe/underscore-pipe';
 import {imageError} from '../../../../../core/utility/global-utility';
 import {LISTING_TYPES, PAYMENT_STATUS} from '../../../../../core/constants/constants';
@@ -10,6 +10,7 @@ import {Dialog} from '../../../../shared/dialog/dialog';
 import {EvidenceDTO} from '../../../../../core/models/payments/EvidenceDTO';
 import {RouterLink} from '@angular/router';
 import {ResolveDisputeDialog} from './resolve-dispute-dialog/resolve-dispute-dialog';
+import {BasicCategory} from '../../../../../core/models/category/BasicCategory';
 
 @Component({
   selector: 'app-payment-item',
@@ -26,6 +27,8 @@ import {ResolveDisputeDialog} from './resolve-dispute-dialog/resolve-dispute-dia
   styleUrl: './payment-item.css',
 })
 export class PaymentItem {
+  private _translator = inject(TranslateService);
+
   readonly payment = input.required<PaymentItemDTO>();
 
   readonly successAction = output<void>();
@@ -38,6 +41,12 @@ export class PaymentItem {
   readonly isOpenResolveDisputeDialog = signal<boolean>(false);
 
   togglePaymentDetails = () => this.isOpenPaymentDetails.set(!this.isOpenPaymentDetails());
+
+  getCategoryName(category: BasicCategory): string {
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
+  }
 
   openPreviewEvidenceDialog(evidence: EvidenceDTO) {
     this.selectedEvidence.set(evidence);

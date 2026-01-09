@@ -40,7 +40,7 @@
           <div class="flex flex-row flex-wrap gap-3">
             @for (category of payment().listing.categories; track category.id){
               <div class="border-2 border-border px-4 py-2 rounded-2xl bg-background text-foreground">
-                <p class="text-base md:text-xl">{{ `categories.${category.name}` | translate }}</p>
+                <p class="text-base md:text-xl">{{ getCategoryName(category) }}</p>
               </div>
             }
           </div>

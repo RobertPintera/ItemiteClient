@@ -40,10 +40,11 @@ export class PaymentControl implements OnInit, OnDestroy {
   private _router = inject(Router);
   private _destroyRef = inject(DestroyRef);
   private _breakpointObserver = inject(BreakpointObserver);
+  private isFirstLoad = true;
 
   readonly isMd = signal<boolean>(false);
   readonly payments = signal<PaginatedPaymentResponseDTO | null>(null);
-  readonly loading = signal<boolean>(true);
+  readonly loading = signal<boolean>(false);
   readonly totalPages = computed(() => this.payments()?.totalPages ?? 0);
 
   readonly paymentsCounts = signal<PaymentCountsResponseDTO | null>(null);
@@ -51,7 +52,7 @@ export class PaymentControl implements OnInit, OnDestroy {
 
   readonly filter = signal<PaymentFilter>({
     type: PAYMENT_TYPE.LATEST,
-    pageSize: 2,
+    pageSize: 1,
     pageNumber: 1,
     paymentStatus: null
   });
@@ -90,7 +91,8 @@ export class PaymentControl implements OnInit, OnDestroy {
         updated.type = PAYMENT_TYPE.LATEST;
       }
 
-      const status = params.get('status');
+      const status = params.get('paymentStatus');
+
       if (status && isPaymentStatus(status)) {
         const option = this.statusOptions.find(o => o.key === status);
 
@@ -107,7 +109,45 @@ export class PaymentControl implements OnInit, OnDestroy {
 
       this.filter.set(newFilter);
 
-      this.applyFilter(this.filter());
+      if(this.isFirstLoad){
+        this.isFirstLoad = false;
+        this.loading.set(true);
+        this.isBlocked.set(true);
+
+
+        const status = this.filter().paymentStatus ?? '';
+        if(this.filter().type == PAYMENT_TYPE.WITH_STATUS && isPaymentStatus(status)){
+          const payload: GetAdminPanelPaymentsWithStatusDTO = {
+            ...newFilter,
+            paymentStatus: status
+          };
+
+          this._adminService.loadPaymentsWithStatus(payload).pipe(
+            finalize(() => {
+              this.isBlocked.set(false);
+              this.loading.set(false);
+            })
+          ).subscribe(data => {
+            this.payments.set(data);
+          });
+        }else {
+          const payload: GetAdminPanelPaymentsLatestDTO = {
+            ...newFilter
+          };
+
+          this._adminService.loadLatestPayments(payload).pipe(
+            finalize(() => {
+              this.isBlocked.set(false);
+              this.loading.set(false);
+            })
+          ).subscribe(data => {
+            this.payments.set(data);
+          });
+        }
+      }
+      else {
+        this.applyFilter(this.filter());
+      }
     });
 
     this.filterPageSubject.pipe(
@@ -123,10 +163,8 @@ export class PaymentControl implements OnInit, OnDestroy {
 
           return this._adminService.loadPaymentsWithStatus(payload).pipe(
             finalize(() => {
-              setTimeout(() => {
-                this.isBlocked.set(false);
-                this.loading.set(false);
-              }, 500);
+              this.isBlocked.set(false);
+              this.loading.set(false);
             })
           );
         }else {
@@ -136,10 +174,8 @@ export class PaymentControl implements OnInit, OnDestroy {
 
           return this._adminService.loadLatestPayments(payload).pipe(
             finalize(() => {
-              setTimeout(() => {
-                this.isBlocked.set(false);
-                this.loading.set(false);
-              }, 500);
+              this.isBlocked.set(false);
+              this.loading.set(false);
             })
           );
         }
@@ -155,8 +191,6 @@ export class PaymentControl implements OnInit, OnDestroy {
     this._adminService.loadPaymentsCounts().subscribe(counts => {
       this.paymentsCounts.set(counts);
     });
-
-    this.refreshFilter();
   }
 
   ngOnDestroy() {
@@ -210,16 +244,7 @@ export class PaymentControl implements OnInit, OnDestroy {
   }
 
   usePaginator(pageNumber: number): void {
-    this.filter().pageNumber = pageNumber;
-
-    this._router.navigate([], {
-      queryParams: {
-        pageNumber: pageNumber,
-      },
-      queryParamsHandling: 'merge'
-    });
-
-    this.applyFilter(this.filter());
+    this.updateFilter({pageNumber: pageNumber});
   }
 
   refreshFilter() {
