@@ -70,7 +70,6 @@ export class UserProducts implements OnInit, OnDestroy {
 
   readonly selectedOption = signal<OptionItem>(this.listingOptions[0]);
 
-
   ngOnInit() {
     this._breakpointObserver.observe([
       '(min-width: 768px)',

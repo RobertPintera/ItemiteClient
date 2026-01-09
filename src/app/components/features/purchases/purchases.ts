@@ -26,6 +26,7 @@ export class Purchases implements OnInit, OnDestroy {
   private _paymentsService = inject(PaymentService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
+  private isFirstLoad = true;
 
   readonly loading = signal<boolean>(true);
   readonly purchases = signal<GetPurchasesResponseDTO | null>(null);
@@ -76,7 +77,26 @@ export class Purchases implements OnInit, OnDestroy {
 
       this.filter.set(newFilter);
 
-      this.applyFilter(this.filter());
+      if (this.isFirstLoad) {
+        this.isFirstLoad = false;
+
+        this.isBlocked.set(true);
+        this.loading.set(true);
+
+        this._paymentsService.loadPurchases(this.filter())
+          .pipe(
+            finalize(() => {
+              this.isBlocked.set(false);
+              this.loading.set(false);
+            }),
+            takeUntil(this.destroy$)
+          )
+          .subscribe(data => {
+            this.purchases.set(data);
+          });
+      } else{
+        this.applyFilter(this.filter());
+      }
     });
   }
 
