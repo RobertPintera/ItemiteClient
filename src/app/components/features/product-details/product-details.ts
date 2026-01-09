@@ -314,7 +314,7 @@ export class ProductDetails implements OnInit, OnDestroy {
       buttonsSettings.push({label: 'product_details.bids_history', onClick: () => this.openBidHistory()});
     }
 
-    if(this._userService.userInfo().roles.includes('Admin')){
+    if(this._userService.userInfo().roles.includes('Admin') && !this.article()?.isArchived){
       buttonsSettings.push({label: 'product_details.delete_offer', severity: "danger", onClick: () => this.openDeleteOfferDialog()});
     }
 
