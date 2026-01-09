@@ -1,7 +1,7 @@
 import {Component, inject, input, output, signal} from '@angular/core';
 import {Button} from "../../../shared/button/button";
 import {DatePipe} from "@angular/common";
-import {TranslatePipe} from "@ngx-translate/core";
+import {TranslatePipe, TranslateService} from "@ngx-translate/core";
 import {LISTING_TYPES, PAYMENT_STATUS} from '../../../../core/constants/constants';
 import {PurchaseItemDTO} from '../../../../core/models/payments/PurchaseItemDTO';
 import {RouterLink} from '@angular/router';
@@ -12,6 +12,7 @@ import {finalize} from 'rxjs';
 import {DisputeDialog} from './dispute-dialog/dispute-dialog';
 import {imageError} from '../../../../core/utility/global-utility';
 import {UnderscorePipe} from '../../../../core/pipes/underscore-pipe/underscore-pipe';
+import {BasicCategory} from '../../../../core/models/category/BasicCategory';
 
 @Component({
   selector: 'app-purchase-item',
@@ -30,6 +31,7 @@ import {UnderscorePipe} from '../../../../core/pipes/underscore-pipe/underscore-
 })
 export class PurchaseItem {
   private _paymentService = inject(PaymentService);
+  private _translator = inject(TranslateService);
 
   readonly purchase = input.required<PurchaseItemDTO>();
 
@@ -38,6 +40,12 @@ export class PurchaseItem {
   readonly loading = signal<boolean>(false);
   readonly isOpenConfirmDeliveryDialog = signal<boolean>(false);
   readonly isOpenDisputeDialog = signal<boolean>(false);
+
+  getCategoryName(category: BasicCategory): string {
+    return this._translator.getCurrentLang() === 'pl'
+      ? category.polishName
+      : category.name;
+  }
 
   openConfirmDeliveryDialog() {
     this.isOpenConfirmDeliveryDialog.set(true);

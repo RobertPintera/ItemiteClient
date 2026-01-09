@@ -2,6 +2,7 @@ import {Component, inject, signal} from '@angular/core';
 import {CategoryService} from '../../../core/services/category-service/category.service';
 import {NavigationEnd, Router, RouterLink} from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import {CategoryDTO} from '../../../core/models/category/CategoryDTO';
 
 @Component({
   selector: 'app-navbar',
@@ -14,12 +15,12 @@ import { TranslateService } from '@ngx-translate/core';
 export class Navbar {
   private _categoryService = inject(CategoryService);
   private _router = inject(Router);
-  private _translator = inject(TranslateService)
+  private _translator = inject(TranslateService);
 
   readonly categories = this._categoryService.mainCategories;
   readonly isProductsPage = signal<boolean>(this._router.url.startsWith('/products'));
 
-  getCategoryName(category: any): string {
+  getCategoryName(category: CategoryDTO): string {
     return this._translator.getCurrentLang() === 'pl'
       ? category.polishName
       : category.name;
