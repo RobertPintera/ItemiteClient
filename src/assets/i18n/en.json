@@ -721,7 +721,9 @@
     "create": "Create banner",
     "edit": "Edit banner",
     "name": "Name",
+    "status": "Status",
     "active": "Active",
+    "disabled": "Disabled",
     "image": "Image",
     "position": {
       "header": "Position",
@@ -733,5 +735,10 @@
     "no_banners": "Can't find any banner. Create your first banner!",
     "deactivate": "Deactivate",
     "activate": "Activate"
+  },
+  "validator_errors_admin_banner_control": {
+    "field_required": "Field is required",
+    "field_empty" : "Field can't be empty",
+    "name_max": "Name cannot be more than 100 characters"
   }
 }

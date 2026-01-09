@@ -18,47 +18,44 @@
   </app-dialog>
 }
 @else if(isOpenFileUpload()){
-  <app-file-upload [supportsPreview]="true" (onCancelClicked)="cancelFileUpload()" (onConfirmClicked)="confirmFileUpload($event)"/>
+  <app-file-upload [maxSizeMB]="10" [supportsPreview]="true" (onCancelClicked)="cancelFileUpload()" (onConfirmClicked)="confirmFileUpload($event)"/>
 }
 @else if(isOpen()){
   <app-dialog [header]="editedBanner() ? ('admin_banner_control.edit' | translate) : ('admin_banner_control.create' | translate)" (closed)="closeDialog()">
     <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2 w-[100vw] max-w-full sm:max-w-xl">
       <div class="flex flex-col gap-2 w-full">
-        <label for="name" class="text-xl font-semibold">{{ 'admin_category_control.form_dialog.name' | translate }}</label>
+        <label for="name" class="text-xl font-semibold">{{ 'admin_banner_control.name' | translate }}</label>
         <input type="text" name="name" formControlName="name" class="border rounded px-3 py-2">
         @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)) {
           <div>
             <ul class="text-destructive text-sm list-disc pl-4">
               @if(form.controls.name.hasError('required')) {
-                <li>{{ 'validator_errors_admin_category_control.field_required' | translate }}</li>
+                <li>{{ 'validator_errors_admin_banner_control.field_required' | translate }}</li>
               }
               @if(form.controls.name.hasError('empty')){
-                <li>{{ 'validator_errors_admin_category_control.field_empty' | translate }}</li>
-              }
-              @if(form.controls.name.hasError('minlength')){
-                <li>{{ 'validator_errors_admin_category_control.name_min' | translate }}</li>
+                <li>{{ 'validator_errors_admin_banner_control.field_empty' | translate }}</li>
               }
               @if(form.controls.name.hasError('maxlength')){
-                <li>{{ 'validator_errors_admin_category_control.name_max' | translate }}</li>
+                <li>{{ 'validator_errors_admin_banner_control.name_max' | translate }}</li>
               }
             </ul>
           </div>
         }
       </div>
       <div class="flex flex-col gap-2 w-full">
-        <label for="position" class="text-xl font-semibold">{{ 'Position' | translate }}</label>
+        <label for="position" class="text-xl font-semibold">{{ 'admin_banner_control.position.header' | translate }}</label>
         <app-combo-box formControlName="position" [items]="positionOptions">
           <ng-template let-item>
-            <span>{{`${item?.value | snakeCase}` | translate}}</span>
+            <span>{{`admin_banner_control.position.${item?.value | lowercase}` | translate}}</span>
           </ng-template>
         </app-combo-box>
       </div>
       <div class="flex flex-col items-start gap-2 ">
-        <label for="isActive" class="text-xl font-semibold">{{ 'Active' | translate }}</label>
+        <label for="isActive" class="text-xl font-semibold">{{ 'admin_banner_control.active' | translate }}</label>
         <input type="checkbox" name="isActive" formControlName="isActive">
       </div>
       <div class="flex flex-col justify-start items-start gap-2 w-full">
-        <label for="photo" class="text-xl font-semibold">{{ 'admin_category_control.form_dialog.image' | translate }}</label>
+        <label for="photo" class="text-xl font-semibold">{{ 'admin_banner_control.image' | translate }}</label>
         <button type="button" class="flex justify-center items-center border-border border-2 w-full aspect-[6/1] rounded-2xl bg-background cursor-pointer"
                 (click)="!imagePreview() ? openFileUpload() : openPreviewImageDialog()">
           @if(!imagePreview()){
@@ -75,7 +72,7 @@
           <div>
             <ul class="text-destructive text-sm list-disc pl-4">
               @if(form.controls.photo.hasError('required')) {
-                <li>{{ 'validator_errors_admin_category_control.field_required' | translate }}</li>
+                <li>{{ 'validator_errors_admin_banner_control.field_required' | translate }}</li>
               }
             </ul>
           </div>

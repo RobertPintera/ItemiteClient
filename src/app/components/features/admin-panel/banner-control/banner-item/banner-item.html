@@ -3,8 +3,8 @@
   duration-150">
   <h3>{{banner().name}}</h3>
   <div class="flex flex-row flex-wrap justify-between gap-2">
-    <p>Status: {{banner().isActive}}</p>
-    <p>Position: {{banner().position}}</p>
+    <p>{{ 'admin_banner_control.status' | translate }}: {{banner().isActive ? ('admin_banner_control.active' | translate) : ('admin_banner_control.disabled' | translate)}}</p>
+    <p>{{ 'admin_banner_control.position.header' | translate}}: {{`admin_banner_control.position.${banner().position | lowercase}` | translate}}</p>
   </div>
   <div class="w-full aspect-[5/1]">
     <img [src]="banner().url" [alt]="banner().name" class="size-full object-contain">

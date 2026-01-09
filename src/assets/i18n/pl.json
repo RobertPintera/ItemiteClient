@@ -728,7 +728,9 @@
     "create": "Tworzenie banera",
     "edit": "Edycja banera",
     "name": "Nazwa",
+    "status": "Status",
     "active": "Aktywny",
+    "disabled": "Nieaktywny",
     "image": "Obraz",
     "position": {
       "header": "Pozycja",
@@ -740,5 +742,10 @@
     "no_banners": "Nie można znaleźć żadnego banera. Stwórz twój pierwszy baner!",
     "deactivate": "Deaktywuj",
     "activate": "Aktywuj"
+  },
+  "validator_errors_admin_banner_control": {
+    "field_required": "Pole jest wymagane.",
+    "field_empty" : "Pole nie może być puste.",
+    "name_max" : "Nazwa nie może mieć więcej niż z 100 znaków"
   }
 }

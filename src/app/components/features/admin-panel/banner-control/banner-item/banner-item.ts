@@ -8,6 +8,7 @@ import {AdminService} from '../../../../../core/services/admin-service/admin.ser
 import {finalize} from 'rxjs';
 import {LoadingDialog} from '../../../../shared/loading-dialog/loading-dialog';
 import {BannerDialog} from '../banner-dialog/banner-dialog';
+import {LowerCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-banner-item',
@@ -16,7 +17,8 @@ import {BannerDialog} from '../banner-dialog/banner-dialog';
     TranslatePipe,
     ConfirmDialog,
     LoadingDialog,
-    BannerDialog
+    BannerDialog,
+    LowerCasePipe
   ],
   templateUrl: './banner-item.html',
   styleUrl: './banner-item.css',

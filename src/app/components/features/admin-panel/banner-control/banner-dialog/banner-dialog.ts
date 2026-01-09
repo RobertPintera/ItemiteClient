@@ -14,8 +14,8 @@ import {OptionItem} from '../../../../../core/models/OptionItem';
 import {PostAdminPanelBannerDTO} from '../../../../../core/models/banners/PostAdminPanelBannerDTO';
 import {PutAdminPanelBannerDTO} from '../../../../../core/models/banners/PutAdminPanelBannerDTO';
 import {ComboBox} from '../../../../shared/combo-box/combo-box';
-import {SnakeCasePipe} from '../../../../../core/pipes/snake-case-pipe/snake-case-pipe';
 import {SafeUrl} from '@angular/platform-browser';
+import {LowerCasePipe} from '@angular/common';
 
 @Component({
   selector: 'app-banner-dialog',
@@ -27,7 +27,7 @@ import {SafeUrl} from '@angular/platform-browser';
     FileUpload,
     ReactiveFormsModule,
     ComboBox,
-    SnakeCasePipe
+    LowerCasePipe
   ],
   templateUrl: './banner-dialog.html',
   styleUrl: './banner-dialog.css',
@@ -56,7 +56,6 @@ export class BannerDialog {
     name: new FormControl<string>("", [
       Validators.required,
       isEmptyValidator,
-      Validators.minLength(2),
       Validators.maxLength(100)
     ]),
     position: new FormControl<OptionItem | null>(this.positionOptions[0], [
