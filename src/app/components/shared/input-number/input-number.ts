@@ -60,6 +60,10 @@ export class InputNumber {
     const value = input.value;
     const key = event.key;
 
+    const selectionStart = input.selectionStart ?? 0;
+    const selectionEnd = input.selectionEnd ?? 0;
+    const hasSelection = selectionStart !== selectionEnd;
+
     if (key === '-' && value.length === 0) return;
 
     if (!/[0-9.,]/.test(key)) {
@@ -78,7 +82,7 @@ export class InputNumber {
       ? value.indexOf('.')
       : value.indexOf(',');
 
-    if (separatorIndex !== -1) {
+    if (separatorIndex !== -1 && selectionStart > separatorIndex && !hasSelection) {
       const decimals = value.length - separatorIndex - 1;
       if (decimals >= this.decimalPlaces()) {
         event.preventDefault();
