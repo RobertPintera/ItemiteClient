@@ -1,9 +1,10 @@
-import {Component, computed, inject, input, output} from '@angular/core';
+import {Component, computed, inject, input, OnInit, output} from '@angular/core';
 import {TranslatePipe} from '@ngx-translate/core';
 import {TextIconMenuItem} from './text-icon-menu-item/text-icon-menu-item';
 import {UserService} from '../../../core/services/user-service/user.service';
 import {AuthService} from '../../../core/services/auth-service/auth.service';
 import {NotificationService} from '../../../core/services/notification-service/notification.service';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-on-profile-menu',
@@ -14,17 +15,25 @@ import {NotificationService} from '../../../core/services/notification-service/n
   templateUrl: './on-profile-menu.html',
   styleUrl: './on-profile-menu.css',
 })
-export class OnProfileMenu {
+export class OnProfileMenu implements OnInit {
   visible = input<boolean>(true);
-  onClose = output<void>();
+  onClose = output<void>()
 
-
+  private _router = inject(Router);
   private _authService = inject(AuthService);
   private _notificationService = inject(NotificationService);
 
   readonly notificationCount = computed(() =>
     this._notificationService.notificationCount()
   );
+
+  ngOnInit() {
+    this._router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.onClose.emit();
+      }
+    });
+  }
 
   OnMenuItemClicked() {
     this.onClose.emit();
