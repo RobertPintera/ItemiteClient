@@ -71,7 +71,7 @@ export class AuctionForm implements OnDestroy {
     ),
     startingBid: new FormControl<number>(0,[
       Validators.required,
-      Validators.min(0),
+      Validators.min(0.1),
       Validators.max(999999.99),
       Validators.pattern(/^\d+(\.\d{1,2})?$/)
     ]),
