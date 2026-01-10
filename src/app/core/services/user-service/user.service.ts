@@ -5,10 +5,8 @@ import {Localization} from '../../models/location/Localization';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {computed, effect, inject, Injectable, PLATFORM_ID, signal} from '@angular/core';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
-import {UserBasicInfo} from '../../models/user/UserBasicInfo';
 import {AuthService} from '../auth-service/auth.service';
 import {isPlatformBrowser} from '@angular/common';
-import {MessageResponse} from '../../models/chat/MessageResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +64,7 @@ export class UserService {
   async OnServiceEnter() {
     // Check if cookies are set, valid and user is logged in
     await this.FetchCurrentUserInfo();
-    console.log(this.userInfo());
+    // console.log(this.userInfo());
   }
 
   async RequestPasswordReset(email: string): Promise<boolean> {
@@ -125,7 +123,7 @@ export class UserService {
       backgroundUrl: undefined,
       authProvider: "",
       roles: []
-    })
+    });
   }
 
   async ChangeUsername(newUsername: string): Promise<boolean> {

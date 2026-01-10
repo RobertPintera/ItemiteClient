@@ -2,27 +2,27 @@
   sm:border-2 sm:rounded-2xl h-full sm:h-auto transition">
   <div class="relative flex flex-col gap-2">
     @if (!isXl()){
-      <app-button label="X" (clickButton)="closeFilterX()" class="absolute right-[-16px] top-[-16px]"/>
+      <app-button label="X" (clickButton)="closeFilter()" class="absolute right-[-16px] top-[-16px]"/>
     }
     <p class="font-semibold text-lg">{{ getCategoryName(categoryTree()) }}</p>
-    <app-category-tree [categories]="categoryTree()?.subCategories ?? []" [(selectedIds)]="filterSidebar().categoryIds"  (categorySelected)="useCategoriesIds($event)"/>
+    <app-category-tree [categories]="categoryTree()?.subCategories ?? []" [(selectedIds)]="filter().categoryIds"  (categorySelected)="useCategoriesIds($event)"/>
     <div class="flex w-full flex-col sm:flex-row xl:flex-col gap-2">
       <div class="flex flex-1 flex-col gap-2">
         <p>{{ 'products_filter.prices' | translate }}</p>
         <div class="flex flex-row items-center gap-2 w-full">
-          <app-input-number [(value)]="filterSidebar().priceFrom" [min]="0" [max]="10000000" (enterPressed)="usePriceFrom($event)" (blurInput)="usePriceFrom($event)" class="flex-1 w-full"/>
+          <app-input-number [(value)]="filter().priceFrom" [min]="0" [max]="10000000" (enterPressed)="usePriceFrom($event)" (blurInput)="usePriceFrom($event)" class="flex-1 w-full"/>
           <span class="shrink-0 text-2xl">-</span>
-          <app-input-number [(value)]="filterSidebar().priceTo" [min]="0" [max]="10000000" (enterPressed)="usePriceTo($event)" (blurInput)="usePriceTo($event)" class="flex-1 w-full"/>
+          <app-input-number [(value)]="filter().priceTo" [min]="0" [max]="10000000" (enterPressed)="usePriceTo($event)" (blurInput)="usePriceTo($event)" class="flex-1 w-full"/>
         </div>
-        @if (filterSidebar().priceError){
+        @if (filter().priceError){
           <div class="flex flex-row w-full">
-            <p class="text-destructive text-sm text-center">{{ filterSidebar().priceError | translate }}</p>
+            <p class="text-destructive text-sm text-center">{{ filter().priceError | translate }}</p>
           </div>
         }
       </div>
       <div class="flex flex-1 flex-col gap-2 w-full">
         <p>{{ 'products_filter.listing_type' | translate }}</p>
-        <app-combo-box [items]="listingTypesOptions" [selectedItem]="filterSidebar().listingType" (selectedItemChange)="useListingType($event)" class="w-full">
+        <app-combo-box [items]="listingTypesOptions()" [selectedItem]="filter().listingType" (selectedItemChange)="useListingType($event)" class="w-full">
           <ng-template let-item>
             <span>
               {{item?.value | translate}}
@@ -32,8 +32,9 @@
       </div>
       <div class="flex flex-1 flex-col gap-2">
         <p>{{ 'products_filter.localization' | translate }}</p>
-        <app-geocoder-autocomplete [placeHolder]="'products_filter.find_city' | translate" [(inputValue)]="filterSidebar().localizationText" (onCityPicked)="useLocalization($event)" (onInputEnter)="useLocalizationText($event)" />
-        <app-combo-box [items]="distancesOptions" [selectedItem]="filterSidebar().distance" (selectedItemChange)="useDistance($event)" class="w-full">
+        <app-geocoder-autocomplete [placeHolder]="'products_filter.find_city' | translate" [(inputValue)]="filter().localizationText" (onCityPicked)="useLocalization($event)" (onInputEnter)="useLocalizationText($event)" />
+        <p>{{ 'products_filter.distance' | translate }}</p>
+        <app-combo-box [items]="distancesOptions()" [selectedItem]="filter().distance" (selectedItemChange)="useDistance($event)" class="w-full">
           <ng-template let-item>
             <span>
               {{item?.value | translate}}
@@ -43,10 +44,8 @@
       </div>
     </div>
 
-    @if (!isXl()){
-      <div class="flex justify-end w-full">
-        <app-button label="Filter" (clickButton)="applyMobileFilter()" />
-      </div>
-    }
+    <div class="flex justify-end w-full">
+      <app-button label="Filter" (clickButton)="applyFilter()" [disabled]="isBlocked()"/>
+    </div>
   </div>
 </aside>

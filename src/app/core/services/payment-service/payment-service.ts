@@ -153,9 +153,6 @@ export class PaymentService {
       formData.append('photos', file);
     });
 
-    console.log(paymentId);
-    console.log(formData);
-
     return this.postDispute(paymentId, formData).pipe(
       catchError(err => {
         this._errorHandlerService.SendErrorMessage(err);

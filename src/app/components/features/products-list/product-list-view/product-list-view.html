@@ -2,7 +2,7 @@
   <div class="w-full flex flex-row flex-wrap items-center gap-4 border-b-1 py-4">
     <div class="flex flex-row flex-wrap items-center gap-4">
       <p>{{"sort_directions.header" | translate}}:</p>
-      <app-combo-box [items]="sortDirectionOptions" [selectedItem]="sortDirection()" (selectedItemChange)="useSortDirection($event)">
+      <app-combo-box [items]="sortDirectionOptions()" [selectedItem]="filter().sortDirection" (selectedItemChange)="useSortDirection($event)">
         <ng-template let-item>
       <span>
         {{item?.value | translate}}
@@ -12,7 +12,7 @@
     </div>
     <div class="flex flex-row flex-wrap items-center gap-4">
       <p>{{"sort_by.header" | translate}}:</p>
-      <app-combo-box [items]="sortByOptions" [selectedItem]="sortBy()" (selectedItemChange)="useSortBy($event)">
+      <app-combo-box [items]="sortByOptions()" [selectedItem]="filter().sortBy" (selectedItemChange)="useSortBy($event)">
         <ng-template let-item>
          <span>
           {{item?.value | translate}}
@@ -26,7 +26,7 @@
       <app-button label="filters" (clickButton)="openFilter()"/>
     }
     @if(!loading() && totalPages() !== 0){
-      <app-paginator [isBlocked]="isBlocked()" [pageNumber]="pageNumber() ?? 1" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
+      <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
     }
   </div>
   @if(loading()){
@@ -48,7 +48,7 @@
       }
     </div>
     <div class="w-full flex justify-end py-4">
-      <app-paginator [isBlocked]="isBlocked()" [pageNumber]="pageNumber()?? 1" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
+      <app-paginator [isBlocked]="isBlocked()" [pageNumber]="filter().pageNumber" [totalPages]="totalPages()" (pageChange)="usePaginator($event)"/>
     </div>
   }
 </main>

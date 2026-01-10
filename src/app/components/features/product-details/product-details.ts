@@ -175,7 +175,6 @@ export class ProductDetails implements OnInit, OnDestroy {
           this._productListingService.loadProductListingAuth(validId).subscribe({
             next: product => {
               this.article.set(product);
-              console.log(this.product);
               this.isFollowed.set(product.isFollowed ?? false);
               this._listingService.addFollowedListing(product.id);
             },

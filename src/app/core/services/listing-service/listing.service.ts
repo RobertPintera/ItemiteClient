@@ -3,13 +3,13 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import {catchError, Observable} from 'rxjs';
 import {ListingResponseDTO} from '../../models/listing-general/ListingResponseDTO';
-import {ListingFilter} from '../../models/product-listings/ListingFilter';
 import {PaginatedListingDTO} from '../../models/listing-general/PaginatedListingDTO';
 import {ListingType} from '../../constants/constants';
 import {ListingItemDTO} from '../../models/listing-general/LitstingItemDTO';
 import {PostListingFollowDTO} from '../../models/listing-general/PostListingFollowDTO';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
 import {GetUserListingDTO} from '../../models/listing-general/GetUserListingDTO';
+import {GetListingDTO} from '../../models/listing-general/GetListingDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +53,7 @@ export class ListingService {
 
   // Logic
 
-  loadListing(filter?: Partial<ListingFilter>): Observable<ListingResponseDTO> {
+  loadListing(filter?: Partial<GetListingDTO>): Observable<ListingResponseDTO> {
     let params = new HttpParams();
 
     if (filter?.pageSize != null) params = params.set('pageSize', filter.pageSize);

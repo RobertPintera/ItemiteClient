@@ -1,6 +1,7 @@
+
 import {ListingType, SortBy, SortDirection} from '../../constants/constants';
 
-export interface ListingFilter {
+export interface GetListingDTO {
   pageSize: null | number;
   pageNumber: number;
   listingType: null | ListingType;

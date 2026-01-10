@@ -1,10 +1,11 @@
 <nav>
   <div class="flex overflow-x-auto whitespace-nowrap items-center h-16 bg-sidebar px-2">
     @for(category of categories(); track category.id) {
-      @if (isProductsPage()) {
+      @if (isProductsPage() && selectedCategoryId() === category.id) {
         <a
           [routerLink]="['/products']"
           [replaceUrl]="true"
+          queryParamsHandling="merge"
           [queryParams]="{ id: category.id }"
           class="flex justify-center items-center cursor-pointer focus:outline-none hover:bg-card hover:shadow-2xl h-full duration-75"
         >

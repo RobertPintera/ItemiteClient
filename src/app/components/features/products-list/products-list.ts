@@ -2,13 +2,15 @@ import {Component, inject, signal, OnInit, OnDestroy, ViewChild, HostBinding} fr
 import { ProductListView } from './product-list-view/product-list-view';
 import { ProductFilterSidebar } from './product-filter-sidebar/product-filter-sidebar';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { ListingFilter } from '../../../core/models/product-listings/ListingFilter';
+import { ListingFilter } from '../../../core/models/listing-general/ListingFilter';
 import { ListingResponseDTO } from '../../../core/models/listing-general/ListingResponseDTO';
 import {Subject, debounceTime, switchMap, takeUntil, finalize, catchError, of} from 'rxjs';
 import { ListingService } from '../../../core/services/listing-service/listing.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ListingType, SortBy, SortDirection} from '../../../core/constants/constants';
-import { TranslateService } from '@ngx-translate/core';
+import {OptionItem} from '../../../core/models/OptionItem';
+import {Localization} from '../../../core/models/location/Localization';
+import {GetListingDTO} from '../../../core/models/listing-general/GetListingDTO';
+import {isListingType, isSortDirection} from '../../../core/type-guards/listing-type.guard';
 
 @Component({
   selector: 'app-products-list',
@@ -27,26 +29,59 @@ export class ProductsList implements OnInit, OnDestroy {
   private _listingService = inject(ListingService);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
+  private isFirstLoad = true;
 
   readonly isMd = signal<boolean>(false);
   readonly isXl = signal<boolean>(false);
   readonly isFilterOpen = signal<boolean>(false);
   readonly listing = signal<ListingResponseDTO | null>(null);
-  readonly loading = signal<boolean>(true);
+  readonly loading = signal<boolean>(false);
   readonly isBlocked = signal<boolean>(false);
 
+  readonly sortDirectionOptions: OptionItem[] = [
+    { key: 'none', value: '-'},
+    { key: 'Ascending', value: 'sort_directions.ascending' },
+    { key: 'Descending', value: 'sort_directions.descending' },
+  ];
+
+  readonly sortByOptions: OptionItem[] = [
+    { key: 'none', value: '-'},
+    { key: 'Price', value: 'sort_by.price' },
+    { key: 'CreationDate', value: 'sort_by.creation_date' },
+    { key: 'Views', value: 'sort_by.views' },
+  ];
+
+  readonly listingTypesOptions: OptionItem[]  = [
+    { key: 'none', value: '-'},
+    { key: 'Auction', value: 'listing_types.auction' },
+    { key: 'Product', value: 'listing_types.product' },
+  ];
+
+  readonly distancesOptions: OptionItem[]  = [
+    { key: 'none', value: '-'},
+    { key: '20', value: '20' },
+    { key: '50', value: '50' },
+    { key: '70', value: '70' },
+    { key: '100', value: '100' },
+  ];
+
   readonly filter = signal<ListingFilter>({
-    pageSize: 5, pageNumber: 1,
-    listingType: null,
-    sortBy: null, sortDirection: null,
-    priceFrom: null, priceTo: null,
-    longitude: null, latitude: null, distance: null,
+    pageSize: 5,
+    pageNumber: 1,
     categoryIds: [],
+    priceFrom: null,
+    priceTo: null,
+    priceError: null,
+    listingType: this.listingTypesOptions[0],
+    localization: null,
+    distance: this.distancesOptions[0],
+    localizationText: '',
+    sortDirection: this.sortDirectionOptions[0],
+    sortBy: this.sortByOptions[0],
   });
-  readonly localizationText = signal<string | null>(null);
 
   // Debouncing: delays API calls when filters change
-  private filterSubject = new Subject<ListingFilter>();
+  private filterSubject = new Subject<GetListingDTO>();
   private destroy$ = new Subject<void>();
 
   mainCategoryId : number | null = null;
@@ -64,6 +99,7 @@ export class ProductsList implements OnInit, OnDestroy {
       debounceTime(1000),
       switchMap(filter => {
         this.loading.set(true);
+
         return this._listingService.loadListing(filter).pipe(
           catchError(err => {
             console.error('Error loading listings:', err);
@@ -81,7 +117,6 @@ export class ProductsList implements OnInit, OnDestroy {
     });
 
     this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      this.loading.set(true);
       const updated: Partial<ListingFilter> = {};
 
       const num = (name: string) => {
@@ -93,24 +128,109 @@ export class ProductsList implements OnInit, OnDestroy {
       updated.pageNumber = num('pageNumber') ?? this.filter().pageNumber;
       updated.priceFrom = num('priceFrom');
       updated.priceTo = num('priceTo');
-      updated.longitude = num('longitude');
-      updated.latitude = num('latitude');
-      updated.distance = num('distance');
 
-      updated.listingType = str('listingType') as ListingType;
-      updated.sortBy = str('sortBy') as SortBy;
-      updated.sortDirection = str('sortDirection') as SortDirection;
+      const latitude = num('latitude');
+      const longitude = num('longitude');
+
+      let localization: Localization | null = null;
+      const localizationText = str('localizationText');
+      const parts = localizationText?.split(',').map(p => p.trim()) ?? [];
+      updated.localizationText = localizationText ?? '';
+
+      if(!(latitude === null || longitude === null)) {
+        localization = {
+          country: '',
+          state: '',
+          formatted: localizationText ?? '',
+          city: '',
+          latitude: latitude,
+          longitude: longitude,
+        };
+
+        if(parts.length > 1) {
+          localization.city = parts[0] ?? '';
+          localization.state = parts[1] ?? '';
+          localization.country = parts[2] ?? '';
+        }
+      }
+
+      const distanceValue = str('distance');
+      updated.distance =
+        this.distancesOptions.find(o => o.key === distanceValue) ??
+        this.distancesOptions[0];
+
+      const listingTypeValue = str('listingType');
+      updated.listingType =
+        this.listingTypesOptions.find(o => o.key === listingTypeValue) ??
+        this.listingTypesOptions[0];
+
+      const sortByValue = str('sortBy');
+      updated.sortBy =
+        this.sortByOptions.find(o => o.key === sortByValue) ??
+        this.sortByOptions[0];
+
+      const sortDirectionValue = str('sortDirection');
+      updated.sortDirection =
+        this.sortDirectionOptions.find(o => o.key === sortDirectionValue) ??
+        this.sortDirectionOptions[0];
 
       const mainCategoryId = num('id');
-      const categoryIds = params.getAll('categoryIds').map(Number);
+      const categoryIds = params.getAll('categoryIds').map(Number).filter(n => !isNaN(n));
+
+      if (this.mainCategoryId !== mainCategoryId) {
+        this.isFirstLoad = true;
+      }
+
       this.mainCategoryId = mainCategoryId;
-      updated.categoryIds = categoryIds.length > 0 ? categoryIds : (mainCategoryId ? [mainCategoryId] : []);
+
+      updated.categoryIds =
+        categoryIds.length > 0
+          ? categoryIds
+          : mainCategoryId != null
+            ? [mainCategoryId]
+            : [];
 
       const newFilter = { ...this.filter(), ...updated };
       this.filter.set(newFilter);
-      this.localizationText.set(str("localizationText"));
 
-      this.applyFilter(this.filter());
+      if(this.isFirstLoad){
+        this.isFirstLoad = false;
+        this.loading.set(true);
+        this.isBlocked.set(true);
+
+        const listingTypeKey = this.filter().listingType?.key;
+        const sortDirectionKey = this.filter().sortDirection?.key;
+        const sortByKey = this.filter().sortBy?.key;
+        const distanceKey = this.filter().distance?.key;
+        const distance = distanceKey && distanceKey !== 'none' ? Number(distanceKey) : null;
+
+        const payload: GetListingDTO = {
+          pageSize: this.filter().pageSize,
+          pageNumber: this.filter().pageNumber,
+          listingType: isListingType(listingTypeKey) ? listingTypeKey : null,
+          sortBy: isListingType(sortByKey) ? sortByKey : null,
+          sortDirection: isSortDirection(sortDirectionKey) ? sortDirectionKey : null,
+          priceFrom: this.filter().priceFrom,
+          priceTo: this.filter().priceTo,
+          longitude: this.filter().localization?.longitude ?? null,
+          latitude: this.filter().localization?.latitude ?? null,
+          distance: distance,
+          categoryIds: this.filter().categoryIds
+        };
+
+        this._listingService.loadListing(payload).pipe(
+          catchError(err => {
+            console.error('Error loading listings:', err);
+            return of(null);
+          }),
+          finalize(() => {
+            this.isBlocked.set(false);
+            this.loading.set(false);
+          })
+        ).subscribe(data => {
+          this.listing.set(data);
+        });
+      }
     });
   }
 
@@ -131,20 +251,14 @@ export class ProductsList implements OnInit, OnDestroy {
 
   closeOverlay() {
     if (this.filterSidebarChild) {
-      this.filterSidebarChild.closeFilterX();
+      this.filterSidebarChild.closeFilter();
     }
     this.isFilterOpen.set(false);
     document.body.classList.remove('overflow-hidden');
   }
 
-  updateFilter(partial: Partial<ListingFilter>) {
+  updateFilterParameters(partial: Partial<ListingFilter>){
     const newFilter = { ...this.filter(), ...partial };
-
-    const hasOtherChanges = Object.keys(partial).some(key => key !== 'pageNumber' && partial[key as keyof ListingFilter] !== this.filter()[key as keyof ListingFilter]);
-
-    if (hasOtherChanges) {
-      newFilter.pageNumber = 1;
-    }
 
     if (newFilter.categoryIds?.length) {
       const otherCategories = newFilter.categoryIds.filter(id => id !== this.mainCategoryId);
@@ -156,11 +270,17 @@ export class ProductsList implements OnInit, OnDestroy {
     }
 
     this.filter.set(newFilter);
+  }
 
-    const uniqueCategoryIds = [...new Set(newFilter.categoryIds || [])];
+  updateFilter(){
+    const filter = this.filter();
+
+    this.filter().pageNumber = 1;
+
+    const uniqueCategoryIds = [...new Set(filter.categoryIds || [])];
 
     const query = this.serializeFilterToQuery({
-      ...newFilter,
+      ...filter,
       categoryIds: uniqueCategoryIds
     });
 
@@ -168,55 +288,58 @@ export class ProductsList implements OnInit, OnDestroy {
       query['id'] = this.mainCategoryId;
     }
 
-    const formatted = this.localizationText();
-    if (formatted?.trim()) {
-      query['localizationText'] = formatted;
-    }
-
     this._router.navigate([], {
       queryParams: query
     });
 
-    this.applyFilter(newFilter);
+
+    console.log(uniqueCategoryIds);
+    this.applyFilter();
   }
 
-  updateLocalizationText(localizationText: string){
-    this.localizationText.set(localizationText);
-
-    const query = this.serializeFilterToQuery(this.filter());
-
-    if (this.mainCategoryId != null) {
-      query['id'] = this.mainCategoryId;
-    }
-
-    const formatted = this.localizationText();
-    if (formatted && formatted.trim() !== '') {
-      query['localizationText'] = formatted;
-    }
-
-    this._router.navigate([], {
-      queryParams: query
-    });
-  }
-
-  private applyFilter(filter: ListingFilter) {
+  private applyFilter() {
     this.isBlocked.set(true);
-    this.filterSubject.next(filter);
+
+    const listingTypeKey = this.filter().listingType?.key;
+    const sortDirectionKey = this.filter().sortDirection?.key;
+    const sortByKey = this.filter().sortBy?.key;
+    const distanceKey = this.filter().distance?.key;
+    const distance = distanceKey && distanceKey !== 'none' ? Number(distanceKey) : null;
+
+    const payload: GetListingDTO = {
+      pageSize: this.filter().pageSize,
+      pageNumber: this.filter().pageNumber,
+      listingType: isListingType(listingTypeKey) ? listingTypeKey : null,
+      sortBy: isListingType(sortByKey) ? sortByKey : null,
+      sortDirection: isSortDirection(sortDirectionKey) ? sortDirectionKey : null,
+      priceFrom: this.filter().priceFrom,
+      priceTo: this.filter().priceTo,
+      longitude: this.filter().localization?.longitude ?? null,
+      latitude: this.filter().localization?.latitude ?? null,
+      distance: distance,
+      categoryIds: this.filter().categoryIds
+    };
+
+    this.filterSubject.next(payload);
   }
 
   private serializeFilterToQuery(filter: ListingFilter): Record<string, string | number | (string | number)[]> {
     const params: Record<string, string | number | (string | number)[]> = {};
 
+    const latitude = filter.localization?.latitude;
+    const longitude = filter.localization?.longitude;
+
     if (filter.categoryIds?.length) params['categoryIds'] = [...new Set(filter.categoryIds)];
-    if (filter.priceFrom != null) params['priceFrom'] = filter.priceFrom;
-    if (filter.priceTo != null) params['priceTo'] = filter.priceTo;
-    if (filter.listingType) params['listingType'] = filter.listingType;
-    if (filter.distance != null) params['distance'] = filter.distance;
-    if (filter.latitude != null) params['latitude'] = filter.latitude;
-    if (filter.longitude != null) params['longitude'] = filter.longitude;
-    if (filter.sortBy) params['sortBy'] = filter.sortBy;
-    if (filter.sortDirection) params['sortDirection'] = filter.sortDirection;
-    if (filter.pageNumber != null) params['pageNumber'] = filter.pageNumber;
+    if (filter.priceFrom !== null) params['priceFrom'] = filter.priceFrom;
+    if (filter.priceTo !== null) params['priceTo'] = filter.priceTo;
+    if (filter.listingType && filter.listingType.key !== "none") params['listingType'] = filter.listingType.key;
+    if (filter.distance !== null && filter.distance.key !== "none") params['distance'] = filter.distance.key;
+    if (latitude != null) params['latitude'] = latitude;
+    if (longitude != null) params['longitude'] = longitude;
+    if (filter.sortBy && filter.sortBy.key !== "none") params['sortBy'] = filter.sortBy.key;
+    if (filter.sortDirection && filter.sortDirection.key !== "none") params['sortDirection'] = filter.sortDirection.key;
+    if (filter.pageNumber !== null) params['pageNumber'] = filter.pageNumber;
+    if (filter.localizationText !== null && filter.localizationText.trim() !== '') params['localizationText'] = filter.localizationText;
 
     return params;
   }

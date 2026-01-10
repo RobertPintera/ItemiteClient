@@ -426,6 +426,7 @@
     "prices": "Prices",
     "listing_type": "Listing Type",
     "localization": "Localization",
+    "distance": "Distance",
     "find_city": "Find city",
     "min_max_price_error": "Minimal price cannot be greater than maximal price"
   },
