@@ -108,6 +108,13 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'stripe-success',
+        loadComponent: () =>
+          import('./components/features/stripe-success/stripe-success')
+            .then(m => m.StripeSuccess),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'chat',
         loadComponent: () =>
           import('./components/features/chat/fullscreen-chat-page/fullscreen-chat-page')

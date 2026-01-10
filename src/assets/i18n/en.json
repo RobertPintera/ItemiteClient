@@ -742,5 +742,9 @@
     "field_required": "Field is required",
     "field_empty" : "Field can't be empty",
     "name_max": "Name cannot be more than 100 characters"
+  },
+  "stripe_success": {
+    "header": "Stripe account created successfully!",
+    "back_to_home": "Back to home"
   }
 }

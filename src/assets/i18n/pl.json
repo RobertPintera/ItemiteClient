@@ -749,5 +749,9 @@
     "field_required": "Pole jest wymagane.",
     "field_empty" : "Pole nie może być puste.",
     "name_max" : "Nazwa nie może mieć więcej niż z 100 znaków"
+  },
+  "stripe_success": {
+    "header": "Konto Stripe zostało pomyślnie utworzone!",
+    "back_to_home": "Powrót do strony głównej"
   }
 }
