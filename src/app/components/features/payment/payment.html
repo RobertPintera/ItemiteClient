@@ -25,7 +25,9 @@
         <h1>{{ 'payment.header' | translate }}</h1>
         <div class="flex flex-col-reverse lg:flex-row w-full gap-4">
           <div class="flex flex-col flex-1 gap-2">
-            <h2>{{ 'payment.bid' | translate }}</h2>
+            @if (auction && form.controls.bidAmount){
+              <h2>{{ 'payment.bid' | translate }}</h2>
+            }
             <form ngxStripeCardGroup [formGroup]="form" (ngSubmit)="pay()" [elementsOptions]="elementsOptions" class="flex flex-col gap-2">
               @if (auction && form.controls.bidAmount){
                 <div class="flex flex-col gap-2 w-full">

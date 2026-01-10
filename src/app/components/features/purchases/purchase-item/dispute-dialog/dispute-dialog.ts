@@ -83,6 +83,8 @@ export class DisputeDialog {
       photos: photos
     };
 
+    this.loading.set(true);
+
     this._paymentService.dispute(this.paymentId(), payload).pipe(
       finalize(() => {
         this.loading.set(false);

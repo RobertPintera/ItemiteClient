@@ -55,7 +55,7 @@ export class PaymentControl implements OnInit, OnDestroy {
 
   readonly filter = signal<PaymentFilter>({
     type: PAYMENT_TYPE.LATEST,
-    pageSize: 1,
+    pageSize: 5,
     pageNumber: 1,
     paymentStatus: null
   });
