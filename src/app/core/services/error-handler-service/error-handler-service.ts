@@ -1,8 +1,9 @@
-import {effect, Injectable, Signal, signal} from '@angular/core';
+import {effect, inject, Injectable, Signal, signal} from '@angular/core';
 import {ErrorHandler} from '../../utility/ErrorHandler';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subject} from 'rxjs';
 import {MessageResponse} from '../../models/chat/MessageResponse';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable(
   {
@@ -13,6 +14,7 @@ export class ErrorHandlerService {
   private _errorMessage = signal("");
   private _lastErrorMessage =  signal("");
   private _lastErrorCode = signal("");
+  private _translateService = inject(TranslateService);
 
   // This one is cleared after displayTime time
   readonly errorMessage : Signal<string> = this._errorMessage.asReadonly();
@@ -46,7 +48,7 @@ export class ErrorHandlerService {
   }
 
   async SendErrorMessage(error: HttpErrorResponse, displayTime: number = 5000) {
-    const message = ErrorHandler(error);
+    const message = await ErrorHandler(error, this._translateService);
     this._lastErrorMessage.set(message[0]);
     this._lastErrorCode.set(message[1]);
     this._errorMessage.set(message[0]);
