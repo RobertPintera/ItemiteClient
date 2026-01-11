@@ -147,14 +147,17 @@ export const routes: Routes = [
       {
         path: 'admin/category',
         loadComponent: () => import('./components/features/admin-panel/category-control/category-control').then(m => m.CategoryControl),
+        canActivate: [AuthGuard]
       },
       {
         path: 'admin/payment',
         loadComponent: () => import('./components/features/admin-panel/payment-control/payment-control').then(m => m.PaymentControl),
+        canActivate: [AuthGuard]
       },
       {
         path: 'admin/banners',
         loadComponent: () => import('./components/features/admin-panel/banner-control/banner-control').then(m => m.BannerControl),
+        canActivate: [AuthGuard]
       }
     ]
   },
