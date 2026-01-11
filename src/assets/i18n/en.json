@@ -745,6 +745,7 @@
     "back_to_home": "Back to home"
   },
   "api_errors": {
+    "Create_a_stripe_account_first": "To sell you need to create Stripe account first",
     "Invalid_credentials": "Invalid credentials",
     "Access_token_not_found_in_cookies": "Access token not found in cookies",
     "try_again": "Please try again",

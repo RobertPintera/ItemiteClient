@@ -752,6 +752,7 @@
     "back_to_home": "Powrót do strony głównej"
   },
   "api_errors": {
+    "Create_a_stripe_account_first": "Aby sprzedawać należy najpierw utworzyć konto Stripe",
     "Invalid_credentials": "Niepoprawne hasło",
     "Access_token_not_found_in_cookies": "Token dostępowy nie istnieje w plikach cookie",
     "try_again": "Proszę spróbować ponownie",
