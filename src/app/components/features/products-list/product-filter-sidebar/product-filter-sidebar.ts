@@ -125,11 +125,13 @@ export class ProductFilterSidebar implements OnInit {
   }
 
   useCategoriesIds(categoryIds: number[]) {
-    const otherCategories = this.filter().categoryIds.filter(id => id !== this.mainCategoryId());
+    const otherCategories = categoryIds.filter(id => id !== this.mainCategoryId());
     const mainCategory = this.mainCategoryId();
 
+    console.log(otherCategories);
+
     if (otherCategories.length > 0) {
-      this.filter().categoryIds = categoryIds;
+      this.filter().categoryIds = otherCategories;
     } else {
       this.filter().categoryIds = mainCategory ? [mainCategory] : [];
     }
