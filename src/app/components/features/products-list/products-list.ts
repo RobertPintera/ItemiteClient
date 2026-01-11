@@ -257,21 +257,6 @@ export class ProductsList implements OnInit, OnDestroy {
     document.body.classList.remove('overflow-hidden');
   }
 
-  updateFilterParameters(partial: Partial<ListingFilter>){
-    const newFilter = { ...this.filter(), ...partial };
-
-    if (newFilter.categoryIds?.length) {
-      const otherCategories = newFilter.categoryIds.filter(id => id !== this.mainCategoryId);
-      if (otherCategories.length > 0) {
-        newFilter.categoryIds = otherCategories;
-      } else {
-        newFilter.categoryIds = this.mainCategoryId ? [this.mainCategoryId] : [];
-      }
-    }
-
-    this.filter.set(newFilter);
-  }
-
   updateFilter(){
     const filter = this.filter();
 

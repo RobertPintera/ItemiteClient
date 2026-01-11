@@ -27,7 +27,7 @@ export class Home implements OnInit {
   readonly bottomBanner = signal<BannerDTO | null>(null);
 
   ngOnInit() {
-    this._bannerService.loadActivebanners().subscribe(banners => {
+    this._bannerService.loadActiveBanners().subscribe(banners => {
       this.topBanner.set(
         banners.find(b => b.position === BANNER_POSITION.TOP) ?? null
       );

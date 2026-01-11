@@ -15,7 +15,7 @@ export class BannerService {
     return this.http.get<BannerDTO[]>(`${this.baseUrl}/active`);
   }
 
-  loadActivebanners(){
+  loadActiveBanners(){
     return this.getActiveBanners().pipe(
       catchError(err => {
         console.error('Error loadActivebanners:', err);
