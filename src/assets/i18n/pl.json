@@ -834,7 +834,7 @@
     "Product_name_must_be_between_2_and_50_characters":"Nazwa produktu musi mieć od 2 do 50 znaków",
     "Product_description_is_empty": "Opis produktu jest pusty",
     "Product_description_is_null": "Opis produktu jest pusty",
-    "Product_description_must_be_between_2_and_2500_characters": "Opis produktu jest pusty",
+    "Product_description_must_be_between_2_and_2500_characters": "Opis produktu powinien zawierać się między 2 a 2500 znakom",
     "Price_is_empty": "Cena jest pusta",
     "Price_is_null": "Cena jest pusta",
     "Price_must_be_greater_than_0": "Cena musi być większa niż 0",
