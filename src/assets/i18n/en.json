@@ -890,7 +890,7 @@
     "Search_cannot_be_null":"Search cannot be null",
     "Email_already_in_use":"Email already in use",
     "Email_is_not_confirmed": {
-      "_Check_your_email_for_the_confirmation_link": "Email is nod confirmed! Check your email for the confirmation link."
+      "_Check_your_email_for_the_confirmation_link": "Email is not confirmed! Check your email for the confirmation link."
     }
   }
 }
