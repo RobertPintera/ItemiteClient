@@ -207,11 +207,11 @@
       <div class="flex flex-col">
         <p>  {{ 'transactions.status.header' | translate }}:
           {{ ('transactions.status.' + (payment().dispute.status | underscore)) | translate }}</p>
-        <p>{{ 'transactions.reason' | translate}}: {{ payment().dispute.reason }}</p>
+        <p>{{ 'transactions.reason' | translate}}: {{ `purchases.dispute.reason.${payment().dispute.reason | snakeCase}` | translate }}</p>
         <p>{{ 'transactions.description' | translate}}: {{ payment().dispute.description }}</p>
         <p>{{ 'transactions.refund_amount' | translate}}: {{ payment().dispute.refundAmount }}</p>
-        <p>{{ 'transactions.created_at' | translate}}: {{ payment().dispute.createdAt }}</p>
-        <p>{{ 'transactions.resolved_at' | translate}}: {{ payment().dispute.resolvedAt }}</p>
+        <p>{{ 'transactions.created_at' | translate}}: {{ payment().dispute.createdAt | date:'yyyy-MM-dd' }}</p>
+        <p>{{ 'transactions.resolved_at' | translate}}: {{ payment().dispute.resolvedAt | date:'yyyy-MM-dd' }}</p>
         <p>{{ 'transactions.notes' | translate }}: {{ payment().dispute.notes }}</p>
       </div>
       <div class="flex flex-col gap-2">

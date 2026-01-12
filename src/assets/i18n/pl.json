@@ -566,7 +566,8 @@
       "refunded": "Zwrócono",
       "partially_refunded": "Częściowo zwrócono",
       "disputed": "Sporny",
-      "failed": "Nie powiodło się"
+      "failed": "Nie powiodło się",
+      "open": "Otwarty"
     },
     "paid": "Zapłacono",
     "sold": "Sprzedano",

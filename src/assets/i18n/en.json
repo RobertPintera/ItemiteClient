@@ -572,7 +572,8 @@
       "refunded": "Refunded",
       "partially_refunded": "Partially refunded",
       "disputed": "Disputed",
-      "failed": "Failed"
+      "failed": "Failed",
+      "open": "Open"
     },
     "paid": "Paid",
     "sold": "Sold",
