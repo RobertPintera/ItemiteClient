@@ -1,14 +1,12 @@
 import {effect, inject, Injectable, PLATFORM_ID, signal} from '@angular/core';
-import * as signalR from '@microsoft/signalR'
+import * as signalR from '@microsoft/signalr'
 import { environment } from '../../../../environments/environment.development';
 import {AuthService} from '../auth-service/auth.service';
 import {MessageResponse} from '../../models/chat/MessageResponse';
-import {lastValueFrom, Observable, Subject} from 'rxjs';
+import {lastValueFrom, Subject} from 'rxjs';
 import {ErrorHandlerService} from '../error-handler-service/error-handler-service';
-import {TranslateService} from '@ngx-translate/core';
-import {isPlatformBrowser, isPlatformServer} from '@angular/common';
+import {isPlatformServer} from '@angular/common';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {User} from '../../models/user/User';
 import {Notification} from '../../models/notification/Notification';
 import {NotificationResponseDTO} from '../../models/notification/NotificationResponseDTO';
 
