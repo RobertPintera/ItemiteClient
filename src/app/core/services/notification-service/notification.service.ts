@@ -1,5 +1,5 @@
 import {effect, inject, Injectable, PLATFORM_ID, signal} from '@angular/core';
-import * as signalR from '@microsoft/signalr'
+import * as signalR from '@microsoft/signalr';
 import { environment } from '../../../../environments/environment.development';
 import {AuthService} from '../auth-service/auth.service';
 import {MessageResponse} from '../../models/chat/MessageResponse';
@@ -136,7 +136,7 @@ export class NotificationService {
 
   private RegisterMessageEvents() {
     this._notifHub.on("MessageReceived", (message: MessageResponse) => {
-      console.log("Received message")
+      console.log("Received message");
       console.log(message);
       this._onMessageReceived.next(message);
     });
@@ -156,7 +156,7 @@ export class NotificationService {
       console.log("Deleted message");
       console.log(message);
       this._onMessageDeleted.next(message.messageId);
-    })
+    });
   }
 
   private RegisterBroadcastEvents() {
@@ -217,7 +217,7 @@ export class NotificationService {
       return true;
     } catch (error: any) {
       this._errorService.SendErrorMessage(error);
-      return false
+      return false;
     }
   }
 
@@ -237,7 +237,7 @@ export class NotificationService {
       return true;
     } catch (error: any) {
       this._errorService.SendErrorMessage(error);
-      return false
+      return false;
     }
   }
 
