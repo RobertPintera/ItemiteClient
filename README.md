@@ -164,4 +164,4 @@ The compiled output will be stored in the `dist/` directory.
 
 ## License
 
-This project is part of an academic project by filip_wojc, DarknesoPirate, RobertPintera, HAScrashed
+This project is part of an academic project by [RobertPintera](https://github.com/RobertPintera), [HAScrashed](https://github.com/HAScrashed), [filip_wojc](https://github.com/filip-wojc), [DarknesoPirate](https://github.com/DarknessoPirate),
