@@ -114,6 +114,10 @@ cd ItemiteClient
 Make sure you have installed:
 - **Node.js** - JavaScript runtime environment required to run the development server and build tools.
 - **Npm** - package manager for JavaScript, used to install project dependencies.
+- **Angular CLI** - command-line interface for Angular, required to run and build the application.
+```bash
+npm install -g @angular/cli
+```
 
 Then install project dependencies:
 ```bash
